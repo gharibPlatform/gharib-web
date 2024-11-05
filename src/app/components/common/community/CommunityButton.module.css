@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-left: 38px;
+    transition: all 300ms ease;
+}
+.img{
+    width: 38px;
+    height: 38px;
+}
+.p{
+    font-size: 18px;
+    color: white;
+}

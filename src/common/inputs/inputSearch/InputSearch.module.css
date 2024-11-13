@@ -1,0 +1,22 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.input{
+    background-color: #575757;
+    width: 440px;
+    height: 35px;
+    border-radius: 10px;
+    border: none;
+    padding-left: 40px;
+    outline: none;
+    color: var(--w-color);
+    margin-right: -180px;
+}
+.svg{
+    margin-right: -35px;
+    height: 25px;
+    width: 25px;
+    z-index: 2;
+}

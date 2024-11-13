@@ -4,7 +4,7 @@ import InputSearch from "../inputs/inputSearch/InputSearch";
 import Gharib from "../gharib/Gharib";
 import { useRef, useState } from "react";
 import UserMenu from "../usermenu/UserMenu";
-import { motion } from 'framer-motion'
+// import { motion } from 'framer-motion'
 
 function Header() {
     const [toggleUserMenuBool, setToggleUserMenuBool] = useState(false);
@@ -27,13 +27,13 @@ function Header() {
             <RightElements toggleUserMenu={toggleUserMenu} />
         </div>
 
-        <motion.div
+        {/* <motion.div
          initial={{ opacity: 0, y: -10 }}
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 0.5 }}
          >
             <UserMenu toggleUserMenu={toggleUserMenu} />
-        </motion.div>
+        </motion.div> */}
 
     </>
 }

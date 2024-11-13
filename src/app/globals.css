@@ -1,10 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root{
-  --background-dark: #292929;
-  --background-light: #201E1E;
+  --main-color : #212121;
+  --secondary-color: #262626;
+  --tertiary-color: #232323;
+  --dark-color: #01060A;
+  --darker-color: #1d1d1d;
+  --w-color: #fff;
+  --o-color: #DC9908;
+  --lighter-color: #9A9996;
+  --g-color: #585858;
+  --fade-timing: 300ms ease-out 20ms;
+}
+
+body{
+  font-family: "Cairo";
+  margin: 0;
+  padding: 0;
+  background-color: var(--secondary-color);
+  overflow: hidden;
 }
 
 @layer base {

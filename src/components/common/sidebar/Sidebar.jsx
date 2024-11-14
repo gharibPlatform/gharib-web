@@ -24,7 +24,7 @@ function SideBar() {
         <div class="w-min border-r-0 border-[var(--g-color)] bg-[var(--main-color)] h-max">
             <Top />
             <div class="mt-2 h-px bg-[var(--g-color)]"></div>
-            {/* <Community /> */}
+            <Community />
         </div>
     </>
 }

@@ -1,4 +1,3 @@
-import styles from "./CommunityButton.module.css"
 import Image
  from "next/image";
 function CommunityButton({ communityName, communityIcon}) {

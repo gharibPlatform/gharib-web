@@ -1,7 +1,9 @@
 'use client'
 import SideBar from "@/components/common/sidebar/Sidebar";
-export default function Home() {
+
+import Home from "@/pages/Home";
+export default function page() {
   return (
-    <SideBar />
+    <Home />
   );
 }

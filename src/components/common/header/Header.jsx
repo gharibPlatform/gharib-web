@@ -1,4 +1,3 @@
-import stylesHeader from "./Header.module.css"
 import RightElements from "./RightElements";
 import InputSearch from "../inputs/inputSearch/InputSearch";
 import Gharib from "../gharib/Gharib";
@@ -20,20 +19,13 @@ function Header() {
     }
 
     return <>
-        <div className={stylesHeader.container}>
+    
+        <div class="flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-2">
             {/* gharib icon */}
             <Gharib />
             <InputSearch />
             <RightElements toggleUserMenu={toggleUserMenu} />
         </div>
-
-        {/* <motion.div
-         initial={{ opacity: 0, y: -10 }}
-         animate={{ opacity: 1, y: 0 }}
-         transition={{ duration: 0.5 }}
-         >
-            <UserMenu toggleUserMenu={toggleUserMenu} />
-        </motion.div> */}
 
     </>
 }

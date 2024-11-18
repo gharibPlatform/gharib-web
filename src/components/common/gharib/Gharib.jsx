@@ -1,7 +1,6 @@
-import styles from "./Gharib.module.css"
 function Gharib() {
     return<>
-        <p className={styles.p}>غريب</p>
+        <p class="p-0 m-0 pl-20 text-[var(--o-color)] font-bold text-4xl">غريب</p>
     </>
 }
 export default Gharib;

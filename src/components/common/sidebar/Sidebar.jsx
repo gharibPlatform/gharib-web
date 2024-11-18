@@ -21,7 +21,7 @@ function Top() {
 function SideBar() {
 
     return <>
-        <div class="w-min border-r-0 border-[var(--g-color)] bg-[var(--main-color)] h-screen">
+        <div class="w-min border-r border-[var(--g-color)] bg-[var(--main-color)] h-screen">
             <Top />
             <div class="mt-2 h-px bg-[var(--g-color)]"></div>
             <Community />

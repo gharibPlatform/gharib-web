@@ -11,7 +11,10 @@
   --o-color: #DC9908;
   --lighter-color: #9A9996;
   --g-color: #585858;
+  --g-color-ver-02: #575757;
+  --input-color: #414141;
   --fade-timing: 300ms ease-out 20ms;
+  --radius: 16px;
 }
 
 body{

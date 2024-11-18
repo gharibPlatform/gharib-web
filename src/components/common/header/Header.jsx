@@ -20,7 +20,7 @@ function Header() {
 
     return <>
     
-        <div class="flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-2">
+        <div class="flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
             {/* gharib icon */}
             <Gharib />
             <InputSearch />

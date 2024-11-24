@@ -3,7 +3,6 @@ import HomeButton from "../buttons/HomeButton"
 import ExploreButton from "../buttons/ExploreButton"
 import ProgressButton from "../buttons/ProgressButton"
 import TerminologyButton from "../buttons/TerminologyButton"
-import Community from "../community/Community"
 
 function Top() {
     return<>
@@ -18,10 +17,29 @@ function Top() {
     </>
 }
 
+import Community from "../community/Community"
+import { useWidth } from "../../context/WidthContext"
+import { useRef, useEffect, useState } from "react"
 function SideBar() {
 
+    const { setWidth } = useWidth();
+    const firstRef = useRef(null);
+
+    useEffect(() => {
+        const updateWidth = () => {
+            if (firstRef.current) {
+                setWidth(firstRef.current.offsetWidth);
+            }
+        };
+
+        updateWidth();
+        window.addEventListener("resize", updateWidth);
+
+        return () => window.removeEventListener("resize", updateWidth);
+    }, [setWidth]);
+  
     return <>
-        <div class="w-min border-r border-[var(--g-color)] bg-[var(--main-color)] h-screen">
+        <div ref={firstRef} class="w-min border-r border-[var(--g-color)] bg-[var(--main-color)] h-screen inline-block">
             <Top />
             <div class="mt-2 h-px bg-[var(--g-color)]"></div>
             <Community />

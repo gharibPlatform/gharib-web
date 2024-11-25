@@ -20,7 +20,7 @@ function Header() {
 
     return <>
     
-        <div class="flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
+        <div class="h-14 flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
             <Gharib />
             <InputSearch />
             <RightElements toggleUserMenu={toggleUserMenu} />

@@ -6,7 +6,7 @@ import Quran from "../iconButtons/Quran"
 function RightElements({ toggleUserMenu }) {
     return<>
         <div class="flex gap-7 items-center pr-5">
-            <Create />
+            <Create fill={"white"} />
             <Quran />
             <Notifications />
             <AccountMenu toggleUserMenu={toggleUserMenu} />

@@ -19,7 +19,8 @@ function Top() {
 
 import Community from "../community/Community"
 import { useWidth } from "../../context/WidthContext"
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect } from "react"
+
 function SideBar() {
 
     const { setWidth } = useWidth();
@@ -39,7 +40,7 @@ function SideBar() {
     }, [setWidth]);
   
     return <>
-        <div ref={firstRef} class="w-min border-r border-[var(--g-color)] bg-[var(--main-color)] h-screen inline-block">
+        <div ref={firstRef} class="w-min border-r border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)] inline-block">
             <Top />
             <div class="mt-2 h-px bg-[var(--g-color)]"></div>
             <Community />

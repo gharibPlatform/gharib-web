@@ -18,29 +18,11 @@ function Top() {
 }
 
 import Community from "../community/Community"
-import { useWidth } from "../../context/WidthContext"
-import { useRef, useEffect } from "react"
 
 function SideBar() {
 
-    const { setWidth } = useWidth();
-    const firstRef = useRef(null);
-
-    useEffect(() => {
-        const updateWidth = () => {
-            if (firstRef.current) {
-                setWidth(firstRef.current.offsetWidth);
-            }
-        };
-
-        updateWidth();
-        window.addEventListener("resize", updateWidth);
-
-        return () => window.removeEventListener("resize", updateWidth);
-    }, [setWidth]);
-  
     return <>
-        <div ref={firstRef} class="w-min border-r border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)] inline-block">
+        <div class="w-min border-r border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)] inline-block">
             <Top />
             <div class="mt-2 h-px bg-[var(--g-color)]"></div>
             <Community />

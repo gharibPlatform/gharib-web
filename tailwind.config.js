@@ -10,6 +10,10 @@ module.exports = {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			cairo: ['Cairo', 'sans-serif'],
+			poppins: ['Poppins', 'sans-serif'],
+		  },
   		colors: {
   			background: 'var(--background)',
   			foreground: 'var(--foreground)',

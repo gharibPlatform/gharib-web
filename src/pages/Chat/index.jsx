@@ -1,7 +1,7 @@
 'use client'
 import Header from "@/components/common/header/Header";
 import SideBar from "@/components/common/sidebar/Sidebar";
-import ChatLeftBar from "@/components/chat/ChatLeftBar";
+import ChatRightBar from "@/components/chat/ChatRightBar";
 import "../../app/globals.css"
 import ChatContent from "@/components/chat/ChatContent";
 import { useState } from "react";
@@ -27,7 +27,7 @@ export default function ChatPage() {
             <div class="flex h-[var(--height)]">
                 <SideBar />
                 <ChatContent nameHeader={nameHeader} />
-                <ChatLeftBar changeNameHeader={changeNameHeader} />
+                <ChatRightBar changeNameHeader={changeNameHeader} />
             </div>
         </main>
     </>

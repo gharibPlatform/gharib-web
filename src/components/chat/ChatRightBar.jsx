@@ -2,7 +2,7 @@ import { useState } from "react";
 import ChatBrotherCard from "./ChatBrotherCard";
 import ChatBrotherSection from "./ChatBrothersSection";
 import ChatGroupsSection from "./ChatGroupsSection";
-import KhatmaSection from "./KhatmaSection";
+import KhatmasSection from "./KhatmasSection";
 
 export default function ChatRightBar({ changeNameHeader }) {
     const BLUE_COLOR = "#7575ff"
@@ -14,10 +14,10 @@ export default function ChatRightBar({ changeNameHeader }) {
     const toggleBrotherBool = () => {
         setBrothersStyle(BLUE_COLOR);
         setGroupsStyle(WHITE_COLOR);
-        setKhatmaStyle(WHITE_COLOR);
+        setKhatmasStyle(WHITE_COLOR);
         setBrothersBool(true);
         setGroupsBool(false);
-        setKhatmaBool(false);
+        setKhatmasBool(false);
     }
 
     const [groupsBool, setGroupsBool] = useState(false)
@@ -25,24 +25,24 @@ export default function ChatRightBar({ changeNameHeader }) {
 
     const toggleGroupsBool = () => {
         setBrothersStyle(WHITE_COLOR);
-        setKhatmaStyle(WHITE_COLOR);
+        setKhatmasStyle(WHITE_COLOR);
         setGroupsStyle(BLUE_COLOR);
         setGroupsBool(true);
         setBrothersBool(false);
-        setKhatmaBool(false);
+        setKhatmasBool(false);
 
     }
 
-    const [khatmaBool, setKhatmaBool] = useState(false)
-    const [khatmaStyle, setKhatmaStyle] = useState(WHITE_COLOR)
+    const [khatmasBool, setKhatmasBool] = useState(false)
+    const [khatmaStyle, setKhatmasStyle] = useState(WHITE_COLOR)
 
-    const toogleKhatmaBool = () => {
+    const toogleKhatmasBool = () => {
         setBrothersStyle(WHITE_COLOR);
         setGroupsStyle(WHITE_COLOR);
-        setKhatmaStyle(BLUE_COLOR);
+        setKhatmasStyle(BLUE_COLOR);
         setGroupsBool(false);
         setBrothersBool(false);
-        setKhatmaBool(true);
+        setKhatmasBool(true);
     }
 
 
@@ -51,7 +51,7 @@ export default function ChatRightBar({ changeNameHeader }) {
             <div class="flex  p-7 gap-8 justify-between">
                 <div onClick={()=>toggleBrotherBool()} style={{color: `${brothersStyle}`}} class="cursor-pointer font-bold text-l">Brothers</div>
                 <div onClick={()=>toggleGroupsBool()} style={{color: `${groupsStyle}`}} class="cursor-pointer font-bold text-l">Groups</div>
-                <div onClick={()=>toogleKhatmaBool()} style={{color: `${khatmaStyle}`}} class="cursor-pointer font-bold text-l">Khatmat</div>
+                <div onClick={()=>toogleKhatmasBool()} style={{color: `${khatmaStyle}`}} class="cursor-pointer font-bold text-l">Khatmat</div>
             </div>
 
             <div >
@@ -64,8 +64,8 @@ export default function ChatRightBar({ changeNameHeader }) {
                     <ChatGroupsSection changeNameHeader={changeNameHeader} /> : <div ></div>
                 }
 
-                {khatmaBool ?
-                    <KhatmaSection  /> : <div></div>
+                {khatmasBool ?
+                    <KhatmasSection  /> : <div></div>
                 }
 
             </div>

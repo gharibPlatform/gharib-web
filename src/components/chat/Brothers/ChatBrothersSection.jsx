@@ -6,7 +6,7 @@ export default function ChatBrotherSection( { changeNameHeader }) {
     const BACKGROUND_COLOR = "#212121"
     const BACKGROUND_COLOR_NEW = "#323232"
 
-    const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];
+    const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa", "Raouf"];
     const [backgroundColorArray, setBackgroundColorArray] = useState(Array(ARRAY_LENGTH).fill(BACKGROUND_COLOR))
 
     const handleClick = (brother, i) => {

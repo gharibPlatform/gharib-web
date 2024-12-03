@@ -1,11 +1,11 @@
 import Circle from "@/components/common/circle/Circle";
 
-function Header(){
+function Header({ Name }){
   return(
-    <div class="flex flex-col gap-3" >
+    <div class="flex flex-col gap-6" >
 
-        <h2 class="text-[var(--w-color)]">Ghaza</h2>
-        <div class="w-28 h-1 bg-[var(--g-color)]" >
+        <h2 class="text-[var(--w-color)] text-xl">{Name}</h2>
+        <div class="w-48 h-1 bg-[var(--g-color)]" >
             <div class="w-1/2 h-1 bg-[var(--o-color)]"></div>
         </div>
 
@@ -13,11 +13,13 @@ function Header(){
   )
 }
 
-export default function ChatKhatmaCard() {
+export default function ChatKhatmaCard({ Name }) {
     return(
-        <div class="flex pl-5 pt-4 gap-4" >
-            <Header />
-            <Circle degree={ 30 } />
+        <div class="flex pl-10 pt-4 pb-4 gap-6 hover:bg-[var(--main-color-hover)] cursor-pointer" >
+            <Header Name={Name} />
+            <div className="pt-1">
+                <Circle width={65} height={65} degree={30} />
+            </div>
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import Circle from "@/components/common/circle/Circle";
+import { useRouter } from "next/router";
 
 function Header({ Name }){
   return(
@@ -14,8 +15,15 @@ function Header({ Name }){
 }
 
 export default function ChatKhatmaCard({ Name }) {
+    const router = useRouter();
+    const pushToKhatmas = () => {
+        router.push('/Khatmas');
+        console.log(router)
+        console.log('real')
+    }
+
     return(
-        <div class="flex pl-10 pt-4 pb-4 gap-6 hover:bg-[var(--main-color-hover)] cursor-pointer" >
+        <div onClick={pushToKhatmas} class="flex pl-10 pt-4 pb-4 gap-6 hover:bg-[var(--main-color-hover)] cursor-pointer" >
             <Header Name={Name} />
             <div className="pt-1">
                 <Circle width={65} height={65} degree={30} />

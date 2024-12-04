@@ -15,11 +15,11 @@ function Header({ Name }){
 }
 
 export default function ChatKhatmaCard({ Name }) {
+    
     const router = useRouter();
     const pushToKhatmas = () => {
         router.push('/Khatmas');
         console.log(router)
-        console.log('real')
     }
 
     return(

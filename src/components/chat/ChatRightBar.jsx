@@ -1,8 +1,8 @@
 import { useState } from "react";
-import ChatBrotherCard from "./Brothers/ChatBrotherCard";
-import ChatBrotherSection from "./Brothers/ChatBrothersSection";
-import ChatGroupsSection from "./Groups/ChatGroupsSection";
-import ChatKhatmasSection from "./Khatmas/ChatKhatmasSection";
+import ChatBrotherCard from "./brothers/ChatBrotherCard";
+import ChatBrotherSection from "./brothers/ChatBrothersSection";
+import ChatGroupsSection from "./groups/ChatGroupsSection";
+import ChatKhatmasSection from "./khatmas/ChatKhatmasSection";
 
 export default function ChatRightBar({ changeNameHeader }) {
     const BLUE_COLOR = "#7575ff"

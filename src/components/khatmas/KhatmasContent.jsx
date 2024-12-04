@@ -46,7 +46,7 @@ function Personal() {
 }
 export default function KhatmasContent() {
     return(
-        <div className="flex w-full flex-col h-screen overflow-y-auto">
+        <div className="flex w-full flex-col h-[var(--height)] overflow-y-auto">
             <div className="flex w-full flex-col ">
                 <div className="w-full">
                     <ChatHeader Name={"Group1"} />

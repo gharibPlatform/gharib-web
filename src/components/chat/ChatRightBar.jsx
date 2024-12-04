@@ -47,7 +47,7 @@ export default function ChatRightBar({ changeNameHeader }) {
 
 
     return(
-        <div style={{width: "680px"}} class="border-l border-[var(--g-color)] bg-[var(--main-color)] h-screen">
+        <div style={{width: "680px"}} class="border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]">
             <div class="flex  p-7 gap-8 justify-between">
                 <div onClick={()=>toggleBrotherBool()} style={{color: `${brothersStyle}`}} class="cursor-pointer font-bold text-l">Brothers</div>
                 <div onClick={()=>toggleGroupsBool()} style={{color: `${groupsStyle}`}} class="cursor-pointer font-bold text-l">Groups</div>

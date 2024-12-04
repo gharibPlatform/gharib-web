@@ -8,7 +8,7 @@ export default function Khatmas() {
     return(
         <div >
             <Header />
-            
+
             <div className="flex " >
                 <SideBar />
                 <KhatmasContent />

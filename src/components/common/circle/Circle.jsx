@@ -1,4 +1,4 @@
-export default function Circle({ width,  height,  degree }) {
+export default function Circle({ width,  height,  degree, fontSize, text, backgroundColor }) {
     console.log("the width is : ", width)
     console.log("the height is : ", height)
     const innerWidth = width - 5 ;
@@ -12,11 +12,15 @@ export default function Circle({ width,  height,  degree }) {
             }
             }>
     
-            <div className="bg-[var(--main-color)] rounded-full z-10 flex flex-col items-center justify-center text-sm text-[var(--w-color)]" style={{
+            <div className="rounded-full z-10 flex flex-col items-center justify-center text-[var(--w-color)]" style={{
                 height : `${innerHeight}px`,
-                width : `${innerWidth}px`
+                width : `${innerWidth}px`,
+                fontSize: `${fontSize}px`,
+                // backgroundColor: `$var({backgroundColor})`
+                backgroundColor: `${backgroundColor}`
             }}> 
-            4d23h
+
+            {text}
           </div>
         </div>
     )

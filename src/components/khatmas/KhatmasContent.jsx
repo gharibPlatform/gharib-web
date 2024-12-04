@@ -1,5 +1,4 @@
 import ChatHeader from "../chat/ChatHeader";
-import ChatRightBar from "../chat/ChatRightBar";
 import KhatmasProgress from "./KhatmasProgress";
 
 export default function KhatmasContent() {

@@ -5,7 +5,7 @@ export default function ChatBrotherSection( { changeNameHeader }) {
     const ARRAY_LENGTH = 5;
     const BACKGROUND_COLOR = "#212121"
     const BACKGROUND_COLOR_NEW = "#323232"
-
+    const BROTHER_ID = "123asd"
     const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];
     const [backgroundColorArray, setBackgroundColorArray] = useState(Array(ARRAY_LENGTH).fill(BACKGROUND_COLOR))
 
@@ -17,7 +17,7 @@ export default function ChatBrotherSection( { changeNameHeader }) {
             )
         )
 
-        changeNameHeader(brother);
+        changeNameHeader(brother, BROTHER_ID);
     }
 
     return(

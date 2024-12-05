@@ -4,12 +4,12 @@ import Personal from "./expandContent/Personal"
 import Group from "./expandContent/Group"
 import Members from "./expandContent/Members"
 
-export default function KhatmasContent() {
+export default function KhatmasContent( { nameHeader }) {
     return(
         <div className="flex w-full flex-col h-[var(--height)] overflow-y-auto">
             <div className="flex w-full flex-col ">
                 <div className="w-full">
-                    <ChatHeader Name={"Group1"} />
+                    <ChatHeader Name={nameHeader} />
                 </div>
                 <KhatmasProgress />
             </div>

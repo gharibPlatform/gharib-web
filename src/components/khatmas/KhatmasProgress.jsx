@@ -2,7 +2,7 @@ import Circle from "../common/circle/Circle"
 
 export default function KhatmasProgress() {
     return(
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center pb-6">
             <h1 className="text-4xl text-[var(--w-color)] flex justify-center pt-12">Ghaza</h1>
             <h1 className="text-3xl text-[var(--w-color)] flex justify-center pt-12">Progress</h1>
 

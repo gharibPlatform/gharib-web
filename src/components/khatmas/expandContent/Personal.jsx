@@ -1,31 +1,38 @@
 import { useState } from "react";
 
 function PersonalContent() {
+    
+    const shareContent = "from the cow v 1 to the cow v 80";
+    const pagesContent = "8 Pages";
+    const remainingContent = "2 Pages";
+    const statusContent = "Incomplete";
+    const duaaContent = "Read Now";
+
     return(
         <div className="pl-14 pt-4 text-xl text-[var(--w-color)]">
             <table className="table-auto border-collapse">
-              <tbody>
-                <tr className="">
-                  <td className="px-4 pr-16 py-2 font-medium">Share</td>
-                  <td className="px-4 py-2">from the cow v 1 to the cow v 80</td>
-                </tr>
-                <tr className="">
-                  <td className="px-4 pr-16 py-2 font-medium">Pages</td>
-                  <td className="px-4 py-2">8 Pages</td>
-                </tr>
-                <tr className="">
-                  <td className="px-4 pr-16 py-2 font-medium">Remaining</td>
-                  <td className="px-4 py-2">2 Pages</td>
-                </tr>
-                <tr className="">
-                  <td className="px-4 pr-16 py-2 font-medium">Status</td>
-                  <td className="px-4 py-2">Incomplete</td>
-                </tr>
-                <tr>
-                  <td className="px-4 pr-16 py-2 font-medium">Duaa</td>
-                  <td className="px-4 py-2">Read Now</td>
-                </tr>
-              </tbody>
+                <tbody>
+                    <tr>
+                        <td className="px-4 pr-16 py-2 font-medium">Share</td>
+                        <td className="px-4 py-2">{shareContent}</td>
+                    </tr>
+                    <tr>
+                        <td className="px-4 pr-16 py-2 font-medium">Pages</td>
+                        <td className="px-4 py-2">{pagesContent}</td>
+                    </tr>
+                    <tr>
+                        <td className="px-4 pr-16 py-2 font-medium">Remaining</td>
+                        <td className="px-4 py-2">{remainingContent}</td>
+                    </tr>
+                    <tr>
+                        <td className="px-4 pr-16 py-2 font-medium">Status</td>
+                        <td className="px-4 py-2">{statusContent}</td>
+                    </tr>
+                    <tr>
+                        <td className="px-4 pr-16 py-2 font-medium">Duaa</td>
+                        <td className="px-4 py-2">{duaaContent}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     )

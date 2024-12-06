@@ -3,7 +3,6 @@ import InputSearch from "../inputs/inputSearch/InputSearch";
 import Gharib from "../gharib/Gharib";
 import { useState } from "react";
 import UserMenu from "../usermenu/UserMenu";
-// import { motion } from 'framer-motion'
 
 function Header() {
     const [toggleUserMenuBool, setToggleUserMenuBool] = useState(false);
@@ -20,7 +19,7 @@ function Header() {
 
     return <>
     
-        <div class="h-14 flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
+        <div className="fixed w-screen overflow-hidden h-14 flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
             <Gharib />
             <InputSearch />
             <RightElements toggleUserMenu={toggleUserMenu} />

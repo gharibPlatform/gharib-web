@@ -6,7 +6,7 @@ import "../../app/globals.css"
 import ChatContent from "@/components/chat/ChatContent";
 import { useState } from "react";
 import { Cairo } from "next/font/google";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
 const cairo = Cairo({
     subsets: ['latin'], 
@@ -16,7 +16,7 @@ const cairo = Cairo({
 
 export default function ChatPage( { changeNameHeader, nameHeader } ) {
 
-    const router = useRouter();
+    // const router = useRouter();
 
     return<>
         <main className={cairo.variable} >

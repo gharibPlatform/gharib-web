@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root{
+  --main-color : #212121;
+  --main-color-hover: #323232;
+  --secondary-color: #262626;
+  --tertiary-color: #232323;
+  --darker-color: #01060A;
+  --dark-color: #1d1d1d;
+  --light-color: #444444;
+  --circle-color: #1b1b1f;
+  --w-color: #fff;
+  --o-color: #DC9908;
+  --r-color: red;
+  --lighter-color: #9A9996;
+  --g-color: #585858;
+  --g-color-ver-02: #575757;
+  --g-color-hover: #;
+  --input-color: #414141;
+  --fade-timing: 300ms ease-out 20ms;
+  --radius: 16px;
+  --height: calc(100vh - 70px);
+  --width: calc(100vh - 360px);
+  --font-cairo: "Cairo", sans-serif;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  background-color: var(--secondary-color);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

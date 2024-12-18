@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { registerUser } from "../../../utils/auth"
-const Signup = () => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
@@ -22,17 +22,19 @@ const Signup = () => {
 
   return (
     <div className='flex flex-col items-center bg-[var(--dark-color)] w-min justify-center py-4 px-8 rounded-md'>
-      <h2 className='text-[var(--w-color)] text-3xl pb-8 pt-4'>Signup</h2>
+      <h2 className='text-[var(--w-color)] text-3xl pb-8 pt-4'>Login</h2>
+      
       <div className='flex flex-col gap-4' >
         <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="text" placeholder='Username' required/>
-        <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="email" placeholder='Email' required/>
-        <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password" placeholder='Create Password' required/>
-        <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password" placeholder='Confirm Password' required/>
-        
-        <button style={{width : "380px", borderRadius: "6px"}} className='px-4 py-2 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-2'>Signup</button>
+        {/* <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="email" placeholder='Email' required/> */}
+        <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password" placeholder='Password' required/>
+
+        <a href='rest-password' className='flex items-center justify-center text-[var(--b-color)]'>Forgot Password?</a>
+
+        <button style={{width : "380px", borderRadius: "6px"}} className='px-4 py-2 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-2'>Login</button>
       </div>
 
-      <p className='text-[var(--w-color)]'>Alreay have an account? <a className='text-[var(--b-color)]' href="login">Login</a></p>
+      <p className='text-[var(--w-color)]'>Don't have an account? <a className='text-[var(--b-color)]' href="signup">Signup</a></p>
 
       <div className='flex items-center gap-8 w-full'>
         <div style={{height: "1px"}} className='w-1/2 bg-[var(--main-color-hover)]'></div>
@@ -49,4 +51,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;

@@ -1,11 +1,11 @@
 "use client"
-import ForgotPassword from "@/components/common/forgot password/ForgotPassword";
+import EmailVerification from "@/components/common/email verification/EmailVerification";
 
 const Page = () => {
 
   return (
     <div className="overflow-y-auto h-[var(--height)] flex items-center justify-center"> 
-        <ForgotPassword />
+        <EmailVerification />
     </div>
   );
 }

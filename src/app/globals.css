@@ -22,10 +22,11 @@
   --o-color: #DC9908;
   --r-color: red;
   --b-color: rgb(138, 138, 255);
-  --lighter-color: #9A9996;
   --g-color: #585858;
+  --bright-r-color: #FF4C4C;
   --g-color-ver-02: #575757;
   --g-color-hover: #;
+  --lighter-color: #9A9996;
   --input-color: #414141;
   --fade-timing: 300ms ease-out 20ms;
   --radius: 16px;

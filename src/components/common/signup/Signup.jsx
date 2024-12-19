@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { registerUser } from "../../../utils/auth"
+import { useRouter } from 'next/navigation';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -7,7 +8,13 @@ const Signup = () => {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
+  const [isValid, setIsValid] = useState(false);
+  const router = useRouter()
   let loginData;
+
+  useEffect(()=>{
+    router.push("/email-verification");
+  }, [isValid])
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -26,10 +33,42 @@ const Signup = () => {
 
     registerUser(loginData)
     .then(response => {
-        console.log('Login successful:', response);
+      setIsValid(true);
+      console.log(isValid);
+      console.log('Login successful:', response);
     })
     .catch(error => {
         console.error('Login failed:', error);
+        if (error.response?.data?.username?.[0]) {
+          setError(error.response.data.username[0]);
+        
+          setTimeout(() => {
+            setError('');
+          }, 5000);
+        
+          return;
+        }
+
+        if (error.response?.data?.password1?.[0]) {
+          setError(error.response.data.password1[0]);
+        
+          setTimeout(() => {
+            setError('');
+          }, 5000);
+        
+          return;
+        }
+
+        if (error.response?.data?.non_field_errors?.[0]) {
+          setError(error.response.data.non_field_errors[0]);
+        
+          setTimeout(() => {
+            setError('');
+          }, 5000);
+        
+          return;
+        }
+        
     });
 
   };

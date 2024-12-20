@@ -21,6 +21,7 @@ const ForgotPassword = () => {
   //       console.error('Login failed:', error);
   //   });
   // };
+  
   const router = useRouter();
   const handleClick = () => {
     router.push("/email-verification");

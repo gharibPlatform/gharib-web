@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import { registerUser } from "../../../utils/auth"
+import { login } from '@/utils/auth';
+
 const Login = () => {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password1, setPassword1] = useState('');
-  const [password2, setPassword2] = useState('');
+  const [password, setPassword] = useState('');
   let loginData;
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    loginData = {username: username, email: email, password1: password1, password2: password2}
-    registerUser(loginData)
+    loginData = {username: username, password: password}
+    login(loginData)
     .then(response => {
         console.log('Login successful:', response);
     })
@@ -24,15 +23,13 @@ const Login = () => {
     <div className='flex flex-col items-center bg-[var(--dark-color)] w-min justify-center py-4 px-8 rounded-md'>
       <h2 className='text-[var(--w-color)] text-3xl pb-8 pt-4'>Login</h2>
       
-      <div className='flex flex-col gap-4' >
-        <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="text" placeholder='Username' required/>
-        {/* <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="email" placeholder='Email' required/> */}
-        <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password" placeholder='Password' required/>
-
-        <a href='forgot-password' className='flex items-center justify-center text-[var(--b-color)]'>Forgot Password?</a>
-
-        <button style={{width : "380px", borderRadius: "6px"}} className='px-4 py-2 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-2'>Login</button>
-      </div>
+        <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+          <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="text" placeholder='Username' required/>
+          {/* <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="email" placeholder='Email' required/> */}
+          <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password" placeholder='Password' required/>
+          <a href='forgot-password' className='flex items-center justify-center text-[var(--b-color)]'>Forgot Password?</a>
+          <button style={{width : "380px", borderRadius: "6px"}} className='px-4 py-2 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-2'>Login</button>
+        </form>
 
       <p className='text-[var(--w-color)]'>Don't have an account? <a className='text-[var(--b-color)]' href="signup">Signup</a></p>
 

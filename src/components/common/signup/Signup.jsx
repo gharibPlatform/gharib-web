@@ -13,7 +13,7 @@ const Signup = () => {
   let loginData;
 
   useEffect(()=>{
-    router.push("/email-verification");
+    // router.push("/email-verification");
   }, [isValid])
 
   const handleSubmit = (event) => {

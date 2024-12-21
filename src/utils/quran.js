@@ -1,10 +1,20 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://api.quran.com/v4';
+const BASE_URL = 'http://api.alquran.cloud/v1';
 
-export const fetchSurahs = async () => {
+export const fetchQuran = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/chapters`);
+    const response = await axios.get(`http://api.alquran.cloud/v1/quran/quran-uthmani`);
+    return response.data.edition;
+  } catch (error) {
+    console.error('Error fetching Surahs:', error);
+    throw error;
+  }
+};
+
+export const fetchSurah = async (surahId, edition) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/surah/${surahId}/${edition}`);
     return response.data.chapters;
   } catch (error) {
     console.error('Error fetching Surahs:', error);

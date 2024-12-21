@@ -1,9 +1,16 @@
 'use client'
-import { fetchSurah, fetchSurahs } from "@/utils/quran";
+import { fetchSurah } from "@/utils/quran";
 import QuranContent from "@/components/common/quran/QuranContent";
 
 const Page = () => {
-  console.log(fetchSurah(114));
+      fetchSurah(114)
+      .then(response => {
+          console.log('the surah is :', response);
+      })
+      .catch(error => {
+          console.error('error fetching :', error);
+      });
+
   return (
     <div>
         <QuranContent />

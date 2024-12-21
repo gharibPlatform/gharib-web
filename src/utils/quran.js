@@ -1,74 +1,64 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://api.alquran.cloud/v1';
+const BASE_URL = 'https://api.quran.com/api/v4';
 
-export const fetchQuran = async () => {
+export const listChapters = async () => {
   try {
-    const response = await axios.get(`http://api.alquran.cloud/v1/quran/quran-uthmani`);
-    return response.data.edition;
+    const response = await axios.get(`${BASE_URL}/chapters`);
+    return response.chapters;
   } catch (error) {
     console.error('Error fetching Surahs:', error);
     throw error;
   }
 };
 
-export const fetchSurah = async (surahId, edition) => {
+export const getChapter = async (surahId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/surah/${surahId}/${edition}`);
-    return response.data.chapters;
+    const response = await axios.get(`${BASE_URL}/chapters/${chapterId}`);
+    return response.data;
   } catch (error) {
     console.error('Error fetching Surahs:', error);
     throw error;
   }
 };
 
-
-export const fetchSurahDetails = async (surahId) => {
+export const getChapterInfo = async (surahId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/chapters/${surahId}`);
-    return response.data.chapter;
+    const response = await axios.get(`${BASE_URL}/chapters/${surahId}/info`);
+    return response.data;
   } catch (error) {
-    console.error(`Error fetching Surah ${surahId} details:`, error);
+    console.error('Error fetching Surahs:', error);
     throw error;
   }
 };
 
-export const fetchAyah = async (surahId, ayahNumber) => {
+export const verseByChapter = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/verses/by_key/${surahId}:${ayahNumber}`);
-    return response.data.verse;
-  } catch (error) {
-    console.error(`Error fetching Ayah ${ayahNumber} from Surah ${surahId}:`, error);
-    throw error;
-  }
-};
-
-export const fetchTranslations = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/translations`);
-    return response.data.translations;
+    const response = await axios.get(`${BASE_URL}/verses/by_chapter/${chapterId}?words=true`);
+    return response.data.verses;
   } catch (error) {
     console.error('Error fetching translations:', error);
     throw error;
   }
 };
 
-export const fetchRecitations = async () => {
+export const verseByPage = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/recitations`);
-    return response.data.recitations;
+    const response = await axios.get(`${BASE_URL}/verses/by_page/${chapterId}?words=true`);
+    return response.data.verses;
   } catch (error) {
-    console.error('Error fetching recitations:', error);
+    console.error('Error fetching translations:', error);
     throw error;
   }
 };
 
-export const fetchSurahAudio = async (reciterId, surahId) => {
+export const randomVerse = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/recitations/${reciterId}/by_chapter/${surahId}`);
-    return response.data.audio_files[0]?.url;
+    const response = await axios.get(`${BASE_URL}/verses/random/?words=true`);
+    return response.data.verses;
   } catch (error) {
-    console.error(`Error fetching audio for Surah ${surahId} with reciter ${reciterId}:`, error);
+    console.error('Error fetching translations:', error);
     throw error;
   }
 };
+

@@ -12,7 +12,7 @@ export const listChapters = async () => {
   }
 };
 
-export const getChapter = async (surahId) => {
+export const getChapter = async (chapterId) => {
   try {
     const response = await axios.get(`${BASE_URL}/chapters/${chapterId}`);
     return response.data;
@@ -22,9 +22,9 @@ export const getChapter = async (surahId) => {
   }
 };
 
-export const getChapterInfo = async (surahId) => {
+export const getChapterInfo = async (chapterId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/chapters/${surahId}/info`);
+    const response = await axios.get(`${BASE_URL}/chapters/${chapterId}/info`);
     return response.data;
   } catch (error) {
     console.error('Error fetching Surahs:', error);
@@ -32,7 +32,7 @@ export const getChapterInfo = async (surahId) => {
   }
 };
 
-export const verseByChapter = async () => {
+export const verseByChapter = async (chapterId) => {
   try {
     const response = await axios.get(`${BASE_URL}/verses/by_chapter/${chapterId}?words=true`);
     return response.data.verses;
@@ -42,7 +42,7 @@ export const verseByChapter = async () => {
   }
 };
 
-export const verseByPage = async () => {
+export const verseByPage = async (chapterId) => {
   try {
     const response = await axios.get(`${BASE_URL}/verses/by_page/${chapterId}?words=true`);
     return response.data.verses;

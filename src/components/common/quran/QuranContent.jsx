@@ -1,20 +1,16 @@
-function QuranHeader() {
-    return(
-        <div className="flex justify-center pt-6">
-            <div className="w-[var(--header-width)] h-12 bg-[var(--dark-color)] rounded-sm flex justify-between px-6">
-                <h2 className="text-[var(--w-color)] text-xl flex items-center justify-center">The cow </h2>
-                <h2 className="text-[var(--w-color)] text-xl flex items-center justify-center">145</h2>
-                <h2 className="text-[var(--w-color)] text-xl flex items-center justify-center">Juzs</h2>
-                <h2 className="text-[var(--w-color)] text-xl flex items-center justify-center">Hizbs</h2>
-            </div>
-        </div>
-    )
-}
+import { useState } from "react";
+import QuranHeader from "./QuranHeader";
 
 export default function QuranContent() {
-    return(
+    return (
         <div className="w-full h-2">
-            <QuranHeader />
+            <div className="flex flex-col justify-center pt-6">
+                <QuranHeader />
+        
+                <div className="flex items-center justify-center pt-12">
+                    <div className="bg-[var(--dark-color)] w-2/3 h-screen"></div>
+                </div>
+            </div>
         </div>
-    )
+    );
 }

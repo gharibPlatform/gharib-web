@@ -13,6 +13,7 @@ module.exports = {
 		fontFamily: {
 			cairo: ['Cairo', 'sans-serif'],
 			poppins: ['Poppins', 'sans-serif'],
+			p1v1: ['p1-v1', 'serif'],
 		  },
   		colors: {
   			background: 'var(--background)',

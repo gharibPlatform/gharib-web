@@ -22,7 +22,7 @@ const Page = () => {
         <QuranContent />
         <div className="flex justify-center items-center absolute top-1/2 left-1/2">
           {response.map((resp, index) => (
-            <div className="text-3xl text-[var(--w-color)] rtl" data-font="code_v1"  style={{fontFamily: "p2-v1"}} key={index}>{resp.text}</div>
+            <div className="text-3xl text-[var(--w-color)] rtl" data-font="code_v1" key={index}>{resp.text}</div>
           ))}
         </div>
     </div>

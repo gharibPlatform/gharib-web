@@ -1,6 +1,7 @@
 import React from "react";
 import { Cairo } from "next/font/google";
 import "./globals.css";
+import "./fonts.css"
 import ReactQueryProvider from "@/components/ReactQueryProviders";
 import { Toaster } from "react-hot-toast";
 

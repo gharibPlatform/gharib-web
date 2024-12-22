@@ -9,13 +9,6 @@
   padding: 0;
 }
 
-@font-face {
-  font-family: 'p1-v1';
-  src: url('/fonts/QCF_P001.TTF') format('truetype');
-  font-family: 'p2-v1';
-  src: url('/fonts/QCF_P002.TTF') format('truetype');
-}
-
 :root{
   --main-color : #212121;
   --main-color-hover: #323232;

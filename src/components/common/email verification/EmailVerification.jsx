@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { registerUser } from "../../../utils/auth"
+import { registerUser } from "../../../utils/userAuth"
 const EmailVerification = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');

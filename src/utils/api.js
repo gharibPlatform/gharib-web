@@ -104,9 +104,9 @@ export async function updateUserSettingsPatch(userId, settings) {
 
 export async function googleAuthPost(code) {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/google/`, {
-      code: code, 
-    });
+    const response = await axios.post(`${API_BASE_URL}/auth/google/`,
+      code
+    );
 
     return response.data; 
   } catch (error) {

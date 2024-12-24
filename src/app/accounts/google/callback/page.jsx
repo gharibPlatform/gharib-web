@@ -12,15 +12,12 @@ export default function GoogleCallback() {
     const queryParams = new URLSearchParams(window.location.search); 
     const code = queryParams.get('code'); 
     const decodedString = decodeURIComponent(code);
+    const codeObject = {'code' : decodedString}
+    const dataJSON = JSON.stringify(codeObject)
 
-    const dataBody = {
-      code: decodedString,
-    }
-    
-    const dataJSON = JSON.stringify(dataBody);
     if (decodedString) {
 
-      googleAuthPost(dataJSON)
+      googleAuthPost(codeObject)
         .then((data) => {
           console.log('Tokens received:', data);
           setTokens(data); 

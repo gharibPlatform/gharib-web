@@ -9,17 +9,12 @@ const Signup = () => {
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const router = useRouter()
-  let loginData;
-
-  useEffect(()=>{
-    // router.push("/email-verification");
-  }, [isValid])
+  let signupData;
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    loginData = {username: username, email: email, password1: password1, password2: password2}
+    signupData = {username: username, email: email, password1: password1, password2: password2}
 
     if (password1 !== password2) {
       setError("Passwords do not match")
@@ -31,7 +26,7 @@ const Signup = () => {
       return;
     }
 
-    registerUser(loginData)
+    registerUser(signupData)
     .then(response => {
       setIsValid(true);
       console.log(isValid);

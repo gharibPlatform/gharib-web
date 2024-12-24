@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { googleAuthPost } from "@/utils/api"
+import { useRouter } from 'next/navigation';
 
 export default function GoogleCallback() {
   const [loading, setLoading] = useState(true);
@@ -13,13 +14,11 @@ export default function GoogleCallback() {
     const code = queryParams.get('code'); 
     const decodedString = decodeURIComponent(code);
     const codeObject = {'code' : decodedString}
-    const dataJSON = JSON.stringify(codeObject)
-
+    
     if (decodedString) {
 
       googleAuthPost(codeObject)
         .then((data) => {
-          console.log('Tokens received:', data);
           setTokens(data); 
           setLoading(false); 
         })
@@ -28,10 +27,15 @@ export default function GoogleCallback() {
           setError('Failed to exchange code. Please try again.');
           setLoading(false);
         });
-      console.log("the code is : ", code)
-      console.log("the decodeed code is : ", decodedString)
     }
   }, [window.location.search]);
+  
+  if (tokens) {
+    const router = useRouter();  
+    setTimeout(() => {
+      router.push("/home")
+  }, 3000); 
+  }
 
   if (loading) {
     return <div className='flex items-center justify-center h-screen text-[var(--w-color)]'>Loading...</div>;
@@ -42,10 +46,6 @@ export default function GoogleCallback() {
   }
 
   return (
-    <div>
-      <h2>Authentication Successful</h2>
-      <p>Access Token: {tokens?.access_token}</p>
-      <p>Refresh Token: {tokens?.refresh_token}</p>
-    </div>
+    <div className='flex items-center justify-center h-screen text-[var(--w-color)] text-center'>Authentification success <br /> you'll be redirected to the home page</div>
   );
 }

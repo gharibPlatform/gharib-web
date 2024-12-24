@@ -85,7 +85,7 @@ const Signup = () => {
           <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password"
           value={password2} onChange={(e) => setPassword2(e.target.value)} placeholder='Confirm Password' required/>
           {error ? <p className='text-[var(--bright-r-color)] flex items-center justify-center'>{error}</p> : <div/>}
-          <button style={{width : "380px", borderRadius: "6px"}} className='px-4 py-2 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-2'>Signup</button>
+          <button style={{width : "380px", borderRadius: "6px"}} className='px-4 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-2'>Signup</button>
         </form>
 
       <p className='text-[var(--w-color)]'>Alreay have an account? <a className='text-[var(--b-color)]' href="login">Login</a></p>

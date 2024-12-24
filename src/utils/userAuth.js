@@ -46,24 +46,22 @@ export async function changePassword(data) {
   }
 }
 
-// Request password reset
-export async function resetPassword(data) {
+export async function resetPassword(email) {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/password/reset/`, data);
+    const response = await axios.post(`${API_BASE_URL}/auth/password/reset/`, email);
     return response.data;
   } catch (error) {
-    console.error('Error requesting password reset:', error);
+    console.error('Error sending email with error : ', error);
     throw error;
   }
 }
 
-// Confirm password reset
-export async function confirmResetPassword(uidb64, token, data) {
+export async function resetPasswordConfirm(password1, password2, userID, accessToken) {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/password/reset/confirm/${uidb64}/${token}/`, data);
+    const response = await axios.post(`${API_BASE_URL}/auth/password/reset/confirm/`, password1, password2, userID, accessToken);
     return response.data;
   } catch (error) {
-    console.error('Error confirming password reset:', error);
+    console.error('Error reseting the password with error : ', error);
     throw error;
   }
 }

@@ -101,3 +101,17 @@ export async function updateUserSettingsPatch(userId, settings) {
     throw error;
   }
 }
+
+export async function googleAuthPost(code) {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/auth/google/`, {
+      code: code, 
+    });
+
+    return response.data; 
+  } catch (error) {
+    console.error('Error exchanging Google code:', error);
+
+    throw error;
+  }
+}

@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { resetPasswordConfirm } from '@/utils/userAuth';
 
 const ResetPassword= () => {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
-  const userID = 'lol';
-  const accessToken = 'idk';
+  const userID = '';
+  const accessToken = '';
   const router = useRouter()
-
+  const params = useParams()
+  const {uid, token} = params;
+  
   let resetPasswordData;
 
   const handleSubmit = (event) => {

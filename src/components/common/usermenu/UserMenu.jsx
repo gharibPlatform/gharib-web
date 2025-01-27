@@ -1,10 +1,23 @@
 import Image from "next/image";
+import { logout } from "@/utils/userAuth";
 
 function UserMenu({ toggleUserMenu }) {
+
+  const handleClick = (prop) => {
+    toggleUserMenu(prop);
+    logout()
+    .then(response=>{
+      console.log("Logout success ", response);
+    })
+    .catch(error=>{
+      console.error("error loggin out : ", error)
+    })
+  }
+
   return (
     <>
       <div
-        className="bg-[var(--main-color)] flex flex-col absolute right-0 mr-3 w-72 z-10"
+        className="bg-[var(--main-color)] flex flex-col absolute right-5 top-10 mr-3 w-72 z-10 border-[var(--g-color)] border"
         style={{
           borderBottomRightRadius: "12px",
           borderBottomLeftRadius: "12px",
@@ -138,7 +151,7 @@ function UserMenu({ toggleUserMenu }) {
         </div>
 
         <div
-          onClick={() => toggleUserMenu(false)}
+          onClick={() => handleClick(false)}
           className="flex items-center cursor-pointer gap-5 p-4 hover:bg-[var(--tertiary-color)] pt-6"
           style={{
             borderBottomRightRadius: "12px",

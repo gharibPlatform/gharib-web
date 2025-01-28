@@ -42,9 +42,9 @@ export const verseByChapter = async (chapterId) => {
   }
 };
 
-export const verseByPage = async (chapterId) => {
+export const verseByPage = async (page) => {
   try {
-    const response = await axios.get(`${BASE_URL}/verses/by_page/${chapterId}?words=true`);
+    const response = await axios.get(`${BASE_URL}/verses/by_page/${page}?words=true`);
     return response.data.verses;
   } catch (error) {
     console.error('Error fetching translations:', error);
@@ -62,3 +62,23 @@ export const randomVerse = async () => {
   }
 };
 
+export const fetchPagesAroundCenter = async (currentPage, totalPagesToFetch = 4) => {
+  // Generate page numbers: from (currentPage - 4) to (currentPage + 4)
+  const pages = Array.from(
+    { length: totalPagesToFetch * 2 + 1 },
+    (_, i) => currentPage - totalPagesToFetch + i
+  );
+
+  const requests = pages.map((page) => verseByPage(page)); 
+
+  try {
+    const allData = await Promise.all(requests); 
+    return pages.reduce((result, page, index) => {
+      result[page] = allData[index]; 
+      return result;
+    }, {});
+  } catch (error) {
+    console.error("Error fetching pages around center:", error.message);
+    return {};
+  }
+};

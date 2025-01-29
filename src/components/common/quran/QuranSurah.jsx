@@ -5,7 +5,7 @@ import QuranPage from "./QuranPage";
 const QuranInfiniteScroll = () => {
     const [pagesData, setPagesData] = useState([]);
     const currentPage = 4; 
-    const pageNumberString = currentPage.toString().padStart(3, "0");
+    // const pageNumberString = currentPage.toString().padStart(3, "0");
 
     useEffect(()=>{
         let isMounted = true;
@@ -33,7 +33,7 @@ const QuranInfiniteScroll = () => {
             {Object.entries(pagesData).map(([key, verses]) => (
                 <QuranPage 
                     verses={verses} 
-                    pageNumberString={key.toString().padStart(3, "0")} 
+                    pageNumber={key} 
                 />
             ))}
 

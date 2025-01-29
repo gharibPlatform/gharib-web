@@ -5,7 +5,7 @@ const BASE_URL = 'https://api.quran.com/api/v4';
 export const listChapters = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/chapters`);
-    return response.chapters;
+    return response.data.chapters
   } catch (error) {
     console.error('Error fetching Surahs:', error);
     throw error;

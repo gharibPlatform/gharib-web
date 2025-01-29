@@ -43,6 +43,7 @@
   --fade-timing: 300ms ease-out 20ms;
   --radius: 16px;
   --height: calc(100vh - 57px);
+  --max-height-quran: calc(100vh - 160px);
   --width: calc(100vh - 360px);
   --header-width: calc(100% - 60px);
   --sidebar-width: 290px;

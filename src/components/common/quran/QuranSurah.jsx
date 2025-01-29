@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchPagesAroundCenter } from "@/utils/quran";
+import { fetchPagesWithinChapter } from "@/utils/quran";
 import QuranPage from "./QuranPage";
 
 const QuranInfiniteScroll = () => {
     const [pagesData, setPagesData] = useState([]);
-    const currentPage = 4; 
+    const currentPage = 1; 
     // const pageNumberString = currentPage.toString().padStart(3, "0");
 
     useEffect(()=>{
         let isMounted = true;
-        fetchPagesAroundCenter(currentPage, 3).then((data) => {
+        fetchPagesWithinChapter(currentPage, 3).then((data) => {
             if (isMounted) {
                 setPagesData(data); 
             }
@@ -36,7 +36,7 @@ const QuranInfiniteScroll = () => {
                     pageNumber={key} 
                 />
             ))}
-
+            {/* <div className="pt-32"></div> */}
             </div>
         </div>
     );

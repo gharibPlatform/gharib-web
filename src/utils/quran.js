@@ -62,23 +62,44 @@ export const randomVerse = async () => {
   }
 };
 
-export const fetchPagesAroundCenter = async (currentPage, totalPagesToFetch = 4) => {
-  // Generate page numbers: from (currentPage - 4) to (currentPage + 4)
-  const pages = Array.from(
-    { length: totalPagesToFetch * 2 + 1 },
-    (_, i) => currentPage - totalPagesToFetch + i
-  );
-
-  const requests = pages.map((page) => verseByPage(page)); 
-
+export const fetchPagesWithinChapter = async (currentPage, totalPagesToFetch = 4, maxPage = 604) => {
   try {
-    const allData = await Promise.all(requests); 
-    return pages.reduce((result, page, index) => {
+    // Fetch the current page to determine the chapter
+    const currentPageData = await verseByPage(currentPage);
+    const currentChapter = currentPageData[0]?.verse_key.split(":")[0]; // Extract chapter ID from "verse_key"
+
+    const pagesToCheck = Array.from(
+      { length: totalPagesToFetch * 2 + 1 },
+      (_, i) => currentPage - totalPagesToFetch + i
+    ).filter((page) => page > 0 && page <= maxPage); 
+
+    // Function to check if a page belongs to the same chapter
+    const isSameChapter = async (page) => {
+      const pageData = await verseByPage(page);
+      return pageData.every((verse) => verse.verse_key.split(":")[0] === currentChapter);
+    };
+
+    // Fetch only pages within the same chapter
+    const validPages = [];
+    for (const page of pagesToCheck) {
+      if (page === currentPage || (await isSameChapter(page))) {
+        validPages.push(page);
+      } else if (page > currentPage) {
+        break;
+      }
+    }
+
+    // Fetch the data for the valid pages
+    const requests = validPages.map((page) => verseByPage(page));
+    const allData = await Promise.all(requests);
+
+    return validPages.reduce((result, page, index) => {
       result[page] = allData[index]; 
       return result;
     }, {});
   } catch (error) {
-    console.error("Error fetching pages around center:", error.message);
+    console.error("Error fetching pages within chapter:", error.message);
     return {};
   }
+
 };

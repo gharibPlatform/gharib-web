@@ -1,20 +1,11 @@
-export default function VerseDropdown({ dropdownRef, searchQuery, setSearchQuery, selectedChapter }) {
-    // Generate verses for the selected chapter
+export default function VerseDropdown({ dropdownRef, searchQuery, setSearchQuery, selectedChapter, onSelectVerse }) {
     const generateVerses = () => {
         if (!selectedChapter || !selectedChapter.verses_count) return [];
-        const verses = [];
-        for (let i = 1; i <= selectedChapter.verses_count; i++) {
-            verses.push(i);
-        }
-        return verses;
+        return Array.from({ length: selectedChapter.verses_count }, (_, i) => i + 1);
     };
 
     const verses = generateVerses();
-
-    // Filter verses based on search query
-    const filteredVerses = verses.filter((verse) =>
-        verse.toString().includes(searchQuery)
-    );
+    const filteredVerses = verses.filter((verse) => verse.toString().includes(searchQuery));
 
     return (
         <div
@@ -35,8 +26,9 @@ export default function VerseDropdown({ dropdownRef, searchQuery, setSearchQuery
                     <div
                         key={i}
                         className="p-2 text-[var(--w-color)] cursor-pointer rounded flex items-center gap-5 hover:bg-[var(--dark-color)]"
+                        onClick={(e) => onSelectVerse(verse, e)} 
                     >
-                        <h2>Verse {verse}</h2>
+                        <h2>{verse}</h2>
                     </div>
                 ))
             ) : (

@@ -1,19 +1,11 @@
-export default function PageDropdown({ dropdownRef, searchQuery, setSearchQuery, selectedChapter }) {
+export default function PageDropdown({ dropdownRef, searchQuery, setSearchQuery, onSelectPage }) {
     const generatePages = () => {
-        if (!selectedChapter || !selectedChapter.pages) return [];
-        const [startPage, endPage] = selectedChapter.pages;
-        const pages = [];
-        for (let i = startPage; i <= endPage; i++) {
-            pages.push(i);
-        }
-        return pages;
+        const [startPage, endPage] = [1, 604]
+        return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
     };
 
     const pages = generatePages();
-
-    const filteredPages = pages.filter((page) =>
-        page.toString().includes(searchQuery)
-    );
+    const filteredPages = pages.filter((page) => page.toString().includes(searchQuery));
 
     return (
         <div
@@ -34,6 +26,7 @@ export default function PageDropdown({ dropdownRef, searchQuery, setSearchQuery,
                     <div
                         key={i}
                         className="p-2 text-[var(--w-color)] cursor-pointer rounded flex items-center gap-5 hover:bg-[var(--dark-color)]"
+                        onClick={(e) => onSelectPage(page, e)}
                     >
                         <h2>Page {page}</h2>
                     </div>

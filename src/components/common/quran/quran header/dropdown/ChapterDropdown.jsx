@@ -1,4 +1,4 @@
-export default function ChapterDropdown({ dropdownRef, searchQuery, setSearchQuery, filteredChapters }) {
+export default function ChapterDropdown({ dropdownRef, searchQuery, setSearchQuery, filteredChapters, onSelectChapter }) {
     return (
         <div
             ref={dropdownRef}
@@ -18,6 +18,7 @@ export default function ChapterDropdown({ dropdownRef, searchQuery, setSearchQue
                     <div
                         key={i}
                         className="p-2 text-[var(--w-color)] cursor-pointer rounded flex items-center gap-5 hover:bg-[var(--dark-color)]"
+                        onClick={(e) => onSelectChapter(chapter, e)}
                     >
                         <h2>{chapter.id}</h2>
                         <h2>{chapter.name_simple}</h2>

@@ -7,8 +7,11 @@ import VerseDropdown from "./dropdown/VerseDropdown";
 export default function QuranHeader() {
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+
     const [selectedChapter, setSelectedChapter] = useState(null);
-    
+    const [selectedVerse, setSelectedVerse] = useState(null);
+    const [selectedPage, setSelectedPage] = useState(null);
+
     const chapterButtonRef = useRef(null);
     const verseButtonRef = useRef(null);
     const pageButtonRef = useRef(null);
@@ -38,12 +41,11 @@ export default function QuranHeader() {
     };
 
     const handleClickOutside = (event) => {
-        const isInsideDropdown = dropdownRef.current && dropdownRef.current.contains(event.target);
         const isInsideChapterButton = chapterButtonRef.current && chapterButtonRef.current.contains(event.target);
         const isInsideVerseButton = verseButtonRef.current && verseButtonRef.current.contains(event.target);
         const isInsidePageButton = pageButtonRef.current && pageButtonRef.current.contains(event.target);
+        const isInsideDropdown = dropdownRef.current && dropdownRef.current.contains(event.target);
 
-        // If the click is outside all dropdowns and buttons, close all dropdowns
         if (!isInsideDropdown && !isInsideChapterButton && !isInsideVerseButton && !isInsidePageButton) {
             setSections({
                 chapter: { rotation: 90, isOpen: false },
@@ -62,8 +64,8 @@ export default function QuranHeader() {
 
     const sectionsData = [
         { name: "Chapter", value: selectedChapter ? selectedChapter.name_simple : "Select Chapter", ref: chapterButtonRef },
-        { name: "Verse", value: "Select Verse", ref: verseButtonRef },
-        { name: "Page", value: "Select Page", ref: pageButtonRef },
+        { name: "Verse", value: selectedVerse ? `Verse ${selectedVerse}` : "Select Verse", ref: verseButtonRef },
+        { name: "Page", value: selectedPage ? `Page ${selectedPage}` : "Select Page", ref: pageButtonRef },
     ];
 
     const filteredChapters = quranHeaderData.filter((chapter) =>
@@ -78,7 +80,7 @@ export default function QuranHeader() {
                     section={section}
                     sections={sections}
                     toggleSection={toggleSection}
-                    buttonRef={section.ref} // Use specific ref for each section
+                    buttonRef={section.ref} 
                 >
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Chapter" && (
                         <ChapterDropdown
@@ -86,7 +88,10 @@ export default function QuranHeader() {
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
                             filteredChapters={filteredChapters}
-                            onSelectChapter={setSelectedChapter}
+                            onSelectChapter={(chapter, e) => {
+                                setSelectedChapter(chapter);
+                                toggleSection(section.name.toLowerCase(), e)
+                            }}
                         />
                     )}
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Page" && (
@@ -94,7 +99,10 @@ export default function QuranHeader() {
                             dropdownRef={dropdownRef}
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
-                            selectedChapter={selectedChapter}
+                            onSelectPage={(page, e)=>{
+                                setSelectedPage(page);
+                                toggleSection(section.name.toLowerCase(), e)
+                            }}
                         />
                     )}
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Verse" && (
@@ -103,6 +111,10 @@ export default function QuranHeader() {
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
                             selectedChapter={selectedChapter}
+                            onSelectVerse={(verse, e)=>{
+                                setSelectedVerse(verse);
+                                toggleSection(section.name.toLowerCase(), e)
+                            }}
                         />
                     )}
                 </QuranHeaderSection>

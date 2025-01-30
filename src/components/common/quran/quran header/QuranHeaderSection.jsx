@@ -1,10 +1,9 @@
-
-export default function QruanHeaderSection({ section, sections, toggleSection, buttonRef, children }) {
+export default function QuranHeaderSection({ section, sections, toggleSection, buttonRef, children }) {
     return (
         <div className="flex gap-2 items-center justify-center relative">
             <h2 className="text-[var(--w-color)] text-xl">{section.name} :</h2>
             <div
-                ref={buttonRef}
+                ref={buttonRef} // Assign buttonRef here
                 className="flex items-center justify-center bg-[var(--darker-color)] p-2 px-4 rounded-sm h-12 cursor-pointer gap-2"
                 onClick={(event) => {
                     toggleSection(section.name.toLowerCase(), event);

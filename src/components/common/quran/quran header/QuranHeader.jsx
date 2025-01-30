@@ -1,17 +1,21 @@
 import { useEffect, useState, useRef } from "react";
 import { listChapters } from "@/utils/quran";
-import QruanHeaderSection from "./QuranHeaderSection";
-import ChapterDropdown from "./dropdown/ChapterDropdown";
-
+import QuranHeaderSection from "./QuranHeaderSection";
+import ChapterDropdown from "./dropdown/chapterDropdown";
+import PageDropdown from "./dropdown/PageDropdown";
+import VerseDropdown from "./dropdown/VerseDropdown";
 export default function QuranHeader() {
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const dropdownRef = useRef(null); 
-    const buttonRef = useRef(null); 
+    const [selectedChapter, setSelectedChapter] = useState(null);
+    
+    const chapterButtonRef = useRef(null);
+    const verseButtonRef = useRef(null);
+    const pageButtonRef = useRef(null);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         listChapters().then((resp) => {
-            console.log(resp);
             setQuranHeaderData(resp);
         });
     }, []);
@@ -19,48 +23,32 @@ export default function QuranHeader() {
     const [sections, setSections] = useState({
         chapter: { rotation: 90, isOpen: false },
         verse: { rotation: 90, isOpen: false },
-        juz: { rotation: 90, isOpen: false },
-        hizb: { rotation: 90, isOpen: false },
         page: { rotation: 90, isOpen: false },
     });
 
     const toggleSection = (section, e) => {
         e.stopPropagation();
-        setSections((prev) => {
-            const newState = { ...prev };
-            Object.keys(newState).forEach((key) => {
-                if (key === section) {
-                    newState[key] = {
-                        rotation: newState[key].isOpen ? 90 : 270,
-                        isOpen: !newState[key].isOpen,
-                    };
-                } else {
-                    newState[key] = {
-                        rotation: 90,
-                        isOpen: false,
-                    };
-                }
-            });
-            return newState;
-        });
+        setSections((prev) => ({
+            ...prev,
+            [section]: {
+                rotation: prev[section].isOpen ? 90 : 270,
+                isOpen: !prev[section].isOpen,
+            },
+        }));
     };
 
     const handleClickOutside = (event) => {
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target) &&
-            buttonRef.current &&
-            !buttonRef.current.contains(event.target)
-        ) {
-            setSections((prev) => {
-                const newState = { ...prev };
-                Object.keys(newState).forEach((key) => {
-                    newState[key] = {
-                        rotation: 90,
-                        isOpen: false,
-                    };
-                });
-                return newState;
+        const isInsideDropdown = dropdownRef.current && dropdownRef.current.contains(event.target);
+        const isInsideChapterButton = chapterButtonRef.current && chapterButtonRef.current.contains(event.target);
+        const isInsideVerseButton = verseButtonRef.current && verseButtonRef.current.contains(event.target);
+        const isInsidePageButton = pageButtonRef.current && pageButtonRef.current.contains(event.target);
+
+        // If the click is outside all dropdowns and buttons, close all dropdowns
+        if (!isInsideDropdown && !isInsideChapterButton && !isInsideVerseButton && !isInsidePageButton) {
+            setSections({
+                chapter: { rotation: 90, isOpen: false },
+                verse: { rotation: 90, isOpen: false },
+                page: { rotation: 90, isOpen: false },
             });
         }
     };
@@ -73,11 +61,9 @@ export default function QuranHeader() {
     }, []);
 
     const sectionsData = [
-        { name: "Chapter", value: "The Cow" },
-        { name: "Verse", value: "114" },
-        { name: "Juz", value: "1" },
-        { name: "Hizb", value: "2" },
-        { name: "Page", value: "22" },
+        { name: "Chapter", value: selectedChapter ? selectedChapter.name_simple : "Select Chapter", ref: chapterButtonRef },
+        { name: "Verse", value: "Select Verse", ref: verseButtonRef },
+        { name: "Page", value: "Select Page", ref: pageButtonRef },
     ];
 
     const filteredChapters = quranHeaderData.filter((chapter) =>
@@ -87,12 +73,12 @@ export default function QuranHeader() {
     return (
         <div className="w-[var(--header-width)] h-14 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto">
             {sectionsData.map((section, index) => (
-                <QruanHeaderSection
+                <QuranHeaderSection
                     key={index}
                     section={section}
                     sections={sections}
                     toggleSection={toggleSection}
-                    buttonRef={section.name.toLowerCase() === "chapter" ? buttonRef : null}
+                    buttonRef={section.ref} // Use specific ref for each section
                 >
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Chapter" && (
                         <ChapterDropdown
@@ -100,9 +86,26 @@ export default function QuranHeader() {
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
                             filteredChapters={filteredChapters}
+                            onSelectChapter={setSelectedChapter}
                         />
                     )}
-                </QruanHeaderSection>
+                    {sections[section.name.toLowerCase()].isOpen && section.name === "Page" && (
+                        <PageDropdown
+                            dropdownRef={dropdownRef}
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery}
+                            selectedChapter={selectedChapter}
+                        />
+                    )}
+                    {sections[section.name.toLowerCase()].isOpen && section.name === "Verse" && (
+                        <VerseDropdown
+                            dropdownRef={dropdownRef}
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery}
+                            selectedChapter={selectedChapter}
+                        />
+                    )}
+                </QuranHeaderSection>
             ))}
         </div>
     );

@@ -1,4 +1,4 @@
-import QuranHeader from "./QuranHeader";
+import QuranHeader from "./quran header/QuranHeader";
 import QuranSurah from "./QuranSurah";
 import QuranFooter from "./QuranFooter";
 

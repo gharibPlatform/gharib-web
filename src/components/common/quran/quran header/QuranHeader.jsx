@@ -1,11 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { listChapters } from "@/utils/quran";
+import QruanHeaderSection from "./QuranHeaderSection";
+import ChapterDropdown from "./dropdown/ChapterDropdown";
 
 export default function QuranHeader() {
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const dropdownRef = useRef(null); 
     const buttonRef = useRef(null); 
+
     useEffect(() => {
         listChapters().then((resp) => {
             console.log(resp);
@@ -84,57 +87,22 @@ export default function QuranHeader() {
     return (
         <div className="w-[var(--header-width)] h-14 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto">
             {sectionsData.map((section, index) => (
-                <div key={index} className="flex gap-2 items-center justify-center relative">
-                    <h2 className="text-[var(--w-color)] text-xl">{section.name} :</h2>
-                    <div
-                        ref={section.name.toLowerCase() === "chapter" ? buttonRef : null}
-                        className="flex items-center justify-center bg-[var(--darker-color)] p-2 px-4 rounded-sm h-12 cursor-pointer gap-2"
-                        onClick={(event) => {
-                            toggleSection(section.name.toLowerCase(), event);
-                        }}
-                    >
-                        <h2 className="text-[var(--w-color)] text-xl">{section.value}</h2>
-                        <svg
-                            style={{ transform: `rotate(${sections[section.name.toLowerCase()].rotation}deg)` }}
-                            className="w-5 h-5 transition-all duration-200 ease"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path d="M15 20L7 12L15 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </div>
-
+                <QruanHeaderSection
+                    key={index}
+                    section={section}
+                    sections={sections}
+                    toggleSection={toggleSection}
+                    buttonRef={section.name.toLowerCase() === "chapter" ? buttonRef : null}
+                >
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Chapter" && (
-                        <div
-                            ref={dropdownRef}
-                            className="bg-[var(--darker-color)] p-2 rounded-sm top-12 mt-2 left-6 w-48 absolute max-h-96 overflow-y-auto no-scrollbar"
-                        >
-                            <input
-                                className="bg-[var(--darker-color)] p-2 placeholder:text-[var(--g-color)] focus:outline-none text-[var(--w-color)]"
-                                type="text"
-                                placeholder="Search Surah"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-
-                            <div className="w-3/4 h-[1px] bg-[var(--g-color)] mb-2"></div>
-                            {filteredChapters.length > 0 ? (
-                                filteredChapters.map((chapter, i) => (
-                                    <div
-                                        key={i}
-                                        className="p-2 text-[var(--w-color)] cursor-pointer rounded flex items-center gap-5 hover:bg-[var(--dark-color)]"
-                                    >
-                                        <h2>{chapter.id}</h2>
-                                        <h2>{chapter.name_simple}</h2>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-[var(--w-color)] p-2">No results found</p>
-                            )}
-                        </div>
+                        <ChapterDropdown
+                            dropdownRef={dropdownRef}
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery}
+                            filteredChapters={filteredChapters}
+                        />
                     )}
-                </div>
+                </QruanHeaderSection>
             ))}
         </div>
     );

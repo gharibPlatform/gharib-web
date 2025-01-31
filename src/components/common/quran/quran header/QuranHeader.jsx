@@ -4,19 +4,31 @@ import QuranHeaderSection from "./QuranHeaderSection";
 import ChapterDropdown from "./dropdown/chapterDropdown";
 import PageDropdown from "./dropdown/PageDropdown";
 import VerseDropdown from "./dropdown/VerseDropdown";
+import useQuranHeaderPage from "@/stores/pageQuranHeaderStore"
+import { convertChapterToPage } from "@/utils/quran";
+
 export default function QuranHeader() {
+    const setQuranHeaderPage = useQuranHeaderPage((state) => state.setQuranHeaderPage);
+
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
     const [selectedChapter, setSelectedChapter] = useState(null);
     const [selectedVerse, setSelectedVerse] = useState(null);
-    const [selectedPage, setSelectedPage] = useState(null);
+    const [selectedPage, setSelectedPage] = useState();
 
     const chapterButtonRef = useRef(null);
     const verseButtonRef = useRef(null);
     const pageButtonRef = useRef(null);
     const dropdownRef = useRef(null);
 
+    const setSelected = (chapter) => {
+        setSelectedPage(chapter.pages[0]);
+        setQuranHeaderPage(chapter.pages[0]);
+        setSelectedVerse(1);
+        setSelectedChapter(chapter);
+
+    }
     useEffect(() => {
         listChapters().then((resp) => {
             setQuranHeaderData(resp);
@@ -89,7 +101,7 @@ export default function QuranHeader() {
                             setSearchQuery={setSearchQuery}
                             filteredChapters={filteredChapters}
                             onSelectChapter={(chapter, e) => {
-                                setSelectedChapter(chapter);
+                                setSelected(chapter);
                                 toggleSection(section.name.toLowerCase(), e)
                             }}
                         />
@@ -101,6 +113,7 @@ export default function QuranHeader() {
                             setSearchQuery={setSearchQuery}
                             onSelectPage={(page, e)=>{
                                 setSelectedPage(page);
+                                setQuranHeaderPage(page);
                                 toggleSection(section.name.toLowerCase(), e)
                             }}
                         />

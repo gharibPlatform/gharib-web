@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import { fetchPagesAroundCenter } from "@/utils/quran";
-
 export default function QuranPage ({ verses, pageNumber}) {
     const pageNumberString = pageNumber.toString().padStart(3, "0")
     return (
         <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16">
-            <div className="" style={{fontFamily: `p${pageNumberString}-v1`}}>
+            <div className=""
+             style={{
+                fontFamily: `p${pageNumberString}-v1`,
+                direction: "rtl"
+            }}>
                 {verses.flatMap((verse, index) =>
                     verse.words.map((word) => (
                         <span

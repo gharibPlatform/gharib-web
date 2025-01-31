@@ -1,5 +1,5 @@
 import QuranHeader from "./quran header/QuranHeader";
-import QuranSurah from "./QuranSurah";
+import QuranSurah from "./quran content/QuranSurah";
 import QuranFooter from "./QuranFooter";
 
 export default function QuranContent() {

@@ -64,22 +64,19 @@ export const randomVerse = async () => {
 
 export const fetchPagesWithinChapter = async (currentPage, totalPagesToFetch = 4, maxPage = 604) => {
   try {
-    // Fetch the current page to determine the chapter
     const currentPageData = await verseByPage(currentPage);
-    const currentChapter = currentPageData[0]?.verse_key.split(":")[0]; // Extract chapter ID from "verse_key"
+    const currentChapter = currentPageData[0]?.verse_key.split(":")[0];
 
     const pagesToCheck = Array.from(
       { length: totalPagesToFetch * 2 + 1 },
       (_, i) => currentPage - totalPagesToFetch + i
     ).filter((page) => page > 0 && page <= maxPage); 
 
-    // Function to check if a page belongs to the same chapter
     const isSameChapter = async (page) => {
       const pageData = await verseByPage(page);
       return pageData.every((verse) => verse.verse_key.split(":")[0] === currentChapter);
     };
 
-    // Fetch only pages within the same chapter
     const validPages = [];
     for (const page of pagesToCheck) {
       if (page === currentPage || (await isSameChapter(page))) {
@@ -89,7 +86,6 @@ export const fetchPagesWithinChapter = async (currentPage, totalPagesToFetch = 4
       }
     }
 
-    // Fetch the data for the valid pages
     const requests = validPages.map((page) => verseByPage(page));
     const allData = await Promise.all(requests);
 

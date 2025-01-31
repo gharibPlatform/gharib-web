@@ -15,7 +15,7 @@ export const listChapters = async () => {
 export const getChapter = async (chapterId) => {
   try {
     const response = await axios.get(`${BASE_URL}/chapters/${chapterId}`);
-    return response.data;
+    return response.data.chapter;
   } catch (error) {
     console.error('Error fetching Surahs:', error);
     throw error;
@@ -62,10 +62,20 @@ export const randomVerse = async () => {
   }
 };
 
-export const fetchPagesWithinChapter = async (currentPage, totalPagesToFetch = 4, maxPage = 604) => {
+export const fetchPagesWithinChapter = async (
+  currentPage,
+  totalPagesToFetch = 4,
+  maxPage = 604,
+  setQuranHeaderChapter,
+  setQuranHeaderVerse
+) => {
   try {
-    const currentPageData = await verseByPage(currentPage);
+    const currentPageData = await verseByPage(currentPage);    
     const currentChapter = currentPageData[0]?.verse_key.split(":")[0];
+    const currentChapterToPass = await getChapter(currentChapter);
+    
+    // Pass chapter to store
+    setQuranHeaderChapter(currentChapterToPass);
 
     const pagesToCheck = Array.from(
       { length: totalPagesToFetch * 2 + 1 },
@@ -89,13 +99,22 @@ export const fetchPagesWithinChapter = async (currentPage, totalPagesToFetch = 4
     const requests = validPages.map((page) => verseByPage(page));
     const allData = await Promise.all(requests);
 
-    return validPages.reduce((result, page, index) => {
-      result[page] = allData[index]; 
-      return result;
+    // Create an object with page numbers as keys and corresponding verses as values
+    const result = validPages.reduce((acc, page, index) => {
+      acc[page] = allData[index]; 
+      return acc;
     }, {});
+
+    // Set Quran header verse (first verse ID from the first valid page)
+    if (validPages.length > 0 && allData[0].length > 0) {
+      const firstVerseId = allData[0][0].id;
+      setQuranHeaderVerse(firstVerseId);
+    }
+
+    return result;
   } catch (error) {
     console.error("Error fetching pages within chapter:", error.message);
     return {};
   }
-
 };
+

@@ -107,8 +107,8 @@ export const fetchPagesWithinChapter = async (
 
     // Set Quran header verse (first verse ID from the first valid page)
     if (validPages.length > 0 && allData[0].length > 0) {
-      const firstVerseId = allData[0][0].id;
-      setQuranHeaderVerse(firstVerseId);
+      const firstVerseNumber = allData[0][0].verse_number;
+      setQuranHeaderVerse(firstVerseNumber);
     }
 
     return result;

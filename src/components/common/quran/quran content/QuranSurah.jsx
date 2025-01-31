@@ -3,6 +3,7 @@ import { fetchPagesWithinChapter } from "@/utils/quran";
 import QuranPage from "./QuranPage";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 
 const QuranInfiniteScroll = () => {
     const [pagesData, setPagesData] = useState([]);

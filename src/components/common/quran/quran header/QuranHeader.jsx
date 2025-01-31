@@ -6,10 +6,12 @@ import PageDropdown from "./dropdown/PageDropdown";
 import VerseDropdown from "./dropdown/VerseDropdown";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore"
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 
 export default function QuranHeader() {
     const setQuranHeaderPage = useQuranHeaderPage((state) => state.setQuranHeaderPage);
     const { quranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderVerse } = useQuranHeaderVerse();
 
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -34,20 +36,19 @@ export default function QuranHeader() {
         if (page) {
             setSelectedPage(page);
             setQuranHeaderPage(page);
-            
         }
     };
 
     useEffect(() => {
         if (selectedPage) {
             setSelectedChapter(quranHeaderChapter);
+            setSelectedVerse(quranHeaderVerse);
         }
-    }, [selectedPage, quranHeaderChapter]);
+    }, [selectedPage, quranHeaderChapter, quranHeaderVerse]);
 
     useEffect(() => {
         listChapters().then((resp) => {
             setQuranHeaderData(resp);
-            console.log(resp)
         });
     }, []);
 

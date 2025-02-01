@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { listChapters } from "@/utils/quran";
+import { listChapters, verseByChapter } from "@/utils/quran";
 import QuranHeaderSection from "./QuranHeaderSection";
 import ChapterDropdown from "./dropdown/chapterDropdown";
 import PageDropdown from "./dropdown/PageDropdown";
@@ -31,10 +31,17 @@ export default function QuranHeader() {
             setQuranHeaderPage(chapter.pages[0]);
             setSelectedVerse(1);
             setSelectedChapter(chapter);
+            console.log(chapter)
             return;
         }
         if (page) {
             setSelectedPage(page);
+            setQuranHeaderPage(page);
+        }
+        if (verse) {
+            setSelectedPage(page);
+            const currentVerses = verseByChapter(chapter.id)
+            // console.log(currentV)
             setQuranHeaderPage(page);
         }
     };

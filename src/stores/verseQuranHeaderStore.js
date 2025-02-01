@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const useQuranHeaderVerse = create((set) => ({
     quranHeaderVerse: null,
-  setQuranHeaderVerse: (chapter) => set({ quranHeaderVerse: chapter }),
+  setQuranHeaderVerse: (verse) => set({ quranHeaderVerse: verse }),
 }));
 
 export default useQuranHeaderVerse;

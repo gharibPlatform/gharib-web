@@ -37,8 +37,8 @@ export default function QuranHeader() {
         
                     if (foundVerse) {
                         console.log("Found verse:", foundVerse);
-                        setSelectedPage(foundVerse.page_number); // Update the selected page
-                        setQuranHeaderPage(foundVerse.page_number); // Update store state
+                        setSelectedPage(foundVerse.page_number); 
+                        setQuranHeaderPage(foundVerse.page_number); 
                     } else {
                         console.log("Verse not found in the current chapter");
                     }
@@ -67,7 +67,6 @@ export default function QuranHeader() {
     useEffect(() => {
         if (selectedPage) {
             setSelectedChapter(quranHeaderChapter);
-            // setSelectedVerse(quranHeaderVerse);
         }
     }, [selectedPage, quranHeaderChapter, quranHeaderVerse]);
 

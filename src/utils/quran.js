@@ -34,7 +34,7 @@ export const getChapterInfo = async (chapterId) => {
 
 export const verseByChapter = async (chapterId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/verses/by_chapter/${chapterId}?words=true`);
+    const response = await axios.get(`${BASE_URL}/verses/by_chapter/${chapterId}?per_page=300`);
     return response.data.verses;
   } catch (error) {
     console.error('Error fetching translations:', error);

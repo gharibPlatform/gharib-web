@@ -3,7 +3,6 @@ export default function VerseDropdown({ dropdownRef, searchQuery, setSearchQuery
         if (!selectedChapter || !selectedChapter.verses_count) return [];
         return Array.from({ length: selectedChapter.verses_count }, (_, i) => i + 1);
     };
-    console.log(selectedChapter);
     const verses = generateVerses();
     const filteredVerses = verses.filter((verse) => verse.toString().includes(searchQuery));
 

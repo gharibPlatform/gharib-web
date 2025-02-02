@@ -25,31 +25,49 @@ export default function QuranHeader() {
     const pageButtonRef = useRef(null);
     const dropdownRef = useRef(null);
 
-    const setSelected = (chapter, page) => {
+    const setSelected = (chapter, page, verse) => {
+        if (verse) {
+            setSelectedVerse(verse);
+            
+            verseByChapter(selectedChapter.id)
+                .then((resp) => {
+                    console.log("Current verses are:", resp);
+        
+                    const foundVerse = resp.find((v) => v.verse_number === verse);
+        
+                    if (foundVerse) {
+                        console.log("Found verse:", foundVerse);
+                        setSelectedPage(foundVerse.page_number); // Update the selected page
+                        setQuranHeaderPage(foundVerse.page_number); // Update store state
+                    } else {
+                        console.log("Verse not found in the current chapter");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching verses:", error);
+                });
+                return;
+        }
+
         if (chapter) {
             setSelectedPage(chapter.pages[0]);
             setQuranHeaderPage(chapter.pages[0]);
             setSelectedVerse(1);
             setSelectedChapter(chapter);
-            console.log(chapter)
-            return;
         }
+
         if (page) {
             setSelectedPage(page);
             setQuranHeaderPage(page);
         }
-        if (verse) {
-            setSelectedPage(page);
-            const currentVerses = verseByChapter(chapter.id)
-            // console.log(currentV)
-            setQuranHeaderPage(page);
-        }
+
+        
     };
 
     useEffect(() => {
         if (selectedPage) {
             setSelectedChapter(quranHeaderChapter);
-            setSelectedVerse(quranHeaderVerse);
+            // setSelectedVerse(quranHeaderVerse);
         }
     }, [selectedPage, quranHeaderChapter, quranHeaderVerse]);
 
@@ -148,8 +166,8 @@ export default function QuranHeader() {
                             setSearchQuery={setSearchQuery}
                             selectedChapter={selectedChapter}
                             onSelectVerse={(verse, e)=>{
-                                setSelectedVerse(verse);
                                 toggleSection(section.name.toLowerCase(), e)
+                                setSelected(selectedChapter, null, verse)
                             }}
                         />
                     )}

@@ -10,7 +10,7 @@ export default function PageDropdown({ dropdownRef, searchQuery, setSearchQuery,
     return (
         <div
             ref={dropdownRef}
-            className="bg-[var(--darker-color)] p-2 rounded-sm top-12 mt-2 left-6 w-48 absolute max-h-96 overflow-y-auto no-scrollbar"
+            className=" z-10 bg-[var(--darker-color)] p-2 rounded-sm top-12 mt-2 left-6 w-48 absolute max-h-96 overflow-y-auto no-scrollbar"
         >
             <input
                 className="bg-[var(--darker-color)] p-2 placeholder:text-[var(--g-color)] focus:outline-none text-[var(--w-color)]"

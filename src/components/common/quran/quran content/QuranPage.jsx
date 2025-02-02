@@ -42,7 +42,7 @@ export default function QuranPage({ verses, pageNumber }) {
                 {verses.flatMap((verse, index) =>
                     verse.words.map((word, wordIndex) => (
                         <span
-                            key={`${index}-${wordIndex}`} // Ensure each key is unique
+                            key={`${index}-${wordIndex}`} 
                             onClick={handleClick}
                             className="p-1 pb-3 inline-block hover:text-[var(--g-color)] cursor-pointer"
                         >

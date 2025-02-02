@@ -124,6 +124,7 @@ export default function QuranHeader() {
     const filteredChapters = quranHeaderData.filter((chapter) =>
         chapter.name_simple.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    console.log(filteredChapters);
 
     return (
         <div className="w-[var(--header-width)] h-14 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto">

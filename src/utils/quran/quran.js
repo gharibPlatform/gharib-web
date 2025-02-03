@@ -117,4 +117,3 @@ export const fetchPagesWithinChapter = async (
     return {};
   }
 };
-

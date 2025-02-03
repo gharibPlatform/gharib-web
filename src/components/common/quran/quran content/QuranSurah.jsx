@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchPagesWithinChapter } from "@/utils/quran";
+import { fetchPagesWithinChapter } from "@/utils/quran/quran";
 import QuranPage from "./QuranPage";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";

@@ -67,7 +67,8 @@ export const fetchPagesWithinChapter = async (
   totalPagesToFetch = 4,
   maxPage = 604,
   setQuranHeaderChapter,
-  setQuranHeaderVerse
+  setQuranHeaderVerse,
+  scrollDirection = 'down' // 'up' or 'down'
 ) => {
   try {
     const currentPageData = await verseByPage(currentPage);    
@@ -93,6 +94,25 @@ export const fetchPagesWithinChapter = async (
         validPages.push(page);
       } else if (page > currentPage) {
         break;
+      }
+    }
+
+    // Adjust pages based on scroll direction
+    if (scrollDirection === 'down') {
+      if (validPages.length > 0) {
+        const lastPage = validPages[validPages.length - 1];
+        if (lastPage < maxPage) {
+          validPages.push(lastPage + 1);
+          validPages.shift(); // Remove the first page
+        }
+      }
+    } else if (scrollDirection === 'up') {
+      if (validPages.length > 0) {
+        const firstPage = validPages[0];
+        if (firstPage > 1) {
+          validPages.unshift(firstPage - 1);
+          validPages.pop(); // Remove the last page
+        }
       }
     }
 

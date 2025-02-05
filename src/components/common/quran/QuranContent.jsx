@@ -12,6 +12,7 @@ export default function QuranContent() {
     const [cache, setCache] = useState({});
     const { quranHeaderPage } = useQuranHeaderPage();
     const [addedPage, setAddedPage] = useState([]);
+    const [lastFetchedPage, setLastFetchedPage] = useState();
     const setQuranHeaderChapter = useQuranHeaderChapter((state) => state.setQuranHeaderChapter);
     const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
 
@@ -22,6 +23,9 @@ export default function QuranContent() {
             if (isMounted) {
                 console.log(updatedCache)
                 setCache(updatedCache);
+                const keys = Object.keys(updatedCache);
+                console.log(keys[keys.length - 1])
+                setLastFetchedPage(+keys[keys.length - 1])
             }
         });
 
@@ -42,13 +46,18 @@ export default function QuranContent() {
         console.log("Window : ", innerHeight);
 
         if (scrollTop + innerHeight + 3600 >= scrollHeight) {
-            verseByPage(12)
-            .then((resp) => {
-                setAddedPage(resp)
-                // console.log(resp[0].page_number)
-            })
+            console.log(lastFetchedPage)
+            if(lastFetchedPage) {
+                verseByPage(lastFetchedPage + 1)
+                .then((resp) => {
+                    setAddedPage(resp)
+                })
+                setLastFetchedPage(lastFetchedPage + 1)
+            }
+           
         }
     };
+
     useEffect(()=>{
         if(addedPage && addedPage.length > 0 && addedPage[0]){
             setCache({...cache, [addedPage[0].page_number]: addedPage})
@@ -67,7 +76,7 @@ export default function QuranContent() {
             scrollableDiv.removeEventListener("scroll", handleScroll);
             console.log("Event listener removed");
         };
-    }, []);
+    }, [lastFetchedPage]);
 
     return (
         <div 

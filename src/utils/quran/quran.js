@@ -64,56 +64,83 @@ export const randomVerse = async () => {
 
 export const fetchPagesWithinChapter = async (
   currentPage,
-  totalPagesToFetch = 4,
-  maxPage = 604,
+  cache,
+  setCache,
   setQuranHeaderChapter,
-  setQuranHeaderVerse
+  setQuranHeaderVerse,
+  maxPage = 604
 ) => {
   try {
-    const currentPageData = await verseByPage(currentPage);    
-    const currentChapter = currentPageData[0]?.verse_key.split(":")[0];
-    const currentChapterToPass = await getChapter(currentChapter);
+    const totalPagesToFetch = 2; // Default fetch: 2 before, 2 after, + current page
     
-    // Pass chapter to store
-    setQuranHeaderChapter(currentChapterToPass);
+    // Ensure the current page is cached first
+    if (!cache[currentPage]) {
+      const currentPageData = await verseByPage(currentPage);
+      const currentChapter = currentPageData[0]?.verse_key.split(":")[0];
+      const currentChapterToPass = await getChapter(currentChapter);
+      setQuranHeaderChapter(currentChapterToPass);
 
-    const pagesToCheck = Array.from(
-      { length: totalPagesToFetch * 2 + 1 },
-      (_, i) => currentPage - totalPagesToFetch + i
-    ).filter((page) => page > 0 && page <= maxPage); 
+      cache[currentPage] = currentPageData;
+    }
+
+    const currentChapter = cache[currentPage][0]?.verse_key.split(":")[0];
+
+    // Check if this is the first page of the chapter
+    const firstPageInChapter = async () => {
+      const firstVerse = cache[currentPage]?.[0] || (await verseByPage(currentPage))[0];
+      return firstVerse.verse_number === 1;
+    };
+
+    let pagesToFetch;
+    if (await firstPageInChapter()) {
+      // If it's the first page of the chapter, fetch 4 pages after
+      pagesToFetch = Array.from(
+        { length: 5 },
+        (_, i) => currentPage + i
+      ).filter((page) => page > 0 && page <= maxPage && !cache[page]);
+    } else {
+      // Normal behavior: fetch 2 before and 2 after
+      pagesToFetch = Array.from(
+        { length: totalPagesToFetch * 2 + 1 },
+        (_, i) => currentPage - totalPagesToFetch + i
+      ).filter((page) => page > 0 && page <= maxPage && !cache[page]);
+    }
 
     const isSameChapter = async (page) => {
+      if (cache[page]) return true; // If already cached, no need to fetch
       const pageData = await verseByPage(page);
       return pageData.every((verse) => verse.verse_key.split(":")[0] === currentChapter);
     };
 
     const validPages = [];
-    for (const page of pagesToCheck) {
-      if (page === currentPage || (await isSameChapter(page))) {
+    for (const page of pagesToFetch) {
+      if (await isSameChapter(page)) {
         validPages.push(page);
       } else if (page > currentPage) {
         break;
       }
     }
 
+    // Fetch only the missing pages
     const requests = validPages.map((page) => verseByPage(page));
     const allData = await Promise.all(requests);
 
-    // Create an object with page numbers as keys and corresponding verses as values
-    const result = validPages.reduce((acc, page, index) => {
-      acc[page] = allData[index]; 
-      return acc;
-    }, {});
+    // Update cache with new pages
+    const newCache = { ...cache };
+    validPages.forEach((page, index) => {
+      newCache[page] = allData[index];
+    });
 
-    // Set Quran header verse (first verse ID from the first valid page)
-    if (validPages.length > 0 && allData[0].length > 0) {
-      const firstVerseNumber = allData[0][0].verse_number;
-      setQuranHeaderVerse(firstVerseNumber);
+    // Ensure the height remains static or grows
+    setCache(newCache);
+
+    if (cache[currentPage]?.length > 0) {
+      setQuranHeaderVerse(cache[currentPage][0].verse_number);
     }
 
-    return result;
+    return newCache;
   } catch (error) {
     console.error("Error fetching pages within chapter:", error.message);
-    return {};
+    return cache;
   }
 };

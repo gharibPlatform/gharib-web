@@ -6,7 +6,6 @@ export default function QuranPage({ verses, pageNumber }) {
     const [clickBoxBool, setClickBoxBool] = useState(false);
     const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
     const boxRef = useRef(null); 
-    console.log(verses)
     const [verseKey, setVerseKey] = useState("");
 
     const handleClick = (event, verse) => {

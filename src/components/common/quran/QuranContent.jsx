@@ -1,10 +1,34 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import QuranHeader from "./quran header/QuranHeader";
 import QuranSurah from "./quran content/QuranSurah";
 import QuranFooter from "./QuranFooter";
-
+import { fetchPagesWithinChapter } from "@/utils/quran/quran";
+import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
+import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import { verseByPage } from "@/utils/quran/quran";
 export default function QuranContent() {
-    const scrollRef = useRef(null); // Reference to scrollable div
+    const scrollRef = useRef(null); 
+    const [cache, setCache] = useState({});
+    const { quranHeaderPage } = useQuranHeaderPage();
+    const [addedPage, setAddedPage] = useState([]);
+    const setQuranHeaderChapter = useQuranHeaderChapter((state) => state.setQuranHeaderChapter);
+    const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        fetchPagesWithinChapter(quranHeaderPage, cache, setCache, setQuranHeaderChapter, setQuranHeaderVerse).then((updatedCache) => {
+            if (isMounted) {
+                console.log(updatedCache)
+                setCache(updatedCache);
+            }
+        });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [quranHeaderPage]);
 
     const handleScroll = () => {
         if (!scrollRef.current) return;
@@ -15,18 +39,22 @@ export default function QuranContent() {
 
         console.log("Height:", scrollHeight);
         console.log("Top:", scrollTop);
-        console.log("Window : ", innerHeight)
+        console.log("Window : ", innerHeight);
 
-        if (scrollTop + innerHeight + 400 >= scrollHeight ) {
-            console.log("Happened")
+        if (scrollTop + innerHeight + 3600 >= scrollHeight) {
+            verseByPage(12)
+            .then((resp) => {
+                setAddedPage(resp)
+                // console.log(resp[0].page_number)
+            })
         }
-
-        if (scrollTop + innerHeight + 400 >= scrollHeight ) {
-            //fetch pages logic up
-        }
-
-        
     };
+    useEffect(()=>{
+        if(addedPage && addedPage.length > 0 && addedPage[0]){
+            setCache({...cache, [addedPage[0].page_number]: addedPage})
+            console.log({...cache, [addedPage[0].page_number]: addedPage})
+        }
+    }, [addedPage])
 
     useEffect(() => {
         const scrollableDiv = scrollRef.current;
@@ -48,7 +76,7 @@ export default function QuranContent() {
         >
             <div className="flex flex-col justify-center pt-6">
                 <QuranHeader />
-                <QuranSurah />
+                <QuranSurah cache={cache} />
                 <QuranFooter />
             </div>
         </div>

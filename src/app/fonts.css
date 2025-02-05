@@ -1,3 +1,12 @@
+@font-face {
+    font-family: "surahnames";
+    src:
+      url("/fonts/sura_names.woff2"),
+      url("/fonts/sura_names.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
 
 @font-face {
     font-family: 'p001-v1';

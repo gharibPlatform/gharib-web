@@ -17,7 +17,7 @@ export default function QuranPage({ verses, pageNumber }) {
         });
         setVerseKey(verse.verse_key);
     };
-
+    
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (boxRef.current && !boxRef.current.contains(event.target)) {
@@ -49,17 +49,20 @@ export default function QuranPage({ verses, pageNumber }) {
                     direction: "rtl"
                 }}
             >
-                {verses.flatMap((verse, index) =>
-                    verse.words.map((word, wordIndex) => (
-                        <span
-                            key={`${index}-${wordIndex}`} 
-                            onClick={(e)=>handleClick(e, verse)}
-                            className="p-1 pb-3 inline-block hover:text-[var(--g-color)] cursor-pointer"
-                        >
-                            {word.text}{" "}
-                        </span>
-                    ))
-                )}
+                {verses.flatMap((verse, index) => (
+                    <>
+                        {verse.verse_number === 1 && index !== 0 && <div style={{fontFamily: "surahnames"}}>surah</div> } 
+                        {verse.words.map((word, wordIndex) => (
+                            <span
+                                key={`${index}-${wordIndex}`} 
+                                onClick={(e) => handleClick(e, verse)}
+                                className="p-1 pb-3 inline-block hover:text-[var(--g-color)] cursor-pointer"
+                            >
+                                {word.text}{" "}
+                            </span>
+                        ))}
+                    </>
+                ))}
             </div>
 
             {clickBoxBool && (

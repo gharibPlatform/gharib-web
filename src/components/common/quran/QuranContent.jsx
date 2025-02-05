@@ -41,9 +41,9 @@ export default function QuranContent() {
         const scrollTop = scrollRef.current.scrollTop;
         const innerHeight = window.innerHeight;
 
-        console.log("Height:", scrollHeight);
-        console.log("Top:", scrollTop);
-        console.log("Window : ", innerHeight);
+        // console.log("Height:", scrollHeight);
+        // console.log("Top:", scrollTop);
+        // console.log("Window : ", innerHeight);
 
         if (scrollTop + innerHeight + 3600 >= scrollHeight) {
             console.log(lastFetchedPage)
@@ -54,14 +54,13 @@ export default function QuranContent() {
                 })
                 setLastFetchedPage(lastFetchedPage + 1)
             }
-           
         }
     };
 
     useEffect(()=>{
         if(addedPage && addedPage.length > 0 && addedPage[0]){
             setCache({...cache, [addedPage[0].page_number]: addedPage})
-            console.log({...cache, [addedPage[0].page_number]: addedPage})
+            // console.log({...cache, [addedPage[0].page_number]: addedPage})
         }
     }, [addedPage])
 
@@ -74,7 +73,7 @@ export default function QuranContent() {
 
         return () => {
             scrollableDiv.removeEventListener("scroll", handleScroll);
-            console.log("Event listener removed");
+            // console.log("Event listener removed");
         };
     }, [lastFetchedPage]);
 

@@ -1,5 +1,6 @@
 import { audioByVerse } from "@/utils/quran/quranAudio";
 import { useState, useEffect, useRef } from "react";
+import QuranSurahSeparator from "./QuranSurahSeparator";
 
 export default function QuranPage({ verses, pageNumber }) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
@@ -7,7 +8,7 @@ export default function QuranPage({ verses, pageNumber }) {
     const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
     const boxRef = useRef(null); 
     const [verseKey, setVerseKey] = useState("");
-
+    
     const handleClick = (event, verse) => {
         setClickBoxBool(true);
         setBoxPosition({
@@ -16,7 +17,7 @@ export default function QuranPage({ verses, pageNumber }) {
         });
         setVerseKey(verse.verse_key);
     };
-    
+    console.log("verses are :", verses)
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (boxRef.current && !boxRef.current.contains(event.target)) {
@@ -32,7 +33,7 @@ export default function QuranPage({ verses, pageNumber }) {
             document.removeEventListener("click", handleOutsideClick);
         };
     }, [clickBoxBool]);
-
+    
     const PlayVerse = () => {
         setClickBoxBool(false)
         audioByVerse(1, verseKey)
@@ -40,6 +41,7 @@ export default function QuranPage({ verses, pageNumber }) {
             console.log(resp);
         })
     }
+    
     return (
         <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
             <div
@@ -50,7 +52,19 @@ export default function QuranPage({ verses, pageNumber }) {
             >
                 {verses.flatMap((verse, index) => (
                     <>
-                        {verse.verse_number === 1 && index !== 0 && <div style={{fontFamily: "surahnames"}}>surah</div> } 
+                        {verse.verse_number === 1 && index !== 0 && 
+                        <QuranSurahSeparator
+                         chapterId={ verse.verse_key.split(":")[0].padStart(3, "0") } 
+                         pageNumber={pageNumber}
+                         pageNumberBool={true}
+                         /> } 
+
+                        {verse.verse_number === 1 && index == 0 &&
+                        <QuranSurahSeparator
+                         chapterId={ verse.verse_key.split(":")[0].padStart(3, "0") }
+                         />  
+                        }
+
                         {verse.words.map((word, wordIndex) => (
                             <span
                                 key={`${index}-${wordIndex}`} 

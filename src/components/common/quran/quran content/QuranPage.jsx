@@ -52,18 +52,25 @@ export default function QuranPage({ verses, pageNumber }) {
             >
                 {verses.flatMap((verse, index) => (
                     <>
-                        {verse.verse_number === 1 && index !== 0 && 
-                        <QuranSurahSeparator
-                         chapterId={ verse.verse_key.split(":")[0].padStart(3, "0") } 
-                         pageNumber={pageNumber}
-                         pageNumberBool={true}
-                         /> } 
-
-                        {verse.verse_number === 1 && index == 0 &&
-                        <QuranSurahSeparator
-                         chapterId={ verse.verse_key.split(":")[0].padStart(3, "0") }
-                         />  
-                        }
+                       {verse.verse_number === 1 && (
+                            index !== 0 ? (
+                                <QuranSurahSeparator
+                                chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
+                                pageNumber={pageNumber}
+                                pageNumberBool={true}
+                                basmalaPre={true}
+                                />
+                            ) : (Number(verse.verse_key.split(":")[0]) === 1 || Number(verse.verse_key.split(":")[0]) === 9) ? (
+                                <QuranSurahSeparator
+                                chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
+                                />
+                            ) : (
+                                <QuranSurahSeparator
+                                chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
+                                basmalaPre={true}
+                                />
+                            )
+                        )}
 
                         {verse.words.map((word, wordIndex) => (
                             <span

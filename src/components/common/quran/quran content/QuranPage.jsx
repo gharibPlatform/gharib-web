@@ -17,7 +17,6 @@ export default function QuranPage({ verses, pageNumber }) {
         });
         setVerseKey(verse.verse_key);
     };
-    console.log("verses are :", verses)
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (boxRef.current && !boxRef.current.contains(event.target)) {

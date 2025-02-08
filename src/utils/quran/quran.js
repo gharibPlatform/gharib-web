@@ -43,13 +43,16 @@ export const verseByChapter = async (chapterId) => {
 };
 
 export const verseByPage = async (page) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/verses/by_page/${page}?words=true`);
-    return response.data.verses;
-  } catch (error) {
-    console.error('Error fetching translations:', error);
-    throw error;
+  if(page >= 1 && page <=604){
+    try {
+      const response = await axios.get(`${BASE_URL}/verses/by_page/${page}?words=true`);
+      return response.data.verses;
+    } catch (error) {
+      console.error('Error fetching translations:', error);
+      throw error;
+    }
   }
+    
 };
 
 export const randomVerse = async () => {

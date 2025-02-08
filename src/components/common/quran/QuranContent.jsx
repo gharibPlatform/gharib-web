@@ -41,12 +41,11 @@ export default function QuranContent() {
         const scrollTop = scrollRef.current.scrollTop;
         const innerHeight = window.innerHeight;
 
-        // console.log("Height:", scrollHeight);
-        // console.log("Top:", scrollTop);
-        // console.log("Window : ", innerHeight);
+        console.log("Height:", scrollHeight);
+        console.log("Top:", scrollTop);
 
         if (scrollTop + innerHeight + 3600 >= scrollHeight) {
-            console.log(lastFetchedPage)
+            console.log("lasted fetched page is : ", lastFetchedPage)
             if(lastFetchedPage) {
                 verseByPage(lastFetchedPage + 1)
                 .then((resp) => {
@@ -73,7 +72,6 @@ export default function QuranContent() {
 
         return () => {
             scrollableDiv.removeEventListener("scroll", handleScroll);
-            // console.log("Event listener removed");
         };
     }, [lastFetchedPage]);
 

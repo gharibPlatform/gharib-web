@@ -7,6 +7,7 @@ import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { verseByPage } from "@/utils/quran/quran";
+
 export default function QuranContent() {
     const scrollRef = useRef(null); 
     const [cache, setCache] = useState({});
@@ -34,6 +35,8 @@ export default function QuranContent() {
         };
     }, [quranHeaderPage]);
 
+    const [stopFetching, setStopFetching] = useState(false);
+
     const handleScroll = () => {
         if (!scrollRef.current) return;
 
@@ -41,14 +44,19 @@ export default function QuranContent() {
         const scrollTop = scrollRef.current.scrollTop;
         const innerHeight = window.innerHeight;
 
-        console.log("Height:", scrollHeight);
-        console.log("Top:", scrollTop);
+        // console.log("Height:", scrollHeight);
+        // console.log("Top:", scrollTop);
+        if (scrollTop + innerHeight + 3600 >= scrollHeight || !stopFetching) {
 
-        if (scrollTop + innerHeight + 3600 >= scrollHeight) {
-            console.log("lasted fetched page is : ", lastFetchedPage)
             if(lastFetchedPage) {
                 verseByPage(lastFetchedPage + 1)
                 .then((resp) => {
+                    // stop fetching in the end of the chapter
+                    if (resp[0].verse_key.split(":")[0] !== Object.values(cache)[0][0].verse_key.split(":")[0]) {
+                        // console.log("stopped fetching");
+                        setStopFetching(true);
+                        return;
+                    }
                     setAddedPage(resp)
                 })
                 setLastFetchedPage(lastFetchedPage + 1)
@@ -68,7 +76,7 @@ export default function QuranContent() {
         if (!scrollableDiv) return;
 
         scrollableDiv.addEventListener("scroll", handleScroll);
-        console.log("Event listener added");
+        // console.log("Event listener added");
 
         return () => {
             scrollableDiv.removeEventListener("scroll", handleScroll);

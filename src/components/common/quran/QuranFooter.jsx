@@ -1,14 +1,17 @@
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import { getChapter } from "@/utils/quran/quran";
+import { useRouter } from "next/navigation";
 
 export default function QuranFooter() {
     const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const router = useRouter();
 
     const PreviousSurah = () => {
         getChapter(quranHeaderChapter.id - 1)
         .then((resp) => {
             setQuranHeaderChapter(resp);
         })
+        router.push(`/quran/chapters/${quranHeaderChapter.id - 1}`)
     };
 
     const NextSurah = () => {
@@ -16,6 +19,7 @@ export default function QuranFooter() {
         .then((resp) => {
             setQuranHeaderChapter(resp);
         })
+        router.push(`/quran/chapters/${quranHeaderChapter.id + 1}`)
     };
 
     return (

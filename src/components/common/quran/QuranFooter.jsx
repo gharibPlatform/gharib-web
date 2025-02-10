@@ -3,7 +3,6 @@ import { getChapter } from "@/utils/quran/quran";
 
 export default function QuranFooter() {
     const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
-    console.log(quranHeaderChapter)
 
     const PreviousSurah = () => {
         getChapter(quranHeaderChapter.id - 1)

@@ -16,8 +16,8 @@ export default function QuranHeader() {
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const [selectedChapter, setSelectedChapter] = useState(null);
-    const [selectedVerse, setSelectedVerse] = useState(null);
+    const [selectedChapter, setSelectedChapter] = useState(quranHeaderChapter);
+    const [selectedVerse, setSelectedVerse] = useState(quranHeaderVerse);
     const [selectedPage, setSelectedPage] = useState();
 
     const chapterButtonRef = useRef(null);
@@ -25,6 +25,10 @@ export default function QuranHeader() {
     const pageButtonRef = useRef(null);
     const dropdownRef = useRef(null);
 
+    useEffect(()=>{
+        setSelectedChapter(quranHeaderChapter)
+    }, [quranHeaderChapter])
+    
     const setSelected = (chapter, page, verse) => {
         if (verse) {
             setSelectedVerse(verse);
@@ -57,7 +61,6 @@ export default function QuranHeader() {
             setSelectedPage(page);
             setQuranHeaderPage(page);
         }
-
         
     };
 
@@ -69,7 +72,7 @@ export default function QuranHeader() {
 
     useEffect(() => {
         if (quranHeaderChapter) {
-            setSelected(null, null, null);
+            setSelected(quranHeaderChapter, null, null);
         }
     }, [ quranHeaderChapter ]);
 

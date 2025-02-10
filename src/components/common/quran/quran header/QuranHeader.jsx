@@ -30,13 +30,10 @@ export default function QuranHeader() {
             setSelectedVerse(verse);
             
             verseByChapter(selectedChapter.id)
-                .then((resp) => {
-                    console.log("Current verses are:", resp);
-        
+                .then((resp) => {        
                     const foundVerse = resp.find((v) => v.verse_number === verse);
         
                     if (foundVerse) {
-                        console.log("Found verse:", foundVerse);
                         setSelectedPage(foundVerse.page_number); 
                         setQuranHeaderPage(foundVerse.page_number); 
                     } else {
@@ -69,6 +66,12 @@ export default function QuranHeader() {
             setSelectedChapter(quranHeaderChapter);
         }
     }, [selectedPage, quranHeaderChapter, quranHeaderVerse]);
+
+    useEffect(() => {
+        if (quranHeaderChapter) {
+            setSelected(null, null, null);
+        }
+    }, [ quranHeaderChapter ]);
 
     useEffect(() => {
         listChapters().then((resp) => {

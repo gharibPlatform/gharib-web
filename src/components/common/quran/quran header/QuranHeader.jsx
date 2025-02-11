@@ -7,10 +7,11 @@ import VerseDropdown from "./dropdown/VerseDropdown";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore"
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import { useRouter } from "next/navigation";
 
 export default function QuranHeader() {
     const setQuranHeaderPage = useQuranHeaderPage((state) => state.setQuranHeaderPage);
-    const { quranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
     const { quranHeaderVerse } = useQuranHeaderVerse();
 
     const [quranHeaderData, setQuranHeaderData] = useState([]);
@@ -28,7 +29,8 @@ export default function QuranHeader() {
     useEffect(()=>{
         setSelectedChapter(quranHeaderChapter)
     }, [quranHeaderChapter])
-    
+
+    const router = useRouter();
     const setSelected = (chapter, page, verse) => {
         if (verse) {
             setSelectedVerse(verse);
@@ -148,8 +150,9 @@ export default function QuranHeader() {
                             setSearchQuery={setSearchQuery}
                             filteredChapters={filteredChapters}
                             onSelectChapter={(chapter, e) => {
-                                setSelected(chapter);
-                                toggleSection(section.name.toLowerCase(), e)
+                                setQuranHeaderChapter(chapter)
+                                toggleSection(section.name.toLowerCase(), e);
+                                router.push(`quran/chapters/${chapter.id}`)
                             }}
                         />
                     )}

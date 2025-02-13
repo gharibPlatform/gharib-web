@@ -8,12 +8,13 @@ import useQuranHeaderPage from "@/stores/pageQuranHeaderStore"
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { useRouter } from "next/navigation";
+import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 
 export default function QuranHeader() {
     const setQuranHeaderPage = useQuranHeaderPage((state) => state.setQuranHeaderPage);
     const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
     const { quranHeaderVerse } = useQuranHeaderVerse();
-
+    const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -133,8 +134,16 @@ export default function QuranHeader() {
         chapter.name_simple.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const surahTopRef = useRef(null);
+    if(beginningOfTheSurah) {
+        if (surahTopRef.current) {
+            setBeginningOfTheSurah(false);
+            surahTopRef.current.scrollIntoView({ behavior: "smooth", block: "center"});
+        }
+    }
+
     return (
-        <div className="w-[var(--header-width)] h-14 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto">
+        <div ref={surahTopRef} className="w-[var(--header-width)] h-14 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto scroll-mt-16">
             {sectionsData.map((section, index) => (
                 <QuranHeaderSection
                     key={index}

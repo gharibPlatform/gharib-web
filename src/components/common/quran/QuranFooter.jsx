@@ -1,9 +1,12 @@
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import { getChapter } from "@/utils/quran/quran";
 import { useRouter } from "next/navigation";
+import useBeginningOfTheSurah from "@/stores/begginingOfTheSurah";
 
 export default function QuranFooter() {
     const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const setBeginningOfTheSurah = useBeginningOfTheSurah((state) => state.setBeginningOfTheSurah);
+
     const router = useRouter();
 
     const PreviousSurah = () => {
@@ -35,7 +38,7 @@ export default function QuranFooter() {
                     <h2>Previous Surah</h2>
                 </div>
                 
-                <div className="transition-all duration-75 ease p-4 pl-6 flex items-center border border-[var(--g-color)] text-[var(--lighter-color)] text-xl gap-3 rounded-[6px] cursor-pointer hover:border-[var(--w-color)] hover:text-[var(--w-color)]">
+                <div onClick={() => setBeginningOfTheSurah(true)} className="transition-all duration-75 ease p-4 pl-6 flex items-center border border-[var(--g-color)] text-[var(--lighter-color)] text-xl gap-3 rounded-[6px] cursor-pointer hover:border-[var(--w-color)] hover:text-[var(--w-color)]">
                     <h2>Beginning of Surah</h2>
                 </div>
 

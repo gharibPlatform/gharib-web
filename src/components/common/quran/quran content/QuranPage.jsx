@@ -17,6 +17,7 @@ export default function QuranPage({ verses, pageNumber }) {
         });
         setVerseKey(verse.verse_key);
     };
+    
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (boxRef.current && !boxRef.current.contains(event.target)) {
@@ -40,6 +41,12 @@ export default function QuranPage({ verses, pageNumber }) {
             console.log(resp);
         })
     }
+    
+    if (!Array.isArray(verses)) {
+        console.error("Verses is not an array:", verses);
+    }
+    console.log("verses are  : ", verses)
+    console.log(typeof(verses))
     
     return (
         <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">

@@ -6,18 +6,22 @@ import { fetchPagesWithinChapter } from "@/utils/quran/quran";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
-import { verseByPage } from "@/utils/quran/quran";
+import { verseByPage, verseByChapter } from "@/utils/quran/quran";
+import useShouldFetch from "@/stores/shouldFetch";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
     const [cache, setCache] = useState({});
-    const { quranHeaderPage } = useQuranHeaderPage();
     const [addedPage, setAddedPage] = useState([]);
     const [lastFetchedPage, setLastFetchedPage] = useState();
-    const setQuranHeaderChapter = useQuranHeaderChapter((state) => state.setQuranHeaderChapter);
+
+    const { quranHeaderPage } = useQuranHeaderPage();
+    const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
     const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
+    const { shouldFetch } = useShouldFetch();
 
     useEffect(() => {
+        // if ( shouldFetch !== "page") return;
         let isMounted = true;
 
         fetchPagesWithinChapter(quranHeaderPage, cache, setCache, setQuranHeaderChapter, setQuranHeaderVerse).then((updatedCache) => {
@@ -34,6 +38,23 @@ export default function QuranContent() {
             isMounted = false;
         };
     }, [quranHeaderPage]);
+    
+    // useEffect(() => {
+    //     if ( shouldFetch !== "chapter") return;
+    //     let isMounted = true;
+    //     verseByChapter(quranHeaderChapter.id)
+    //     .then((updatedCache) => {
+    //         const tempObj = {data : updatedCache}
+    //         if ( isMounted ) {
+    //             console.log(tempObj)
+    //             setCache(tempObj)
+    //         }
+    //     })
+
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, [ quranHeaderChapter ]);
 
     const [stopFetching, setStopFetching] = useState(false);
 
@@ -44,8 +65,6 @@ export default function QuranContent() {
         const scrollTop = scrollRef.current.scrollTop;
         const innerHeight = window.innerHeight;
 
-        // console.log("Height:", scrollHeight);
-        // console.log("Top:", scrollTop);
         if (scrollTop + innerHeight + 3600 >= scrollHeight || !stopFetching) {
 
             if(lastFetchedPage) {
@@ -53,7 +72,6 @@ export default function QuranContent() {
                 .then((resp) => {
                     // stop fetching in the end of the chapter
                     if (resp[0].verse_key.split(":")[0] !== Object.values(cache)[0][0].verse_key.split(":")[0]) {
-                        // console.log("stopped fetching");
                         setStopFetching(true);
                         return;
                     }

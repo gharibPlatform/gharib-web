@@ -55,6 +55,7 @@ export default function QuranHeader() {
 
         if (chapter) {
             setSelectedPage(chapter.pages[0]);
+            console.log('chapter is :', chapter)
             setQuranHeaderPage(chapter.pages[0]);
             setSelectedVerse(1);
             setSelectedChapter(chapter);

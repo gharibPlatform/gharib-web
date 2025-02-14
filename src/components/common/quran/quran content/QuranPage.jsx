@@ -1,7 +1,6 @@
 import { audioByVerse } from "@/utils/quran/quranAudio";
 import { useState, useEffect, useRef } from "react";
 import QuranSurahSeparator from "./QuranSurahSeparator";
-import { verseByChapter } from "@/utils/quran/quran";
 
 export default function QuranPage({ verses, pageNumber }) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
@@ -43,6 +42,7 @@ export default function QuranPage({ verses, pageNumber }) {
         })
     }
 
+    console.log("verses are : ", verses)
     return (
         <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
             <div

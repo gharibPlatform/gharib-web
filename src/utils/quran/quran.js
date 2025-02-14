@@ -34,8 +34,22 @@ export const getChapterInfo = async (chapterId) => {
 
 export const verseByChapter = async (chapterId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/verses/by_chapter/${chapterId}?words=true&per_page=450`);
-    return response.data.verses;
+    let allVerses = {};
+    let chapterInfo = await getChapter(chapterId);
+    console.log(chapterInfo)
+    let firstPage = chapterInfo.pages[0];
+    let pagesFetched = 0;
+
+    while (pagesFetched < 5) {
+      const response = await verseByPage(firstPage + pagesFetched);
+      
+      if (response.length === 0) break; // Stop if no more verses
+      
+      allVerses[firstPage + pagesFetched] = response;
+      pagesFetched++;
+    }
+
+    return allVerses;
   } catch (error) {
     console.error('Error fetching translations:', error);
     throw error;
@@ -71,8 +85,7 @@ export const fetchPagesWithinChapter = async (
   setCache,
   setQuranHeaderChapter,
   setQuranHeaderVerse,
-  maxPage = 604,
-  fetchOnlyOneChapter = false // New argument to fetch only one chapter
+  maxPage = 604
 ) => {
   try {
     const totalPagesToFetch = 2; // Default fetch: 2 before, 2 after, + current page
@@ -96,20 +109,7 @@ export const fetchPagesWithinChapter = async (
     };
 
     let pagesToFetch;
-    if (fetchOnlyOneChapter) {
-      // If fetching only one chapter, fetch all pages within the current chapter
-      pagesToFetch = [];
-      let page = currentPage;
-      while (page > 0 && page <= maxPage) {
-        const pageData = await verseByPage(page);
-        if (pageData[0]?.verse_key.split(":")[0] === currentChapter) {
-          pagesToFetch.push(page);
-          page++;
-        } else {
-          break;
-        }
-      }
-    } else if (await firstPageInChapter()) {
+    if (await firstPageInChapter()) {
       // If it's the first page of the chapter, fetch 4 pages after
       pagesToFetch = Array.from(
         { length: 5 },

@@ -45,11 +45,9 @@ export default function QuranContent() {
         verseByChapter(quranHeaderChapter.id)
         .then((updatedCache) => {
             console.log(updatedCache)
-            const pageNumber = updatedCache[0].page_number;
-            const tempObj = {[pageNumber]: updatedCache}
             if ( isMounted ) {
-                console.log(tempObj)
-                setCache(tempObj)
+                console.log(updatedCache)
+                setCache(updatedCache)
             }
         })
 

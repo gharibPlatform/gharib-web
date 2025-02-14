@@ -1,6 +1,7 @@
 import { audioByVerse } from "@/utils/quran/quranAudio";
 import { useState, useEffect, useRef } from "react";
 import QuranSurahSeparator from "./QuranSurahSeparator";
+import { verseByChapter } from "@/utils/quran/quran";
 
 export default function QuranPage({ verses, pageNumber }) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
@@ -41,13 +42,7 @@ export default function QuranPage({ verses, pageNumber }) {
             console.log(resp);
         })
     }
-    
-    if (!Array.isArray(verses)) {
-        console.error("Verses is not an array:", verses);
-    }
-    console.log("verses are  : ", verses)
-    console.log(typeof(verses))
-    
+
     return (
         <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
             <div
@@ -56,7 +51,7 @@ export default function QuranPage({ verses, pageNumber }) {
                     direction: "rtl"
                 }}
             >
-                {verses.flatMap((verse, index) => (
+                {Array.isArray(verses) && verses.flatMap((verse, index) => (
                     <>
                        {verse.verse_number === 1 && (
                             index !== 0 ? (

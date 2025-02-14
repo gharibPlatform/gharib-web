@@ -21,10 +21,10 @@ export default function QuranContent() {
     const { shouldFetch } = useShouldFetch();
 
     useEffect(() => {
-        // if ( shouldFetch !== "page") return;
+        if ( shouldFetch !== "page") return;
         let isMounted = true;
 
-        fetchPagesWithinChapter(quranHeaderPage, cache, setCache, setQuranHeaderChapter, setQuranHeaderVerse).then((updatedCache) => {
+        fetchPagesWithinChapter(quranHeaderPage, cache, setCache, setQuranHeaderChapter, setQuranHeaderVerse, true).then((updatedCache) => {
             if (isMounted) {
                 console.log(updatedCache)
                 setCache(updatedCache);
@@ -39,22 +39,22 @@ export default function QuranContent() {
         };
     }, [quranHeaderPage]);
     
-    // useEffect(() => {
-    //     if ( shouldFetch !== "chapter") return;
-    //     let isMounted = true;
-    //     verseByChapter(quranHeaderChapter.id)
-    //     .then((updatedCache) => {
-    //         const tempObj = {data : updatedCache}
-    //         if ( isMounted ) {
-    //             console.log(tempObj)
-    //             setCache(tempObj)
-    //         }
-    //     })
+    useEffect(() => {
+        if ( shouldFetch !== "chapter") return;
+        let isMounted = true;
+        verseByChapter(quranHeaderChapter.id)
+        .then((updatedCache) => {
+            const tempObj = {data : updatedCache}
+            if ( isMounted ) {
+                console.log(tempObj)
+                setCache(tempObj)
+            }
+        })
 
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, [ quranHeaderChapter ]);
+        return () => {
+            isMounted = false;
+        };
+    }, [ quranHeaderChapter ]);
 
     const [stopFetching, setStopFetching] = useState(false);
 
@@ -85,7 +85,6 @@ export default function QuranContent() {
     useEffect(()=>{
         if(addedPage && addedPage.length > 0 && addedPage[0]){
             setCache({...cache, [addedPage[0].page_number]: addedPage})
-            // console.log({...cache, [addedPage[0].page_number]: addedPage})
         }
     }, [addedPage])
 
@@ -94,7 +93,6 @@ export default function QuranContent() {
         if (!scrollableDiv) return;
 
         scrollableDiv.addEventListener("scroll", handleScroll);
-        // console.log("Event listener added");
 
         return () => {
             scrollableDiv.removeEventListener("scroll", handleScroll);

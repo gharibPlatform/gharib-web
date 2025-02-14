@@ -36,16 +36,20 @@ export const verseByChapter = async (chapterId) => {
   try {
     let allVerses = {};
     let chapterInfo = await getChapter(chapterId);
-    console.log(chapterInfo)
+    console.log(chapterInfo);
     let firstPage = chapterInfo.pages[0];
+    let lastPage = chapterInfo.pages[1];
     let pagesFetched = 0;
 
     while (pagesFetched < 5) {
-      const response = await verseByPage(firstPage + pagesFetched);
+      let currentPage = firstPage + pagesFetched;
+      if (currentPage > lastPage) break; // Stop if page exceeds chapter range
+      
+      const response = await verseByPage(currentPage);
       
       if (response.length === 0) break; // Stop if no more verses
       
-      allVerses[firstPage + pagesFetched] = response;
+      allVerses[currentPage] = response;
       pagesFetched++;
     }
 
@@ -55,6 +59,7 @@ export const verseByChapter = async (chapterId) => {
     throw error;
   }
 };
+
 
 export const verseByPage = async (page) => {
   if(page >= 1 && page <=604){

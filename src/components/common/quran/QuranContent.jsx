@@ -47,6 +47,8 @@ export default function QuranContent() {
             console.log(updatedCache)
             if ( isMounted ) {
                 console.log(updatedCache)
+                const keys = Object.keys(updatedCache);
+                setLastFetchedPage(+keys[keys.length - 1])
                 setCache(updatedCache)
             }
         })

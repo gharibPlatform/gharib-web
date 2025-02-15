@@ -49,10 +49,6 @@ export default function QuranContent() {
             if (isMounted) {
                 const tempObj = { [quranHeaderPage] : updatedCache }
                 setCache(tempObj);
-                
-                const keys = Object.keys(updatedCache);
-                console.log(keys[keys.length - 1])
-                setLastFetchedPage(+keys[keys.length - 1])
             }
         });
 

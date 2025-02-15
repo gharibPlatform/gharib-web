@@ -45,7 +45,7 @@ export const verseByChapter = async (chapterId) => {
       let currentPage = firstPage + pagesFetched;
       if (currentPage > lastPage) break; // Stop if page exceeds chapter range
       
-      const response = await verseByPage(currentPage);
+      const response = await verseByPageAndChapter(currentPage, chapterId);
       
       if (response.length === 0) break; // Stop if no more verses
       
@@ -61,17 +61,26 @@ export const verseByChapter = async (chapterId) => {
 };
 
 
-export const verseByPage = async (page) => {
-  if(page >= 1 && page <=604){
+export const verseByPage = async (page, chapterId = null) => {
+  if (page >= 1 && page <= 604) {
     try {
       const response = await axios.get(`${BASE_URL}/verses/by_page/${page}?words=true`);
-      return response.data.verses;
+      let verses = response.data.verses;
+      
+      if (chapterId) {
+        verses = verses.filter(verse => verse.verse_key.split(":")[0] == chapterId);
+      }
+      
+      return verses;
     } catch (error) {
       console.error('Error fetching translations:', error);
       throw error;
     }
   }
-    
+};
+
+export const verseByPageAndChapter = async (page, chapterId) => {
+  return await verseByPage(page, chapterId);
 };
 
 export const randomVerse = async () => {

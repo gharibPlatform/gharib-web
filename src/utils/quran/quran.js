@@ -93,6 +93,7 @@ export const randomVerse = async () => {
   }
 };
 
+
 export const fetchPagesWithinChapter = async (
   currentPage,
   cache,
@@ -102,8 +103,8 @@ export const fetchPagesWithinChapter = async (
   maxPage = 604
 ) => {
   try {
-    const totalPagesToFetch = 2; // Default fetch: 2 before, 2 after, + current page
-    
+    const totalPagesToFetch = 4; // Fetch only 4 pages after
+
     // Ensure the current page is cached first
     if (!cache[currentPage]) {
       const currentPageData = await verseByPage(currentPage);
@@ -116,26 +117,11 @@ export const fetchPagesWithinChapter = async (
 
     const currentChapter = cache[currentPage][0]?.verse_key.split(":")[0];
 
-    // Check if this is the first page of the chapter
-    const firstPageInChapter = async () => {
-      const firstVerse = cache[currentPage]?.[0] || (await verseByPage(currentPage))[0];
-      return firstVerse.verse_number === 1;
-    };
-
-    let pagesToFetch;
-    if (await firstPageInChapter()) {
-      // If it's the first page of the chapter, fetch 4 pages after
-      pagesToFetch = Array.from(
-        { length: 5 },
-        (_, i) => currentPage + i
-      ).filter((page) => page > 0 && page <= maxPage && !cache[page]);
-    } else {
-      // Normal behavior: fetch 2 before and 2 after
-      pagesToFetch = Array.from(
-        { length: totalPagesToFetch * 2 + 1 },
-        (_, i) => currentPage - totalPagesToFetch + i
-      ).filter((page) => page > 0 && page <= maxPage && !cache[page]);
-    }
+    // Fetch 4 pages after the current page
+    const pagesToFetch = Array.from(
+      { length: totalPagesToFetch },
+      (_, i) => currentPage + i + 1
+    ).filter((page) => page > 0 && page <= maxPage && !cache[page]);
 
     const isSameChapter = async (page) => {
       if (cache[page]) return true; // If already cached, no need to fetch
@@ -147,7 +133,7 @@ export const fetchPagesWithinChapter = async (
     for (const page of pagesToFetch) {
       if (await isSameChapter(page)) {
         validPages.push(page);
-      } else if (page > currentPage) {
+      } else {
         break;
       }
     }

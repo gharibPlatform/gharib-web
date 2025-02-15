@@ -102,7 +102,7 @@ export default function QuranHeader() {
             },
         }));
     };
-
+    
     const handleClickOutside = (event) => {
         const isInsideChapterButton = chapterButtonRef.current && chapterButtonRef.current.contains(event.target);
         const isInsideVerseButton = verseButtonRef.current && verseButtonRef.current.contains(event.target);

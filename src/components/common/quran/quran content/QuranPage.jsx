@@ -42,7 +42,7 @@ export default function QuranPage({ verses, pageNumber }) {
         })
     }
 
-    console.log("verses are : ", verses)
+    // console.log("verses are : ", verses)
     return (
         <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
             <div

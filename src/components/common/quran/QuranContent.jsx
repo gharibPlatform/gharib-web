@@ -19,25 +19,6 @@ export default function QuranContent() {
     const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
     const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
     const { shouldFetch } = useShouldFetch();
-
-    // useEffect(() => {
-    //     if ( shouldFetch !== "page") return;
-    //     let isMounted = true;
-
-    //     fetchPagesWithinChapter(quranHeaderPage, cache, setCache, setQuranHeaderChapter, setQuranHeaderVerse, true).then((updatedCache) => {
-    //         if (isMounted) {
-    //             console.log(updatedCache)
-    //             setCache(updatedCache);
-    //             const keys = Object.keys(updatedCache);
-    //             console.log(keys[keys.length - 1])
-    //             setLastFetchedPage(+keys[keys.length - 1])
-    //         }
-    //    });
-
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, [quranHeaderPage]);
     
     useEffect(() => {
         if ( shouldFetch !== "page") return;

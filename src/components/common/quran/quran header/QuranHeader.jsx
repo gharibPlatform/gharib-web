@@ -7,7 +7,7 @@ import VerseDropdown from "./dropdown/VerseDropdown";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore"
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
-import { useRouter } from "next/navigation";
+import { useRouter , usePathname} from "next/navigation";
 import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 
 export default function QuranHeader() {
@@ -20,7 +20,7 @@ export default function QuranHeader() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedChapter, setSelectedChapter] = useState(quranHeaderChapter);
     const [selectedVerse, setSelectedVerse] = useState(quranHeaderVerse);
-    const [selectedPage, setSelectedPage] = useState();
+    const [selectedPage, setSelectedPage] = useState(quranHeaderPage);
 
     const chapterButtonRef = useRef(null);
     const verseButtonRef = useRef(null);
@@ -32,7 +32,8 @@ export default function QuranHeader() {
     }, [quranHeaderChapter])
 
     const router = useRouter();
-    
+    const pathname = usePathname();
+
     // const setSelected = (chapter, page, verse) => {
     //     if (verse) {
     //         setSelectedVerse(verse);
@@ -77,15 +78,15 @@ export default function QuranHeader() {
     useEffect(() => {
         if (quranHeaderPage) {
             setSelectedPage(quranHeaderPage)
-
         }
     }, [ quranHeaderPage ])
 
-    // useEffect(() => {
-    //     if (quranHeaderChapter) {
-    //         setSelected(quranHeaderChapter, null, null);
-    //     }
-    // }, [ quranHeaderChapter ]);
+    useEffect(() => {
+        if (selectedPage) {
+            const newPath = `/quran/pages/${selectedPage}`;
+            router.push(newPath);
+        }
+    }, [ selectedPage ])
 
     useEffect(() => {
         listChapters().then((resp) => {
@@ -173,17 +174,19 @@ export default function QuranHeader() {
                             }}
                         />
                     )}
+
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Page" && (
                         <PageDropdown
                             dropdownRef={dropdownRef}
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
                             onSelectPage={(page, e)=>{
-                                setSelected(null, page)
+                                setSelectedPage(page)
                                 toggleSection(section.name.toLowerCase(), e)
                             }}
                         />
                     )}
+
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Verse" && (
                         <VerseDropdown
                             dropdownRef={dropdownRef}

@@ -12,7 +12,7 @@ import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 
 export default function QuranHeader() {
     const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
-    const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderChapter, setPriority, setQuranHeaderChapter } = useQuranHeaderChapter();
     const {quranHeaderPage, setQuranHeaderPage } = useQuranHeaderPage();
     const { quranHeaderVerse } = useQuranHeaderVerse();
 
@@ -85,6 +85,7 @@ export default function QuranHeader() {
         if (selectedPage) {
             const newPath = `/quran/pages/${selectedPage}`;
             router.push(newPath);
+            setPriority(false);
         }
     }, [ selectedPage ])
 

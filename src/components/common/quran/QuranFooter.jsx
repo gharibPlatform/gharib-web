@@ -3,10 +3,9 @@ import { getChapter } from "@/utils/quran/quran";
 import { useRouter } from "next/navigation";
 import useBeginningOfTheSurah from "@/stores/begginingOfTheSurah";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
-import { useParams } from "next/navigation";
 
 export default function QuranFooter() {
-    const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderChapter, priority, setQuranHeaderChapter } = useQuranHeaderChapter();
     const { quranHeaderPage, setQuranHeaderPage } = useQuranHeaderPage();
     const setBeginningOfTheSurah = useBeginningOfTheSurah((state) => state.setBeginningOfTheSurah);
 
@@ -98,7 +97,7 @@ export default function QuranFooter() {
 
     return (
         <div>
-            {quranHeaderChapter ? (
+            {priority ? (
                 <SurahFooter />
                 
             ) : (

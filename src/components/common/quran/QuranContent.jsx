@@ -16,10 +16,10 @@ export default function QuranContent() {
     const [lastFetchedPage, setLastFetchedPage] = useState();
 
     const { quranHeaderPage } = useQuranHeaderPage();
-    const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderChapter, setPriority, setQuranHeaderChapter } = useQuranHeaderChapter();
     const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
     const { shouldFetch } = useShouldFetch();
-    
+
     useEffect(() => {
         if ( shouldFetch !== "page") return;
         let isMounted = true;
@@ -54,6 +54,7 @@ export default function QuranContent() {
                 const keys = Object.keys(updatedCache);
                 setLastFetchedPage(+keys[keys.length - 1])
                 setCache(updatedCache)
+                setPriority(true)
             }
         })
 

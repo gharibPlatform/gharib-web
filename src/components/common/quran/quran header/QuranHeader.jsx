@@ -11,13 +11,13 @@ import { useRouter } from "next/navigation";
 import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 
 export default function QuranHeader() {
-    const setQuranHeaderPage = useQuranHeaderPage((state) => state.setQuranHeaderPage);
-    const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
-    const { quranHeaderVerse } = useQuranHeaderVerse();
     const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
+    const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const {quranHeaderPage, setQuranHeaderPage } = useQuranHeaderPage();
+    const { quranHeaderVerse } = useQuranHeaderVerse();
+
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-
     const [selectedChapter, setSelectedChapter] = useState(quranHeaderChapter);
     const [selectedVerse, setSelectedVerse] = useState(quranHeaderVerse);
     const [selectedPage, setSelectedPage] = useState();
@@ -32,41 +32,41 @@ export default function QuranHeader() {
     }, [quranHeaderChapter])
 
     const router = useRouter();
-    const setSelected = (chapter, page, verse) => {
-        if (verse) {
-            setSelectedVerse(verse);
+    
+    // const setSelected = (chapter, page, verse) => {
+    //     if (verse) {
+    //         setSelectedVerse(verse);
             
-            verseByChapter(selectedChapter.id)
-                .then((resp) => {        
-                    const foundVerse = resp.find((v) => v.verse_number === verse);
+    //         verseByChapter(selectedChapter.id)
+    //             .then((resp) => {        
+    //                 const foundVerse = resp.find((v) => v.verse_number === verse);
         
-                    if (foundVerse) {
-                        setSelectedPage(foundVerse.page_number); 
-                        setQuranHeaderPage(foundVerse.page_number); 
-                    } else {
-                        console.log("Verse not found in the current chapter");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching verses:", error);
-                });
-                return;
-        }
+    //                 if (foundVerse) {
+    //                     setSelectedPage(foundVerse.page_number); 
+    //                     setQuranHeaderPage(foundVerse.page_number); 
+    //                 } else {
+    //                     console.log("Verse not found in the current chapter");
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Error fetching verses:", error);
+    //             });
+    //             return;
+    //     }
 
-        if (chapter) {
-            setSelectedPage(chapter.pages[0]);
-            console.log('chapter is :', chapter)
-            setQuranHeaderPage(chapter.pages[0]);
-            setSelectedVerse(1);
-            setSelectedChapter(chapter);
-        }
+    //     if (chapter) {
+    //         setSelectedPage(chapter.pages[0]);
+    //         setQuranHeaderPage(chapter.pages[0]);
+    //         setSelectedVerse(1);
+    //         setSelectedChapter(chapter);
+    //     }
 
-        if (page) {
-            setSelectedPage(page);
-            setQuranHeaderPage(page);
-        }
+    //     if (page) {
+    //         setSelectedPage(page);
+    //         setQuranHeaderPage(page);
+    //     }
         
-    };
+    // };
 
     useEffect(() => {
         if (selectedPage) {
@@ -75,10 +75,17 @@ export default function QuranHeader() {
     }, [selectedPage, quranHeaderChapter, quranHeaderVerse]);
 
     useEffect(() => {
-        if (quranHeaderChapter) {
-            setSelected(quranHeaderChapter, null, null);
+        if (quranHeaderPage) {
+            setSelectedPage(quranHeaderPage)
+
         }
-    }, [ quranHeaderChapter ]);
+    }, [ quranHeaderPage ])
+
+    // useEffect(() => {
+    //     if (quranHeaderChapter) {
+    //         setSelected(quranHeaderChapter, null, null);
+    //     }
+    // }, [ quranHeaderChapter ]);
 
     useEffect(() => {
         listChapters().then((resp) => {

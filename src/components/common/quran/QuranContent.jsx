@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import QuranHeader from "./quran header/QuranHeader";
 import QuranSurah from "./quran content/QuranSurah";
 import QuranFooter from "./QuranFooter";
-import { fetchPagesWithinChapter } from "@/utils/quran/quran";
+import { fetchPagesWithinChapter, getChapter } from "@/utils/quran/quran";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
@@ -32,7 +32,7 @@ export default function QuranContent() {
     //             console.log(keys[keys.length - 1])
     //             setLastFetchedPage(+keys[keys.length - 1])
     //         }
-    //     });
+    //    });
 
     //     return () => {
     //         isMounted = false;
@@ -46,6 +46,10 @@ export default function QuranContent() {
         verseByPage(quranHeaderPage)
         .then((updatedCache) => {
             console.log(updatedCache)
+            getChapter(updatedCache[0].verse_key.split(":")[0])
+            .then((resp) => {
+                setQuranHeaderChapter(resp)
+            })
             if (isMounted) {
                 const tempObj = { [quranHeaderPage] : updatedCache }
                 setCache(tempObj);

@@ -28,13 +28,13 @@ export default function QuranFooter() {
     };
 
     const PreviousPage = () => {
-        const newPage = Number(quranHeaderPage) - 1; // Ensure quranHeaderPage is treated as a number
+        const newPage = Number(quranHeaderPage) - 1; 
         setQuranHeaderPage(newPage); 
         router.push(`/quran/pages/${newPage}`);
     };
     
     const NextPage = () => {
-        const newPage = Number(quranHeaderPage) + 1; // Ensure quranHeaderPage is treated as a number
+        const newPage = Number(quranHeaderPage) + 1; 
         setQuranHeaderPage(newPage); 
         router.push(`/quran/pages/${newPage}`);
     };
@@ -100,7 +100,7 @@ export default function QuranFooter() {
         <div>
             {quranHeaderChapter ? (
                 <SurahFooter />
-
+                
             ) : (
                 <PageFooter />
             )}

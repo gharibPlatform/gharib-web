@@ -34,41 +34,6 @@ export default function QuranHeader() {
     const router = useRouter();
     const pathname = usePathname();
 
-    // const setSelected = (chapter, page, verse) => {
-    //     if (verse) {
-    //         setSelectedVerse(verse);
-            
-    //         verseByChapter(selectedChapter.id)
-    //             .then((resp) => {        
-    //                 const foundVerse = resp.find((v) => v.verse_number === verse);
-        
-    //                 if (foundVerse) {
-    //                     setSelectedPage(foundVerse.page_number); 
-    //                     setQuranHeaderPage(foundVerse.page_number); 
-    //                 } else {
-    //                     console.log("Verse not found in the current chapter");
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 console.error("Error fetching verses:", error);
-    //             });
-    //             return;
-    //     }
-
-    //     if (chapter) {
-    //         setSelectedPage(chapter.pages[0]);
-    //         setQuranHeaderPage(chapter.pages[0]);
-    //         setSelectedVerse(1);
-    //         setSelectedChapter(chapter);
-    //     }
-
-    //     if (page) {
-    //         setSelectedPage(page);
-    //         setQuranHeaderPage(page);
-    //     }
-        
-    // };
-
     useEffect(() => {
         if (selectedPage) {
             setSelectedChapter(quranHeaderChapter);
@@ -88,6 +53,14 @@ export default function QuranHeader() {
             setPriority(false);
         }
     }, [ selectedPage ])
+
+    useEffect(() => {
+        if (selectedChapter) {
+            const newPath = `/quran/chapters/${selectedChapter.id}`;
+            router.push(newPath);
+            setPriority(true);
+        }
+    }, [ selectedChapter ])
 
     useEffect(() => {
         listChapters().then((resp) => {
@@ -171,7 +144,6 @@ export default function QuranHeader() {
                             onSelectChapter={(chapter, e) => {
                                 setQuranHeaderChapter(chapter)
                                 toggleSection(section.name.toLowerCase(), e);
-                                router.push(`quran/chapters/${chapter.id}`)
                             }}
                         />
                     )}

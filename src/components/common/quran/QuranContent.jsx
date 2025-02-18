@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import QuranHeader from "./quran header/QuranHeader";
 import QuranSurah from "./quran content/QuranSurah";
 import QuranFooter from "./QuranFooter";
-import { fetchPagesWithinChapter, getChapter } from "@/utils/quran/quran";
+import { fetchPagesWithinChapter, getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
@@ -77,13 +77,8 @@ export default function QuranContent() {
         if (scrollTop + innerHeight + 3600 >= scrollHeight || !stopFetching) {
 
             if(lastFetchedPage) {
-                verseByPage(lastFetchedPage + 1)
+                verseByPageAndChapter(lastFetchedPage + 1, quranHeaderChapter.id)
                 .then((resp) => {
-                    // stop fetching in the end of the chapter
-                    if (resp[0].verse_key.split(":")[0] !== Object.values(cache)[0][0].verse_key.split(":")[0]) {
-                        setStopFetching(true);
-                        return;
-                    }
                     setAddedPage(resp)
                 })
                 setLastFetchedPage(lastFetchedPage + 1)

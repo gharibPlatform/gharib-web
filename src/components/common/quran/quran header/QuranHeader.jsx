@@ -13,7 +13,7 @@ import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 export default function QuranHeader() {
     const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
     const { quranHeaderChapter, setPriority, setQuranHeaderChapter, goToPath, setGoToPath } = useQuranHeaderChapter();
-    const {quranHeaderPage, setQuranHeaderPage } = useQuranHeaderPage();
+    const {quranHeaderPage, goToPathPages, setGoToPathPages } = useQuranHeaderPage();
     const { quranHeaderVerse } = useQuranHeaderVerse();
 
     const [quranHeaderData, setQuranHeaderData] = useState([]);
@@ -35,10 +35,12 @@ export default function QuranHeader() {
     const pathname = usePathname();
 
     useEffect(() => {
-        if (selectedPage) {
-            setSelectedChapter(quranHeaderChapter);
+        setSelectedChapter(quranHeaderChapter);
+        if (quranHeaderChapter) {
+            setSelectedPage(quranHeaderChapter.pages[0])
+            setGoToPathPages(false);
         }
-    }, [selectedPage, quranHeaderChapter, quranHeaderVerse]);
+    }, [quranHeaderChapter, quranHeaderVerse]);
 
     useEffect(() => {
         if (quranHeaderPage) {
@@ -47,7 +49,7 @@ export default function QuranHeader() {
     }, [ quranHeaderPage ])
 
     useEffect(() => {
-        if (selectedPage) {
+        if (selectedPage && goToPathPages) {
             const newPath = `/quran/pages/${selectedPage}`;
             router.push(newPath);
             setPriority(false);
@@ -156,6 +158,7 @@ export default function QuranHeader() {
                             setSearchQuery={setSearchQuery}
                             onSelectPage={(page, e)=>{
                                 setSelectedPage(page)
+                                setGoToPathPages(true);
                                 toggleSection(section.name.toLowerCase(), e)
                             }}
                         />

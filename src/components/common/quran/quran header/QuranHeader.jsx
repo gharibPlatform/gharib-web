@@ -12,7 +12,7 @@ import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 
 export default function QuranHeader() {
     const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
-    const { quranHeaderChapter, setPriority, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderChapter, setPriority, setQuranHeaderChapter, goToPath, setGoToPath } = useQuranHeaderChapter();
     const {quranHeaderPage, setQuranHeaderPage } = useQuranHeaderPage();
     const { quranHeaderVerse } = useQuranHeaderVerse();
 
@@ -55,7 +55,7 @@ export default function QuranHeader() {
     }, [ selectedPage ])
 
     useEffect(() => {
-        if (selectedChapter) {
+        if (selectedChapter && goToPath) {
             const newPath = `/quran/chapters/${selectedChapter.id}`;
             router.push(newPath);
             setPriority(true);
@@ -143,6 +143,7 @@ export default function QuranHeader() {
                             filteredChapters={filteredChapters}
                             onSelectChapter={(chapter, e) => {
                                 setQuranHeaderChapter(chapter)
+                                setGoToPath(true);
                                 toggleSection(section.name.toLowerCase(), e);
                             }}
                         />

@@ -16,7 +16,7 @@ export default function QuranContent() {
     const [lastFetchedPage, setLastFetchedPage] = useState();
 
     const { quranHeaderPage } = useQuranHeaderPage();
-    const { quranHeaderChapter, setPriority, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderChapter, setPriority, setQuranHeaderChapter, setGoToPath } = useQuranHeaderChapter();
     const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
     const { shouldFetch } = useShouldFetch();
 
@@ -27,10 +27,12 @@ export default function QuranContent() {
         verseByPage(quranHeaderPage)
         .then((updatedCache) => {
             console.log(updatedCache)
-            getChapter(updatedCache[0].verse_key.split(":")[0])
-            .then((resp) => {
-                setQuranHeaderChapter(resp)
-            })
+            if (!quranHeaderChapter || quranHeaderChapter.id !== updatedCache[0].verse_key.split(":")[0]) {
+                getChapter(updatedCache[0].verse_key.split(":")[0]).then((resp) => {
+                    setQuranHeaderChapter(resp);
+                    setGoToPath(false);
+                });
+            }
             if (isMounted) {
                 const tempObj = { [quranHeaderPage] : updatedCache }
                 setCache(tempObj);

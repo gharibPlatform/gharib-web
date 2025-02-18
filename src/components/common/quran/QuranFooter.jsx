@@ -15,7 +15,7 @@ export default function QuranFooter() {
         .then((resp) => {
             setQuranHeaderChapter(resp);
         })
-        router.push(`/quran/chapters/${quranHeaderChapter.id - 1}`)
+        // router.push(`/quran/chapters/${quranHeaderChapter.id - 1}`)
     };
 
     const NextSurah = () => {
@@ -23,7 +23,7 @@ export default function QuranFooter() {
         .then((resp) => {
             setQuranHeaderChapter(resp);
         })
-        router.push(`/quran/chapters/${quranHeaderChapter.id + 1}`)
+        // router.push(`/quran/chapters/${quranHeaderChapter.id + 1}`)
     };
 
     const PreviousPage = () => {
@@ -37,7 +37,6 @@ export default function QuranFooter() {
         setQuranHeaderPage(newPage); 
         router.push(`/quran/pages/${newPage}`);
     };
-
 
     const SurahFooter = () => {
         return(

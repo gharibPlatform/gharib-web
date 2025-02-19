@@ -12,7 +12,7 @@ import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 
 export default function QuranHeader() {
     const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
-    const { quranHeaderChapter, setPriority, setQuranHeaderChapter, goToPath, setGoToPath } = useQuranHeaderChapter();
+    const { quranHeaderChapter, setPriority, setQuranHeaderChapter, goToPath, setGoToPath, priority } = useQuranHeaderChapter();
     const {quranHeaderPage, goToPathPages, setGoToPathPages } = useQuranHeaderPage();
     const { quranHeaderVerse } = useQuranHeaderVerse();
 
@@ -37,7 +37,9 @@ export default function QuranHeader() {
     useEffect(() => {
         setSelectedChapter(quranHeaderChapter);
         if (quranHeaderChapter) {
-            setSelectedPage(quranHeaderChapter.pages[0])
+            if (priority) {
+                setSelectedPage(quranHeaderChapter.pages[0])
+            }
             setGoToPathPages(false);
         }
     }, [quranHeaderChapter, quranHeaderVerse]);

@@ -5,7 +5,7 @@ import useBeginningOfTheSurah from "@/stores/begginingOfTheSurah";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 
 export default function QuranFooter() {
-    const { quranHeaderChapter, priority, setQuranHeaderChapter } = useQuranHeaderChapter();
+    const { quranHeaderChapter, priority, setQuranHeaderChapter, setGoToPath } = useQuranHeaderChapter();
     const { quranHeaderPage, setQuranHeaderPage } = useQuranHeaderPage();
     const setBeginningOfTheSurah = useBeginningOfTheSurah((state) => state.setBeginningOfTheSurah);
 
@@ -15,7 +15,7 @@ export default function QuranFooter() {
         .then((resp) => {
             setQuranHeaderChapter(resp);
         })
-        // router.push(`/quran/chapters/${quranHeaderChapter.id - 1}`)
+        router.push(`/quran/chapters/${quranHeaderChapter.id - 1}`)
     };
 
     const NextSurah = () => {
@@ -23,7 +23,7 @@ export default function QuranFooter() {
         .then((resp) => {
             setQuranHeaderChapter(resp);
         })
-        // router.push(`/quran/chapters/${quranHeaderChapter.id + 1}`)
+        router.push(`/quran/chapters/${quranHeaderChapter.id + 1}`)
     };
 
     const PreviousPage = () => {

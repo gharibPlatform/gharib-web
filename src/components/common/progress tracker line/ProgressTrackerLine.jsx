@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 
-export default function ProgressTrackerLine({ current, total }) {
+export default function ProgressTrackerLine({ current, total}) {
   const parentRef = useRef(null);
   const childRef = useRef(null);
-
+  
   const updateWidth = () => {
     if (parentRef.current && childRef.current) {
       const parentWidth = parentRef.current.offsetWidth;
-      childRef.current.style.width = `${parentWidth}px`;
+      childRef.current.style.width = `${parentWidth - 5}px`;
     }
   };
 
@@ -21,13 +21,13 @@ export default function ProgressTrackerLine({ current, total }) {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden" ref={parentRef}>
+    <div className="relative w-full overflow-hidden flex justify-center pt-1" ref={parentRef}>
       <div
-        className="fixed z-50 h-2 bg-gray-200 rounded-full overflow-hidden"
+        className="fixed z-50 h-[5px] bg-[var(--darker-color)] overflow-hidden border border-[var(--dark-color)]"
         ref={childRef}
       >
         <div
-          className="absolute top-0 left-0 h-full bg-green-500 transition-all"
+          className="absolute top-0 left-0 h-full bg-[var(--w-color)] transition-all"
           style={{ width: `${(current / total) * 100}%` }}
         ></div>
       </div>

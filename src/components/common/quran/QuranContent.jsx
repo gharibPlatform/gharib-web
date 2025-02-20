@@ -109,8 +109,10 @@ export default function QuranContent() {
             ref={scrollRef} 
             className="w-full overflow-y-auto h-screen no-scrollbar flex flex-col"
         >
-            <div className="flex flex-col justify-center pt-6">
-                <ProgressTrackerLine />
+            <div className="flex flex-col justify-center">
+                <div className="pb-6">
+                    <ProgressTrackerLine />
+                </div>
                 <QuranHeader />
                 <QuranSurah cache={cache} />
                 <QuranFooter />

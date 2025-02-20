@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import QuranHeader from "./quran header/QuranHeader";
 import QuranSurah from "./quran content/QuranSurah";
 import QuranFooter from "./QuranFooter";
-import { fetchPagesWithinChapter, getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
+import { getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";

@@ -8,6 +8,7 @@ import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 import useShouldFetch from "@/stores/shouldFetch";
+import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
@@ -109,6 +110,7 @@ export default function QuranContent() {
             className="w-full overflow-y-auto h-screen no-scrollbar flex flex-col"
         >
             <div className="flex flex-col justify-center pt-6">
+                <ProgressTrackerLine />
                 <QuranHeader />
                 <QuranSurah cache={cache} />
                 <QuranFooter />

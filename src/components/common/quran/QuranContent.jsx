@@ -9,6 +9,7 @@ import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 import useShouldFetch from "@/stores/shouldFetch";
 import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
+import useAddPageNumber from "@/stores/pageNumberArray";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
@@ -20,7 +21,12 @@ export default function QuranContent() {
     const { quranHeaderChapter, setPriority, setQuranHeaderChapter, setGoToPath } = useQuranHeaderChapter();
     const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
     const { shouldFetch } = useShouldFetch();
+    const { pageNumberArray , currentPageNumber, increment, decremnet, setCurrentPageNumber } = useAddPageNumber();
 
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+
+    console.log(pageNumberArray);
     useEffect(() => {
         if ( shouldFetch !== "page") return;
         let isMounted = true;
@@ -46,6 +52,13 @@ export default function QuranContent() {
     }, [quranHeaderPage]);
 
     useEffect(() => {
+        if (quranHeaderChapter) {
+            const total = quranHeaderChapter.pages[1] - quranHeaderChapter.pages[0] + 1;
+            setTotalPages(total);
+        }
+    }, [ quranHeaderChapter ])
+
+    useEffect(() => {
         if ( shouldFetch !== "chapter") return;
         let isMounted = true;
 
@@ -65,27 +78,25 @@ export default function QuranContent() {
             isMounted = false;
         };
     }, [ quranHeaderChapter ]);
-
-    const [stopFetching, setStopFetching] = useState(false);
-
+    let i = 0;
     const handleScroll = () => {
         if (!scrollRef.current) return;
-
+    
         const scrollHeight = scrollRef.current.scrollHeight;
         const scrollTop = scrollRef.current.scrollTop;
         const innerHeight = window.innerHeight;
 
-        if (scrollTop + innerHeight + 3600 >= scrollHeight || !stopFetching) {
-
-            if(lastFetchedPage) {
+        if (scrollTop + innerHeight + 3600 >= scrollHeight) {
+            if (lastFetchedPage) {
                 verseByPageAndChapter(lastFetchedPage + 1, quranHeaderChapter.id)
-                .then((resp) => {
-                    setAddedPage(resp)
-                })
-                setLastFetchedPage(lastFetchedPage + 1)
+                    .then((resp) => {
+                        setAddedPage(resp);
+                    });
+                setLastFetchedPage(lastFetchedPage + 1);
             }
         }
     };
+    
 
     useEffect(()=>{
         if(addedPage && addedPage.length > 0 && addedPage[0]){
@@ -111,7 +122,7 @@ export default function QuranContent() {
         >
             <div className="flex flex-col justify-center">
                 <div className="pb-6">
-                    <ProgressTrackerLine />
+                    <ProgressTrackerLine current={currentPage} total={totalPages} />
                 </div>
                 <QuranHeader />
                 <QuranSurah cache={cache} />

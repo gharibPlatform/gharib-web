@@ -23,7 +23,7 @@ const [activeTab, setActiveTab] = useState({activeTabStore});
       style={{ width: "480px" }} 
       className="border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]"
     >
-      <div className="flex p-7 gap-8 justify-between">
+      <div className="flex p-7 pb-[27px] gap-8 justify-between border-b border-[var(--g-color)]">
         <div 
           onClick={() => setActive('brothers')} 
           className={`cursor-pointer font-bold text-l ${activeTab === 'brothers' ? 'text-blue-500' : 'text-white'}`}
@@ -44,7 +44,11 @@ const [activeTab, setActiveTab] = useState({activeTabStore});
         </div>
       </div>
 
-      <div>
+      <div className="flex justify-between items-center ">
+        <h2 className="text-[var(--lighter-color)] p-5 pb-0">Direct Messages </h2>
+        <h2 className="text-[var(--lighter-color)] p-5 pb-0 pr-12 text-2xl cursor-pointer">+ </h2>
+      </div>
+      <div >
         {activeTab === 'brothers' && <ChatBrotherSection changeNameHeader={changeNameHeader} />}
         {activeTab === 'groups' && <ChatGroupsSection changeNameHeader={changeNameHeader} />}
         {activeTab === 'khatmas' && <ChatKhatmasSection />}

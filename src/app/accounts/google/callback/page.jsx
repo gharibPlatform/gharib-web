@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { googleAuthPost } from "@/utils/api"
+import { googleAuthPost } from "@/utils/apiUser"
 import { useRouter } from 'next/navigation';
 
 export default function GoogleCallback() {

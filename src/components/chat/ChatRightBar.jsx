@@ -5,7 +5,7 @@ import ChatBrotherSection from "./brothers/ChatBrothersSection";
 import ChatGroupsSection from "./groups/ChatGroupsSection";
 import ChatKhatmasSection from "./khatmas/ChatKhatmasSection";
 import useKhatmasContentStore from "@/stores/khatmasContentStore";
-
+import Tooltip from "../common/tooltip/Tooltip";
 export default function ChatRightBar({ changeNameHeader }) {
   const { activeTabStore } = useKhatmasContentStore();
 const [activeTab, setActiveTab] = useState({activeTabStore}); 
@@ -44,9 +44,11 @@ const [activeTab, setActiveTab] = useState({activeTabStore});
         </div>
       </div>
 
-      <div className="flex justify-between items-center ">
-        <h2 className="text-[var(--lighter-color)] p-5 pb-0">Direct Messages </h2>
-        <h2 className="text-[var(--lighter-color)] p-5 pb-0 pr-12 text-2xl cursor-pointer">+ </h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-[var(--lighter-color)] p-5 pb-0">Direct Messages</h2>
+        <Tooltip text="Create a DM">
+          <h2 className="text-[var(--lighter-color)] p-5 pb-0 pr-12 text-2xl cursor-pointer">+</h2>
+        </Tooltip>
       </div>
       <div >
         {activeTab === 'brothers' && <ChatBrotherSection changeNameHeader={changeNameHeader} />}

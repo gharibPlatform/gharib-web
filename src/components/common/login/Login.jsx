@@ -25,8 +25,8 @@ const Login = () => {
       <h2 className='text-[var(--w-color)] text-3xl pb-8 pt-4'>Login</h2>
       
         <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-          <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="text" placeholder='Username' required/>
-          <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password" placeholder='Password' required/>
+          <input onChange={(e) => setUsername(e.target.value)} style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="text" placeholder='Username' required/>
+          <input onChange={(e) => setPassword(e.target.value)} style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="password" placeholder='Password' required/>
           <a href='forgot-password' className='flex items-center justify-center text-[var(--b-color)]'>Forgot Password?</a>
           <button style={{width : "380px", borderRadius: "6px"}} className='px-4 py-2 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] mb-2'>Login</button>
         </form>

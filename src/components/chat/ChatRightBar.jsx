@@ -1,23 +1,40 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ChatBrotherSection from "./brothers/ChatBrothersSection";
 import ChatGroupsSection from "./groups/ChatGroupsSection";
 import ChatKhatmasSection from "./khatmas/ChatKhatmasSection";
 import useKhatmasContentStore from "@/stores/khatmasContentStore";
 import Tooltip from "../common/tooltip/Tooltip";
+import CreateDM from "./create dm/CreateDM";
+
 export default function ChatRightBar({ changeNameHeader }) {
   const { activeTabStore } = useKhatmasContentStore();
-const [activeTab, setActiveTab] = useState({activeTabStore}); 
-  
-  useEffect(()=> {
+  const [activeTab, setActiveTab] = useState(activeTabStore); 
+  const [showCreateDM, setShowCreateDM] = useState(false);
+  const createDMRef = useRef(null);
+
+  useEffect(() => {
     setActiveTab(activeTabStore);
   }, []);
 
   const setActive = (prop) => {
     setActiveTab(prop);
-  }
-  
+  };
+
+  // Close when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (createDMRef.current && !createDMRef.current.contains(event.target)) {
+        setShowCreateDM(false);
+      }
+    }
+    if (showCreateDM) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showCreateDM]);
+
   return (
     <div 
       style={{ width: "480px" }} 
@@ -44,13 +61,37 @@ const [activeTab, setActiveTab] = useState({activeTabStore});
         </div>
       </div>
 
-      <div className="flex justify-between items-center">
-        <h2 className="text-[var(--lighter-color)] p-5 pb-0">Direct Messages</h2>
-        <Tooltip text="Create a DM">
-          <h2 className="text-[var(--lighter-color)] p-5 pb-0 pr-12 text-2xl cursor-pointer">+</h2>
-        </Tooltip>
-      </div>
-      <div >
+      {activeTab !== 'khatmas' && (
+        <div className="flex justify-between items-center">
+          <h2 className="text-[var(--lighter-color)] p-5 pb-0">Direct Messages</h2>
+          <Tooltip text="Create a DM">
+            <h2 
+              className="text-[var(--lighter-color)] p-5 pb-0 pr-12 text-2xl cursor-pointer"
+              onClick={() => setShowCreateDM(true)}
+            >
+              +
+            </h2>
+          </Tooltip>
+        </div>
+      )}
+
+      {/* Background Overlay with Image when CreateDM is Open */}
+      {showCreateDM && (
+        <div 
+          className="fixed inset-0 bg-no-repeat bg-cover flex justify-center items-center z-50"
+          style={{ backgroundImage: "url('/your-image.jpg')" }}
+        >
+          {/* This makes everything unclickable */}
+          <div className="absolute inset-0 pointer-events-none"></div>
+          
+          {/* The popup itself is clickable */}
+          <div ref={createDMRef}>
+            <CreateDM close={() => setShowCreateDM(false)} />
+          </div>
+        </div>
+      )}
+
+      <div>
         {activeTab === 'brothers' && <ChatBrotherSection changeNameHeader={changeNameHeader} />}
         {activeTab === 'groups' && <ChatGroupsSection changeNameHeader={changeNameHeader} />}
         {activeTab === 'khatmas' && <ChatKhatmasSection />}

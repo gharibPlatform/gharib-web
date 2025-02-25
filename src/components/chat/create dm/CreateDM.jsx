@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import CreateDMListingBrothers from "./CreateDMListingBrothers";
+import CreateDMConfirmation from "./CreateDMConfirmation";
 
 export default function CreateDM() {
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -34,8 +35,8 @@ export default function CreateDM() {
                 <input 
                     ref={inputRef} 
                     placeholder="Type the username of the brother"
-                    className="bg-transparent outline-none flex-grow"
-                    type="text"
+                    className="text-b bg-transparent outline-none flex-grow"
+                    type="text "
                 />
                 
             </div>
@@ -47,11 +48,13 @@ export default function CreateDM() {
             <div className="pb-4"></div>
 
             <button
-             className=" py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px]"
+             className="hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px]"
              >
                 Create DM
             </button>
+            
 
         </div>
+        // <CreateDMConfirmation />
     );
 }

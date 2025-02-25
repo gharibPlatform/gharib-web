@@ -1,15 +1,8 @@
 import { useState } from "react";
 import CreateDMBrotherCard from "./CreateDMBrotherCard";
 
-export default function CreateDMListingBrothers() {
+export default function CreateDMListingBrothers( { selectedUsers, toggleUser }) {
     const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];
-    const [selectedUsers, setSelectedUsers] = useState([]);
-
-    const toggleUser = (brother) => {
-        setSelectedUsers((prev) =>
-            prev.includes(brother) ? prev.filter((name) => name !== brother) : [...prev, brother]
-        );
-    };
 
     return (
         <div className="overflow-y-auto no-scrollbar">

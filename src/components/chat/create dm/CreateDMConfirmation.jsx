@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function CreateDMConfirmation() {
+export default function CreateDMConfirmation( { selectedUsers }) {
     const [groupName, setGroupName] = useState("");
     const [groupIcon, setGroupIcon] = useState(null);
 
@@ -14,9 +14,19 @@ export default function CreateDMConfirmation() {
     return (
         <div className="bg-[var(--main-color)] w-[500px] p-6 rounded-lg border border-[var(--g-color)] text-[var(--w-color)]">
             <h2 className="text-2xl font-semibold mb-4">You're going to create a group with:</h2>
+            <div className="text-[var(--w-color)] rounded-[5px] text-lg flex flex-wrap items-center gap-2">
+                {selectedUsers.map((user) => (
+                    <span
+                        key={user}
+                        className="cursor-pointer bg-[var(--main-color-hover)] px-2 py-2 rounded-md text-sm flex items-center gap-2"
+                    >
+                        <h2>{user}</h2>
+                    </span>
+                ))}
+            </div>
 
             <label className="flex flex-col gap-2 mb-4">
-                <span className="text-lg">Group Name</span>
+                <span className="text-lg pt-2">Group Name</span>
                 <div className="bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex items-center gap-2">
                     <input
                         value={groupName}

@@ -60,7 +60,7 @@ export default function CreateDM() {
 
             {/* Confirmation Component */}
             <div
-                className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${
+                className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto no-scrollbar ${
                     showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
             >

@@ -2,18 +2,20 @@ export default function GroupSideBar() {
     const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];
 
     return (
-        <div className=" p-4 bg-[var(--main-color)] w-[360px] rounded-md border border-[var(--g-color)]">
-            <h2 className="text-lg font-semibold text-[var(--w-color)] mb-2">Group Members</h2>
-            <div className="mb-4">
-                {brothersDataArray.map((brother) => (
-                    <GroupSidebarCard key={brother} name={brother} />
-                ))}
+        <div className=" flex justify-between flex-col  p-6 w-[360px] border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]">
+            <div className="flex-col flex-nowrap w-full h-min">
+                <h2 className="text-lg font-semibold text-[var(--w-color)] mb-2">Group Members</h2>
+                <div className="mb-4">
+                    {brothersDataArray.map((brother) => (
+                        <GroupSidebarCard key={brother} name={brother} />
+                    ))}
+                </div>
             </div>
-            <div className="space-y-2">
-                <button className="w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700">
+            <div className="flex gap-2 flex-col mt-auto justify-center items-center">
+                <button className="w-full py-2 px-4 text-[var(--r-color)] hover:bg-[var(--main-color-hover)] ">
                     Delete Chat
                 </button>
-                <button className="w-full py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                <button className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
                     Leave Group
                 </button>
             </div>

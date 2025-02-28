@@ -6,7 +6,7 @@ import SideBar from "@/components/common/sidebar/Sidebar";
 import useGroupSidebarStore from "@/stores/groupSidebarStore";
 
 const Layout = ({ children }) => {
-  const { groupSidebar }  = useGroupSidebarStore();
+  const { isGroupSidebarOpen }  = useGroupSidebarStore();
 
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">
@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
             {children}
           </div>
           <div>
-            {groupSidebar ? <GroupSideBar /> : <ChatRightBar />}
+            {isGroupSidebarOpen ? <GroupSideBar /> : <ChatRightBar />}
           </div>
         </div>
       </div>

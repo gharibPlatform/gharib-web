@@ -1,9 +1,8 @@
 import { create } from "zustand";
 
 const useGroupSidebarStore = create((set) => ({
-  groupSidebar: false,
-  setGroupSidebar: (value) => set({ groupSidebar: value }),
+  isGroupSidebarOpen: false,
+  setGroupSidebar: (value) => set({ isGroupSidebarOpen: value }),
 }));
 
 export default useGroupSidebarStore;
-``

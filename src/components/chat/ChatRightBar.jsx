@@ -36,9 +36,8 @@ export default function ChatRightBar({ changeNameHeader }) {
   }, [showCreateDM]);
 
   return (
-    <div 
-      style={{ width: "480px" }} 
-      className="border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]"
+    <div  
+      className=" w-[360px] border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]"
     >
       <div className="flex p-7 pb-[27px] gap-8 justify-between border-b border-[var(--g-color)]">
         <div 
@@ -75,11 +74,9 @@ export default function ChatRightBar({ changeNameHeader }) {
         </div>
       )}
 
-      {/* Background Overlay with Image when CreateDM is Open */}
       {showCreateDM && (
         <div 
           className="fixed inset-0 bg-no-repeat bg-cover flex justify-center items-center z-50"
-          style={{ backgroundImage: "url('/your-image.jpg')" }}
         >
           {/* This makes everything unclickable */}
           <div className="absolute inset-0 pointer-events-none"></div>

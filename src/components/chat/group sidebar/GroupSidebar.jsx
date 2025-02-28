@@ -2,7 +2,7 @@ export default function GroupSideBar() {
     const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];
 
     return (
-        <div className="p-4 bg-[var(--main-color)] w-[300px] rounded-md border border-[var(--g-color)]">
+        <div className=" p-4 bg-[var(--main-color)] w-[360px] rounded-md border border-[var(--g-color)]">
             <h2 className="text-lg font-semibold text-[var(--w-color)] mb-2">Group Members</h2>
             <div className="mb-4">
                 {brothersDataArray.map((brother) => (

@@ -10,7 +10,7 @@ export default function ChatHeader({ Name }) {
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
   const pathname = usePathname(); 
-  const setGroupSidebar = useGroupSidebarStore((state) => state.setGroupSidebar); // Get Zustand function
+  const { isGroupSidebarOpen, setGroupSidebar } = useGroupSidebarStore(); // Get Zustand state and function
 
   // Check if the route matches "/brother/[name]" or "/groups/[name]"
   const isBrotherRoute = pathname.startsWith("/chat/brothers/");
@@ -46,12 +46,12 @@ export default function ChatHeader({ Name }) {
           alt="accountImage"
         />
         
-        {/* Clicking the title updates Zustand if it's a group */}
+        {/* Clicking the title toggles Zustand state for groups */}
         <h2
           className="text-[var(--w-color)] text-xl cursor-pointer"
           onClick={() => {
             if (isGroupRoute) {
-              setGroupSidebar(true); 
+              setGroupSidebar(!isGroupSidebarOpen); // Toggle the sidebar state
             }
           }}
         >

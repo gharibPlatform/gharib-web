@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createGroup } from "@/utils/apiGroup";
 
 export default function CreateDMConfirmation({ selectedUsers }) {
@@ -6,6 +6,13 @@ export default function CreateDMConfirmation({ selectedUsers }) {
     const [groupIcon, setGroupIcon] = useState(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => setError(""), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [error]);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];

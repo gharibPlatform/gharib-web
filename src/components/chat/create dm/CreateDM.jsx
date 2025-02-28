@@ -5,7 +5,7 @@ import CreateDMConfirmation from "./CreateDMConfirmation";
 export default function CreateDM() {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(""); // State for search input
+    const [searchQuery, setSearchQuery] = useState("");
     const inputRef = useRef(null);
 
     const toggleUser = (brother) => {

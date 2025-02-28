@@ -10,11 +10,11 @@ export default function ChatHeader({ Name }) {
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
   const pathname = usePathname(); 
-  const setGroupSidebarOpen = useGroupSidebarStore((state) => state.setGroupSidebarOpen); // Get Zustand function
+  const setGroupSidebar = useGroupSidebarStore((state) => state.setGroupSidebar); // Get Zustand function
 
   // Check if the route matches "/brother/[name]" or "/groups/[name]"
-  const isBrotherRoute = pathname.startsWith("chat/brothers/");
-  const isGroupRoute = pathname.startsWith("chat/groups/");
+  const isBrotherRoute = pathname.startsWith("/chat/brothers/");
+  const isGroupRoute = pathname.startsWith("/chat/groups/");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -51,7 +51,7 @@ export default function ChatHeader({ Name }) {
           className="text-[var(--w-color)] text-xl cursor-pointer"
           onClick={() => {
             if (isGroupRoute) {
-              setGroupSidebarOpen(true); 
+              setGroupSidebar(true); 
             }
           }}
         >

@@ -5,14 +5,36 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import useGroupSidebarStore from "@/stores/groupSidebarStore"; 
 
+function OpenMenu() {
+  return (
+    <div className="absolute right-4 top-16 w-56 py-4 px-2 bg-[var(--main-color)] rounded-md shadow-lg z-10">
+      <div className="bg-[var(--main-color)] items-center justify-center py-4 flex border-b border-[var(--dark-color)] cursor-pointer hover:bg-[var(--secondary-color)] text-[var(--w-color)] ">
+        View Profile
+      </div>
+      <div className="bg-[var(--main-color)] items-center justify-center py-4 flex border-b border-[var(--dark-color)] cursor-pointer hover:bg-[var(--secondary-color)] text-[var(--w-color)] ">
+        Mute User
+      </div>
+      <div className="bg-[var(--main-color)] items-center justify-center py-4 flex border-b border-[var(--dark-color)] cursor-pointer hover:bg-[var(--secondary-color)] text-[var(--w-color)] ">
+        Progress
+      </div>
+      <div className="bg-[var(--main-color)] items-center justify-center py-4 flex border-b border-[var(--dark-color)] cursor-pointer hover:bg-[var(--secondary-color)] text-[var(--w-color)] ">
+        Delete Chat
+      </div>
+      <div className="bg-[var(--main-color)] items-center justify-center py-4 flex cursor-pointer hover:bg-[var(--secondary-color)] text-[var(--w-color)] ">
+        Block User
+      </div>
+    </div>
+  );
+}
+
 export default function ChatHeader({ Name }) {
   const [isClicked, setIsClicked] = useState(false);
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
   const pathname = usePathname(); 
-  const { isGroupSidebarOpen, setGroupSidebar } = useGroupSidebarStore(); // Get Zustand state and function
+  const { isGroupSidebarOpen, setGroupSidebar } = useGroupSidebarStore(); // Zustand state
 
-  // Check if the route matches "/brother/[name]" or "/groups/[name]"
+  // Check if the route matches "/chat/brothers/[name]" or "/chat/groups/[name]"
   const isBrotherRoute = pathname.startsWith("/chat/brothers/");
   const isGroupRoute = pathname.startsWith("/chat/groups/");
 
@@ -36,7 +58,7 @@ export default function ChatHeader({ Name }) {
   }, []);
 
   return (
-    <>
+    <div className="relative">
       <div className="h-20 border-b border-[var(--g-color)] flex p-4 items-center gap-4">
         <Image
           src={"/electron.svg"}
@@ -51,7 +73,7 @@ export default function ChatHeader({ Name }) {
           className="text-[var(--w-color)] text-xl cursor-pointer"
           onClick={() => {
             if (isGroupRoute) {
-              setGroupSidebar(!isGroupSidebarOpen); // Toggle the sidebar state
+              setGroupSidebar(!isGroupSidebarOpen);
             }
           }}
         >
@@ -71,6 +93,13 @@ export default function ChatHeader({ Name }) {
           </div>
         )}
       </div>
-    </>
+
+      {/* Show OpenMenu when isClicked is true */}
+      {isClicked && (
+        <div ref={menuRef}>
+          <OpenMenu />
+        </div>
+      )}
+    </div>
   );
 }

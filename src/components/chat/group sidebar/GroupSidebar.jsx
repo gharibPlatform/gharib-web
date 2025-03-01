@@ -50,7 +50,7 @@ export default function GroupSideBar() {
 function GroupSidebarCard({ name, isAdmin, isActive, onClick }) {
   return (
     <div className="relative">
-      <div onClick={onClick} className="flex items-center justify-between p-3 hover:bg-[var(--main-color-hover)] cursor-pointer">
+      <div onClick={onClick} className="flex items-center justify-between p-2 hover:bg-[var(--main-color-hover)] cursor-pointer">
         <div className="flex justify-between items-center gap-2">
           <Image src={"/electron.svg"} className="w-12 h-12 cursor-pointer" width={1} height={1} alt="accountImage" />
           <span className="text-[var(--w-color)]">{name}</span>

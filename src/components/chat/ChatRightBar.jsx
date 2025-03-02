@@ -63,7 +63,7 @@ export default function ChatRightBar({ changeNameHeader }) {
       {activeTab !== 'khatmas' && (
         <div className="flex justify-between items-center">
           <h2 className="text-[var(--lighter-color)] p-5 pb-0">Direct Messages</h2>
-          <Tooltip text="Create a DM">
+          <Tooltip text="Create a DM" top={0} right={0}>
             <h2 
               className="text-[var(--lighter-color)] p-5 pb-0 pr-12 text-2xl cursor-pointer"
               onClick={() => setShowCreateDM(true)}

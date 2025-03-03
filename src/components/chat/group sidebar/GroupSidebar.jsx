@@ -60,7 +60,7 @@ export default function GroupSideBar() {
         {showEditDMConfirmation && (
           <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="absolute inset-0 pointer-events-none"></div>
-            <div ref={editDMRef} className=" p-5">
+            <div ref={editDMRef}>
               <EditGroupSettings selectedUsers={brothersDataArray} />
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function GroupSideBar() {
         {showAddBrotherConfirmation && (
           <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="absolute inset-0 pointer-events-none"></div>
-            <div ref={addBrotherRef} className=" p-5">
+            <div ref={addBrotherRef}>
               <AddBrother selectedUsers={brothersDataArray} />
             </div>
           </div>

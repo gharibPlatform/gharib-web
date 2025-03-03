@@ -1,88 +1,92 @@
-import { useState, useEffect } from "react";
-import { createGroup } from "@/utils/apiGroup";
+import { useState, useRef, useEffect } from "react";
+import CreateDMListingBrothers from "../create dm/CreateDMListingBrothers";
+import CreateDMConfirmation from "./EditGroupSettings";
 
-export default function AddBrother({ selectedUsers }) {
-    const [groupName, setGroupName] = useState("");
-    const [groupIcon, setGroupIcon] = useState(null);
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+export default function AddBrother() {
+    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const inputRef = useRef(null);
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => setError(""), 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setGroupIcon(file);
-        }
+    const toggleUser = (brother) => {
+        setSelectedUsers((prev) =>
+            prev.includes(brother) ? prev.filter((name) => name !== brother) : [...prev, brother]
+        );
+        setSearchQuery(""); 
     };
 
-    const handleCreateGroup = async () => {
-        if (!groupName.trim()) {
-            setError("Group name is required");
-            return;
+    useEffect(()=>{
+        if (inputRef.current) {
+            inputRef.current.focus();
         }
-        setError("");
-        setLoading(true);
-        
-        try {
-            const formData = new FormData();
-            formData.append("name", groupName);
-            if (groupIcon) {
-                formData.append("icon", groupIcon);
-            }
-            formData.append("users", JSON.stringify(selectedUsers));
-
-            await createGroup(formData);
-            console.log("Group successfully created");
-        } catch (error) {
-            console.error("Failed to create group", error);
-            setError("Failed to create group. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [selectedUsers])
 
     return (
-        <div className="bg-[var(--main-color)] w-[500px] no-scrollbar p-6 rounded-lg border border-[var(--g-color)] text-[var(--w-color)]">
-            <h2 className="text-2xl font-semibold mb-4">Edit your group settings </h2>
+        <div className="relative w-[620px] h-[400px] overflow-hidden">
+            {/* Create DM Component */}
+            <div
+                className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${
+                    showConfirmation ? "opacity-0 pointer-events-none" : "opacity-100"
+                }`}
+            >
+                <div className="max-h-[400px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
+                    <h2 className="text-[var(--w-color)] text-2xl py-4">Select Brothers</h2>
 
-            <label className="no-scrollbar flex flex-col gap-2 mb-4">
-                <span className="text-lg pt-2">Group Name</span>
-                <div className="no-scrollbar bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex items-center gap-2">
-                    <input
-                        value={groupName}
-                        onChange={(e) => setGroupName(e.target.value)}
-                        placeholder="Enter group name"
-                        className="bg-transparent outline-none flex-grow"
-                        type="text"
+                    {/* Search Input */}
+                    <div className="relative">
+                        <div className="bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex flex-wrap items-center gap-2">
+                            {selectedUsers.map((user) => (
+                                <span
+                                    key={user}
+                                    onClick={() => toggleUser(user)}
+                                    className="cursor-pointer bg-[var(--main-color-hover)] px-2 py-2 rounded-md text-sm flex items-center gap-2"
+                                >
+                                    <h2>{user}</h2>
+                                    <h2>✕</h2>
+                                </span>
+                            ))}
+                            <input
+                                ref={inputRef}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Type the username of the brother"
+                                className="text-b bg-transparent outline-none flex-grow"
+                                type="text"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="pb-2"></div>
+
+                    {/* Pass searchQuery to filter the list */}
+                    <CreateDMListingBrothers 
+                        selectedUsers={selectedUsers} 
+                        toggleUser={toggleUser} 
+                        searchQuery={searchQuery}
                     />
-                </div>
-                {error && <p className="text-[var(--bright-r-color)] flex items-center justify-center">{error}</p>}
-            </label>
 
-            <div className="mb-4 no-scrollbar">
-                <h2 className="text-lg mb-2">Group Icon</h2>
-                <div className="no-scrollbar flex items-center gap-4">
-                    <label className="cursor-pointer hover:bg-[var(--main-color-hover)] bg-[var(--dark-color)] py-2 px-4 rounded-[5px] border border-[var(--g-color)] hover:bg-opacity-80">
-                        Upload Image
-                        <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-                    </label>
-                    {groupIcon && <img src={URL.createObjectURL(groupIcon)} alt="Group Icon" className="w-12 h-12 rounded-full border border-[var(--g-color)]" />}
+                    <div className="pb-4"></div>
+
+                    <button
+                        className="hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] "
+                        onClick={() => setShowConfirmation(true)}
+                    >
+                        Add Brothers
+                    </button>
                 </div>
             </div>
 
-            <button 
-                onClick={handleCreateGroup} 
-                disabled={loading}
-                className={`hover:bg-[var(--b-color-hover)] w-full bg-[var(--b-color)] text-white py-2 px-4 rounded-[4px] text-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            <div
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 overflow-y-auto no-scrollbar ${
+                    showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
             >
-                {loading ? "Editing..." : "Edit"}
-            </button>
+                <div className="flex justify-center items-center border border-[var(--g-color)] flex-col p-6 w-[360px] bg-[var(--main-color)] h-[200px]">
+                    <div className="text-[var(--w-color)] items-center justify-center text-lg text-center">
+                        A confirmation request has been sent to the group admin. Please wait for their approval
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

@@ -10,14 +10,14 @@ export default function GroupSideBar() {
   const [activeUser, setActiveUser] = useState(null); 
   const menuRef = useRef(null);
 
-  const [showCreateDMConfirmation, setShowCreateDMConfirmation] = useState(false);
+  const [showEditDMConfirmation, setShowEditDMConfirmation] = useState(false);
   const createDMRef = useRef(null);
 
   // Close the modal when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (createDMRef.current && !createDMRef.current.contains(event.target)) {
-        setShowCreateDMConfirmation(false);
+        setShowEditDMConfirmation(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -41,7 +41,7 @@ export default function GroupSideBar() {
       <div className="flex-col flex-nowrap w-full h-min">
         <div
             className="w-full py-2 text-lg font-semibold mb-5 text-[var(--w-color)] flex  gap-12 items-center"
-            onClick={() => setShowCreateDMConfirmation(true)}>
+            onClick={() => setShowEditDMConfirmation(true)}>
 
             Edit group settings
             <button className="flex gap-2 items-center justify-center rounded-sm py-2 bg-[var(--darker-color)] px-4 text-[var(--w-color)] hover:bg-[var(--dark-color)]">
@@ -50,14 +50,14 @@ export default function GroupSideBar() {
             </button>
         </div>
 
-        {showCreateDMConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
-          <div className="absolute inset-0 pointer-events-none"></div>
-          <div ref={createDMRef} className=" p-5">
-            <EditGroupSettings selectedUsers={brothersDataArray} />
+        {showEditDMConfirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
+            <div className="absolute inset-0 pointer-events-none"></div>
+            <div ref={createDMRef} className=" p-5">
+              <EditGroupSettings selectedUsers={brothersDataArray} />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
         <h2 className="text-lg font-semibold text-[var(--w-color)] mb-2">Group Members</h2>
         <div className="mb-4" ref={menuRef}>
@@ -78,6 +78,9 @@ export default function GroupSideBar() {
         </button>
         <button className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
           Leave Group
+        </button>
+        <button className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
+          Add Brother
         </button>
       </div>
     </div>

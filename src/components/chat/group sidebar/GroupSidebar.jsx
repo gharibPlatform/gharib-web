@@ -3,6 +3,7 @@ import Image from "next/image";
 import OpenMenu from "@/components/common/open menu/OpenMenu";
 import Tooltip from "@/components/common/tooltip/Tooltip";
 import EditGroupSettings from "../groups/EditGroupSettings";
+import AddBrother from "../groups/AddBrother";
 
 export default function GroupSideBar() {
   const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];
@@ -11,13 +12,19 @@ export default function GroupSideBar() {
   const menuRef = useRef(null);
 
   const [showEditDMConfirmation, setShowEditDMConfirmation] = useState(false);
-  const createDMRef = useRef(null);
+  const editDMRef = useRef(null);
+
+  const [showAddBrotherConfirmation, setShowAddBrotherConfirmation] = useState(false);
+  const  addBrotherRef= useRef(null);
 
   // Close the modal when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (createDMRef.current && !createDMRef.current.contains(event.target)) {
+      if (editDMRef.current && !editDMRef.current.contains(event.target)) {
         setShowEditDMConfirmation(false);
+      }
+      if (addBrotherRef.current && !addBrotherRef.current.contains(event.target)) {
+        setShowAddBrotherConfirmation(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -53,7 +60,7 @@ export default function GroupSideBar() {
         {showEditDMConfirmation && (
           <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="absolute inset-0 pointer-events-none"></div>
-            <div ref={createDMRef} className=" p-5">
+            <div ref={editDMRef} className=" p-5">
               <EditGroupSettings selectedUsers={brothersDataArray} />
             </div>
           </div>
@@ -79,9 +86,19 @@ export default function GroupSideBar() {
         <button className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
           Leave Group
         </button>
-        <button className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
+        <button onClick={() => setShowAddBrotherConfirmation(true)} className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
           Add Brother
         </button>
+
+        {showAddBrotherConfirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
+            <div className="absolute inset-0 pointer-events-none"></div>
+            <div ref={addBrotherRef} className=" p-5">
+              <AddBrother selectedUsers={brothersDataArray} />
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

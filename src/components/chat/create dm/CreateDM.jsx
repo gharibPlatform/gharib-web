@@ -22,7 +22,7 @@ export default function CreateDM() {
     }, [selectedUsers])
 
     return (
-        <div className="relative w-[620px] h-[400px] overflow-hidden">
+        <div className={`relative overflow-hidden ${showConfirmation ? "w-[500px] h-[385px]" : "w-[620px] h-[400px]"}`}>
             {/* Create DM Component */}
             <div
                 className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${
@@ -78,7 +78,7 @@ export default function CreateDM() {
 
             {/* Confirmation Component */}
             <div
-                className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto no-scrollbar ${
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] transition-opacity duration-500 overflow-y-auto no-scrollbar ${
                     showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
             >

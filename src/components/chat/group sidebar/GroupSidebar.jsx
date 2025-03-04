@@ -4,6 +4,7 @@ import OpenMenu from "@/components/common/open menu/OpenMenu";
 import Tooltip from "@/components/common/tooltip/Tooltip";
 import EditGroupSettings from "../groups/EditGroupSettings";
 import AddBrother from "../groups/AddBrother";
+import ShareGroup from "../groups/ShareGroup";
 
 export default function GroupSideBar() {
   const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];
@@ -17,6 +18,9 @@ export default function GroupSideBar() {
   const [showAddBrotherConfirmation, setShowAddBrotherConfirmation] = useState(false);
   const  addBrotherRef= useRef(null);
 
+  const [showShareGroupConfirmation,setShowShareGroupConfirmation] = useState(false);
+  const  shareGroupRef= useRef(null);
+
   // Close the modal when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -25,6 +29,9 @@ export default function GroupSideBar() {
       }
       if (addBrotherRef.current && !addBrotherRef.current.contains(event.target)) {
         setShowAddBrotherConfirmation(false);
+      }
+      if (shareGroupRef.current && !shareGroupRef.current.contains(event.target)) {
+        setShowShareGroupConfirmation(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -89,12 +96,25 @@ export default function GroupSideBar() {
         <button onClick={() => setShowAddBrotherConfirmation(true)} className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
           Add Brother
         </button>
+        
+        <button onClick={() => setShowAddBrotherConfirmation(true)} className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
+          Share group
+        </button>
 
         {showAddBrotherConfirmation && (
           <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="absolute inset-0 pointer-events-none"></div>
             <div ref={addBrotherRef}>
               <AddBrother selectedUsers={brothersDataArray} />
+            </div>
+          </div>
+        )}
+
+        {showShareGroupConfirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
+            <div className="absolute inset-0 pointer-events-none"></div>
+            <div ref={shareGroupRef}>
+              <ShareGroup selectedUsers={brothersDataArray} />
             </div>
           </div>
         )}

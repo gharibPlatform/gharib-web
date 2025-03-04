@@ -5,6 +5,7 @@ import Instagram from "@/components/common/iconButtons/Instagram";
 import Facebook from "@/components/common/iconButtons/Facebook";
 import Messanger from "@/components/common/iconButtons/Messanger";
 import Pinterest from "@/components/common/iconButtons/Pinterest";
+import Copy from "@/components/common/iconButtons/Copy";
 
 export default function ShareGroup() {
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -28,12 +29,12 @@ export default function ShareGroup() {
     return (
         <div className="max-h-[400px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
             <div className="flex-col gap-3">
-                <h2 className="text-[var(--w-color)] text-lg px-4">Share your group in </h2>
-                <div className="flex gap-4">
-                    <Instagram />
-                    <Facebook />
-                    <Messanger />
-                    <Pinterest />
+                <h2 className="py-4 text-[var(--w-color)] text-lg px-4">Share your group in </h2>
+                <div className="px-4 flex gap-4">
+                    <Instagram height={"75"} width={"75"} />
+                    <Facebook  height={"75"} width={"75"}/>
+                    <Messanger height={"75"} width={"75"}/>
+                    <Pinterest height={"75"} width={"75"} />
                 </div>
             </div>   
 
@@ -45,9 +46,9 @@ export default function ShareGroup() {
 
             <div className="flex items-center justify-center gap-6 pt-4">
                 <h2 className="text-[var(--w-color)] text-lg">Copy code </h2>
-                <div className="bg-[var(--dark-color)] p-4 text-[var(--g-color)] rounded-md">
+                <div className="gap-2 flex items-center justify-center bg-[var(--dark-color)] p-4 text-[var(--g-color)] rounded-md">
                     KOJSXBCP9CS2
-                    
+                    <Copy  height={"30"} width={"30"} color={"#585858"}  />
                 </div>
             </div>     
         </div>

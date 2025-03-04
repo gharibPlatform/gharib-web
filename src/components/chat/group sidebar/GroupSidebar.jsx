@@ -97,7 +97,7 @@ export default function GroupSideBar() {
           Add Brother
         </button>
         
-        <button onClick={() => setShowAddBrotherConfirmation(true)} className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
+        <button onClick={() => setShowShareGroupConfirmation(true)} className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
           Share group
         </button>
 

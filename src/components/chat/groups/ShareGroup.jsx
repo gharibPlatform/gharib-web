@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import CreateDMListingBrothers from "../create dm/CreateDMListingBrothers";
 import CreateDMConfirmation from "./EditGroupSettings";
+import Instagram from "@/components/common/iconButtons/Instagram";
+import Facebook from "@/components/common/iconButtons/Facebook";
+import Messanger from "@/components/common/iconButtons/Messanger";
+import Pinterest from "@/components/common/iconButtons/Pinterest";
 
 export default function ShareGroup() {
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -22,66 +26,30 @@ export default function ShareGroup() {
     }, [selectedUsers])
 
     return (
-        <div>
-            <div className={`relative overflow-hidden ${showConfirmation ? "w-[360px] h-[200px]" : "w-[620px] h-[400px]"}`}>
-                {/* Create DM Component */}
-                <div
-                    className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${
-                        showConfirmation ? "opacity-0 pointer-events-none hidden w-1 " : "opacity-100 visibility-visible"
-                    }`}
-                >
-                    <div className="max-h-[400px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
-                        <h2 className="text-[var(--w-color)] text-2xl py-4">Select Brothers</h2>
-                        {/* Search Input */}
-                        <div className="relative">
-                            <div className="bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex flex-wrap items-center gap-2">
-                                {selectedUsers.map((user) => (
-                                    <span
-                                        key={user}
-                                        onClick={() => toggleUser(user)}
-                                        className="cursor-pointer bg-[var(--main-color-hover)] px-2 py-2 rounded-md text-sm flex items-center gap-2"
-                                    >
-                                        <h2>{user}</h2>
-                                        <h2>✕</h2>
-                                    </span>
-                                ))}
-                                <input
-                                    ref={inputRef}
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Type the username of the brother"
-                                    className="text-b bg-transparent outline-none flex-grow"
-                                    type="text"
-                                />
-                            </div>
-                        </div>
-                        <div className="pb-2"></div>
-                        {/* Pass searchQuery to filter the list */}
-                        <CreateDMListingBrothers
-                            selectedUsers={selectedUsers}
-                            toggleUser={toggleUser}
-                            searchQuery={searchQuery}
-                        />
-                        <div className="pb-4"></div>
-                        <button
-                            className="hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] "
-                            onClick={() => setShowConfirmation(true)}
-                        >
-                            Add Brothers
-                        </button>
-                    </div>
+        <div className="max-h-[400px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
+            <div className="flex-col gap-3">
+                <h2 className="text-[var(--w-color)] text-lg px-4">Share your group in </h2>
+                <div className="flex gap-4">
+                    <Instagram />
+                    <Facebook />
+                    <Messanger />
+                    <Pinterest />
                 </div>
-            </div>
-            <div
-                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500 w-[360px] h-[200px]  overflow-y-auto no-scrollbar ${
-                    showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none hidden"
-                }`}>
-                <div className="w-[360px] h-[200px] flex justify-center items-center border border-[var(--g-color)] flex-col p-6 bg-[var(--main-color)] ">
-                    <div className="text-[var(--w-color)] items-center justify-center text-lg text-center">
-                        A confirmation request has been sent to the group admin. Please wait for their approval
-                    </div>
+            </div>   
+
+            <div className='flex items-center gap-8 w-full pt-4'>
+                <div style={{height: "1px"}} className='w-1/2 bg-[var(--main-color-hover)]'></div>
+                <p className='text-[var(--w-color)] text-xl'>Or</p>
+                <div style={{height: "1px"}} className='w-1/2 bg-[var(--main-color-hover)]'></div>
+            </div>  
+
+            <div className="flex items-center justify-center gap-6 pt-4">
+                <h2 className="text-[var(--w-color)] text-lg">Copy code </h2>
+                <div className="bg-[var(--dark-color)] p-4 text-[var(--g-color)] rounded-md">
+                    KOJSXBCP9CS2
+                    
                 </div>
-            </div>
+            </div>     
         </div>
     );
 }

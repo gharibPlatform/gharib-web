@@ -125,9 +125,23 @@ export default function GroupSideBar() {
 }
 
 function GroupSidebarCard({ name, isAdmin, isActive, onClick }) {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleClick = (event) => {
+    onClick();
+    handleMouseMove(event);
+  }
+
+  const handleMouseMove = (event) => {
+    setMousePosition({ x: event.clientX, y: event.clientY });
+    console.log("y : ", event.clientY);
+    console.log("x : ", event.clientX);
+  };
+
+
   return (
     <div className="relative">
-      <div onClick={onClick} className="flex items-center justify-between p-2 hover:bg-[var(--main-color-hover)] cursor-pointer">
+      <div onClick={ (event) => handleClick(event) } className="flex items-center justify-between p-2 hover:bg-[var(--main-color-hover)] cursor-pointer">
         <div className="flex justify-between items-center gap-2">
           <Image src={"/electron.svg"} className="w-12 h-12 cursor-pointer" width={1} height={1} alt="accountImage" />
           <span className="text-[var(--w-color)]">{name}</span>
@@ -146,7 +160,7 @@ function GroupSidebarCard({ name, isAdmin, isActive, onClick }) {
           </Tooltip>
         )}
       </div>
-      {isActive && <OpenMenu />}
+      {isActive && <OpenMenu xAxis={ mousePosition.x } yAxis={ mousePosition.y } />}
     </div>
   );
 }

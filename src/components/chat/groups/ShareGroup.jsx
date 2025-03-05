@@ -13,6 +13,8 @@ export default function ShareGroup() {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const inputRef = useRef(null);
+    const [text, setText] = useState("KOJSXBCP9CS2");
+    const [copied, setCopied] = useState(false); // State to show "Copied" message
 
     const toggleUser = (brother) => {
         setSelectedUsers((prev) =>
@@ -21,11 +23,18 @@ export default function ShareGroup() {
         setSearchQuery(""); 
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    }, [selectedUsers])
+    }, [selectedUsers]);
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 3000); 
+        });
+    };
 
     return (
         <div className="max-h-[400px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
@@ -33,8 +42,8 @@ export default function ShareGroup() {
                 <h2 className="py-4 text-[var(--w-color)] text-lg px-4">Share your group in </h2>
                 <div className="px-4 flex gap-4">
                     <Instagram height={"75"} width={"75"} />
-                    <Facebook  height={"75"} width={"75"}/>
-                    <Messanger height={"75"} width={"75"}/>
+                    <Facebook height={"75"} width={"75"} />
+                    <Messanger height={"75"} width={"75"} />
                     <Pinterest height={"75"} width={"75"} />
                 </div>
             </div>   
@@ -47,11 +56,18 @@ export default function ShareGroup() {
 
             <div className="flex items-center justify-center gap-6 pt-4">
                 <h2 className="text-[var(--w-color)] text-lg">Share code</h2>
-                <div className="gap-2 flex items-center justify-center bg-[var(--dark-color)] p-4 text-[var(--g-color)] rounded-md">
-                    KOJSXBCP9CS2
+                <div className="gap-2 flex items-center justify-center bg-[var(--dark-color)] p-4 text-[var(--g-color)] rounded-md relative">
+                    {text}
                     <Tooltip text="Copy" top={-30} right={-15} >
-                        <Copy  height={"30"} width={"30"} color={"#585858"}  />
+                        <div onClick={copyToClipboard} className="cursor-pointer">
+                            <Copy height={"30"} width={"30"} color={"#585858"} />
+                        </div>
                     </Tooltip>
+                    {copied && (
+                        <span className="text-[var(--w-color)] absolute top-12 right-0 bg-[var(--darker-color)] p-1 px-2 rounded-md">
+                            Copied!
+                        </span>
+                    )}
                 </div>
             </div>     
         </div>

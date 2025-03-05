@@ -6,6 +6,7 @@ import Facebook from "@/components/common/iconButtons/Facebook";
 import Messanger from "@/components/common/iconButtons/Messanger";
 import Pinterest from "@/components/common/iconButtons/Pinterest";
 import Copy from "@/components/common/iconButtons/Copy";
+import Tooltip from "@/components/common/tooltip/Tooltip";
 
 export default function ShareGroup() {
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -45,10 +46,12 @@ export default function ShareGroup() {
             </div>  
 
             <div className="flex items-center justify-center gap-6 pt-4">
-                <h2 className="text-[var(--w-color)] text-lg">Copy code </h2>
+                <h2 className="text-[var(--w-color)] text-lg">Share code</h2>
                 <div className="gap-2 flex items-center justify-center bg-[var(--dark-color)] p-4 text-[var(--g-color)] rounded-md">
                     KOJSXBCP9CS2
-                    <Copy  height={"30"} width={"30"} color={"#585858"}  />
+                    <Tooltip text="Copy" top={-30} right={-15} >
+                        <Copy  height={"30"} width={"30"} color={"#585858"}  />
+                    </Tooltip>
                 </div>
             </div>     
         </div>

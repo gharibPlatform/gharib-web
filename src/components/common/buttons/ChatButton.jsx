@@ -1,9 +1,13 @@
+import useGroupSidebarStore from "@/stores/groupSidebarStore";
 import { useRouter } from "next/navigation";
 
 function ProgressButton() {
+    const { setGroupSidebar } = useGroupSidebarStore();
+    
     const router = useRouter();
     const handleClick = () => {
         router.push("/chat");
+        setGroupSidebar(false);
     }
 
     return<>

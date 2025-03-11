@@ -11,7 +11,7 @@ export default function ChatHeader({ Name }) {
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
   const pathname = usePathname(); 
-  const { isGroupSidebarOpen, setGroupSidebar } = useGroupSidebarStore(); // Zustand state
+  const { isGroupSidebarOpen, setGroupSidebar } = useGroupSidebarStore();
 
   // Check if the route matches "/chat/brothers/[name]" or "/chat/groups/[name]"
   const isBrotherRoute = pathname.startsWith("/chat/brothers/");

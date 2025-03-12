@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useWebSocket = (groupId) => {
+const useGroupWebSocket = (groupId) => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
 
@@ -31,4 +31,4 @@ const useWebSocket = (groupId) => {
   return { messages, sendMessage };
 };
 
-export default useWebSocket;
+export default useGroupWebSocket;

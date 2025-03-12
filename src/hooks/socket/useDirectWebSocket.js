@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 
-const useUserWebSocket = (userId, receiverId) => {
+const useDirectWebSocket = (userId) => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    if (!userId || !receiverId) return;
-
-    const ws = new WebSocket(`ws://localhost:8000/ws/chat/${userId}/${receiverId}/`);
+    const ws = new WebSocket(`ws://localhost:8000/ws/dm/${userId}/`);
 
     ws.onopen = () => console.log("WebSocket Connected");
 
@@ -22,7 +20,7 @@ const useUserWebSocket = (userId, receiverId) => {
     setSocket(ws);
 
     return () => ws.close();
-  }, [userId, receiverId]);
+  }, [userId]);
 
   const sendMessage = (message) => {
     if (socket) {
@@ -33,4 +31,4 @@ const useUserWebSocket = (userId, receiverId) => {
   return { messages, sendMessage };
 };
 
-export default useUserWebSocket;
+export default useDirectWebSocket;

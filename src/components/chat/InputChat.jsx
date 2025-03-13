@@ -1,6 +1,6 @@
-import { useState } from "react";
 import Create from "../common/iconButtons/Create";
 import CreateKhatma from "./khatmas/CreateKhatma";
+import {useState, useEffect, useRef } from "react";
 
 export default function InputChat({ onSendMessage }) {
   const [message, setMessage] = useState(""); 

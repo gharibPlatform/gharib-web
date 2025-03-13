@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import CreateDMListingBrothers from "../create dm/CreateDMListingBrothers";
 
-export default function AddBrother() {
+export default function CreateKhatma() {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");

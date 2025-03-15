@@ -23,7 +23,6 @@ export default function AddBrother() {
     return (
         <div>
             <div className={`relative overflow-hidden ${showConfirmation ? "w-[360px] h-[200px]" : "w-[620px] h-[400px]"}`}>
-                {/* Create DM Component */}
                 <div
                     className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${
                         showConfirmation ? "opacity-0 pointer-events-none hidden w-1 " : "opacity-100 visibility-visible"

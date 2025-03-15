@@ -138,6 +138,7 @@ export default function QuranHeader() {
                     sections={sections}
                     toggleSection={toggleSection}
                     buttonRef={section.ref} 
+                    fontSize={18}
                 >
                     {sections[section.name.toLowerCase()].isOpen && section.name === "Chapter" && (
                         <ChapterDropdown

@@ -268,11 +268,11 @@ export default function CreateKhatma() {
 
                             {/* Description Section */}
                             <form action="">
-                                <h2 className="text-lg font-semibold text-[var(--w-color)]">Description :</h2>
+                                <h2 className="text-lg font-semibold text-[var(--w-color)] ">Description :</h2>
                                 <textarea
-                                    className="outline-none bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg w-full"
+                                    className="resize-none outline-none bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg w-full"
                                     placeholder="Enter description"
-                                    rows="4"
+                                    rows="6"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />

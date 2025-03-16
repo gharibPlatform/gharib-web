@@ -75,3 +75,42 @@ body{
     @apply bg-background text-foreground;
   }
 }
+
+.react-datepicker {
+  background-color: #1f1f1f; /* Dark background */
+  border: 1px solid #333;
+  border-radius: 8px;
+  font-family: inherit;
+  color: white;
+}
+
+.react-datepicker__header {
+  background-color: #333; /* Header background */
+  border-bottom: 1px solid #444;
+}
+
+.react-datepicker__day {
+  color: white;
+}
+
+.react-datepicker__day--selected {
+  background-color: #4CAF50 !important; /* Green selected */
+  color: white !important;
+  border-radius: 6px;
+}
+
+.react-datepicker__time-list {
+  background-color: #1f1f1f !important;
+  border-radius: 6px;
+  color: white !important;
+}
+
+.react-datepicker__time-list-item {
+  color: white !important;
+}
+
+.react-datepicker__time-list-item--selected {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+

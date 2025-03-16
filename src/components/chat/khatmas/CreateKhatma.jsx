@@ -4,17 +4,20 @@ import { listChapters } from "@/utils/quran/quran";
 import ChapterDropdown from "@/components/common/quran/quran header/dropdown/ChapterDropdown";
 import VerseDropdown from "@/components/common/quran/quran header/dropdown/VerseDropdown";
 import PageDropdown from "@/components/common/quran/quran header/dropdown/PageDropdown";
+import DatePicker from "react-datepicker";
 
 const QuranHeader = () => {
-    const [quranHeaderData, setQuranHeaderData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
     const [selectedChapter, setSelectedChapter] = useState();
     const [selectedVerse, setSelectedVerse] = useState();
     const [selectedPage, setSelectedPage] = useState();
+    
+    const [quranHeaderData, setQuranHeaderData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const chapterButtonRef = useRef(null);
     const verseButtonRef = useRef(null);
     const pageButtonRef = useRef(null);
+    
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -130,9 +133,12 @@ const QuranHeader = () => {
 
 export default function CreateKhatma() {
     const [isLimited, setIsLimited] = useState(null);
-    const [userLimit, setUserLimit] = useState(""); 
+    const [userLimit, setUserLimit] = useState("");
+
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedDate, setSelectedDate] = useState(null);
+    
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -243,12 +249,19 @@ export default function CreateKhatma() {
                                 <h2 className="text-lg font-semibold pb-4">Duration :</h2>
 
                                 <h2>From :</h2>
-                                <QuranHeader />
+                                <input 
+                                 type="datetime-local"
+                                 className="bg-[var(--dark-color)] p-2"
+                                />
 
                                 <div className="pb-4"></div>
 
                                 <h2>To :</h2>
-                                <QuranHeader />
+                                <input 
+                                 type="datetime-local"
+                                 className="bg-[var(--dark-color)] p-2"
+                                />
+                                {/* <QuranHeader /> */}
 
                             </container>
 

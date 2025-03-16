@@ -132,12 +132,14 @@ const QuranHeader = () => {
 }
 
 export default function CreateKhatma() {
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    
+    const [khatmaName, setKhatmaName] = useState("");
     const [isLimited, setIsLimited] = useState(null);
     const [userLimit, setUserLimit] = useState("");
-
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
     const [selectedDate, setSelectedDate] = useState(null);
+    const [description, setDescription] = useState(null);
+
     
     const inputRef = useRef(null);
 
@@ -159,13 +161,14 @@ export default function CreateKhatma() {
                         <h2 className="text-[var(--w-color)] text-2xl py-4">Create Khatma</h2>
 
                         <div className="flex flex-col relative pl-6 gap-6">
+
                             {/* Name Input */}
                             <form className="flex gap-2 text-[var(--w-color)] flex-col">
                                 <h2 className="text-lg font-semibold">Name :</h2>
                                 <input
                                     ref={inputRef}
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    value={khatmaName}
+                                    onChange={(e) => setKhatmaName(e.target.value)}
                                     placeholder="Gharib"
                                     className="text-b outline-none flex-grow bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg gap-2"
                                     type="text"
@@ -261,9 +264,19 @@ export default function CreateKhatma() {
                                  type="datetime-local"
                                  className="bg-[var(--dark-color)] p-2"
                                 />
-                                {/* <QuranHeader /> */}
-
                             </container>
+
+                            {/* Description Section */}
+                            <form action="">
+                                <h2 className="text-lg font-semibold text-[var(--w-color)]">Description :</h2>
+                                <textarea
+                                    className="outline-none bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg w-full"
+                                    placeholder="Enter description"
+                                    rows="4"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                />
+                            </form>
 
                         </div>
 

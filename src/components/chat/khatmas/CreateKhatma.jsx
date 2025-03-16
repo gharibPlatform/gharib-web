@@ -143,19 +143,19 @@ export default function CreateKhatma() {
 
     return (
         <div className="no-scrollbar">
-            <div className={`relative overflow-hidden no-scrollbar ${showConfirmation ? "w-[380px] h-[200px]" : "w-[680px] h-[460px]"}`}>
+            <div className={`relative overflow-hidden no-scrollbar ${showConfirmation ? "w-[380px] h-[200px]" : "w-[700px] h-[600px]"}`}>
                 <div
                     className={`no-scrollbar absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${
                         showConfirmation ? "opacity-0 pointer-events-none hidden w-1" : "opacity-100 visibility-visible"
                     }`}
                 >
-                    <div className="max-h-[460px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
+                    <div className="max-h-[1680px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
                         <h2 className="text-[var(--w-color)] text-2xl py-4">Create Khatma</h2>
 
                         <div className="flex flex-col relative pl-6 gap-6">
                             {/* Name Input */}
                             <form className="flex gap-2 text-[var(--w-color)] flex-col">
-                                <h2>Name :</h2>
+                                <h2 className="text-lg font-semibold">Name :</h2>
                                 <input
                                     ref={inputRef}
                                     value={searchQuery}
@@ -168,7 +168,7 @@ export default function CreateKhatma() {
 
                             {/* Number of People Selection */}
                             <form className="flex gap-2 text-[var(--w-color)] flex-col">
-                                <h2>Number of people :</h2>
+                                <h2 className="text-lg font-semibold">Number of people :</h2>
                                 <div className="flex gap-10">
                                     {/* Limited Option */}
                                     <label className="flex items-center gap-2 cursor-pointer">
@@ -224,11 +224,34 @@ export default function CreateKhatma() {
                                 )}
                             </form>
 
-                            {/* quranHeader section */}
+                            {/* Share Section */}
                             <container className="text-[var(--w-color)] flex-col gap-2">
-                                <h2>Share :</h2>
+                                <h2 className="text-lg font-semibold pb-4">Share :</h2>
+
+                                <h2>From :</h2>
                                 <QuranHeader />
+
+                                <div className="pb-4"></div>
+
+                                <h2>To :</h2>
+                                <QuranHeader />
+
                             </container>
+
+                            {/* Duration Section */}
+                            <container className="text-[var(--w-color)] flex-col gap-2">
+                                <h2 className="text-lg font-semibold pb-4">Duration :</h2>
+
+                                <h2>From :</h2>
+                                <QuranHeader />
+
+                                <div className="pb-4"></div>
+
+                                <h2>To :</h2>
+                                <QuranHeader />
+
+                            </container>
+
                         </div>
 
                         <div className="pb-4"></div>

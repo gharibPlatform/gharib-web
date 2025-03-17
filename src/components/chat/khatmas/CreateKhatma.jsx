@@ -1,15 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import QuranHeaderSection from "@/components/common/quran/quran header/QuranHeaderSection";
 import { listChapters } from "@/utils/quran/quran";
+import QuranHeaderSection from "@/components/common/quran/quran header/QuranHeaderSection";
 import ChapterDropdown from "@/components/common/quran/quran header/dropdown/ChapterDropdown";
 import VerseDropdown from "@/components/common/quran/quran header/dropdown/VerseDropdown";
 import PageDropdown from "@/components/common/quran/quran header/dropdown/PageDropdown";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 
 const QuranHeader = ({ selectionType }) => {
-    const [selectedVerse, setSelectedVerse] = useState();
-    const [selectedPage, setSelectedPage] = useState();
-    
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -19,7 +18,8 @@ const QuranHeader = ({ selectionType }) => {
     
     const dropdownRef = useRef(null);
 
-    // Different hooks for different perpose (from and to)
+    // Different hooks for different purpose (from and to)
+    // Chapter
     const fromChapter = useQuranHeaderChapter((state) => state.fromChapter);
     const setFromChapter = useQuranHeaderChapter((state) => state.setFromChapter);
 
@@ -28,6 +28,26 @@ const QuranHeader = ({ selectionType }) => {
 
     const selectedChapter = selectionType === "from" ? fromChapter : toChapter;
     const setSelectedChapter = selectionType === "from" ? setFromChapter : setToChapter;
+
+    // Page
+    const fromPage = useQuranHeaderPage((state) => state.fromPage);
+    const setFromPage = useQuranHeaderPage((state) => state.setFromPage);
+
+    const toPage = useQuranHeaderPage((state) => state.toPage);
+    const setToPage = useQuranHeaderPage((state) => state.setToPage);
+
+    const selectedPage = selectionType === "from" ? fromPage : toPage;
+    const setSelectedPage = selectionType === "from" ? setFromPage : setToPage;
+
+    // Verse
+    const fromVerse = useQuranHeaderVerse((state) => state.fromVerse);
+    const setFromVerse = useQuranHeaderVerse((state) => state.setFromVerse);
+
+    const toVerse = useQuranHeaderVerse((state) => state.toVerse);
+    const setToVerse = useQuranHeaderVerse((state) => state.setToVerse);
+
+    const selectedVerse = selectionType === "from" ? fromVerse : toVerse;
+    const setSelectedVerse = selectionType === "from" ? setFromVerse : setToVerse;
 
     useEffect(() => {
             listChapters().then((resp) => {
@@ -84,13 +104,6 @@ const QuranHeader = ({ selectionType }) => {
         chapter.name_simple.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleSelectChapter = (chapter) => {
-        console.log("Before update:", { fromChapter, toChapter });
-        setSelectedChapter(chapter);
-        console.log("After update:", { fromChapter, toChapter });
-    };
-
-    
     return(
         <div className="h-20 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto scroll-mt-16 gap-2">
             {sectionsData.map((section, index) => (
@@ -109,8 +122,7 @@ const QuranHeader = ({ selectionType }) => {
                             setSearchQuery={setSearchQuery}
                             filteredChapters={filteredChapters}
                             onSelectChapter={(chapter, e) => {
-                                handleSelectChapter(chapter)
-                                // setGoToPath(true);
+                                setSelectedChapter(chapter)
                                 toggleSection(section.name.toLowerCase(), e);
                             }}
                         />
@@ -123,7 +135,6 @@ const QuranHeader = ({ selectionType }) => {
                             setSearchQuery={setSearchQuery}
                             onSelectPage={(page, e)=>{
                                 setSelectedPage(page)
-                                // setGoToPathPages(true);
                                 toggleSection(section.name.toLowerCase(), e)
                             }}
                         />
@@ -137,7 +148,7 @@ const QuranHeader = ({ selectionType }) => {
                             selectedChapter={selectedChapter}
                             onSelectVerse={(verse, e)=>{
                                 toggleSection(section.name.toLowerCase(), e)
-                                // setSelected(selectedChapter, null, verse)
+                                setSelected(selectedChapter, null, verse)
                             }}
                         />
                     )}

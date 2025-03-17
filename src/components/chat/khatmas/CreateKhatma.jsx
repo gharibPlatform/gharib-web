@@ -4,10 +4,9 @@ import { listChapters } from "@/utils/quran/quran";
 import ChapterDropdown from "@/components/common/quran/quran header/dropdown/ChapterDropdown";
 import VerseDropdown from "@/components/common/quran/quran header/dropdown/VerseDropdown";
 import PageDropdown from "@/components/common/quran/quran header/dropdown/PageDropdown";
-import DatePicker from "react-datepicker";
+import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 
-const QuranHeader = () => {
-    const [selectedChapter, setSelectedChapter] = useState();
+const QuranHeader = ({ selectionType }) => {
     const [selectedVerse, setSelectedVerse] = useState();
     const [selectedPage, setSelectedPage] = useState();
     
@@ -19,6 +18,16 @@ const QuranHeader = () => {
     const pageButtonRef = useRef(null);
     
     const dropdownRef = useRef(null);
+
+    // Different hooks for different perpose (from and to)
+    const fromChapter = useQuranHeaderChapter((state) => state.fromChapter);
+    const setFromChapter = useQuranHeaderChapter((state) => state.setFromChapter);
+
+    const toChapter = useQuranHeaderChapter((state) => state.toChapter);
+    const setToChapter = useQuranHeaderChapter((state) => state.setToChapter);
+
+    const selectedChapter = selectionType === "from" ? fromChapter : toChapter;
+    const setSelectedChapter = selectionType === "from" ? setFromChapter : setToChapter;
 
     useEffect(() => {
             listChapters().then((resp) => {
@@ -75,6 +84,13 @@ const QuranHeader = () => {
         chapter.name_simple.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handleSelectChapter = (chapter) => {
+        console.log("Before update:", { fromChapter, toChapter });
+        setSelectedChapter(chapter);
+        console.log("After update:", { fromChapter, toChapter });
+    };
+
+    
     return(
         <div className="h-20 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto scroll-mt-16 gap-2">
             {sectionsData.map((section, index) => (
@@ -93,7 +109,7 @@ const QuranHeader = () => {
                             setSearchQuery={setSearchQuery}
                             filteredChapters={filteredChapters}
                             onSelectChapter={(chapter, e) => {
-                                // setQuranHeaderChapter(chapter)
+                                handleSelectChapter(chapter)
                                 // setGoToPath(true);
                                 toggleSection(section.name.toLowerCase(), e);
                             }}
@@ -106,7 +122,7 @@ const QuranHeader = () => {
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
                             onSelectPage={(page, e)=>{
-                                // setSelectedPage(page)
+                                setSelectedPage(page)
                                 // setGoToPathPages(true);
                                 toggleSection(section.name.toLowerCase(), e)
                             }}
@@ -238,12 +254,12 @@ export default function CreateKhatma() {
                                 <h2 className="text-lg font-semibold pb-4">Share :</h2>
 
                                 <h2>From :</h2>
-                                <QuranHeader />
+                                <QuranHeader selectionType={"from"} />
 
                                 <div className="pb-4"></div>
 
                                 <h2>To :</h2>
-                                <QuranHeader />
+                                <QuranHeader selectionType={"to"} />
 
                             </container>
 

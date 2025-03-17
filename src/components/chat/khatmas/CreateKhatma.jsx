@@ -123,6 +123,7 @@ const QuranHeader = ({ selectionType }) => {
                             filteredChapters={filteredChapters}
                             onSelectChapter={(chapter, e) => {
                                 setSelectedChapter(chapter)
+                                setSelectedPage(null)
                                 toggleSection(section.name.toLowerCase(), e);
                             }}
                         />
@@ -135,6 +136,8 @@ const QuranHeader = ({ selectionType }) => {
                             setSearchQuery={setSearchQuery}
                             onSelectPage={(page, e)=>{
                                 setSelectedPage(page)
+                                setSelectedChapter(null)
+                                setSelectedVerse(null)
                                 toggleSection(section.name.toLowerCase(), e)
                             }}
                         />
@@ -148,7 +151,8 @@ const QuranHeader = ({ selectionType }) => {
                             selectedChapter={selectedChapter}
                             onSelectVerse={(verse, e)=>{
                                 toggleSection(section.name.toLowerCase(), e)
-                                setSelected(selectedChapter, null, verse)
+                                setSelectedPage(null)
+                                setSelectedVerse(verse)
                             }}
                         />
                     )}
@@ -275,7 +279,7 @@ export default function CreateKhatma() {
                             </container>
 
                             {/* Duration Section */}
-                            <container className="text-[var(--w-color)] flex-col gap-2">
+                            <container className="text-[var(--w-color)] flex-col gap-2 cursor-pointer">
                                 <h2 className="text-lg font-semibold pb-4">Duration :</h2>
 
                                 <h2>From :</h2>

@@ -168,12 +168,28 @@ export default function CreateKhatma() {
     const [khatmaName, setKhatmaName] = useState("");
     const [isLimited, setIsLimited] = useState(null);
     const [userLimit, setUserLimit] = useState("");
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDateFrom, setSelectedDateFrom] = useState("");
+    const [selectedDateTo, setSelectedDateTo] = useState("");
     const [description, setDescription] = useState(null);
 
-    
     const inputRef = useRef(null);
 
+    const [errors, setErrors] = useState({})
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!khatmaName) newErrors.khatmaName = "Khatma name is required";
+        if (!selectedDateFrom) newErrors.selectedDateFrom = "Date from is required";
+        if (!selectedDateTo) newErrors.selectedDateTo = "Date to is required";
+        if (isLimited === true && (!userLimit || userLimit <= 0)) newErrors.userLimit = "Please enter a valid number.";
+        if (!description) newErrors.description = "Description is required";
+        setErrors(newErrors);
+    }
+    
+    useEffect(() => {
+        console.log(errors);
+    }, [errors])
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
@@ -204,6 +220,7 @@ export default function CreateKhatma() {
                                     className="text-b outline-none flex-grow bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg gap-2"
                                     type="text"
                                 />
+                                {errors.khatmaName && <p className="text-[var(--r-color)]">{errors.khatmaName}</p>}
                             </form>
 
                             {/* Number of People Selection */}
@@ -260,6 +277,7 @@ export default function CreateKhatma() {
                                             className="outline-none bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg w-full"
                                             placeholder="Enter number of users"
                                         />
+                                        {errors.userLimit && <p className="text-[var(--r-color)]">{errors.userLimit}</p>}
                                     </div>
                                 )}
                             </form>
@@ -286,7 +304,9 @@ export default function CreateKhatma() {
                                 <input 
                                  type="datetime-local"
                                  className="bg-[var(--dark-color)] p-2"
-                                />
+                                 onChange={(e) => setSelectedDateFrom(e.target.value)}
+                                 />
+                                {errors.selectedDateFrom && <p className="text-[var(--r-color)]">{errors.selectedDateFrom}</p>}
 
                                 <div className="pb-4"></div>
 
@@ -294,7 +314,9 @@ export default function CreateKhatma() {
                                 <input 
                                  type="datetime-local"
                                  className="bg-[var(--dark-color)] p-2"
-                                />
+                                 onChange={(e) => setSelectedDateTo(e.target.value)}
+                                 />
+                                {errors.selectedDateTo && <p className="text-[var(--r-color)]">{errors.selectedDateTo}</p>}
                             </container>
 
                             {/* Description Section */}
@@ -307,6 +329,7 @@ export default function CreateKhatma() {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
+                                {errors.description && <p className="text-[var(--r-color)]">{errors.description}</p>}
                             </form>
 
                         </div>
@@ -317,11 +340,10 @@ export default function CreateKhatma() {
                         <button
                             className="hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px]"
                             onClick={() => {
-                                if (isLimited && (!userLimit || userLimit <= 0)) {
-                                    alert("Please specify a valid number of users.");
-                                    return;
+                                validateForm();
+                                if (!errors) {
+                                    setShowConfirmation(true);
                                 }
-                                setShowConfirmation(true);
                             }}
                         >
                             Create Khatma

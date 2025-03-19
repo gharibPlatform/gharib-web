@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import { listChapters } from "@/utils/quran/quran";
 import QuranHeaderSection from "@/components/common/quran/quran header/QuranHeaderSection";
 import ChapterDropdown from "@/components/common/quran/quran header/dropdown/ChapterDropdown";
@@ -204,9 +204,29 @@ export default function CreateKhatma() {
     const [selectedDateTo, setSelectedDateTo] = useState("");
     const [description, setDescription] = useState(null);
 
+    const {fromChapter, toChapter} = useQuranHeaderChapter();
+    const {fromPage, toPage} = useQuranHeaderPage();
+    const {fromVerse, toVerse} = useQuranHeaderVerse();
+
+    const [isPage, setIsPage] = useState(false);
+    const [isChapter, setIsChapter] = useState(false);
+
     const inputRef = useRef(null);
 
+    const errorsRef = useRef(null);
     const [errors, setErrors] = useState({})
+
+    useEffect(() => {
+        if (fromPage || toPage) {
+            setIsPage(true);
+            setIsChapter(false);
+        }
+
+        if (fromChapter || toChapter || fromVerse || toVerse) {
+            setIsChapter(true);
+            setIsPage(false);
+        }
+    }, [fromChapter, toChapter, fromPage, toPage, fromVerse, toVerse])
 
     const validateForm = () => {
         const newErrors = {};
@@ -216,23 +236,44 @@ export default function CreateKhatma() {
         if (!selectedDateTo) newErrors.selectedDateTo = "Date to is required";
         if (selectedDateFrom && selectedDateTo && new Date(selectedDateFrom) > new Date(selectedDateTo)) newErrors.selectedDateTo = "End date must be after start date.";
         if (isLimited === true && (!userLimit || userLimit <= 0)) newErrors.userLimit = "Please enter a valid number.";
+        if (isLimited === null) newErrors.isLimited = "Please choose whether the khatma is limited or not";
         if (!description) newErrors.description = "Description is required";
+
+        if (isPage) {
+            if (!fromPage) newErrors.fromPage = "Starting page is required";
+            if (!toPage) newErrors.toPage = "Ending page is required";
+        }
+
+        if (isChapter) {
+            if (!fromChapter) newErrors.fromChapter = "Starting chapter is required";
+            if (!toChapter) newErrors.toChapter = "Ending chapter is required";
+            if (!fromVerse) newErrors.fromVerse = "Starting verse is required";
+            if (!toVerse) newErrors.toVerse = "Ending verse is required";
+        }
 
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
             setShowConfirmation(true);
         } else {
-            setTimeout(() => {
+            if (errorsRef.current !== null) clearTimeout(errorsRef.current);
+            errorsRef.current =  setTimeout(() => {
                 setErrors({});
             }, 5000);
         }
-    }
+    };
+
+    useEffect(() => {
+        return() => {
+            if (errorsRef.current !== null) clearTimeout(errorsRef.current);
+        }
+    }, []);
 
     useEffect(() => {
         console.log(errors);
         console.log(selectedDateFrom);
-    }, [errors])
+    }, [errors]);
+
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
@@ -307,6 +348,7 @@ export default function CreateKhatma() {
                                         Unlimited
                                     </label>
                                 </div>
+                                {errors.isLimited && <p className="text-[var(--r-color)]">{errors.isLimited}</p>}
 
                                 {/* Show user limit input only if "Limited" is selected */}
                                 {isLimited && (
@@ -331,11 +373,17 @@ export default function CreateKhatma() {
 
                                 <h2>From :</h2>
                                 <QuranHeader selectionType={"from"} />
+                                {errors.fromChapter && <p className="text-[var(--r-color)]">{errors.fromChapter}</p>}
+                                {errors.fromVerse && <p className="text-[var(--r-color)]">{errors.fromVerse}</p>}
+                                {errors.fromPage && <p className="text-[var(--r-color)]">{errors.fromPage}</p>}
 
                                 <div className="pb-4"></div>
 
                                 <h2>To :</h2>
                                 <QuranHeader selectionType={"to"} />
+                                {errors.toChapter && <p className="text-[var(--r-color)]">{errors.toChapter}</p>}
+                                {errors.toVerse && <p className="text-[var(--r-color)]">{errors.toVerse}</p>}
+                                {errors.toPage && <p className="text-[var(--r-color)]">{errors.toPage}</p>}
 
                             </container>
 

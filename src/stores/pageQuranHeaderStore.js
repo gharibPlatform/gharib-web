@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 const useQuranHeaderPage = create((set) => ({
-    quranHeaderPage: "",
     goToPathPages: false,
+    quranHeaderPage: 0,
     fromPage: 0,
     toPage: 0,
   setFromPage: (fromPage) => set({ fromPage }),

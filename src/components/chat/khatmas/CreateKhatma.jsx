@@ -182,8 +182,10 @@ export default function CreateKhatma() {
         if (!khatmaName) newErrors.khatmaName = "Khatma name is required"; 
         if (!selectedDateFrom) newErrors.selectedDateFrom = "Date from is required";
         if (!selectedDateTo) newErrors.selectedDateTo = "Date to is required";
+        if (selectedDateFrom && selectedDateTo && new Date(selectedDateFrom) > new Date(selectedDateTo)) newErrors.selectedDateTo = "End date must be after start date.";
         if (isLimited === true && (!userLimit || userLimit <= 0)) newErrors.userLimit = "Please enter a valid number.";
         if (!description) newErrors.description = "Description is required";
+
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
@@ -194,9 +196,10 @@ export default function CreateKhatma() {
             }, 5000);
         }
     }
-    
+
     useEffect(() => {
         console.log(errors);
+        console.log(selectedDateFrom);
     }, [errors])
     useEffect(() => {
         if (inputRef.current) {

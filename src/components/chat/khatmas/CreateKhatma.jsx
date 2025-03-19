@@ -179,16 +179,20 @@ export default function CreateKhatma() {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!khatmaName) newErrors.khatmaName = "Khatma name is required";
+        if (!khatmaName) newErrors.khatmaName = "Khatma name is required"; 
         if (!selectedDateFrom) newErrors.selectedDateFrom = "Date from is required";
         if (!selectedDateTo) newErrors.selectedDateTo = "Date to is required";
         if (isLimited === true && (!userLimit || userLimit <= 0)) newErrors.userLimit = "Please enter a valid number.";
         if (!description) newErrors.description = "Description is required";
         setErrors(newErrors);
 
-        setTimeout(() => {
-            setErrors({});
-        }, [5000]);
+        if (Object.keys(newErrors).length === 0) {
+            setShowConfirmation(true);
+        } else {
+            setTimeout(() => {
+                setErrors({});
+            }, 5000);
+        }
     }
     
     useEffect(() => {

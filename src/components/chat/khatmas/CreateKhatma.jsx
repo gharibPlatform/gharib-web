@@ -185,6 +185,10 @@ export default function CreateKhatma() {
         if (isLimited === true && (!userLimit || userLimit <= 0)) newErrors.userLimit = "Please enter a valid number.";
         if (!description) newErrors.description = "Description is required";
         setErrors(newErrors);
+
+        setTimeout(() => {
+            setErrors({});
+        }, [5000]);
     }
     
     useEffect(() => {

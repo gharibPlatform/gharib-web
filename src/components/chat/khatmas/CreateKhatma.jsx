@@ -49,6 +49,38 @@ const QuranHeader = ({ selectionType }) => {
     const selectedVerse = selectionType === "from" ? fromVerse : toVerse;
     const setSelectedVerse = selectionType === "from" ? setFromVerse : setToVerse;
 
+    // logic to hanle when the user choses a starting chapter or verse or page that is greater than the ending chapter or verse or page
+    useEffect(() => {
+        if (selectedPage && toPage) {
+            if (toPage < selectedPage) {
+                setToPage(selectedPage);
+                setSelectedPage(toPage);
+            }
+        }
+        
+        if (selectedChapter && toChapter) {
+            if (toChapter.id < selectedChapter.id) {
+                setToChapter(selectedChapter);
+                setSelectedChapter(toChapter);
+            }
+        }
+
+        if (selectedChapter && toChapter) {
+            if (selectedChapter.id === toChapter.id) {
+                if (selectedVerse && toVerse) {
+                    if (toVerse < selectedVerse) {
+                        setToVerse(selectedVerse);
+                        setSelectedVerse(toVerse);
+                    }
+                }
+            } else if (toChapter.id < selectedChapter.id) {
+                setToChapter(selectedChapter);
+                setSelectedChapter(toChapter);
+            }
+        }
+
+    }, [selectedPage, toPage, selectedChapter, toChapter, selectedVerse, toVerse]);
+
     useEffect(() => {
             listChapters().then((resp) => {
                 setQuranHeaderData(resp);

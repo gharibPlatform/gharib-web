@@ -7,6 +7,7 @@ import PageDropdown from "@/components/common/quran/quran header/dropdown/PageDr
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
+import { createKhatma } from "@/utils/apiKhatma";
 
 const QuranHeader = ({ selectionType }) => {
     const [quranHeaderData, setQuranHeaderData] = useState([]);
@@ -200,8 +201,8 @@ export default function CreateKhatma() {
     const [khatmaName, setKhatmaName] = useState("");
     const [isLimited, setIsLimited] = useState(null);
     const [userLimit, setUserLimit] = useState("");
-    const [selectedDateFrom, setSelectedDateFrom] = useState("");
-    const [selectedDateTo, setSelectedDateTo] = useState("");
+    const [selectedStartDate, setSelectedStartDate] = useState("");
+    const [selectedEndDate, setSelectedEndDate] = useState("");
     const [description, setDescription] = useState(null);
 
     const {fromChapter, toChapter} = useQuranHeaderChapter();
@@ -215,7 +216,7 @@ export default function CreateKhatma() {
 
     const errorsRef = useRef(null);
     const [errors, setErrors] = useState({})
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (fromPage || toPage) {
             setIsPage(true);
@@ -228,13 +229,13 @@ export default function CreateKhatma() {
         }
     }, [fromChapter, toChapter, fromPage, toPage, fromVerse, toVerse])
 
-    const validateForm = () => {
+    const validateForm = async () => {
         const newErrors = {};
 
         if (!khatmaName) newErrors.khatmaName = "Khatma name is required"; 
-        if (!selectedDateFrom) newErrors.selectedDateFrom = "Date from is required";
-        if (!selectedDateTo) newErrors.selectedDateTo = "Date to is required";
-        if (selectedDateFrom && selectedDateTo && new Date(selectedDateFrom) > new Date(selectedDateTo)) newErrors.selectedDateTo = "End date must be after start date.";
+        if (!selectedStartDate) newErrors.selectedStartDate = "Date from is required";
+        if (!selectedEndDate) newErrors.selectedEndDate = "Date to is required";
+        if (selectedStartDate && selectedEndDate && new Date(selectedStartDate) > new Date(selectedEndDate)) newErrors.selectedEndDate = "End date must be after start date.";
         if (isLimited === true && (!userLimit || userLimit <= 0)) newErrors.userLimit = "Please enter a valid number.";
         if (isLimited === null) newErrors.isLimited = "Please choose whether the khatma is limited or not";
         if (!description) newErrors.description = "Description is required";
@@ -254,7 +255,37 @@ export default function CreateKhatma() {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            setShowConfirmation(true);
+            setLoading(true);
+            const requestBody = {
+                name: khatmaName,      
+                endDate: selectedEndDate,
+                intentions: description,
+                duaa: "no duaa",
+                startSurah: fromChapter,
+                startVerse: fromVerse,
+                endSurah: toChapter,
+                endVerse: toVerse,
+                progress: 0, 
+                status: "ongoing",
+                launcher: 0, 
+                group: 0 
+            };
+
+            try {
+
+                const response = await createKhatma(requestBody);
+    
+                if (!response.ok) {
+                    throw new Error("Failed to create Khatma");
+                }
+    
+                console.log("Khatma created successfully!");
+            } catch (error) {
+                console.error("Error:", error.message);
+            } finally{
+                setLoading(false);
+            }
+
         } else {
             if (errorsRef.current !== null) clearTimeout(errorsRef.current);
             errorsRef.current =  setTimeout(() => {
@@ -271,7 +302,7 @@ export default function CreateKhatma() {
 
     useEffect(() => {
         console.log(errors);
-        console.log(selectedDateFrom);
+        console.log(selectedStartDate);
     }, [errors]);
 
     useEffect(() => {
@@ -395,9 +426,9 @@ export default function CreateKhatma() {
                                 <input 
                                  type="datetime-local"
                                  className="bg-[var(--dark-color)] p-2"
-                                 onChange={(e) => setSelectedDateFrom(e.target.value)}
+                                 onChange={(e) => setSelectedStartDate(e.target.value)}
                                  />
-                                {errors.selectedDateFrom && <p className="text-[var(--r-color)]">{errors.selectedDateFrom}</p>}
+                                {errors.selectedStartDate && <p className="text-[var(--r-color)]">{errors.selectedStartDate}</p>}
 
                                 <div className="pb-4"></div>
 
@@ -405,9 +436,9 @@ export default function CreateKhatma() {
                                 <input 
                                  type="datetime-local"
                                  className="bg-[var(--dark-color)] p-2"
-                                 onChange={(e) => setSelectedDateTo(e.target.value)}
+                                 onChange={(e) => setSelectedEndDate(e.target.value)}
                                  />
-                                {errors.selectedDateTo && <p className="text-[var(--r-color)]">{errors.selectedDateTo}</p>}
+                                {errors.selectedEndDate && <p className="text-[var(--r-color)]">{errors.selectedEndDate}</p>}
                             </container>
 
                             {/* Description Section */}
@@ -429,7 +460,7 @@ export default function CreateKhatma() {
 
                         {/* Submit Button */}
                         <button
-                            className="hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px]"
+                            className={`hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             onClick={() => {
                                 validateForm();
                                 if (!errors) {
@@ -437,7 +468,7 @@ export default function CreateKhatma() {
                                 }
                             }}
                         >
-                            Create Khatma
+                            {loading ? "Creating..." : "Create Khatma"}
                         </button>
                     </div>
                 </div>

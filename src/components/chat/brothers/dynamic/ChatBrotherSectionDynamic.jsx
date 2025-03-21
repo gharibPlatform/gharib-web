@@ -3,11 +3,13 @@ import ChatBrotherCard from "./ChatBrotherCard";
 import { useRouter, useParams } from "next/navigation";
 import useNameHeaderStore from "@/stores/nameHeaderStore";
 import useKhatmasContentStore from "@/stores/khatmasContentStore";
-import { getFriends } from "@/utils/apiUser";
+import { useChatActions } from "@/context/ChatActionContext";
 
 export default function ChatBrotherSection() {
     const BACKGROUND_COLOR = "#212121";
     const BACKGROUND_COLOR_NEW = "#323232";
+    
+    const {friends, loading} = useChatActions();
     
     const [activeIndex, setActiveIndex] = useState(null); 
 
@@ -16,24 +18,6 @@ export default function ChatBrotherSection() {
     const updateKhatmasContent = useKhatmasContentStore((state) => state.updateKhatmasContent);
 
     const nameStore = useParams();
-
-    const [friends, setFriends] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchFriends() {
-      try {
-        const data = await getFriends();
-        setFriends(data);
-      } catch (error) {
-        console.error("Failed to fetch friends:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchFriends();
-  }, []);
 
     useEffect(() => {
         if (!nameStore) return; 

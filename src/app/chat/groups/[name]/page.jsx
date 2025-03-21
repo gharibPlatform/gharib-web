@@ -2,6 +2,7 @@
 import { useParams } from "next/navigation";
 import ChatContent from '@/components/chat/ChatContent';
 import useNameHeaderStore from "@/stores/nameHeaderStore";
+import { GroupProvider } from "@/context/GroupContext";
 
 const Page = () => {
     const { name } = useParams();
@@ -11,9 +12,11 @@ const Page = () => {
     setNameHeader(name);  
 
     return (
-        <div>
-            <ChatContent nameHeader={name} groupBool={true}/>
-        </div>
+        <GroupProvider>
+            <div>
+                <ChatContent nameHeader={name} groupBool={true}/>
+            </div>
+        </GroupProvider>
     );
 };
 

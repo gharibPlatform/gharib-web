@@ -7,7 +7,7 @@ import Members from "./expandContent/progress/Members"
 export default function KhatmasContent( { nameHeader }) {
 
     return(
-        <div className="flex w-full flex-col h-[var(--height)] overflow-y-auto">
+        <div className="flex w-full flex-col h-[var(--height)] overflow-y-auto no-scrollbar">
             <div className="flex w-full flex-col relative">
                 <ChatHeader Name={nameHeader} GroupBool={true} />
                 

@@ -8,6 +8,7 @@ import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import { createKhatma } from "@/utils/apiKhatma";
+import { useKhatmaContext } from "@/context/KhatmaContext";
 
 const QuranHeader = ({ selectionType }) => {
     const [quranHeaderData, setQuranHeaderData] = useState([]);
@@ -216,7 +217,8 @@ export default function CreateKhatma() {
 
     const errorsRef = useRef(null);
     const [errors, setErrors] = useState({})
-    const [loading, setLoading] = useState(false);
+
+    const { handleCreateKhatma, loading } = useKhatmaContext();
     useEffect(() => {
         if (fromPage || toPage) {
             setIsPage(true);
@@ -255,7 +257,6 @@ export default function CreateKhatma() {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            setLoading(true);
             const requestBody = {
                 name: khatmaName,      
                 endDate: selectedEndDate,
@@ -271,21 +272,7 @@ export default function CreateKhatma() {
                 group: 0 
             };
 
-            try {
-
-                const response = await createKhatma(requestBody);
-    
-                if (!response.ok) {
-                    throw new Error("Failed to create Khatma");
-                }
-    
-                console.log("Khatma created successfully!");
-            } catch (error) {
-                console.error("Error:", error.message);
-            } finally{
-                setLoading(false);
-            }
-
+            handleCreateKhatma(requestBody);
         } else {
             if (errorsRef.current !== null) clearTimeout(errorsRef.current);
             errorsRef.current =  setTimeout(() => {

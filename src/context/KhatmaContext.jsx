@@ -32,9 +32,9 @@ export function KhatmaProvider({ children }) {
     };
 
     return (
-        <GroupContext.Provider value={{ handleCreateKhatma, khatmas, loading }} >
+        <KhatmaContext.Provider value={{ handleCreateKhatma, khatmas, loading }} >
             {children}
-        </GroupContext.Provider>
+        </KhatmaContext.Provider>
     );
 }
 

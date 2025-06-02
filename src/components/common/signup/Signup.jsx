@@ -19,6 +19,12 @@ const Signup = () => {
     error: null 
   });
 
+  // Clear error when any input is focused
+  const handleInputFocus = () => {
+    setError('');
+    setResendStatus(prev => ({ ...prev, error: null, success: false }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
@@ -26,7 +32,6 @@ const Signup = () => {
 
     if (password1 !== password2) {
       setError("Passwords do not match");
-      setTimeout(() => setError(''), 3000);
       return;
     }
 
@@ -41,15 +46,8 @@ const Signup = () => {
       };
 
       const response = await registerUser(signupData);
-      
       setIsSuccess(true);
       console.log('Signup successful:', response);
-
-      return(
-        <div className='flex flex-col items-center bg-[var(--dark-color)] w-min justify-center py-4 px-8 rounded-md'>
-          Sign up success. A verification link has been sent to your email please check your inbox.
-        </div>
-      )
       
     } catch (error) {
       console.error('Signup failed:', error);
@@ -65,8 +63,6 @@ const Signup = () => {
       } else {
         setError('Signup failed. Please try again.');
       }
-      
-      setTimeout(() => setError(''), 5000);
     } finally {
       setIsLoading(false);
     }
@@ -80,9 +76,6 @@ const Signup = () => {
     try {
       await resendEmailVerification({ email });
       setResendStatus({ loading: false, success: true, error: null });
-      setTimeout(() => {
-        setResendStatus(prev => ({ ...prev, success: false }));
-      }, 5000);
     } catch (error) {
       console.error('Failed to resend verification email:', error);
       setResendStatus({
@@ -90,9 +83,6 @@ const Signup = () => {
         success: false,
         error: error.response?.data?.message || 'Failed to resend verification email'
       });
-      setTimeout(() => {
-        setResendStatus(prev => ({ ...prev, error: null }));
-      }, 5000);
     }
   };
 
@@ -129,6 +119,7 @@ const Signup = () => {
           type="text"
           value={username} 
           onChange={(e) => setUsername(e.target.value)} 
+          onFocus={handleInputFocus}
           placeholder='Username' 
           required
         />
@@ -139,6 +130,7 @@ const Signup = () => {
           type="email"
           value={email} 
           onChange={(e) => setEmail(e.target.value)} 
+          onFocus={handleInputFocus}
           placeholder='Email' 
           required
         />
@@ -149,6 +141,7 @@ const Signup = () => {
           type="password"
           value={password1} 
           onChange={(e) => setPassword1(e.target.value)} 
+          onFocus={handleInputFocus}
           placeholder='Create Password' 
           required
         />
@@ -159,6 +152,7 @@ const Signup = () => {
           type="password"
           value={password2} 
           onChange={(e) => setPassword2(e.target.value)} 
+          onFocus={handleInputFocus}
           placeholder='Confirm Password' 
           required
         />
@@ -185,7 +179,7 @@ const Signup = () => {
                   ) : 'Resend verification email'}
                 </button>
                 {resendStatus.success && (
-                  <p className="text-[var(--bright-g-color)] mt-1">
+                  <p className="text-[var(--o-color)] mt-1">
                     Verification email sent successfully!
                   </p>
                 )}
@@ -227,7 +221,6 @@ const Signup = () => {
       <a href={googleAuthUrl}>
         <div style={{width: "380px"}} className='mt-2 mb-2 px-4 py-2 bg-[var(--secondary-color)] items-center flex text-xl text-[var(--w-color)] rounded-sm border border-[var(--main-color-hover)]'>
           <svg className='w-6 h-6' viewBox="-3 0 262 262" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" fill="#000000">
-            {/* Google logo SVG remains the same */}
           </svg>
           <p className='ml-auto mr-auto text-[var(--g-color)]'>Login with Google</p>
         </div>

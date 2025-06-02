@@ -27,7 +27,7 @@ const EmailVerification = () => {
       <div className='flex flex-col gap-4' >
         <p className='flex items-center justify-center text-[var(--w-color)] text-center'>Please enter the verification key we sent you to your email</p>
         <input style={{width : "380px"}} className='px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]' type="text" placeholder='Verification' required/>
-        <button style={{width : "380px", borderRadius: "6px"}} className='px-4 py-2 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-8'>Submit</button>
+        <button style={{width : "380px", borderRadius: "6px"}} className='px-4 bg-[var(--o-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] py-2 mb-8'>Submit</button>
       </div>
       
     </div>

@@ -1,4 +1,4 @@
-import api from './api'; // Changed from axios to our custom api instance
+import api from './api'; //custom api instance
 
 const API_BASE_URL = 'http://localhost:8000';
 

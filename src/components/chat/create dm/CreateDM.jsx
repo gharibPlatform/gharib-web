@@ -6,6 +6,7 @@ export default function CreateDM() {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
     const inputRef = useRef(null);
 
     const toggleUser = (brother) => {
@@ -20,6 +21,16 @@ export default function CreateDM() {
             inputRef.current.focus();
         }
     }, [selectedUsers])
+
+    const handleSuccess = () => {
+        setIsSuccess(true);
+        // Optional: Reset after some time
+        setTimeout(() => {
+            setIsSuccess(false);
+            setShowConfirmation(false);
+            setSelectedUsers([]);
+        }, 2000);
+    };
 
     return (
         <div className={`relative overflow-hidden ${showConfirmation ? "w-[500px] h-[385px]" : "w-[620px] h-[400px]"}`}>
@@ -70,6 +81,7 @@ export default function CreateDM() {
                     <button
                         className="hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] "
                         onClick={() => setShowConfirmation(true)}
+                        disabled={selectedUsers.length === 0}
                     >
                         Create DM
                     </button>
@@ -82,7 +94,23 @@ export default function CreateDM() {
                     showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
             >
-                <CreateDMConfirmation selectedUsers={selectedUsers} />
+                {isSuccess ? (
+                    <div className="bg-[var(--main-color)] p-6 rounded-sm border border-[var(--g-color)] h-full flex flex-col items-center justify-center">
+                        <div className="text-green-500 text-5xl mb-4">✓</div>
+                        <h2 className="text-[var(--w-color)] text-2xl text-center">
+                            DM Created Successfully!
+                        </h2>
+                        <p className="text-[var(--g-color)] text-center mt-2">
+                            Your direct message group has been created.
+                        </p>
+                    </div>
+                ) : (
+                    <CreateDMConfirmation 
+                        selectedUsers={selectedUsers} 
+                        onSuccess={handleSuccess}
+                        onCancel={() => setShowConfirmation(false)}
+                    />
+                )}
             </div>
         </div>
     );

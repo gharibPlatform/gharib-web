@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createGroup } from "@/utils/apiGroup";
 
-export default function CreateDMConfirmation({ selectedUsers }) {
+export default function CreateDMConfirmation({ selectedUsers, onSuccess, onCancel }) {
     const [groupName, setGroupName] = useState("");
     const [groupIcon, setGroupIcon] = useState(null);
     const [error, setError] = useState("");
@@ -38,7 +38,7 @@ export default function CreateDMConfirmation({ selectedUsers }) {
             formData.append("users", JSON.stringify(selectedUsers));
 
             await createGroup(formData);
-            console.log("Group successfully created");
+            onSuccess(); // Notify parent component of success
         } catch (error) {
             console.error("Failed to create group", error);
             setError("Failed to create group. Please try again.");
@@ -49,8 +49,17 @@ export default function CreateDMConfirmation({ selectedUsers }) {
 
     return (
         <div className="bg-[var(--main-color)] w-[500px] no-scrollbar p-6 rounded-lg border border-[var(--g-color)] text-[var(--w-color)]">
-            <h2 className="text-2xl font-semibold mb-4">You're going to create a group with:</h2>
-            <div className="text-[var(--w-color)] no-scrollbar rounded-[5px] text-lg flex flex-wrap items-center gap-2">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold">You're going to create a group with:</h2>
+                <button 
+                    onClick={onCancel}
+                    className="text-[var(--g-color)] hover:text-[var(--w-color)]"
+                >
+                    ✕
+                </button>
+            </div>
+            
+            <div className="text-[var(--w-color)] no-scrollbar rounded-[5px] text-lg flex flex-wrap items-center gap-2 mb-6">
                 {selectedUsers.map((user) => (
                     <span
                         key={user}
@@ -75,24 +84,42 @@ export default function CreateDMConfirmation({ selectedUsers }) {
                 {error && <p className="text-[var(--bright-r-color)] flex items-center justify-center">{error}</p>}
             </label>
 
-            <div className="mb-4 no-scrollbar">
+            <div className="mb-6 no-scrollbar">
                 <h2 className="text-lg mb-2">Group Icon</h2>
                 <div className="no-scrollbar flex items-center gap-4">
                     <label className="cursor-pointer hover:bg-[var(--main-color-hover)] bg-[var(--dark-color)] py-2 px-4 rounded-[5px] border border-[var(--g-color)] hover:bg-opacity-80">
                         Upload Image
                         <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                     </label>
-                    {groupIcon && <img src={URL.createObjectURL(groupIcon)} alt="Group Icon" className="w-12 h-12 rounded-full border border-[var(--g-color)]" />}
+                    {groupIcon && (
+                        <div className="flex items-center gap-2">
+                            <img src={URL.createObjectURL(groupIcon)} alt="Group Icon" className="w-12 h-12 rounded-full border border-[var(--g-color)]" />
+                            <button 
+                                onClick={() => setGroupIcon(null)}
+                                className="text-[var(--g-color)] hover:text-[var(--w-color)] text-sm"
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            <button 
-                onClick={handleCreateGroup} 
-                disabled={loading}
-                className={`hover:bg-[var(--b-color-hover)] w-full bg-[var(--b-color)] text-white py-2 px-4 rounded-[4px] text-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-                {loading ? "Creating..." : "Create"}
-            </button>
+            <div className="flex gap-3">
+                <button 
+                    onClick={onCancel}
+                    className="hover:bg-[var(--main-color-hover)] w-full bg-[var(--dark-color)] text-[var(--w-color)] py-2 px-4 rounded-[4px] text-lg border border-[var(--g-color)]"
+                >
+                    Cancel
+                </button>
+                <button 
+                    onClick={handleCreateGroup} 
+                    disabled={loading}
+                    className={`hover:bg-[var(--b-color-hover)] w-full bg-[var(--b-color)] text-white py-2 px-4 rounded-[4px] text-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                    {loading ? "Creating..." : "Create"}
+                </button>
+            </div>
         </div>
     );
 }

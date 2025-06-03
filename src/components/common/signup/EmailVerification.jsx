@@ -55,9 +55,9 @@ const EmailVerification = () => {
 
     verify();
   }, [decodedKey, router]);
-  
+
   return (
-    <div className='flex flex-col items-center bg-[var(--dark-color)] w-min justify-center py-4 px-8 rounded-md'>
+    <div className='flex flex-col items-center bg-[var(--dark-color)] justify-center py-4 px-8 rounded-md'>
       <h2 className='text-[var(--w-color)] text-3xl pb-8 pt-4'>Email Verification</h2>
 
       <div className='flex flex-col gap-4 items-center justify-center w-full'>
@@ -86,9 +86,41 @@ const EmailVerification = () => {
         )}
         
         {success && (
-          <p className='text-[var(--o-color)]'>
-            Email verified successfully! Redirecting to login...
-          </p>
+          <div className="text-center">
+            <div className="checkmark-container px-32  mb-4 flex ">
+              <svg 
+                className="checkmark animate-draw" 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 52 52"
+                width="64"
+                height="64"
+              >
+                <circle 
+                  className="checkmark-circle" 
+                  cx="26" 
+                  cy="26" 
+                  r="25" 
+                  fill="none"
+                  stroke="var(--o-color)"
+                  strokeWidth="2"
+                />
+                <path 
+                  className="checkmark-check" 
+                  fill="none"
+                  stroke="var(--o-color)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                />
+              </svg>
+            </div>
+            <p className='text-[var(--o-color)] text-xl'>
+              Email verified successfully!
+            </p>
+            <p className='text-[var(--w-color)] mt-2'>
+              Redirecting to login...
+            </p>
+          </div>
         )}
       </div>
     </div>

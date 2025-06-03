@@ -114,3 +114,27 @@ body{
   color: white !important;
 }
 
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: draw 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: draw 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+.animate-draw {
+  animation: draw 1s forwards;
+}

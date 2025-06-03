@@ -87,8 +87,7 @@ export default function ChatGroupsSection() {
                     index={index}
                     handleClick={() => handleClick(group, index)}
                     Name={group.name}
-                    // You can pass additional group data as props if needed
-                    // groupData={group}
+                    icon={group.icon}
                 />
             ))}
         </div>

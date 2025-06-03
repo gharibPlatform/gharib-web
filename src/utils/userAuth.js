@@ -1,12 +1,11 @@
-// auth.js
-import api from './api'; //custom axios instance with interceptors 
+import api from './api'; // Changed from axios to our custom api instance
 
 const API_BASE_URL = 'http://localhost:8000';
 
 // Google authentication
 export async function googleAuth(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/google/`, data);
+    const response = await api.post(`${API_BASE_URL}/auth/google/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error authenticating with Google:', error);
@@ -14,15 +13,10 @@ export async function googleAuth(data) {
   }
 }
 
-// Login - stores tokens automatically via interceptors
+// Login
 export async function login(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/login/`, data);
-    
-    // Store tokens (interceptor will use these for future requests)
-    localStorage.setItem('access_token', response.data.access);
-    localStorage.setItem('refresh_token', response.data.refresh);
-    
+    const response = await api.post(`${API_BASE_URL}/auth/login/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error logging in:', error);
@@ -30,15 +24,10 @@ export async function login(data) {
   }
 }
 
-// Logout - clears tokens
+// Logout
 export async function logout() {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/logout/`);
-    
-    // Clear tokens
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    
+    const response = await api.post(`${API_BASE_URL}/auth/logout/`); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error logging out:', error);
@@ -49,7 +38,7 @@ export async function logout() {
 // Change password
 export async function changePassword(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/password/change/`, data);
+    const response = await api.post(`${API_BASE_URL}/auth/password/change/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error changing password:', error);
@@ -59,25 +48,20 @@ export async function changePassword(data) {
 
 export async function resetPassword(email) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/password/reset/`, { email });
+    const response = await api.post(`${API_BASE_URL}/auth/password/reset/`, email); // Changed to api
     return response.data;
   } catch (error) {
-    console.error('Error sending reset email:', error);
+    console.error('Error sending email with error : ', error);
     throw error;
   }
 }
 
-export async function resetPasswordConfirm(uid, token, new_password1, new_password2) {
+export async function resetPasswordConfirm(password1, password2, userID, accessToken) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/password/reset/confirm/`, {
-      uid,
-      token,
-      new_password1,
-      new_password2
-    });
+    const response = await api.post(`${API_BASE_URL}/auth/password/reset/confirm/`, password1, password2, userID, accessToken); // Changed to api
     return response.data;
   } catch (error) {
-    console.error('Error resetting password:', error);
+    console.error('Error reseting the password with error : ', error);
     throw error;
   }
 }
@@ -85,7 +69,7 @@ export async function resetPasswordConfirm(uid, token, new_password1, new_passwo
 // User registration
 export async function registerUser(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/registration/`, data);
+    const response = await api.post(`${API_BASE_URL}/auth/registration/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error registering user:', error);
@@ -96,7 +80,7 @@ export async function registerUser(data) {
 // Resend email verification
 export async function resendEmailVerification(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/registration/resend-email/`, data);
+    const response = await api.post(`${API_BASE_URL}/auth/registration/resend-email/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error resending email verification:', error);
@@ -105,9 +89,9 @@ export async function resendEmailVerification(data) {
 }
 
 // Verify email
-export async function verifyEmail(key) {
+export async function verifyEmail(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/registration/verify-email/`, { key });
+    const response = await api.post(`${API_BASE_URL}/auth/registration/verify-email/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error verifying email:', error);
@@ -115,10 +99,10 @@ export async function verifyEmail(key) {
   }
 }
 
-// Refresh token - now handled automatically by interceptors
-export async function refreshToken(refresh) {
+// Refresh token
+export async function refreshToken(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/token/refresh/`, { refresh });
+    const response = await api.post(`${API_BASE_URL}/auth/token/refresh/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error refreshing token:', error);
@@ -127,9 +111,9 @@ export async function refreshToken(refresh) {
 }
 
 // Verify token
-export async function verifyToken(token) {
+export async function verifyToken(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/token/verify/`, { token });
+    const response = await api.post(`${API_BASE_URL}/auth/token/verify/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error verifying token:', error);
@@ -137,10 +121,10 @@ export async function verifyToken(token) {
   }
 }
 
-// Get user data - uses auth header automatically
+// Get user data
 export async function getUserData() {
   try {
-    const response = await api.get(`${API_BASE_URL}/auth/user/`);
+    const response = await api.get(`${API_BASE_URL}/auth/user/`); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error retrieving user data:', error);
@@ -151,7 +135,7 @@ export async function getUserData() {
 // Update user data (PUT)
 export async function updateUserDataPut(data) {
   try {
-    const response = await api.put(`${API_BASE_URL}/auth/user/`, data);
+    const response = await api.put(`${API_BASE_URL}/auth/user/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error updating user data with PUT:', error);
@@ -159,10 +143,10 @@ export async function updateUserDataPut(data) {
   }
 }
 
-// Update user data (PATCH)
+// Update user data 
 export async function updateUserDataPatch(data) {
   try {
-    const response = await api.patch(`${API_BASE_URL}/auth/user/`, data);
+    const response = await api.patch(`${API_BASE_URL}/auth/user/`, data); // Changed to api
     return response.data;
   } catch (error) {
     console.error('Error updating user data with PATCH:', error);
@@ -170,7 +154,7 @@ export async function updateUserDataPatch(data) {
   }
 }
 
-//To check auth status 
+// function to check auth status
 export async function checkAuth() {
   const token = localStorage.getItem('access_token');
   if (!token) return false;

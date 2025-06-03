@@ -27,7 +27,6 @@ export default function ChatGroupsSection() {
                 console.log(groupsData);
                 setGroups(groupsData.results);
                 
-                // Find and set active index if coming from URL
                 if (nameStore.name) {
                     const foundIndex = groupsData.results.findIndex(group => 
                         group.name === nameStore.name || group.id === nameStore.name
@@ -50,8 +49,8 @@ export default function ChatGroupsSection() {
     const handleClick = (group, i) => {
         setActiveIndex(i);
         updateKhatmasContent({ activeTabStore: "groups" });
-        setNameHeader(group.name || group); 
-        router.push(`/chat/groups/${group.name || group}`);
+        setNameHeader(group.name); 
+        router.push(`/chat/groups/${group.name}`);
     };
 
     if (loading) {
@@ -83,11 +82,10 @@ export default function ChatGroupsSection() {
             {groups.map((group, index) => (
                 <ChatGroupCard
                     backgroundColor={index === activeIndex ? BACKGROUND_COLOR_NEW : BACKGROUND_COLOR}
-                    key={group.id || index}
+                    key={group.id}
                     index={index}
                     handleClick={() => handleClick(group, index)}
                     Name={group.name}
-                    icon={group.icon}
                 />
             ))}
         </div>

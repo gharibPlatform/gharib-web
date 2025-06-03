@@ -5,6 +5,7 @@ import Tooltip from "@/components/common/tooltip/Tooltip";
 import EditGroupSettings from "../groups/EditGroupSettings";
 import AddBrother from "../groups/AddBrother";
 import ShareGroup from "../groups/ShareGroup";
+import { getGroups } from "@/utils/apiGroup";
 
 export default function GroupSideBar() {
   const brothersDataArray = ["Malek", "Moh", "Zohir", "Walid", "Moussa"];

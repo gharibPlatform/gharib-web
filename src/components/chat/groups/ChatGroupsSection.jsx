@@ -1,48 +1,94 @@
-// ChatGroupsSection component
 import { useEffect, useState } from "react";
 import ChatGroupCard from "./ChatGroupCard";
 import { useRouter, useParams } from "next/navigation";
 import useNameHeaderStore from "@/stores/nameHeaderStore";
 import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import { getGroups } from "@/utils/apiGroup";
 
 export default function ChatGroupsSection() {
     const BACKGROUND_COLOR = "#212121";
     const BACKGROUND_COLOR_NEW = "#323232";
 
-    const groupsDataArray = ["Muslims", "Brothers", "2CP5", "2CP1", "2CP3"];
+    const [groups, setGroups] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const nameStore = useParams();
 
-    useEffect(()=> {
-        let foundIndex = groupsDataArray.findIndex((data)=> data === nameStore.name);
-        if (foundIndex !== -1) {
-            console.log(foundIndex);
-            setActiveIndex(foundIndex);
-        }
-    }, [nameStore])
-
     const setNameHeader = useNameHeaderStore((state) => state.setNameHeader);
-    // const setGroupBool = useNameHeaderStore((state) => state.setGroupBool);
     const router = useRouter();
-    const [activeIndex, setActiveIndex] = useState(null); 
-
+    const [activeIndex, setActiveIndex] = useState(null);
     const updateKhatmasContent = useKhatmasContentStore((state) => state.updateKhatmasContent);
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                setLoading(true);
+                const groupsData = await getGroups();
+                console.log(groupsData);
+                setGroups(groupsData.results);
+                
+                // Find and set active index if coming from URL
+                if (nameStore.name) {
+                    const foundIndex = groupsData.results.findIndex(group => 
+                        group.name === nameStore.name || group.id === nameStore.name
+                    );
+                    if (foundIndex !== -1) {
+                        setActiveIndex(foundIndex);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch groups:", err);
+                setError("Failed to load groups. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGroups();
+    }, [nameStore.name]);
+
     const handleClick = (group, i) => {
         setActiveIndex(i);
-        updateKhatmasContent({activeTabStore: "groups" });
-        setNameHeader(group); 
-        // setGroupBool(true); 
-        router.push(`/chat/groups/${group}`);
+        updateKhatmasContent({ activeTabStore: "groups" });
+        setNameHeader(group.name || group); 
+        router.push(`/chat/groups/${group.name || group}`);
     };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-20">
+                <p className="text-[var(--g-color)]">Loading groups...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-20">
+                <p className="text-[var(--bright-r-color)]">{error}</p>
+            </div>
+        );
+    }
+
+    if (groups.length === 0) {
+        return (
+            <div className="flex justify-center items-center h-20">
+                <p className="text-[var(--g-color)]">No groups found</p>
+            </div>
+        );
+    }
 
     return (
         <div>
-            {groupsDataArray.map((group, index) => (
+            {groups.map((group, index) => (
                 <ChatGroupCard
                     backgroundColor={index === activeIndex ? BACKGROUND_COLOR_NEW : BACKGROUND_COLOR}
-                    key={index}
+                    key={group.id || index}
                     index={index}
-                    handleClick={handleClick}
-                    Name={group}
+                    handleClick={() => handleClick(group, index)}
+                    Name={group.name}
+                    // You can pass additional group data as props if needed
+                    // groupData={group}
                 />
             ))}
         </div>

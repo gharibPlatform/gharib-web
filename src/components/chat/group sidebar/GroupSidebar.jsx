@@ -89,7 +89,7 @@ export default function GroupSideBar() {
       </div>
       <div className="flex gap-2 flex-col mt-auto justify-center items-center">
         <button className="w-full py-2 px-4 text-[var(--r-color)] hover:bg-[var(--main-color-hover)]">
-          Delete Chat
+          Delete Group
         </button>
         <button className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
           Leave Group
@@ -115,7 +115,7 @@ export default function GroupSideBar() {
           <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="absolute inset-0 pointer-events-none"></div>
             <div ref={shareGroupRef}>
-              <ShareGroup selectedUsers={brothersDataArray} />
+              <ShareGroup groupId={1} hasExistingCode={false} />
             </div>
           </div>
         )}

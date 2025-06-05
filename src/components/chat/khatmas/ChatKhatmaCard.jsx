@@ -12,16 +12,21 @@ function Header({ name, timeLeft }) {
   );
 }
 
-export default function ChatKhatmaCard({ name, percentage, backgroundColor, timeLeft }) {
-  const degree = percentage * 2 * 1.8; 
+export default function ChatKhatmaCard({ 
+  backgroundColor, 
+  name, 
+  percentage, 
+  timeLeft 
+}) {
+  const degree = percentage * 2 * 1.8;
 
   return (
     <div 
-      style={{ "--background-color": backgroundColor }} 
+      style={{ "--background-color": backgroundColor || "var(--default-bg)" }} 
       className="flex items-center gap-2 hover:bg-[var(--main-color-hover)] cursor-pointer bg-[var(--background-color)] py-3" 
     >
       <Header 
-        name={name}
+        name={name || "Untitled Khatma"}
         timeLeft={timeLeft}
       />
 

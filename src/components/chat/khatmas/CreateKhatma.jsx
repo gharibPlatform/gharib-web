@@ -271,38 +271,32 @@ export default function CreateKhatma() {
 
         try {
             const userData = await getUserData();
-            
-            console.log(userData);
             if (!userData?.id) {
                 throw new Error("Could not determine user ID");
             }
 
             const requestBody = {
-                name: khatmaName,      
+                name: khatmaName.trim(),     
                 endDate: selectedEndDate,
                 intentions: description,
-                duaa: "no duaa",
+                duaa: "no duaa",            
                 startSurah: fromChapter,
                 startVerse: fromVerse,
                 endSurah: toChapter,
                 endVerse: toVerse,
                 progress: 0, 
                 status: "ongoing",
-                launcher: userData.id, 
+                launcher: userData.id,       
                 group: 13
             };
 
-            // Call the API function
-            const response = await createKhatma(requestBody);
-            
-            // Handle successful response
-            if (response) {
-                setShowConfirmation(true);
-            }
+            console.log("Submitting Khatma:", requestBody); // Debug log
 
+            const response = await createKhatma(requestBody);
+            setShowConfirmation(true);
         } catch (error) {
-            console.error("Error creating khatma:", error);
-            setApiError(error.message || "Failed to create khatma");
+            console.error("API Error:", error.response?.data || error.message);
+            setApiError(error.response?.data?.error || "Failed to create khatma");
         } finally {
             setIsSubmitting(false);
         }

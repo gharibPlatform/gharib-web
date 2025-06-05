@@ -9,6 +9,7 @@ import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import { createKhatma } from "@/utils/apiKhatma";
 import { useKhatmaContext } from "@/context/KhatmaContext";
+import { getUserData } from "@/utils/userAuth";
 
 const QuranHeader = ({ selectionType }) => {
     const [quranHeaderData, setQuranHeaderData] = useState([]);
@@ -263,13 +264,19 @@ export default function CreateKhatma() {
             }, 5000);
         }
     };
-
+    
     const submitForm = async () => {
         setIsSubmitting(true);
         setApiError(null);
-        
-        
+
         try {
+            const userData = await getUserData();
+            
+            console.log(userData);
+            if (!userData?.id) {
+                throw new Error("Could not determine user ID");
+            }
+
             const requestBody = {
                 name: khatmaName,      
                 endDate: selectedEndDate,
@@ -281,7 +288,7 @@ export default function CreateKhatma() {
                 endVerse: toVerse,
                 progress: 0, 
                 status: "ongoing",
-                launcher: 0, 
+                launcher: userData.id, 
                 group: 13
             };
 
@@ -291,8 +298,8 @@ export default function CreateKhatma() {
             // Handle successful response
             if (response) {
                 setShowConfirmation(true);
-                // You might want to reset the form here or redirect
             }
+
         } catch (error) {
             console.error("Error creating khatma:", error);
             setApiError(error.message || "Failed to create khatma");

@@ -268,6 +268,7 @@ export default function CreateKhatma() {
         setIsSubmitting(true);
         setApiError(null);
         
+        
         try {
             const requestBody = {
                 name: khatmaName,      
@@ -281,7 +282,7 @@ export default function CreateKhatma() {
                 progress: 0, 
                 status: "ongoing",
                 launcher: 0, 
-                group: 0 
+                group: 13
             };
 
             // Call the API function

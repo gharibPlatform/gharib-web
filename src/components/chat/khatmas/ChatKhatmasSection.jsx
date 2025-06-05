@@ -27,7 +27,7 @@ export default function ChatKhatmasSection() {
           ...(response.history || [])
         ];
         setKhatmas(allKhatmas);
-        
+        console.log(response)
         // Set active index 
         const foundIndex = allKhatmas.findIndex(item => item.name === params.name);
         if (foundIndex !== -1) {

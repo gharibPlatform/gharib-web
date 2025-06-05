@@ -195,10 +195,8 @@ const QuranHeader = ({ selectionType }) => {
         </div>
     )
 }
-
 export default function CreateKhatma() {
     const [showConfirmation, setShowConfirmation] = useState(false);
-    
     const [khatmaName, setKhatmaName] = useState("");
     const [isLimited, setIsLimited] = useState(null);
     const [userLimit, setUserLimit] = useState("");
@@ -214,11 +212,11 @@ export default function CreateKhatma() {
     const [isChapter, setIsChapter] = useState(false);
 
     const inputRef = useRef(null);
-
     const errorsRef = useRef(null);
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({});
+    const [apiError, setApiError] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { handleCreateKhatma, loading } = useKhatmaContext();
     useEffect(() => {
         if (fromPage || toPage) {
             setIsPage(true);
@@ -229,7 +227,7 @@ export default function CreateKhatma() {
             setIsChapter(true);
             setIsPage(false);
         }
-    }, [fromChapter, toChapter, fromPage, toPage, fromVerse, toVerse])
+    }, [fromChapter, toChapter, fromPage, toPage, fromVerse, toVerse]);
 
     const validateForm = async () => {
         const newErrors = {};
@@ -257,6 +255,20 @@ export default function CreateKhatma() {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
+            await submitForm();
+        } else {
+            if (errorsRef.current !== null) clearTimeout(errorsRef.current);
+            errorsRef.current = setTimeout(() => {
+                setErrors({});
+            }, 5000);
+        }
+    };
+
+    const submitForm = async () => {
+        setIsSubmitting(true);
+        setApiError(null);
+        
+        try {
             const requestBody = {
                 name: khatmaName,      
                 endDate: selectedEndDate,
@@ -272,25 +284,27 @@ export default function CreateKhatma() {
                 group: 0 
             };
 
-            handleCreateKhatma(requestBody);
-        } else {
-            if (errorsRef.current !== null) clearTimeout(errorsRef.current);
-            errorsRef.current =  setTimeout(() => {
-                setErrors({});
-            }, 5000);
+            // Call the API function
+            const response = await createKhatma(requestBody);
+            
+            // Handle successful response
+            if (response) {
+                setShowConfirmation(true);
+                // You might want to reset the form here or redirect
+            }
+        } catch (error) {
+            console.error("Error creating khatma:", error);
+            setApiError(error.message || "Failed to create khatma");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     useEffect(() => {
-        return() => {
+        return () => {
             if (errorsRef.current !== null) clearTimeout(errorsRef.current);
-        }
+        };
     }, []);
-
-    useEffect(() => {
-        console.log(errors);
-        console.log(selectedStartDate);
-    }, [errors]);
 
     useEffect(() => {
         if (inputRef.current) {
@@ -310,7 +324,6 @@ export default function CreateKhatma() {
                         <h2 className="text-[var(--w-color)] text-2xl py-4">Create Khatma</h2>
 
                         <div className="flex flex-col relative pl-6 gap-6">
-
                             {/* Name Input */}
                             <form className="flex gap-2 text-[var(--w-color)] flex-col">
                                 <h2 className="text-lg font-semibold">Name :</h2>
@@ -354,7 +367,7 @@ export default function CreateKhatma() {
                                             checked={isLimited === false}
                                             onChange={() => {
                                                 setIsLimited(false);
-                                                setUserLimit(""); // Reset user limit if Unlimited is chosen
+                                                setUserLimit("");
                                             }}
                                             className="hidden"
                                         />
@@ -368,7 +381,6 @@ export default function CreateKhatma() {
                                 </div>
                                 {errors.isLimited && <p className="text-[var(--r-color)]">{errors.isLimited}</p>}
 
-                                {/* Show user limit input only if "Limited" is selected */}
                                 {isLimited && (
                                     <div className="mt-2">
                                         <h2>Specify Number of Users</h2>
@@ -402,7 +414,6 @@ export default function CreateKhatma() {
                                 {errors.toChapter && <p className="text-[var(--r-color)]">{errors.toChapter}</p>}
                                 {errors.toVerse && <p className="text-[var(--r-color)]">{errors.toVerse}</p>}
                                 {errors.toPage && <p className="text-[var(--r-color)]">{errors.toPage}</p>}
-
                             </container>
 
                             {/* Duration Section */}
@@ -411,20 +422,20 @@ export default function CreateKhatma() {
 
                                 <h2>From :</h2>
                                 <input 
-                                 type="datetime-local"
-                                 className="bg-[var(--dark-color)] p-2"
-                                 onChange={(e) => setSelectedStartDate(e.target.value)}
-                                 />
+                                    type="datetime-local"
+                                    className="bg-[var(--dark-color)] p-2"
+                                    onChange={(e) => setSelectedStartDate(e.target.value)}
+                                />
                                 {errors.selectedStartDate && <p className="text-[var(--r-color)]">{errors.selectedStartDate}</p>}
 
                                 <div className="pb-4"></div>
 
                                 <h2>To :</h2>
                                 <input 
-                                 type="datetime-local"
-                                 className="bg-[var(--dark-color)] p-2"
-                                 onChange={(e) => setSelectedEndDate(e.target.value)}
-                                 />
+                                    type="datetime-local"
+                                    className="bg-[var(--dark-color)] p-2"
+                                    onChange={(e) => setSelectedEndDate(e.target.value)}
+                                />
                                 {errors.selectedEndDate && <p className="text-[var(--r-color)]">{errors.selectedEndDate}</p>}
                             </container>
 
@@ -441,21 +452,24 @@ export default function CreateKhatma() {
                                 {errors.description && <p className="text-[var(--r-color)]">{errors.description}</p>}
                             </form>
 
+                            {apiError && (
+                                <div className="text-[var(--r-color)]">
+                                    {apiError}
+                                </div>
+                            )}
                         </div>
 
                         <div className="pb-4"></div>
 
                         {/* Submit Button */}
                         <button
-                            className={`hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            onClick={() => {
-                                validateForm();
-                                if (!errors) {
-                                    setShowConfirmation(true);
-                                }
-                            }}
+                            className={`hover:bg-[var(--b-color-hover)] py-2 px-4 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] ${
+                                isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                            }`}
+                            onClick={validateForm}
+                            disabled={isSubmitting}
                         >
-                            {loading ? "Creating..." : "Create Khatma"}
+                            {isSubmitting ? "Creating..." : "Create Khatma"}
                         </button>
                     </div>
                 </div>

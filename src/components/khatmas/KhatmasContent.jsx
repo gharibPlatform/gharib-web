@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ChatHeader from "../chat/ChatHeader";
 import KhatmasProgress from "./KhatmasProgress";
 import Personal from "./expandContent/progress/Personal";
 import Group from "./expandContent/progress/Group";
 import Members from "./expandContent/progress/Members";
-import { postKhatmaMembership } from "@/utils/apiKhatma";
+import { postKhatmaMembership, getKhatmaMembership } from "@/utils/apiKhatma";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import QuranHeader from "../chat/khatmas/QuranHeaderCreateKhatma";
 
@@ -32,19 +32,22 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
                 endShareVerse: fromVerseEnd,
                 currentSurah,
                 currentVerse,
-                progress: 0, // Starting progress is 0
+                progress: 0,
                 finishDate,
                 status: "ongoing",
-                groupMembership: 13, 
-                khatma: 3
+                groupMembership: groupId,
+                khatma: khatmaId
             };
 
-            await postKhatmaMembership(3, membershipData);
+            await postKhatmaMembership(khatmaId, membershipData);
             setSuccess(true);
             setTimeout(onClose, 2000);
         } catch (err) {
             console.error("Failed to join khatma:", err);
             setError(err.response?.data?.message || "Failed to join khatma");
+            if (err.response?.data?.non_field_errors) {
+                setError(err.response.data.non_field_errors[0]);
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -136,41 +139,126 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
     );
 };
 
-export default function KhatmasContent({ nameHeader, khatmaId }) {
+export default function KhatmasContent({ nameHeader, khatmaId = 2, groupId = 13 }) {
     const [showJoinForm, setShowJoinForm] = useState(false);
-    
+    const [isMember, setIsMember] = useState(false);
+    const [isCheckingMembership, setIsCheckingMembership] = useState(true);
+    const [membershipError, setMembershipError] = useState(null);
+    const [membershipData, setMembershipData] = useState(null);
+
+    useEffect(() => {
+        const checkMembership = async () => {
+            try {
+                const response = await getKhatmaMembership(khatmaId);
+                
+                if (response?.results?.length > 0) {
+                    const memberData = response.results.find(m => 
+                        m.groupMembership === groupId && 
+                        m.khatma === khatmaId
+                    );
+                    
+                    if (memberData) {
+                        setIsMember(true);
+                        setMembershipData(memberData);
+                    }
+                }
+            } catch (err) {
+                console.error("API Error:", err);
+                // Check for specific 404 error with "khatma membership not found" message
+                if (err.response?.data?.error !== "khatma membership not found") {
+                    setMembershipError("Failed to connect to server");
+                }
+            } finally {
+                setIsCheckingMembership(false);
+            }
+        };
+
+        if (khatmaId) {
+            checkMembership();
+        }
+    }, [khatmaId, groupId]);
+
+    if (isCheckingMembership) {
+        return (
+            <div className="flex justify-center items-center h-20">
+                <p className="text-[var(--g-color)]">Checking membership...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex w-full flex-col h-[var(--height)] overflow-y-auto no-scrollbar">
             <div className="flex w-full flex-col relative">
                 <ChatHeader Name={nameHeader} GroupBool={true} />
                 
-                <KhatmasProgress />
-                <div className="flex items-center justify-center mt-4 mb-6">
-                    <button 
-                        onClick={() => setShowJoinForm(true)}
-                        className="hover:bg-[var(--b-color-hover)] py-2 px-5 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] transition-colors duration-200"
-                    >
-                        Join
-                    </button>
+                <KhatmasProgress 
+                    startSurah={membershipData?.startShareSurah}
+                    startVerse={membershipData?.startShareVerse}
+                    endSurah={membershipData?.endShareSurah}
+                    endVerse={membershipData?.endShareVerse}
+                    currentSurah={membershipData?.currentSurah}
+                    currentVerse={membershipData?.currentVerse}
+                    progress={membershipData?.progress}
+                    status={membershipData?.status}
+                    finishDate={membershipData?.finishDate}
+                />
+                
+                <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
+                    {membershipError && (
+                        <p className="text-[var(--r-color)] text-sm">{membershipError}</p>
+                    )}
+                    
+                    {isMember ? (
+                        <button 
+                            className="py-2 px-5 text-[var(--w-color)] bg-[var(--g-color)] rounded-[4px] cursor-default"
+                            disabled
+                        >
+                            Joined
+                        </button>
+                    ) : (
+                        <button 
+                            onClick={() => setShowJoinForm(true)}
+                            className="hover:bg-[var(--b-color-hover)] py-2 px-5 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] transition-colors duration-200"
+                        >
+                            Join
+                        </button>
+                    )}
                 </div>
             </div>
 
-            <div className="flex flex-col">
-                <Personal />
-            </div>
+            {isMember ? (
+                <>
+                    <div className="flex flex-col">
+                        <Personal 
+                            startSurah={membershipData.startShareSurah}
+                            startVerse={membershipData.startShareVerse}
+                            endSurah={membershipData.endShareSurah}
+                            endVerse={membershipData.endShareVerse}
+                            currentSurah={membershipData.currentSurah}
+                            currentVerse={membershipData.currentVerse}
+                            progress={membershipData.progress}
+                        />
+                    </div>
 
-            <div className="flex flex-col">
-                <Group />
-            </div>
+                    <div className="flex flex-col">
+                        <Group groupId={groupId} khatmaId={khatmaId} />
+                    </div>
 
-            <div className="flex flex-col">
-                <Members />
-            </div>
+                    <div className="flex flex-col">
+                        <Members groupId={groupId} khatmaId={khatmaId} />
+                    </div>
+                </>
+            ) : (
+                <div className="flex justify-center items-center p-4">
+                    <p className="text-[var(--g-color)]">Join the khatma to see your progress and group details</p>
+                </div>
+            )}
 
             {showJoinForm && (
                 <JoinKhatmaForm 
                     onClose={() => setShowJoinForm(false)} 
-                    khatmaId={khatmaId} 
+                    khatmaId={khatmaId}
+                    groupId={groupId}
                 />
             )}
         </div>

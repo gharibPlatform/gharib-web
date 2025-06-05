@@ -32,6 +32,16 @@ export const updateKhatmaMembership = async (id, data) => {
   }
 };
 
+export const postKhatmaMembership = async (id, data) => {
+  try {
+    const response = await api.post(`${API_BASE_URL}/khatma/khatma-membership/${id}/`, data);
+    return response.data;
+  } catch (error) {
+    console.error('Error posting khatma membership:', error);
+    throw error;
+  }
+};
+
 export const patchKhatmaMembership = async (id, data) => {
   try {
     const response = await api.patch(`${API_BASE_URL}/khatma/khatma-membership/${id}/`, data);

@@ -10,6 +10,7 @@ function NotificationsMenu({ toggleNotificationsMenu }) {
     const fetchRequests = async () => {
       try {
         const data = await getBrotherRequests();
+        console.log(data)
         setRequests(data);
       } catch (error) {
         console.error("Failed to fetch brother requests:", error);
@@ -35,7 +36,8 @@ function NotificationsMenu({ toggleNotificationsMenu }) {
 
   const handleDecline = async (requestId) => {
     try {
-      await denyBrotherRequest(requestId);
+        console.log(requestId)
+      await denyBrotherRequest(18);
       setRequests(prev => ({
         ...prev,
         received: prev.received.filter(req => req.id !== requestId)
@@ -58,10 +60,10 @@ function NotificationsMenu({ toggleNotificationsMenu }) {
       ) : (
         <>
           {/* Received Requests Section */}
-          {requests?.received?.length > 0 ? (
+          {requests?.recieved?.length > 0 ? (
             <>
               <h3 className="text-white px-4 pt-4 pb-2 font-medium">Received Requests</h3>
-              {requests.received.map((request) => (
+              {requests.recieved.map((request) => (
                 <div key={request.id}>
                   <BrotherRequestCard 
                     request={request}
@@ -69,9 +71,9 @@ function NotificationsMenu({ toggleNotificationsMenu }) {
                     onAccept={handleAccept}
                     onDecline={handleDecline}
                   />
-                  <div className="flex items-center justify-center py-4">
+                  {/* <div className="flex items-center justify-center py-4">
                     <div className="border-t border-[var(--g-color)] w-full"></div>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </>

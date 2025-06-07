@@ -12,26 +12,44 @@ export async function googleAuth(data) {
     throw error;
   }
 }
-
-// Login
+// login
+// In your login function:
 export async function login(data) {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/login/`, data); // Changed to api
+    const response = await api.post('/auth/login/', data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    // Set cookies manually since we can't access Set-Cookie headers directly
+    document.cookie = `access_token=${response.data.access_token}; path=/; max-age=${60 * 60 * 24}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
+    document.cookie = `refresh_token=${response.data.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
+    
     return response.data;
   } catch (error) {
-    console.error('Error logging in:', error);
+    console.error('Login error:', error);
     throw error;
   }
 }
 
-// Logout
+// In your logout function:
 export async function logout() {
   try {
-    const response = await api.post(`${API_BASE_URL}/auth/logout/`); // Changed to api
-    return response.data;
+    const response = await api.post(`${API_BASE_URL}/auth/logout/`)
+    
+    // Clear client-side storage
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    
+    // Clear cookies
+    document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    
+    return response.data
   } catch (error) {
-    console.error('Error logging out:', error);
-    throw error;
+    console.error('Logout error:', error)
+    throw error
   }
 }
 
@@ -156,13 +174,30 @@ export async function updateUserDataPatch(data) {
 
 // function to check auth status
 export async function checkAuth() {
-  const token = localStorage.getItem('access_token');
-  if (!token) return false;
-  
-  try {
-    await verifyToken(token);
-    return true;
-  } catch {
-    return false;
+  // For client-side
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('access_token')
+    if (!token) return false
+    
+    try {
+      await verifyToken({ token })
+      return true
+    } catch {
+      return false
+    }
   }
+  return false
+}
+
+// cookies and clearing it 
+export function setAuthCookies(accessToken, refreshToken = null) {
+  document.cookie = `access_token=${accessToken}; path=/; max-age=${60 * 60 * 24}` // 1 day
+  if (refreshToken) {
+    document.cookie = `refresh_token=${refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}` // 7 days
+  }
+}
+
+export function clearAuthCookies() {
+  document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+  document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
 }

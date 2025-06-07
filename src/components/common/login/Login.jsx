@@ -16,8 +16,7 @@ const Login = () => {
     login(loginData)
       .then(response => {
         console.log('Login successful:', response);
-        // Redirect to dashboard or home page after successful login
-        router.push('/dashboard');
+        router.push('/chat');
       })
       .catch(error => {
         console.error('Login failed:', error);

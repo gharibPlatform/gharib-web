@@ -4,14 +4,14 @@ export default function SettingsSideBar() {
     return (
         <div className=" fixed h-[var(--height)] left-0 top-14 border-r border-[var(--g-color)] bg-[var(--main-color)] inline-block">
             <div className="inline-block flex-col pt-4">
-                <SettingsItem title="Account" path="settings/account" />
-                <SettingsItem title="Profile" path="settings/profile" />
-                <SettingsItem title="Appearance" path="settings/appearance" />
-                <SettingsItem title="Quran" path="settings/quran" />
-                <SettingsItem title="Security" path="settings/security" />
-                <SettingsItem title="Notifications" path="settings/notifications" />
-                <SettingsItem title="Language and region" path="settings/language" />
-                <SettingsItem title="Blocking" path="settings/blocking" />
+                <SettingsItem title="Account" path="/settings/account" />
+                <SettingsItem title="Profile" path="/settings/profile" />
+                <SettingsItem title="Appearance" path="/settings/appearance" />
+                <SettingsItem title="Quran" path="/settings/quran" />
+                <SettingsItem title="Security" path="/settings/security" />
+                <SettingsItem title="Notifications" path="/settings/notifications" />
+                <SettingsItem title="Language and region" path="/settings/language" />
+                <SettingsItem title="Blocking" path="/settings/blocking" />
             </div>
         </div>
     );

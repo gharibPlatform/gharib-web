@@ -162,13 +162,17 @@ export default function SecuritySettings() {
                     )}
                 </div>
                 
-                <button 
-                    className={`mt-2 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap hover:bg-[var(--main-color-hover)] ${!isFormValid() ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    onClick={handleSubmit}
-                    disabled={!isFormValid()}
-                >
-                    Change Password
-                </button>
+                <div className='flex gap-4 items-center'>
+                    <button
+                        className={`mt-2 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap hover:bg-[var(--main-color-hover)] ${!isFormValid() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        onClick={handleSubmit}
+                        disabled={!isFormValid()}
+                    >
+                        Change Password
+                    </button>
+
+                    <div className='text-[var(--b-color)] text-lg pt-2 hover:underline cursor-pointer'>I forgot my password</div>
+                </div>
             </div>
         </div>
     );

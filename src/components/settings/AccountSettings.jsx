@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Popup = ({ isOpen, onClose, children }) => {
+const Popup = ({ isOpen, onClose, children, actionType = 'confirm' }) => {
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div 
@@ -25,11 +25,12 @@ export default function AccountSettings() {
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupContent, setPopupContent] = useState({
         title: '',
-        description: ''
+        description: '',
+        actionType: 'confirm'
     });
 
-    const handleButtonClick = (title, description) => {
-        setPopupContent({ title, description });
+    const handleButtonClick = (title, description, actionType = 'confirm') => {
+        setPopupContent({ title, description, actionType });
         setPopupOpen(true);
     };
 
@@ -37,21 +38,25 @@ export default function AccountSettings() {
         <div className="px-8 pt-4 flex flex-col">
 
             {/* popup component */}
-            <Popup isOpen={popupOpen} onClose={() => setPopupOpen(false)}>
+            <Popup isOpen={popupOpen} onClose={() => setPopupOpen(false)} actionType={popupContent.actionType}>
                 <h2 className="text-2xl font-bold text-white mb-4">{popupContent.title}</h2>
                 <p className="text-[var(--g-color)] mb-6">{popupContent.description}</p>
 
                 <div className="flex justify-end space-x-3">
                     <button 
                         onClick={() => setPopupOpen(false)}
-                        className="px-4 py-2 rounded border border-[var(--g-color)] text-[var(--w-color)] hover:bg-[var(--g-color)]"
+                        className="px-4 py-2 rounded border border-[var(--g-color)] text-[var(--w-color)] hover:bg-[var(--g-color)] transition-colors"
                     >
                         Cancel
                     </button>
                     <button 
-                        className="px-4 py-2 rounded bg-[var(--secondary-color)] text-white hover:bg-[var(--main-color-hover)] border border-[var(--g-color)]"
+                        className={`px-4 py-2 rounded text-white border transition-colors ${
+                            popupContent.actionType === 'delete' 
+                                ? 'bg-[var(--r-color)] border-[var(--r-color)] hover:bg-[var(--bright-r-color)] hover:border-[var(--r-color-dark)]' 
+                                : 'bg-[var(--main-color-hover-darker)] border-[var(--g-color)] hover:bg-[var(--main-color-hover)]'
+                        }`}
                     >
-                        Confirm
+                        {popupContent.actionType === 'delete' ? 'Delete Forever' : 'Confirm'}
                     </button>
                 </div>
             </Popup>
@@ -112,7 +117,8 @@ export default function AccountSettings() {
                  className="mt-5 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap hover:bg-[var(--r-color)] hover:text-white"
                  onClick={() => handleButtonClick(
                     "Delete Account", 
-                    "This action cannot be undone. All your data will be permanently erased. Are you absolutely sure?"
+                    "This action cannot be undone. All your data will be permanently erased. Are you absolutely sure?",
+                    "delete"
                 )}
                  >
                     Delete account

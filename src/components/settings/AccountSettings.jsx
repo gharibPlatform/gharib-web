@@ -12,7 +12,7 @@ const Popup = ({ isOpen, onClose, children }) => {
         {children}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-[var(--g-color)] hover:text-[var(--main-color)]"
+          className="absolute top-4 right-4 text-[var(--g-color)] hover:text-[var(--w-color)]"
         >
           ✕
         </button>
@@ -44,12 +44,12 @@ export default function AccountSettings() {
                 <div className="flex justify-end space-x-3">
                     <button 
                         onClick={() => setPopupOpen(false)}
-                        className="px-4 py-2 rounded border border-[var(--g-color)] text-[var(--g-color)] hover:bg-gray-700"
+                        className="px-4 py-2 rounded border border-[var(--g-color)] text-[var(--w-color)] hover:bg-[var(--g-color)]"
                     >
                         Cancel
                     </button>
                     <button 
-                        className="px-4 py-2 rounded bg-[var(--main-color)] text-white hover:bg-[var(--main-color-hover)]"
+                        className="px-4 py-2 rounded bg-[var(--secondary-color)] text-white hover:bg-[var(--main-color-hover)] border border-[var(--g-color)]"
                     >
                         Confirm
                     </button>

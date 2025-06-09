@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 const Popup = ({ isOpen, onClose, children, actionType = 'confirm' }) => {
-  // Same popup component as before
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div 
@@ -29,7 +28,6 @@ export default function AccountSettings() {
         actionType: 'confirm'
     });
 
-    // Form states
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [isDirty, setIsDirty] = useState({
@@ -67,7 +65,6 @@ export default function AccountSettings() {
             setIsDirty(prev => ({...prev, email: true}));
         }
         
-        // Validate immediately
         validateField(field, value);
     };
 

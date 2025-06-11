@@ -1,13 +1,11 @@
 "use client"
 
-import Header from "@/components/common/header/Header"
-import SettingsSideBar from "@/components/settings/SettingsSideBar"
+import QuranSettings from "@/components/settings/QuranSettings"
 
 export default function page() {
   return(
-  <div className="bg-[#fff] w-screen">
-    <Header />
-    <SettingsSideBar />
+  <div className="w-screen">
+    <QuranSettings />    
   </div>
   )
 }

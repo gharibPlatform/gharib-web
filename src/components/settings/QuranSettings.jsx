@@ -218,7 +218,7 @@ export default function QuranSettings() {
                     disabled={!isDirty}
                     className={`bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap ${
                         isDirty 
-                            ? 'hover:bg-[var(--r-color)] hover:text-white cursor-pointer' 
+                            ? 'hover:bg-[var(--main-color-hover)] hover:text-white cursor-pointer' 
                             : 'opacity-50 cursor-not-allowed'
                     }`}
                 >

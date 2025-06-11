@@ -26,6 +26,16 @@ export default function LanguageAndRegion() {
         alert('Settings saved successfully!');
     };
 
+    const [rotate, setRotate] = useState(90);
+
+    const changeRotation = () => {
+        if (rotate == 90) {
+            setRotate(270);
+        }else{
+            setRotate(90);
+        }
+    }
+
     return (
         <div className="px-8 pt-4 flex flex-col">
             {/* Language Section */}
@@ -43,21 +53,36 @@ export default function LanguageAndRegion() {
                         </p>
                     </div>
                     
-                    <select
-                        value={language}
-                        onChange={handleLanguageChange}
-                        className="w-min bg-[var(--main-color)] border border-[var(--g-color)] rounded px-4 py-2 text-white focus:outline-none focus:border-[var(--main-color-hover)] appearance-none"
-                    >
-                        {availableLanguages.map((lang) => (
-                            <option 
-                                key={lang.value} 
+                    <div
+                     onClick={changeRotation}
+                     className="relative flex items-center w-min">
+                        <select
+                            value={language}
+                            onChange={handleLanguageChange}
+                            className="w-min bg-[var(--main-color)] border border-[var(--g-color)] rounded px-4 py-2 text-white focus:outline-none focus:border-[var(--main-color-hover)] appearance-none pr-8"
+                        >
+                            {availableLanguages.map((lang) => (
+                            <option
+                                key={lang.value}
                                 value={lang.value}
                                 className="bg-[var(--main-color)] text-white"
                             >
                                 {lang.label}
                             </option>
-                        ))}
-                    </select>
+                            ))}
+                        </select>
+                        <div className="absolute right-2 pointer-events-none">
+                            <svg 
+                            style={{transform: `rotate(${rotate}deg)`}} 
+                            className="w-5 h-5 transition-all duration-200 ease" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            >
+                            <path d="M15 20L7 12L15 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                            </svg>
+                        </div>
+                    </div>                
                 </div>
             </div>
 

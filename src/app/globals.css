@@ -65,6 +65,11 @@ body{
   margin: 0;
   padding: 0;
   background-color: var(--secondary-color);
+  
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 @layer base {

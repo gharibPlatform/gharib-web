@@ -13,7 +13,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
     const { pageNumberArray, addPageNumber } = useAddPageNumber();
     const pageNumberRef = useRef(null);
 
-    //obsderver
+    //observer for tracking current surah 
     const [ref, inView] = useInView({
         threshold: 0.5, 
         triggerOnce: false 
@@ -25,6 +25,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
         }
     }, [inView, pageNumber, onPageVisible]);
 
+    //click on ayah box
     const handleClick = (event, verse) => {
         setClickBoxBool(true);
         setBoxPosition({
@@ -34,6 +35,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
         setVerseKey(verse.verse_key);
     };
 
+    //click outside handling
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (boxRef.current && !boxRef.current.contains(event.target)) {
@@ -65,7 +67,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
     }, [pageNumberRef.current]);
 
     return (
-        <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
+        <div className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
             <div
                 ref={ref}
                 style={{
@@ -73,6 +75,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
                     direction: "rtl",
                 }}
             >
+                {/* actual verses */}
                 {Array.isArray(verses) &&
                     verses.flatMap((verse, index) => (
                         <>
@@ -109,6 +112,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
                     ))}
             </div>
 
+            {/* onClick on word show component */}
             {clickBoxBool && (
                 <div
                     ref={boxRef}
@@ -248,6 +252,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
                 </div>
             )}
 
+            {/* footer page number*/}
             <div className="pt-12 gap-6 flex items-center justify-center text-base">
                 <div className="h-[1px] w-1/2 -mx-8 bg-[var(--g-color)]"></div>
                 <div ref={pageNumberRef} className="px-6 text-[var(--lighter-color)]">{pageNumber}</div>

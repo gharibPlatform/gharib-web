@@ -5,11 +5,9 @@ import QuranFooter from "./QuranFooter";
 import { getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 import useShouldFetch from "@/stores/shouldFetch";
 import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
-import useAddPageNumber from "@/stores/pageNumberArray";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
@@ -19,16 +17,12 @@ export default function QuranContent() {
 
     const { quranHeaderPage } = useQuranHeaderPage();
     const { quranHeaderChapter, setPriority, setQuranHeaderChapter, setGoToPath } = useQuranHeaderChapter();
-    const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
     const { shouldFetch } = useShouldFetch();
-    const { pageNumberArray , currentPageNumber, increment, decremnet, setCurrentPageNumber } = useAddPageNumber();
 
     const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
-    const [chapterStartPage, chapterEndPage] = quranHeaderChapter?.pages || [1, 1];
-    const totalPagesInChapter = chapterEndPage - chapterStartPage + 1;
+    const [chapterStartPage, chapterEndPage] = quranHeaderChapter?.pages || [1, 1]; 
+    const totalPagesInChapter = chapterEndPage - chapterStartPage + 1; //a total pages in chapter to track using progress bar
 
-    console.log("totale pages are : ", totalPages);
     //fetch for one page
     useEffect(() => {
         if ( shouldFetch !== "page") return;
@@ -53,14 +47,6 @@ export default function QuranContent() {
         };
     }, [quranHeaderPage]);
 
-
-    useEffect(() => {
-        if (quranHeaderChapter) {
-            const total = quranHeaderChapter.pages[1] - quranHeaderChapter.pages[0] + 1;
-            setTotalPages(total);
-        }
-    }, [ quranHeaderChapter ])
-
     //fetch for one chapter
     useEffect(() => {
         if ( shouldFetch !== "chapter") return;
@@ -82,7 +68,6 @@ export default function QuranContent() {
     }, [ quranHeaderChapter ]);
 
     //scroll to apply lazy loading and fetch surah while scrolling
-    let i = 0;
     const handleScroll = () => {
         if (!scrollRef.current) return;
     
@@ -101,13 +86,14 @@ export default function QuranContent() {
         }
     };
     
-
+    // updating the cache
     useEffect(()=>{
         if(addedPage && addedPage.length > 0 && addedPage[0]){
             setCache({...cache, [addedPage[0].page_number]: addedPage})
         }
     }, [addedPage])
 
+    // onscroll update the cache 
     useEffect(() => {
         const scrollableDiv = scrollRef.current;
         if (!scrollableDiv) return;

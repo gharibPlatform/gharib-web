@@ -25,6 +25,8 @@ export default function QuranContent() {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [chapterStartPage, chapterEndPage] = quranHeaderChapter?.pages || [1, 1];
+    const totalPagesInChapter = chapterEndPage - chapterStartPage + 1;
 
     console.log("totale pages are : ", totalPages);
     //fetch for one page
@@ -128,7 +130,7 @@ export default function QuranContent() {
         >
             <div className="flex flex-col justify-center">
                 <div className="pb-6">
-                    <ProgressTrackerLine current={currentPage} total={totalPages} />
+                    <ProgressTrackerLine current={currentPage - chapterStartPage + 1} total={totalPagesInChapter} />
                 </div>
                 <QuranHeader />
                 <QuranSurah cache={cache} onPageVisible={handlePageVisible} />

@@ -26,14 +26,14 @@ export default function QuranContent() {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
-    console.log(pageNumberArray);
+    console.log("totale pages are : ", totalPages);
+    //fetch for one page
     useEffect(() => {
         if ( shouldFetch !== "page") return;
         let isMounted = true;
 
         verseByPage(quranHeaderPage)
         .then((updatedCache) => {
-            console.log(updatedCache)
             if (!quranHeaderChapter || quranHeaderChapter.id !== updatedCache[0].verse_key.split(":")[0]) {
                 getChapter(updatedCache[0].verse_key.split(":")[0]).then((resp) => {
                     setQuranHeaderChapter(resp);
@@ -51,6 +51,7 @@ export default function QuranContent() {
         };
     }, [quranHeaderPage]);
 
+
     useEffect(() => {
         if (quranHeaderChapter) {
             const total = quranHeaderChapter.pages[1] - quranHeaderChapter.pages[0] + 1;
@@ -58,15 +59,14 @@ export default function QuranContent() {
         }
     }, [ quranHeaderChapter ])
 
+    //fetch for one chapter
     useEffect(() => {
         if ( shouldFetch !== "chapter") return;
         let isMounted = true;
 
         verseByChapter(quranHeaderChapter.id)
         .then((updatedCache) => {
-            console.log(updatedCache)
             if ( isMounted ) {
-                console.log(updatedCache)
                 const keys = Object.keys(updatedCache);
                 setLastFetchedPage(+keys[keys.length - 1])
                 setCache(updatedCache)
@@ -78,6 +78,8 @@ export default function QuranContent() {
             isMounted = false;
         };
     }, [ quranHeaderChapter ]);
+
+    //scroll to apply lazy loading and fetch surah while scrolling
     let i = 0;
     const handleScroll = () => {
         if (!scrollRef.current) return;

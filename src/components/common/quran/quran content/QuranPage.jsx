@@ -2,8 +2,9 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { audioByVerse } from "@/utils/quran/quranAudio";
 import QuranSurahSeparator from "./QuranSurahSeparator";
 import useAddPageNumber from "@/stores/pageNumberArray";
+import { useInView } from 'react-intersection-observer';
 
-export default function QuranPage({ verses, pageNumber }) {
+export default function QuranPage({ verses, pageNumber, onPageVisible }) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
     const [clickBoxBool, setClickBoxBool] = useState(false);
     const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
@@ -11,6 +12,18 @@ export default function QuranPage({ verses, pageNumber }) {
     const [verseKey, setVerseKey] = useState("");
     const { pageNumberArray, addPageNumber } = useAddPageNumber();
     const pageNumberRef = useRef(null);
+
+    //obsderver
+    const [ref, inView] = useInView({
+        threshold: 0.5, 
+        triggerOnce: false 
+    });
+
+    useEffect(() => {
+        if (inView && onPageVisible) {
+            onPageVisible(pageNumber);
+        }
+    }, [inView, pageNumber, onPageVisible]);
 
     const handleClick = (event, verse) => {
         setClickBoxBool(true);
@@ -54,6 +67,7 @@ export default function QuranPage({ verses, pageNumber }) {
     return (
         <div className="w-3/4 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
             <div
+                ref={ref}
                 style={{
                     fontFamily: `p${pageNumberString}-v1`,
                     direction: "rtl",

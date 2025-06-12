@@ -1,14 +1,16 @@
-import React from "react";
 import QuranPage from "./QuranPage";
 
-const QuranSurah = ({ cache }) => {
+export default function QuranSurah ({ cache, onPageVisible }) {
     return (
-        <div className="flex flex-col items-center justify-center pt-6">
+        <div className="flex flex-col ...">
             {Object.entries(cache).map(([pageNumber, verses]) => (
-                <QuranPage key={pageNumber} verses={verses || []} pageNumber={pageNumber} />
+                <QuranPage 
+                    key={pageNumber} 
+                    verses={verses} 
+                    pageNumber={pageNumber}
+                    onPageVisible={onPageVisible}
+                />
             ))}
         </div>
     );
 };
-
-export default QuranSurah;

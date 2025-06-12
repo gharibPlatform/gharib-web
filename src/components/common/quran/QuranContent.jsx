@@ -116,6 +116,10 @@ export default function QuranContent() {
             scrollableDiv.removeEventListener("scroll", handleScroll);
         };
     }, [lastFetchedPage]);
+    
+    const handlePageVisible = (pageNumber) => {
+        setCurrentPage(parseInt(pageNumber));
+    };
 
     return (
         <div 
@@ -127,7 +131,7 @@ export default function QuranContent() {
                     <ProgressTrackerLine current={currentPage} total={totalPages} />
                 </div>
                 <QuranHeader />
-                <QuranSurah cache={cache} />
+                <QuranSurah cache={cache} onPageVisible={handlePageVisible} />
                 <QuranFooter />
             </div>
         </div>

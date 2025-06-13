@@ -1,31 +1,56 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 
-export default function ProgressTrackerLine({ current, total}) {
+export default function ProgressTrackerLine({ current, total }) {
   const parentRef = useRef(null);
   const childRef = useRef(null);
   const progressRef = useRef(null);
+  const animationFrameRef = useRef(null);
 
-  const updateWidth = () => {
-    if (parentRef.current && childRef.current) {
-      const parentWidth = parentRef.current.offsetWidth;
-      childRef.current.style.width = `${parentWidth - 5}px`;
+  // Optimized resize handler
+  const handleResize = useCallback(() => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
     }
-  };
 
-  useEffect(() => {
-    if (progressRef.current) {
-      progressRef.current.style.transition = "width 100ms ease-out";
-    }
+    animationFrameRef.current = requestAnimationFrame(() => {
+      if (parentRef.current && childRef.current) {
+        childRef.current.style.width = `${parentRef.current.offsetWidth}px`;
+      }
+    });
   }, []);
 
+  // Setup and cleanup
   useEffect(() => {
-    updateWidth(); 
-    window.addEventListener("resize", updateWidth); 
+    const resizeObserver = new ResizeObserver(handleResize);
+    if (parentRef.current) {
+      resizeObserver.observe(parentRef.current);
+      handleResize(); // Initial measurement
+    }
 
     return () => {
-      window.removeEventListener("resize", updateWidth);
+      resizeObserver.disconnect();
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
     };
-  }, []);
+  }, [handleResize]);
+
+  // Progress animation with your exact timing
+  useEffect(() => {
+    if (progressRef.current) {
+      progressRef.current.style.willChange = 'width';
+      progressRef.current.style.transition = 'width 100ms ease-out';
+      progressRef.current.style.width = `${(current / total) * 100}%`;
+      
+      const timer = setTimeout(() => {
+        if (progressRef.current) {
+          progressRef.current.style.willChange = 'auto';
+        }
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [current, total]);
 
   return (
     <div className="relative w-full overflow-hidden flex justify-center pt-1" ref={parentRef}>

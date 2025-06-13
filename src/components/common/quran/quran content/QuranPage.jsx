@@ -66,8 +66,12 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
         }
     }, [pageNumberRef.current]);
 
+    console.log(verses);
     return (
-        <div className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative">
+        <div 
+         className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative"
+         data-page-number={pageNumber}
+        >
             <div
                 ref={ref}
                 style={{

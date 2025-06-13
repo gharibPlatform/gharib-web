@@ -5,9 +5,11 @@ import QuranFooter from "./QuranFooter";
 import { getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 import useShouldFetch from "@/stores/shouldFetch";
 import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
+import useAddPageNumber from "@/stores/pageNumberArray";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
@@ -17,6 +19,7 @@ export default function QuranContent() {
 
     const { quranHeaderPage } = useQuranHeaderPage();
     const { quranHeaderChapter, setPriority, setQuranHeaderChapter, setGoToPath } = useQuranHeaderChapter();
+    const setQuranHeaderVerse = useQuranHeaderVerse((state) => state.setQuranHeaderVerse);
     const { shouldFetch } = useShouldFetch();
 
     const [currentPage, setCurrentPage] = useState(0);

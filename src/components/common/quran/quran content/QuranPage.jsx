@@ -19,6 +19,45 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
         triggerOnce: false 
     });
 
+    // Add refs for each verse
+    const verseRefs = useRef({});
+    const observer = useRef();
+    const lastVisibleVerse = useRef();
+
+    useEffect(() => {
+        if (!verses || !onPageVisible) return;
+        if (observer.current) {
+            Object.values(verseRefs.current).forEach((el) => {
+                if (el) observer.current.unobserve(el);
+            });
+        }
+        observer.current = new window.IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const verseKey = entry.target.getAttribute('data-verse-key');
+                        if (lastVisibleVerse.current !== verseKey) {
+                            lastVisibleVerse.current = verseKey;
+                            onPageVisible(verseKey);
+                        }
+                    }
+                });
+            },
+            {
+                root: null,
+                threshold: 0.5,
+            }
+        );
+        Object.values(verseRefs.current).forEach((el) => {
+            if (el) observer.current.observe(el);
+        });
+        return () => {
+            if (observer.current) {
+                observer.current.disconnect();
+            }
+        };
+    }, [verses, onPageVisible]);
+
     useEffect(() => {
         if (inView && onPageVisible) {
             onPageVisible(pageNumber);
@@ -55,7 +94,6 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
     const PlayVerse = () => {
         setClickBoxBool(false);
         audioByVerse(1, verseKey).then((resp) => {
-            console.log(resp);
         });
     };
 
@@ -66,7 +104,6 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
         }
     }, [pageNumberRef.current]);
 
-    console.log(verses);
     return (
         <div 
          className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative"
@@ -82,7 +119,14 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
                 {/* actual verses */}
                 {Array.isArray(verses) &&
                     verses.flatMap((verse, index) => (
-                        <>
+                        <div
+                            key={verse.verse_key}
+                            id={`verse-${verse.verse_key}`}
+                            data-verse-key={verse.verse_key}
+                            ref={el => verseRefs.current[verse.verse_key] = el}
+                            style={{ display: 'inline' }}
+                        >
+                            {/* Surah separator logic */}
                             {verse.verse_number === 1 &&
                                 (index !== 0 ? (
                                     <QuranSurahSeparator
@@ -112,7 +156,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
                                     {word.text}{" "}
                                 </span>
                             ))}
-                        </>
+                        </div>
                     ))}
             </div>
 

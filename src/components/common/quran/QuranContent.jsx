@@ -26,6 +26,9 @@ export default function QuranContent() {
     const [chapterStartPage, chapterEndPage] = quranHeaderChapter?.pages || [1, 1]; 
     const totalPagesInChapter = chapterEndPage - chapterStartPage + 1; //a total pages in chapter to track using progress bar
 
+    const [currentVerse, setCurrentVerse] = useState(1);
+    const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
+
     //fetch for one page
     useEffect(() => {
         if ( shouldFetch !== "page") return;
@@ -112,6 +115,11 @@ export default function QuranContent() {
         setCurrentPage(parseInt(pageNumber));
     };
 
+    const handleVerseVisible = (verseKey) => {
+        const verseNum = parseInt(verseKey.split(":")[1]);
+        setCurrentVerse(verseNum);
+    };
+
     return (
         <div 
             ref={scrollRef} 
@@ -119,10 +127,10 @@ export default function QuranContent() {
         >
             <div className="flex flex-col justify-center">
                 <div className="pb-6">
-                    <ProgressTrackerLine current={currentPage - chapterStartPage + 1} total={totalPagesInChapter} />
+                    <ProgressTrackerLine current={currentVerse} total={totalVersesInChapter} />
                 </div>
                 <QuranHeader />
-                <QuranSurah cache={cache} onPageVisible={handlePageVisible} />
+                <QuranSurah cache={cache} onPageVisible={handleVerseVisible} />
                 <QuranFooter />
             </div>
         </div>

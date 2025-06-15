@@ -118,21 +118,21 @@ export default function QuranContent() {
 
     useEffect(() => {
         toast.error(`the progress is : ${progress}`);
-    }, [increaseProgress]);
+    }, [progress]);
 
-    return (
-        <div 
-            ref={scrollRef} 
-            className="w-full overflow-y-auto h-screen no-scrollbar flex flex-col"
-        >
-            <div className="flex flex-col justify-center">
-                <div className="pb-6">
-                    <ProgressTrackerLine current={currentVerse} total={totalVersesInChapter} />
-                </div>
-                <QuranHeader />
-                <QuranSurah cache={cache} onPageVisible={handleVerseVisible} increaseProgress={increaseProgress} />
-                <QuranFooter />
+return (
+    <div 
+        ref={scrollRef} 
+        className="w-full overflow-y-auto h-screen no-scrollbar flex flex-col relative"
+    >
+        <div className="flex flex-col justify-center relative">
+            <div className="pb-6 sticky top-0 left-0 z-50">
+                <ProgressTrackerLine progress={progress}/>
             </div>
+            <QuranHeader />
+            <QuranSurah cache={cache} onPageVisible={handleVerseVisible} increaseProgress={increaseProgress} />
+            <QuranFooter />
         </div>
-    );
+    </div>
+);
 }

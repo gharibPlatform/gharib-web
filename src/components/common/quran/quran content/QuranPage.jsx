@@ -1,28 +1,20 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { audioByVerse } from "@/utils/quran/quranAudio";
 import QuranSurahSeparator from "./QuranSurahSeparator";
-import useAddPageNumber from "@/stores/pageNumberArray";
-import { useInView } from 'react-intersection-observer';
 import toast from "react-hot-toast";
 
-export default function QuranPage({ verses, pageNumber, increaseProgress}) {
+export default function QuranPage({ verses, pageNumber, changeProgress}) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
     const [clickBoxBool, setClickBoxBool] = useState(false);
     const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
     const boxRef = useRef(null);
     const [verseKey, setVerseKey] = useState("");
-    const { pageNumberArray, addPageNumber } = useAddPageNumber();
     const pageNumberRef = useRef(null);
-
-    //observer for tracking current surah 
-    const [ref, inView] = useInView({
-        threshold: 0.5, 
-        triggerOnce: false 
-    });
 
     // Add refs for each verse
     const verseRefs = useRef({});
     const observerRef = useRef(null);
+    const ref = useRef(null)
     //observing the verses
     useEffect(()=>{
 
@@ -31,8 +23,9 @@ export default function QuranPage({ verses, pageNumber, increaseProgress}) {
             
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    increaseProgress();
-                    toast.success(entry.target.dataset.verseKey)
+                    const verseKey = entry.target.dataset.verseKey.split(":")[1];
+                    changeProgress(verseKey);
+                    toast.success(verseKey);
                     console.log(entry);
                 }
             });
@@ -87,13 +80,6 @@ export default function QuranPage({ verses, pageNumber, increaseProgress}) {
         audioByVerse(1, verseKey).then((resp) => {
         });
     };
-
-    useLayoutEffect(() => {
-        if (pageNumberRef.current) {
-            const yPosition = pageNumberRef.current.offsetTop;
-            addPageNumber(yPosition);
-        }
-    }, [pageNumberRef.current]);
 
     return (
         <div 

@@ -112,10 +112,10 @@ export default function QuranContent() {
         setCurrentVerse(verseNum);
     };
 
-    const increaseProgress = () => {
-        setProgress(progress=> progress + rate);
+    const changeProgress = ( verseKey ) => {
+        setProgress(verseKey * rate);
     }
-
+    
     useEffect(() => {
         toast.error(`the progress is : ${progress}`);
     }, [progress]);
@@ -130,7 +130,11 @@ return (
                 <ProgressTrackerLine progress={progress}/>
             </div>
             <QuranHeader />
-            <QuranSurah cache={cache} onPageVisible={handleVerseVisible} increaseProgress={increaseProgress} />
+            <QuranSurah 
+             cache={cache} 
+             onPageVisible={handleVerseVisible} 
+             changeProgress={changeProgress}
+            />
             <QuranFooter />
         </div>
     </div>

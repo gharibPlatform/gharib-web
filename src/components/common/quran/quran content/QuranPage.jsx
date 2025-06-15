@@ -3,6 +3,7 @@ import { audioByVerse } from "@/utils/quran/quranAudio";
 import QuranSurahSeparator from "./QuranSurahSeparator";
 import useAddPageNumber from "@/stores/pageNumberArray";
 import { useInView } from 'react-intersection-observer';
+import toast from "react-hot-toast";
 
 export default function QuranPage({ verses, pageNumber, onPageVisible }) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
@@ -22,53 +23,86 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
 
     // Add refs for each verse
     const verseRefs = useRef({});
-    const observer = useRef();
+    const visibleVerses = new Set();
 
-    useEffect(() => {
-        if (!verses || !onPageVisible) return;
-        
-        if (observer.current) {
-            Object.values(verseRefs.current).forEach((el) => {
-                if (el) observer.current.unobserve(el);
-            });
-        }
-        
-        observer.current = new window.IntersectionObserver(
-            (entries) => {
-                // Sort entries by their position from top to bottom
-                const sortedEntries = entries
-                    .filter(entry => entry.isIntersecting && entry.boundingClientRect.top > 0)
-                    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    //observing the verses
+    useEffect(()=>{
 
-                if (sortedEntries.length > 0) {
-                    const newVerse = sortedEntries[0].target.getAttribute('data-verse-key');
-                    console.log(`New verse appeared: ${newVerse}`);
-                    lastVisibleVerse.current = newVerse;
-                    onPageVisible(newVerse);
+        //Creating the observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    toast.success(entry.target.dataset.verseKey)
+                    console.log(entry);
                 }
-            },
+            });
+        },
             {
-                root: null,
-                threshold: 0.1,
-                rootMargin: '0px',
-                trackVisibility: true,
-                delay: 100
+                threshold: 0.4,
             }
-        );
-        
-        // Initialize observer for all verses
-        Object.values(verseRefs.current).forEach((el) => {
-            if (el) {
-                observer.current.observe(el);
-            }
-        });
-        
-        return () => {
-            if (observer.current) {
-                observer.current.disconnect();
-            }
+        )
+
+        //Observing the verses
+        // Object.values(verseRefs.current).forEach(el => {
+        //     if (el) observer.observe(el);
+        //     console.log(el);
+        //     toast.success("verse visible");
+        // });
+
+        //Cleaning
+        return () =>{
+            observer.disconnect();
+            verseRefs.current= {};
         };
-    }, [verses, onPageVisible]);
+    }, [verses])
+
+    // OLD OBSERVER
+
+    // useEffect(() => {
+    //     if (!verses || !onPageVisible) return;
+        
+    //     if (observer.current) {
+    //         Object.values(verseRefs.current).forEach((el) => {
+    //             if (el) observer.current.unobserve(el);
+    //         });
+    //     }
+        
+    //     observer.current = new window.IntersectionObserver(
+    //         (entries) => {
+    //             // Sort entries by their position from top to bottom
+    //             const sortedEntries = entries
+    //                 .filter(entry => entry.isIntersecting && entry.boundingClientRect.top > 0)
+    //                 .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+    //             if (sortedEntries.length > 0) {
+    //                 const newVerse = sortedEntries[0].target.getAttribute('data-verse-key');
+    //                 console.log(`New verse appeared: ${newVerse}`);
+    //                 lastVisibleVerse.current = newVerse;
+    //                 onPageVisible(newVerse);
+    //             }
+    //         },
+    //         {
+    //             root: null,
+    //             threshold: 0.1,
+    //             rootMargin: '0px',
+    //             trackVisibility: true,
+    //             delay: 100
+    //         }
+    //     );
+        
+    //     // Initialize observer for all verses
+    //     Object.values(verseRefs.current).forEach((el) => {
+    //         if (el) {
+    //             observer.current.observe(el);
+    //         }
+    //     });
+        
+    //     return () => {
+    //         if (observer.current) {
+    //             observer.current.disconnect();
+    //         }
+    //     };
+    // }, [verses, onPageVisible]);
 
     useEffect(() => {
         if (inView && onPageVisible) {
@@ -135,7 +169,14 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
                             key={verse.verse_key}
                             id={`verse-${verse.verse_key}`}
                             data-verse-key={verse.verse_key}
-                            ref={el => verseRefs.current[verse.verse_key] = el}
+
+                            ref={el => {
+                                if (verseRefs.current[verse.verse_key]) {
+                                    delete verseRefs.current[verse.verse_key];
+                                }
+                                if (el) verseRefs.current[verse.verse_key] = el;
+                            }} 
+
                             style={{ display: 'inline' }}
                         >
                             {/* Surah separator logic */}
@@ -169,7 +210,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
                                 </span>
                             ))}
                         </div>
-                    ))}
+                ))}
             </div>
 
             {/* onClick on word show component */}

@@ -25,8 +25,6 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
                 if (entry.isIntersecting) {
                     const verseKey = entry.target.dataset.verseKey.split(":")[1];
                     changeProgress(verseKey);
-                    toast.success(verseKey);
-                    console.log(entry);
                 }
             });
         },

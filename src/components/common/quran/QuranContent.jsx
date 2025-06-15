@@ -107,18 +107,10 @@ export default function QuranContent() {
         };
     }, [lastFetchedPage]);
 
-    const handleVerseVisible = (verseKey) => {
-        const verseNum = parseInt(verseKey.split(":")[1]);
-        setCurrentVerse(verseNum);
-    };
-
+    //change the progress for the tracker line
     const changeProgress = ( verseKey ) => {
         setProgress(verseKey * rate);
     }
-    
-    useEffect(() => {
-        toast.error(`the progress is : ${progress}`);
-    }, [progress]);
 
 return (
     <div 
@@ -132,7 +124,6 @@ return (
             <QuranHeader />
             <QuranSurah 
              cache={cache} 
-             onPageVisible={handleVerseVisible} 
              changeProgress={changeProgress}
             />
             <QuranFooter />

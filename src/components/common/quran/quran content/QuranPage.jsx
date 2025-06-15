@@ -26,9 +26,9 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
                 key.endsWith(`:${quranHeaderVerse}`)
             );
 
-            if (foundEntry) foundEntry[1].scrollIntoView();
+            if (foundEntry) foundEntry[1].scrollIntoView({ behavior: "smooth" , block: "end"});
         }
-    }, quranHeaderVerse)
+    }, [quranHeaderVerse])
     //observing the verses
     useEffect(()=>{
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { audioByVerse } from "@/utils/quran/quranAudio";
 import QuranSurahSeparator from "./QuranSurahSeparator";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import toast from "react-hot-toast";
 
 export default function QuranPage({ verses, pageNumber, changeProgress}) {
@@ -15,6 +16,19 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
     const verseRefs = useRef({});
     const observerRef = useRef(null);
     const ref = useRef(null)
+
+    //headerVerse for scroll into view
+    const { quranHeaderVerse } = useQuranHeaderVerse();
+
+    useEffect(() => {
+        if ( quranHeaderVerse ) {
+            const foundEntry = Object.entries(verseRefs.current).find(([key, _]) =>
+                key.endsWith(`:${quranHeaderVerse}`)
+            );
+
+            if (foundEntry) foundEntry[1].scrollIntoView();
+        }
+    }, quranHeaderVerse)
     //observing the verses
     useEffect(()=>{
 
@@ -34,6 +48,8 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
         )
 
         //Observing the verses 
+        console.log(verseRefs.current);
+
         Object.values(verseRefs.current).forEach(el => {
             if (el) observerRef.current.observe(el);
         });
@@ -47,6 +63,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
         };
     }, [verses])
 
+    //pop up of verse when clicking on it
     const handleClick = (event, verse) => {
         setClickBoxBool(true);
         setBoxPosition({

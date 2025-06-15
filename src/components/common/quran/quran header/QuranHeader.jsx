@@ -12,17 +12,20 @@ import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
 import toast from "react-hot-toast";
 
 export default function QuranHeader() {
+    //local storage
     const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
     const { quranHeaderChapter, setPriority, setQuranHeaderChapter, goToPath, setGoToPath, priority } = useQuranHeaderChapter();
     const {quranHeaderPage, goToPathPages, setGoToPathPages } = useQuranHeaderPage();
     const { quranHeaderVerse, setQuranHeaderVerse } = useQuranHeaderVerse();
 
+    //local states
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedChapter, setSelectedChapter] = useState(quranHeaderChapter);
     const [selectedVerse, setSelectedVerse] = useState(quranHeaderVerse);
     const [selectedPage, setSelectedPage] = useState(quranHeaderPage);
 
+    //refs
     const chapterButtonRef = useRef(null);
     const verseButtonRef = useRef(null);
     const pageButtonRef = useRef(null);

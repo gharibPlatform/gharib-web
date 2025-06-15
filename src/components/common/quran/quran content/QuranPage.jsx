@@ -13,7 +13,6 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
     const [verseKey, setVerseKey] = useState("");
     const { pageNumberArray, addPageNumber } = useAddPageNumber();
     const pageNumberRef = useRef(null);
-    const lastVisibleVerse = useRef();
 
     //observer for tracking current surah 
     const [ref, inView] = useInView({
@@ -23,13 +22,13 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
 
     // Add refs for each verse
     const verseRefs = useRef({});
-    const visibleVerses = new Set();
-
+    const observerRef = useRef(null);
     //observing the verses
     useEffect(()=>{
 
         //Creating the observer
-        const observer = new IntersectionObserver((entries) => {
+        observerRef.current = new IntersectionObserver((entries) => {
+            
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     toast.success(entry.target.dataset.verseKey)
@@ -38,21 +37,21 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
             });
         },
             {
-                threshold: 0.4,
+                threshold: 1,
             }
         )
 
         //Observing the verses
-        // Object.values(verseRefs.current).forEach(el => {
-        //     if (el) observer.observe(el);
-        //     console.log(el);
-        //     toast.success("verse visible");
-        // });
+        Object.values(verseRefs.current).forEach(el => {
+            if (el) observerRef.current.observe(el);
+        });
 
         //Cleaning
         return () =>{
-            observer.disconnect();
-            verseRefs.current= {};
+            if (observerRef.current) {
+                console.log('Cleaning up observer'); // Debug log
+                observerRef.current.disconnect();
+            }
         };
     }, [verses])
 
@@ -153,6 +152,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
     return (
         <div 
          className="w-9/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative"
+         style={{minHeight: '100vh'}} // Add this
          data-page-number={pageNumber}
         >
             <div

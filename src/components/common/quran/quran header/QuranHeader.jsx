@@ -9,12 +9,13 @@ import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { useRouter , usePathname} from "next/navigation";
 import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
+import toast from "react-hot-toast";
 
 export default function QuranHeader() {
     const { beginningOfTheSurah, setBeginningOfTheSurah } = useBegginingOfTheSurah();
     const { quranHeaderChapter, setPriority, setQuranHeaderChapter, goToPath, setGoToPath, priority } = useQuranHeaderChapter();
     const {quranHeaderPage, goToPathPages, setGoToPathPages } = useQuranHeaderPage();
-    const { quranHeaderVerse } = useQuranHeaderVerse();
+    const { quranHeaderVerse, setQuranHeaderVerse } = useQuranHeaderVerse();
 
     const [quranHeaderData, setQuranHeaderData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -27,13 +28,22 @@ export default function QuranHeader() {
     const pageButtonRef = useRef(null);
     const dropdownRef = useRef(null);
 
+    //three effects to set the chapter, page, verse based on the header (local storage)
     useEffect(()=>{
         setSelectedChapter(quranHeaderChapter)
     }, [quranHeaderChapter])
+    useEffect(()=>{
+        setSelectedVerse(quranHeaderVerse)
+    }, [quranHeaderVerse])
+    useEffect(() => {
+        if (quranHeaderPage) {
+            setSelectedPage(quranHeaderPage)
+        }
+    }, [ quranHeaderPage ])
 
     const router = useRouter();
-    const pathname = usePathname();
 
+    //priority set for chapter and page
     useEffect(() => {
         setSelectedChapter(quranHeaderChapter);
         if (quranHeaderChapter) {
@@ -44,12 +54,7 @@ export default function QuranHeader() {
         }
     }, [quranHeaderChapter, quranHeaderVerse]);
 
-    useEffect(() => {
-        if (quranHeaderPage) {
-            setSelectedPage(quranHeaderPage)
-        }
-    }, [ quranHeaderPage ])
-
+    //push to page
     useEffect(() => {
         if (selectedPage && goToPathPages) {
             const newPath = `/quran/pages/${selectedPage}`;
@@ -58,6 +63,7 @@ export default function QuranHeader() {
         }
     }, [ selectedPage ])
 
+    //push to chapter
     useEffect(() => {
         if (selectedChapter && goToPath) {
             const newPath = `/quran/chapters/${selectedChapter.id}`;
@@ -111,6 +117,10 @@ export default function QuranHeader() {
         };
     }, []);
 
+    useEffect(() => {
+        toast.success(selectedVerse);
+    }, [selectedVerse]);
+
     const sectionsData = [
         { name: "Chapter", value: selectedChapter ? selectedChapter.name_simple : "Select Chapter", ref: chapterButtonRef },
         { name: "Verse", value: selectedVerse ? `Verse ${selectedVerse}` : "Select Verse", ref: verseButtonRef },
@@ -121,6 +131,7 @@ export default function QuranHeader() {
         chapter.name_simple.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    //scroll into view to the top of the surah 
     const surahTopRef = useRef(null);
     if(beginningOfTheSurah) {
         if (surahTopRef.current) {
@@ -175,7 +186,7 @@ export default function QuranHeader() {
                             selectedChapter={selectedChapter}
                             onSelectVerse={(verse, e)=>{
                                 toggleSection(section.name.toLowerCase(), e)
-                                setSelected(selectedChapter, null, verse)
+                                setQuranHeaderVerse(verse)
                             }}
                         />
                     )}

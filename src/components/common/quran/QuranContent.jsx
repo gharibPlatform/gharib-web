@@ -8,6 +8,7 @@ import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 import useShouldFetch from "@/stores/shouldFetch";
 import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
+import toast from "react-hot-toast";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
@@ -21,6 +22,8 @@ export default function QuranContent() {
 
     const [currentVerse, setCurrentVerse] = useState(1);
     const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
+    const [progress, setProgress] = useState(0);
+    const rate = 100 / totalVersesInChapter;
 
     //fetch for one page
     useEffect(() => {
@@ -109,6 +112,14 @@ export default function QuranContent() {
         setCurrentVerse(verseNum);
     };
 
+    const increaseProgress = () => {
+        setProgress(progress=> progress + rate);
+    }
+
+    useEffect(() => {
+        toast.error(`the progress is : ${progress}`);
+    }, [increaseProgress]);
+
     return (
         <div 
             ref={scrollRef} 
@@ -119,7 +130,7 @@ export default function QuranContent() {
                     <ProgressTrackerLine current={currentVerse} total={totalVersesInChapter} />
                 </div>
                 <QuranHeader />
-                <QuranSurah cache={cache} onPageVisible={handleVerseVisible} />
+                <QuranSurah cache={cache} onPageVisible={handleVerseVisible} increaseProgress={increaseProgress} />
                 <QuranFooter />
             </div>
         </div>

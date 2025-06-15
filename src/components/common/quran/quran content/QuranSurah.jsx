@@ -1,6 +1,6 @@
 import QuranPage from "./QuranPage";
 
-export default function QuranSurah ({ cache, onPageVisible }) {
+export default function QuranSurah ({ cache, onPageVisible, increaseProgress}) {
         return (
         <div className="flex flex-col items-center justify-center pt-6">
             {Object.entries(cache).map(([pageNumber, verses]) => (
@@ -9,6 +9,7 @@ export default function QuranSurah ({ cache, onPageVisible }) {
                     verses={verses} 
                     pageNumber={pageNumber}
                     onPageVisible={onPageVisible}
+                    increaseProgress={increaseProgress}
                 />
             ))}
         </div>

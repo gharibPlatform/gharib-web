@@ -5,7 +5,7 @@ import useAddPageNumber from "@/stores/pageNumberArray";
 import { useInView } from 'react-intersection-observer';
 import toast from "react-hot-toast";
 
-export default function QuranPage({ verses, pageNumber, onPageVisible }) {
+export default function QuranPage({ verses, pageNumber, increaseProgress}) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
     const [clickBoxBool, setClickBoxBool] = useState(false);
     const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
@@ -31,6 +31,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
             
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    increaseProgress();
                     toast.success(entry.target.dataset.verseKey)
                     console.log(entry);
                 }
@@ -41,7 +42,7 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
             }
         )
 
-        //Observing the verses
+        //Observing the verses 
         Object.values(verseRefs.current).forEach(el => {
             if (el) observerRef.current.observe(el);
         });
@@ -55,13 +56,6 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
         };
     }, [verses])
 
-    useEffect(() => {
-        if (inView && onPageVisible) {
-            onPageVisible(pageNumber);
-        }
-    }, [inView, pageNumber, onPageVisible]);
-
-    //click on ayah box
     const handleClick = (event, verse) => {
         setClickBoxBool(true);
         setBoxPosition({

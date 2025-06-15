@@ -55,54 +55,6 @@ export default function QuranPage({ verses, pageNumber, onPageVisible }) {
         };
     }, [verses])
 
-    // OLD OBSERVER
-
-    // useEffect(() => {
-    //     if (!verses || !onPageVisible) return;
-        
-    //     if (observer.current) {
-    //         Object.values(verseRefs.current).forEach((el) => {
-    //             if (el) observer.current.unobserve(el);
-    //         });
-    //     }
-        
-    //     observer.current = new window.IntersectionObserver(
-    //         (entries) => {
-    //             // Sort entries by their position from top to bottom
-    //             const sortedEntries = entries
-    //                 .filter(entry => entry.isIntersecting && entry.boundingClientRect.top > 0)
-    //                 .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-    //             if (sortedEntries.length > 0) {
-    //                 const newVerse = sortedEntries[0].target.getAttribute('data-verse-key');
-    //                 console.log(`New verse appeared: ${newVerse}`);
-    //                 lastVisibleVerse.current = newVerse;
-    //                 onPageVisible(newVerse);
-    //             }
-    //         },
-    //         {
-    //             root: null,
-    //             threshold: 0.1,
-    //             rootMargin: '0px',
-    //             trackVisibility: true,
-    //             delay: 100
-    //         }
-    //     );
-        
-    //     // Initialize observer for all verses
-    //     Object.values(verseRefs.current).forEach((el) => {
-    //         if (el) {
-    //             observer.current.observe(el);
-    //         }
-    //     });
-        
-    //     return () => {
-    //         if (observer.current) {
-    //             observer.current.disconnect();
-    //         }
-    //     };
-    // }, [verses, onPageVisible]);
-
     useEffect(() => {
         if (inView && onPageVisible) {
             onPageVisible(pageNumber);

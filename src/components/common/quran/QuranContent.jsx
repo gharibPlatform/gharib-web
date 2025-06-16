@@ -112,26 +112,62 @@ export default function QuranContent() {
         setProgress(verseKey * rate);
     }
 
+    //hide header and footer when scrolling
+    const [isFooterVisible, setIsFooterVisible] = useState(true);
+    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+    const lastScrollTop = useRef(0);
+
+    useEffect(() => {
+    const handleScroll = () => {
+        const currentScroll = scrollRef.current.scrollTop;
+        const scrollDirection = currentScroll > lastScrollTop.current ? 'down' : 'up';
+        
+        if (scrollDirection === 'down' && currentScroll > 50) {
+            setIsFooterVisible(false);
+            setIsHeaderVisible(false);
+        } else {
+            setIsFooterVisible(true);
+            setIsHeaderVisible(true);
+        }
+        
+        lastScrollTop.current = currentScroll <= 0 ? 0 : currentScroll;
+    };
+
+    const scrollContainer = scrollRef.current;
+    scrollContainer.addEventListener('scroll', handleScroll);
+
+    return () => {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+    };
+    }, []);
+
 return (
-    <div className="flex flex-col h-screen">
-        {/* Fixed Header Section */}
-        <div className="sticky top-0 z-50">
-            <ProgressTrackerLine progress={progress}/>
-            <QuranHeader />
-        </div>
+        <div className="flex flex-col h-screen">
+            <div className={`
+                sticky top-0 z-50
+                transition-transform duration-300 ease-in-out
+                ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}
+            `}>
+                <ProgressTrackerLine progress={progress}/>
+                <QuranHeader />
+            </div>
 
-        {/* Scrollable Content */}
-        <div 
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto no-scrollbar relative"
-        >
-            <QuranSurah 
-                cache={cache} 
-                changeProgress={changeProgress}
-            />
-        </div>
+            <div 
+                ref={scrollRef}
+                className="flex-1 overflow-y-auto no-scrollbar relative"
+            >
+                <QuranSurah 
+                    cache={cache} 
+                    changeProgress={changeProgress}
+                />
+            </div>
 
-        <QuranFooter />
-    </div>
-);
+            <div className={`
+                transition-transform duration-300 ease-in-out
+                ${isFooterVisible ? 'translate-y-0' : 'translate-y-full'}
+            `}>
+                <QuranFooter />
+            </div>
+        </div>
+    );
 }

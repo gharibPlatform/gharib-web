@@ -40,7 +40,7 @@ export default function QuranFooter() {
 
     const SurahFooter = () => {
         return(
-            <div className="flex gap-8 pb-32 justify-center pt-8">
+            <div className="flex gap-8 pb-20 justify-center pt-8">
                 <div 
                     className="transition-all duration-75 ease p-4 pl-6 flex items-center border border-[var(--g-color)] text-[var(--lighter-color)] text-xl gap-3 rounded-[6px] cursor-pointer hover:border-[var(--w-color)] hover:text-[var(--w-color)]"
                     onClick={PreviousSurah}

@@ -19,16 +19,17 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
 
     //headerVerse for scroll into view
     const { quranHeaderVerse } = useQuranHeaderVerse();
-
     useEffect(() => {
         if ( quranHeaderVerse ) {
             const foundEntry = Object.entries(verseRefs.current).find(([key, _]) =>
                 key.endsWith(`:${quranHeaderVerse}`)
             );
 
-            if (foundEntry) foundEntry[1].scrollIntoView({ behavior: "smooth" , block: "end"});
+            if (foundEntry) foundEntry[1].scrollIntoView({ behavior: "smooth" , block: "center"});
+
         }
     }, [quranHeaderVerse])
+
     //observing the verses
     useEffect(()=>{
 
@@ -57,7 +58,6 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
         //Cleaning
         return () =>{
             if (observerRef.current) {
-                console.log('Cleaning up observer'); // Debug log
                 observerRef.current.disconnect();
             }
         };
@@ -101,9 +101,9 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
          className="w-9/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative"
          style={{minHeight: '100vh'}} // Add this
          data-page-number={pageNumber}
+         ref={ref}
         >
             <div
-                ref={ref}
                 style={{
                     fontFamily: `p${pageNumberString}-v1`,
                     direction: "rtl",
@@ -116,7 +116,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
                             key={verse.verse_key}
                             id={`verse-${verse.verse_key}`}
                             data-verse-key={verse.verse_key}
-
+                            className="scroll-mt-20"
                             ref={el => {
                                 if (verseRefs.current[verse.verse_key]) {
                                     delete verseRefs.current[verse.verse_key];

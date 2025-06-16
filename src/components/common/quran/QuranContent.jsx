@@ -113,21 +113,25 @@ export default function QuranContent() {
     }
 
 return (
-    <div 
-        ref={scrollRef} 
-        className="w-full overflow-y-auto h-screen no-scrollbar flex flex-col relative"
-    >
-        <div className="flex flex-col justify-center relative">
-            <div className="pb-6 sticky top-0 left-0 z-50">
-                <ProgressTrackerLine progress={progress}/>
-            </div>
+    <div className="flex flex-col h-screen">
+        {/* Fixed Header Section */}
+        <div className="sticky top-0 z-50">
+            <ProgressTrackerLine progress={progress}/>
             <QuranHeader />
-            <QuranSurah 
-             cache={cache} 
-             changeProgress={changeProgress}
-            />
-            <QuranFooter />
         </div>
+
+        {/* Scrollable Content */}
+        <div 
+            ref={scrollRef}
+            className="flex-1 overflow-y-auto no-scrollbar relative"
+        >
+            <QuranSurah 
+                cache={cache} 
+                changeProgress={changeProgress}
+            />
+        </div>
+
+        <QuranFooter />
     </div>
 );
 }

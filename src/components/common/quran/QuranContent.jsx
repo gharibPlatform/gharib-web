@@ -176,14 +176,29 @@ export default function QuranContent() {
             }
         ];
 
-        khatmas.forEach(khatma => {
-            const start = parseInt(khatma.startingVerse.split(":")[1], 10);
-            const end = parseInt(khatma.endingVerse.split(":")[1], 10);
-            khatma.total = end - start + 1;
-            khatma.rate = 100 / khatma.total;
+        const [khatmasWithProgress, setKhatmasWithProgress] = useState(khatmas);
+
+        useEffect(() => {
+        const updated = khatmas.map(khatma => {
+            const start = parseInt(khatma.startingVerse.split(":")[1]);
+            const end = parseInt(khatma.endingVerse.split(":")[1]);
+
+            let progress = 0;
+            if (currentVerse >= start && currentVerse <= end) {
+                const total = end - start + 1;
+                const current = currentVerse - start + 1;
+                progress = (current / total) * 100;
+            }
+
+            return {
+                ...khatma,
+                progress: currentVerse > end ? 100 : Math.min(Math.max(progress, 0), 100) 
+            };
         });
 
-        console.log(khatmas);
+        setKhatmasWithProgress(updated);
+        }, [currentVerse]);
+
 
     return (
         <div className="flex flex-col h-screen">
@@ -194,8 +209,8 @@ export default function QuranContent() {
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar relative">
                 <div className="sticky top-0 right-5 float-right z-40 p-2 flex flex-col gap-1">
-                    {khatmas.map((khatma) => {
-                        return <KhatmasInQuran name={khatma.name} percentage={ currentVerse * khatma.rate} />
+                    {khatmasWithProgress.map((khatma) => {
+                        return <KhatmasInQuran name={khatma.name} percentage={Math.round(khatma.progress || 0)} />
                     })}
                 </div>
                 

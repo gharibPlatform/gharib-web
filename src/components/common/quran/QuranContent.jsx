@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState } from "react";
+import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
+import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
+import useShouldFetch from "@/stores/shouldFetch";
+
 import QuranHeader from "./quran header/QuranHeader";
 import QuranSurah from "./quran content/QuranSurah";
 import QuranFooter from "./QuranFooter";
-import { getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
-import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
-import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
-import { verseByPage, verseByChapter } from "@/utils/quran/quran";
-import useShouldFetch from "@/stores/shouldFetch";
 import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
+import KhatmasInQuran from "./KhatmasInQuran";
+
+import { getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
+import { verseByPage, verseByChapter } from "@/utils/quran/quran";
+
 import toast from "react-hot-toast";
 
 export default function QuranContent() {
@@ -20,7 +24,8 @@ export default function QuranContent() {
     const { quranHeaderChapter, setPriority, setQuranHeaderChapter, setGoToPath } = useQuranHeaderChapter();
     const { shouldFetch } = useShouldFetch();
 
-    const [currentVerse, setCurrentVerse] = useState(1);
+    
+    const [currentVerse, setCurrentVerse] = useState();
     const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
     const [progress, setProgress] = useState(0);
     const rate = 100 / totalVersesInChapter;
@@ -109,6 +114,7 @@ export default function QuranContent() {
 
     //change the progress for the tracker line
     const changeProgress = ( verseKey ) => {
+        setCurrentVerse(verseKey);
         setProgress(verseKey * rate);
     }
 
@@ -141,31 +147,62 @@ export default function QuranContent() {
     };
     }, []);
 
-return (
+    //list of khatmas to test
+        const khatmas = [
+            {
+                name: "Khatma 1",
+                startingVerse: "2:1",
+                endingVerse: "2:50"
+            },
+            {
+                name: "Khatma 2",
+                startingVerse: "2:51",
+                endingVerse: "2:100"
+            },
+            {
+                name: "Khatma 3",
+                startingVerse: "2:101",
+                endingVerse: "2:150"
+            },
+            {
+                name: "Khatma 4",
+                startingVerse: "2:151",
+                endingVerse: "2:200"
+            },
+            {
+                name: "Khatma 5",
+                startingVerse: "2:201",
+                endingVerse: "2:286"
+            }
+        ];
+
+        khatmas.forEach(khatma => {
+            const start = parseInt(khatma.startingVerse.split(":")[1], 10);
+            const end = parseInt(khatma.endingVerse.split(":")[1], 10);
+            khatma.total = end - start + 1;
+            khatma.rate = 100 / khatma.total;
+        });
+
+        console.log(khatmas);
+
+    return (
         <div className="flex flex-col h-screen">
-            <div className={`
-                sticky top-0 z-50
-                transition-transform duration-300 ease-in-out
-                ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}
-            `}>
+            <div className={`sticky top-0 z-50 transition-transform duration-300 ease-in-out ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
                 <ProgressTrackerLine progress={progress}/>
                 <QuranHeader />
             </div>
 
-            <div 
-                ref={scrollRef}
-                className="flex-1 overflow-y-auto no-scrollbar relative"
-            >
-                <QuranSurah 
-                    cache={cache} 
-                    changeProgress={changeProgress}
-                />
+            <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar relative">
+                <div className="sticky top-0 right-5 float-right z-40 p-2 flex flex-col gap-1">
+                    {khatmas.map((khatma) => {
+                        return <KhatmasInQuran name={khatma.name} percentage={ currentVerse * khatma.rate} />
+                    })}
+                </div>
+                
+                <QuranSurah cache={cache} changeProgress={changeProgress} />
             </div>
 
-            <div className={`
-                transition-transform duration-300 ease-in-out
-                ${isFooterVisible ? 'translate-y-0' : 'translate-y-full'}
-            `}>
+            <div className={`transition-transform duration-300 ease-in-out ${isFooterVisible ? 'translate-y-0' : 'translate-y-full'}`}>
                 <QuranFooter />
             </div>
         </div>

@@ -4,6 +4,7 @@ import Gharib from "../gharib/Gharib";
 import { useState } from "react";
 import UserMenu from "../usermenu/UserMenu";
 import NotificationsMenu from "../notifications/NotificationsMenu";
+import QuranHeader from "../quran/quran header/QuranHeader";
 
 function Header() {
     const [toggleUserMenuBool, setToggleUserMenuBool] = useState(false);
@@ -32,9 +33,9 @@ function Header() {
 
     return <>
     
-        <div className="fixed z-10 w-screen overflow-hidden h-14 flex items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
+        <div className="fixed w-screen h-14 flex z-50 items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
             <Gharib />
-            <InputSearch />
+            <QuranHeader />
             <RightElements toggleUserMenu={toggleUserMenu} toggleNotificationsMenu={toggleNotificationsMenu}/>
         </div>
 

@@ -177,7 +177,8 @@ export default function QuranContent() {
         ];
 
         const [khatmasWithProgress, setKhatmasWithProgress] = useState(khatmas);
-
+        
+        //updating progress of the khatmas logic 
         useEffect(() => {
         const updated = khatmas.map(khatma => {
             const start = parseInt(khatma.startingVerse.split(":")[1]);
@@ -202,13 +203,10 @@ export default function QuranContent() {
 
     return (
         <div className="flex flex-col h-screen">
-            <div className={`sticky top-0 z-50 transition-transform duration-300 ease-in-out ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-                <ProgressTrackerLine progress={progress}/>
-                <QuranHeader />
-            </div>
+            <ProgressTrackerLine progress={progress}/>
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar relative">
-                <div className="sticky top-0 right-5 float-right z-40 p-2 flex flex-col gap-1">
+                <div className="sticky top-0 right-5 float-right z-30 p-2 flex flex-col gap-1">
                     {khatmasWithProgress.map((khatma) => {
                         return <KhatmasInQuran name={khatma.name} percentage={Math.round(khatma.progress || 0)} />
                     })}

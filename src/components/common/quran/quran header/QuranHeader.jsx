@@ -144,7 +144,7 @@ export default function QuranHeader() {
     }
 
     return (
-        <div ref={surahTopRef} className="w-[var(--header-width)] h-14 bg-[var(--dark-color)] rounded-sm flex justify-between px-6 ml-auto mr-auto scroll-mt-16">
+        <div ref={surahTopRef} className="h-12 z-50 rounded-sm flex gap-24 justify-between px-6 ml-auto mr-auto scroll-mt-16">
             {sectionsData.map((section, index) => (
                 <QuranHeaderSection
                     key={index}

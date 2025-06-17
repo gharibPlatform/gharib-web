@@ -201,23 +201,25 @@ export default function QuranContent() {
         }, [currentVerse]);
 
 
-    return (
-        <div className="flex flex-col h-screen">
-            <ProgressTrackerLine progress={progress}/>
+return (
+    <div className="flex flex-col h-screen">
+        <ProgressTrackerLine progress={progress}/>
 
-            <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar relative">
-                <div className="sticky top-0 right-5 float-right z-30 p-2 flex flex-col gap-1">
-                    {khatmasWithProgress.map((khatma) => {
-                        return <KhatmasInQuran name={khatma.name} percentage={Math.round(khatma.progress || 0)} />
-                    })}
-                </div>
-                
-                <QuranSurah cache={cache} changeProgress={changeProgress} />
+        <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar relative">
+            <div className="sticky top-0 right-5 float-right z-30 p-2 flex flex-col gap-1">
+                {khatmasWithProgress.map((khatma) => {
+                    return <KhatmasInQuran name={khatma.name} percentage={Math.round(khatma.progress || 0)} />
+                })}
             </div>
-
-            <div className={`transition-transform duration-300 ease-in-out ${isFooterVisible ? 'translate-y-0' : 'translate-y-full'}`}>
-                <QuranFooter />
-            </div>
+            
+            <QuranSurah cache={cache} changeProgress={changeProgress} />
         </div>
-    );
+
+        <div className={`transition-all duration-300 ease-in-out 
+                        ${isFooterVisible ? 'max-h-[500px] opacity-100 py-2' : 'max-h-0 opacity-0 overflow-hidden'}
+                        `}>
+            <QuranFooter />
+        </div>
+    </div>
+);
 }

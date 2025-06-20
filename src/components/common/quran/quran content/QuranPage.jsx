@@ -98,7 +98,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress}) {
 
     return (
         <div 
-         className="w-9/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pr-16 pt-16 relative"
+         className="w-9/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"
          style={{minHeight: '100vh'}} // Add this
          data-page-number={pageNumber}
          ref={ref}

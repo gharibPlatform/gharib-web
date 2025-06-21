@@ -186,8 +186,10 @@ export default function QuranContent() {
         const endingVerse = parseInt(khatma.endingVerse.split(":")[1]);
         const endingChapter = parseInt(khatma.endingVerse.split(":")[0]);
 
+
+        //N
         //calculating the total for each khamta
-        let totalVerses = 0;
+        // let totalVerses = 0;
 
         // //either : khatma starting and ending both in the same chapter 
         // if (startingChapter === endingChapter) {

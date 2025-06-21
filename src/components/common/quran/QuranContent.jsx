@@ -3,7 +3,6 @@ import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
 import useShouldFetch from "@/stores/shouldFetch";
 
-import QuranHeader from "./quran header/QuranHeader";
 import QuranSurah from "./quran content/QuranSurah";
 import QuranFooter from "./QuranFooter";
 import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
@@ -172,7 +171,7 @@ export default function QuranContent() {
         {
             name: "Khatma 5",
             startingVerse: "2:201",
-            endingVerse: "2:286"
+            endingVerse: "3:100"
         }
     ];
 
@@ -181,19 +180,94 @@ export default function QuranContent() {
     //updating progress of the khatmas logic 
     useEffect(() => {
     const updated = khatmas.map(khatma => {
-        const start = parseInt(khatma.startingVerse.split(":")[1]);
-        const end = parseInt(khatma.endingVerse.split(":")[1]);
+        const startingVerse = parseInt(khatma.startingVerse.split(":")[1]);
+        const startingChapter = parseInt(khatma.startingVerse.split(":")[0]);
+        
+        const endingVerse = parseInt(khatma.endingVerse.split(":")[1]);
+        const endingChapter = parseInt(khatma.endingVerse.split(":")[0]);
 
+        //calculating the total for each khamta
+        let totalVerses = 0;
+
+        // //either : khatma starting and ending both in the same chapter 
+        // if (startingChapter === endingChapter) {
+        //     totalVerses = endingVerse - startingVerse + 1;
+        // }
+        
+        // //or : khamta starting chapter and ending chapter are different
+        // else{
+        //     totalVerses += //verses count of the first chapter - the starting verses count + 1 ;
+            
+        //     for ( let chapter = startingChapter + 1; chapter < endingChapter; chapter++ ) {
+        //         totalVerses += //verses count of this chapter 
+        //     }
+
+        //     totalVerses += //vereses count of the ending chapter
+        // }
+
+        // //calculating the completed verses 
+
+        // let completedVerses = 0;
+
+        // //case 1 : still not reached 
+        // if (quranHeaderChapter.id < startingChapter || quranHeaderChapter.id === startingChapter && currentVerse < startingVerse) {
+        //     completedVerses = 0;
+        // } 
+
+        // //case 2 : ended 
+        // else if (quranHeaderChapter.id > endingChapter || quranHeaderChapter.id === endingChapter && currentVerse > endingVerse) {
+        //     completedVerses = totalVerses;
+        // }
+
+        // //case 3 : in progress 
+        // else {
+        //     //case1 : both same chapter 
+        //     if( quranHeaderChapter.id  === startingChapter ) {   
+        //         completedVerses += currentVerse - startingVerse + 1;
+        //     }
+
+        //     //case 2 : in between 
+        //     else if ( quranHeaderChapter.id > startingChapter && quranHeaderChapter.id < endingChapter ) {
+        //         completedVerses += //verses count of the staring chapter
+                
+        //         for (let chapter = startingChapter + 1; chapter < quranHeaderChapter.id ; chapter++) {
+        //             completedVerses += //verses couhnt of the chapter
+        //         }
+
+        //         completedVerses += currentVerse;
+        //     }
+
+        //     //case 3: at the end 
+        //     else if ( quranHeaderChapter.id === endingChapter ) {
+        //         completedVerses += //verses count of the staring chapter 
+                
+        //         for (let chapter = startingChapter + 1; chapter < endingChapter; chapter++) {
+        //             completedVerses += //count of the chapter
+        //         }
+
+        //         completedVerses += currentVerse;
+        //     }
+        // }
+
+        // let progress = (completedVerses / totalVerses ) * 100;
+
+        // return{
+        //     ...khatma,
+        //     progress: Math.min(Math.max(0, progress), 100)
+        // }
+
+        //old logic used for now:/
         let progress = 0;
-        if (currentVerse >= start && currentVerse <= end) {
-            const total = end - start + 1;
-            const current = currentVerse - start + 1;
-            progress = (current / total) * 100;
+
+        if (currentVerse >= startingVerse && currentVerse <= endingVerse && startingChapter === endingChapter && startingChapter === quranHeaderChapter.id && endingChapter === quranHeaderChapter.id) {
+            const totalVerses = endingVerse - startingVerse + 1;
+            const current = currentVerse - startingVerse + 1
+            progress = (current / totalVerses) * 100;
         }
 
         return {
             ...khatma,
-            progress: currentVerse > end ? 100 : Math.min(Math.max(progress, 0), 100) 
+            progress:( currentVerse > endingVerse && startingChapter === quranHeaderChapter.id && endingChapter === quranHeaderChapter.id ) ? 100 : Math.min(Math.max(progress, 0), 100) 
         };
     });
 

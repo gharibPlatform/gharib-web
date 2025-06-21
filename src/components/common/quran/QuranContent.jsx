@@ -187,7 +187,8 @@ export default function QuranContent() {
         const endingChapter = parseInt(khatma.endingVerse.split(":")[0]);
 
 
-        //N
+        //NEW KHATMA CALCULATING LOGIC HERE : 
+        
         //calculating the total for each khamta
         // let totalVerses = 0;
 

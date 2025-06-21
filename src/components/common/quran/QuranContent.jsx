@@ -11,6 +11,7 @@ import KhatmasInQuran from "./KhatmasInQuran";
 import { getChapter, verseByPageAndChapter } from "@/utils/quran/quran";
 import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import toast from "react-hot-toast";
 
 export default function QuranContent() {
@@ -277,19 +278,37 @@ export default function QuranContent() {
     setKhatmasWithProgress(updated);
     }, [currentVerse]);
 
+    const [showKhatmas, setShowKhatmas] = useState(false);
     return (
         <div className="flex flex-col h-screen">
             <ProgressTrackerLine progress={progress}/>
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar relative">
-                <div className="sticky top-10 right-5 float-right z-30 p-2 flex flex-col gap-1">
-                    {khatmasWithProgress.map((khatma) => {
-                        return <KhatmasInQuran name={khatma.name} percentage={Math.round(khatma.progress || 0)} />
-                    })}
+                <div className="sticky top-10 right-5 float-right z-30 flex justify-end">
+                    <div className="flex flex-col items-end">
+                    <button 
+                        onClick={() => setShowKhatmas(!showKhatmas)}
+                        className="p-2 bg-[var(--main-color)] border border-[var(--g-color)] text-[var(--g-color)] rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                    >
+                        {showKhatmas ? <FiChevronUp /> : <FiChevronDown />}
+                    </button>
+                    
+                    {showKhatmas && (
+                        <div className="mt-2 p-2 rounded-lg shadow-lg flex flex-col gap-1 border border-[var(--main-color)]">
+                        {khatmasWithProgress.map((khatma) => (
+                            <KhatmasInQuran 
+                            key={khatma.name} 
+                            name={khatma.name} 
+                            percentage={Math.round(khatma.progress || 0)} 
+                            />
+                        ))}
+                        </div>
+                    )}
+                    </div>
                 </div>
 
                 <QuranSurah cache={cache} changeProgress={changeProgress} />
-            </div>
+                </div>
 
             <div className={`transition-all duration-300 ease-in-out 
                             ${isFooterVisible ? 'max-h-[500px] opacity-100 py-2' : 'max-h-0 opacity-0 overflow-hidden'}

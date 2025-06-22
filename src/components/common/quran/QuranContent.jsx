@@ -179,6 +179,7 @@ export default function QuranContent() {
     ];
 
     const [khatmasWithProgress, setKhatmasWithProgress] = useState(khatmas);
+    const [showKhatmas, setShowKhatmas] = useState(false);
     
     //updating progress of the khatmas logic 
     useEffect(() => {
@@ -280,8 +281,6 @@ export default function QuranContent() {
     setKhatmasWithProgress(updated);
     }, [currentVerse]);
 
-    const [showKhatmas, setShowKhatmas] = useState(false);
-
     const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
     const [clickBoxBool, setClickBoxBool] = useState(false);
     const boxRef = useRef(null);
@@ -319,6 +318,8 @@ export default function QuranContent() {
         };
     }, [clickBoxBool]); 
 
+    //playing the verse when clickng
+    const [verseKey, setVerseKey] = useState();
     const playVerse = () => {
         setClickBoxBool(false);
         audioByVerse(1, verseKey).then((resp) => {
@@ -326,7 +327,6 @@ export default function QuranContent() {
         });
     };
 
-    const [verseKey, setVerseKey] = useState();
     return (
         <div className="flex flex-col h-screen">
             <ProgressTrackerLine progress={progress}/>

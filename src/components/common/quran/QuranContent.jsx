@@ -13,6 +13,7 @@ import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import toast from "react-hot-toast";
+import VersePopup from "./quran content/VersePopup";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
@@ -279,6 +280,44 @@ export default function QuranContent() {
     }, [currentVerse]);
 
     const [showKhatmas, setShowKhatmas] = useState(false);
+
+    const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
+    const [clickBoxBool, setClickBoxBool] = useState(false);
+    const boxRef = useRef(null);
+
+    //closing the pop up when clikcing outside
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (boxRef.current && !boxRef.current.contains(event.target)) {
+                setClickBoxBool(false);
+            }
+        };
+
+        if (clickBoxBool) {
+            document.addEventListener("click", handleOutsideClick);
+        }
+
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
+    }, [clickBoxBool]);
+    
+    //closing the pop up when scrolling
+    useEffect(() => {
+        if (!clickBoxBool) return;
+
+        const handleScroll = () => {
+            setClickBoxBool(false);
+        };
+
+        const scrollContainer = scrollRef.current;
+        scrollContainer?.addEventListener('scroll', handleScroll);
+
+        return () => {
+            scrollContainer?.removeEventListener('scroll', handleScroll);
+        };
+    }, [clickBoxBool]); 
+
     return (
         <div className="flex flex-col h-screen">
             <ProgressTrackerLine progress={progress}/>
@@ -297,9 +336,9 @@ export default function QuranContent() {
                         <div className="mt-2 p-2 rounded-lg shadow-lg flex flex-col gap-1 border border-[var(--main-color)]">
                         {khatmasWithProgress.map((khatma) => (
                             <KhatmasInQuran 
-                            key={khatma.name} 
-                            name={khatma.name} 
-                            percentage={Math.round(khatma.progress || 0)} 
+                                key={khatma.name} 
+                                name={khatma.name} 
+                                percentage={Math.round(khatma.progress || 0)} 
                             />
                         ))}
                         </div>
@@ -307,8 +346,25 @@ export default function QuranContent() {
                     </div>
                 </div>
 
-                <QuranSurah cache={cache} changeProgress={changeProgress} />
-                </div>
+                <QuranSurah 
+                    cache={cache} 
+                    changeProgress={changeProgress} 
+                    setClickBoxBool={setClickBoxBool} 
+                    setBoxPosition={setBoxPosition} 
+                    scrollTop={scrollRef.current?.scrollTop || 0} 
+                />
+                
+                {clickBoxBool && (
+                    <div
+                        ref={boxRef}
+                    >
+                        <VersePopup
+                            left={boxPosition.x}
+                            top={boxPosition.y + (scrollRef.current?.scrollTop || 0)}
+                        />
+                    </div>
+                )}
+            </div>
 
             <div className={`transition-all duration-300 ease-in-out 
                             ${isFooterVisible ? 'max-h-[500px] opacity-100 py-2' : 'max-h-0 opacity-0 overflow-hidden'}

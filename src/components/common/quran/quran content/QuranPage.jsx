@@ -4,9 +4,8 @@ import QuranSurahSeparator from "./QuranSurahSeparator";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import toast from "react-hot-toast";
 
-export default function QuranPage({ verses, pageNumber, changeProgress, setClickBoxBool, setBoxPosition }) {
+export default function QuranPage({ verses, pageNumber, changeProgress, setClickBoxBool, setBoxPosition, setVerseKey }) {
     const pageNumberString = pageNumber.toString().padStart(3, "0");
-    const [verseKey, setVerseKey] = useState("");
     const pageNumberRef = useRef(null);
 
     // Add refs for each verse
@@ -71,15 +70,6 @@ export default function QuranPage({ verses, pageNumber, changeProgress, setClick
         });
 
         setVerseKey(verse.verse_key);
-    };
-
-    //click outside handling
-
-
-    const PlayVerse = () => {
-        setClickBoxBool(false);
-        audioByVerse(1, verseKey).then((resp) => {
-        });
     };
 
     return (

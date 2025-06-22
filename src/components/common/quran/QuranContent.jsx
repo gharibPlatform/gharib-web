@@ -14,6 +14,7 @@ import { verseByPage, verseByChapter } from "@/utils/quran/quran";
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import toast from "react-hot-toast";
 import VersePopup from "./quran content/VersePopup";
+import { audioByVerse } from "@/utils/quran/quranAudio";
 
 export default function QuranContent() {
     const scrollRef = useRef(null); 
@@ -318,6 +319,14 @@ export default function QuranContent() {
         };
     }, [clickBoxBool]); 
 
+    const playVerse = () => {
+        setClickBoxBool(false);
+        audioByVerse(1, verseKey).then((resp) => {
+            console.log(resp)
+        });
+    };
+
+    const [verseKey, setVerseKey] = useState();
     return (
         <div className="flex flex-col h-screen">
             <ProgressTrackerLine progress={progress}/>
@@ -351,7 +360,7 @@ export default function QuranContent() {
                     changeProgress={changeProgress} 
                     setClickBoxBool={setClickBoxBool} 
                     setBoxPosition={setBoxPosition} 
-                    scrollTop={scrollRef.current?.scrollTop || 0} 
+                    setVerseKey={setVerseKey}
                 />
                 
                 {clickBoxBool && (
@@ -361,6 +370,7 @@ export default function QuranContent() {
                         <VersePopup
                             left={boxPosition.x}
                             top={boxPosition.y + (scrollRef.current?.scrollTop || 0)}
+                            playVerse={playVerse}
                         />
                     </div>
                 )}

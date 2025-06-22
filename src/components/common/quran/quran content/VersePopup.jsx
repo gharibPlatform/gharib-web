@@ -1,4 +1,4 @@
-export default function VersePopup({ left, top }) {
+export default function VersePopup({ left, top, playVerse }) {
     return(
         <div>
             <div
@@ -10,7 +10,7 @@ export default function VersePopup({ left, top }) {
             >
                 <div className="flex flex-col">
                     <div
-                        // onClick={PlayVerse}
+                        onClick={playVerse}
                         className="cursor-pointer flex flex-row justify-center items-center rounded-sm px-4 py-2 gap-6  hover:bg-[var(--g-color-ver-02)] "
                     >
                         <svg

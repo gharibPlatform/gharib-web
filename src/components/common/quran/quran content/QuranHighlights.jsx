@@ -1,16 +1,40 @@
-// the problem with this QuranHighlights thing is that I need to show here actual verses means I'll need to do the 
-// same process I did back then with showing the verses in the authmani scripting here too 
-// and not to forget ofc the OnClick go to verse~ logic 
+import { verseByKey } from "@/utils/quran/quran"
+import { useEffect, useState } from "react"
 
-// probably scripting the verses here as keys would help but Idk means I'll need to fetch each time which is ass
+export default function QuranHighlights({ highlights = ["3:23", "2:23", "4:23", "5:24", "2:13", "3:2"] }) {
+    const [verses, setVerses] = useState({});
 
-//since you can only highlight verses I would save the verse keys and then show them OFC WITH FETCHING cause I don't think kayen another way 
-// getting the page number is part of the process so I can font the data
-
-export default function QuranHighlights() {
-    return(
-        <div className="text-white">
+    useEffect(() => {
+        // Fetch all highlighted verses
+        const fetchVerses = async () => {
+            const newVerses = {};
             
+            for (const key of highlights) {
+                try {
+                    const verseData = await verseByKey(key);
+                    newVerses[key] = verseData;
+                } catch (error) {
+                    console.error(`Failed to fetch verse ${key}:`, error);
+                    newVerses[key] = { text: `Error loading verse ${key}` };
+                }
+            }
+            
+            setVerses(newVerses);
+        };
+
+        fetchVerses();
+    }, [highlights]);
+
+    return (
+        <div className="text-white">
+            {Object.entries(verses).map(([key, verseData]) => (
+                <div 
+                    key={key} 
+                    className="verse-highlight" 
+                >
+                    <p><strong>{key}</strong>: {verseData.text}</p>
+                </div>
+            ))}
         </div>
     )    
 }

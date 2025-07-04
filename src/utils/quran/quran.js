@@ -80,8 +80,8 @@ export const verseByPage = async (page, chapterId = null) => {
 
 export const verseByKey = async (key) => {
   try {
-    const response = await axios.get(`${BASE_URL}/verses/by_key/?words=true`);
-    return response.data.verses;
+    const response = await axios.get(`${BASE_URL}/verses/by_key/${key}?words=true`);
+    return response.data.verse;
   } catch (error) {
     console.error('Error fetching verses by key:', error);
     throw error;

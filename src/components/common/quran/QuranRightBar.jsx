@@ -17,7 +17,7 @@ export default function QuranRightBar() {
     }
 
     return(
-        <div className="w-64 fixed h-[var(--height)] right-0 top-14 border-l border-[var(--g-color)] bg-[var(--main-color)] inline-block">
+        <div className="overflow-y-auto w-64 flex-wrap fixed h-[var(--height)] right-0 top-14 border-l border-[var(--g-color)] bg-[var(--main-color)] inline-block pb-5">
             <div 
              onClick={changeRotation}
              className="flex px-4 py-2 text-white font-semibold text-xl gap-6 items-center cursor-pointer">

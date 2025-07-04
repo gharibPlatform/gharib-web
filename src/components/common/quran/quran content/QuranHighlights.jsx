@@ -28,7 +28,7 @@ export default function QuranHighlights({ highlights = ["3:23", "2:23", "4:23", 
     }, []);
 
     return (
-        <div className="text-white">
+        <div className="flex flex-col text-white flex-wrap px-2 gap-6">
             {Object.entries(verses).map(([key, verseData]) => (
                 <QuranHighlightsVerse verse={verseData} />
             ))}

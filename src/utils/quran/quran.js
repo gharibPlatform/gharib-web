@@ -60,7 +60,6 @@ export const verseByChapter = async (chapterId) => {
   }
 };
 
-
 export const verseByPage = async (page, chapterId = null) => {
   if (page >= 1 && page <= 604) {
     try {
@@ -79,6 +78,16 @@ export const verseByPage = async (page, chapterId = null) => {
   }
 };
 
+export const verseByKey = async (key) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/verses/by_key/?words=true`);
+    return response.data.verses;
+  } catch (error) {
+    console.error('Error fetching verses by key:', error);
+    throw error;
+  }
+};
+
 export const verseByPageAndChapter = async (page, chapterId) => {
   return await verseByPage(page, chapterId);
 };
@@ -92,7 +101,6 @@ export const randomVerse = async () => {
     throw error;
   }
 };
-
 
 export const fetchPagesWithinChapter = async (
   currentPage,

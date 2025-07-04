@@ -2,7 +2,7 @@ import DropDown from "../drop down /DropDown";
 import QuranHighlights from "./quran content/QuranHighlights";
 import { useState } from "react";
 
-export default function QuranRightBar() {
+export default function QuranRightBar( { handleVerseClick }) {
     const [rotation, setRotation] = useState(90);
     const [showHighlights, setShowHighlights] = useState(false);
 
@@ -25,7 +25,7 @@ export default function QuranRightBar() {
                 <DropDown rotation={rotation}/>
 
             </div>
-                {showHighlights && <QuranHighlights />}
+                {showHighlights && <QuranHighlights handleVerseClick={handleVerseClick} />}
         </div>
     )
 }

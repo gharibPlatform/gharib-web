@@ -92,7 +92,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress, setClick
                             key={verse.verse_key}
                             id={`verse-${verse.verse_key}`}
                             data-verse-key={verse.verse_key}
-                            className="scroll-mt-20"
+                            className="scroll-mt-20 hover:bg-[var(--g-color)]"
                             ref={el => {
                                 if (verseRefs.current[verse.verse_key]) {
                                     delete verseRefs.current[verse.verse_key];
@@ -127,7 +127,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress, setClick
                                 <span
                                     key={`${index}-${wordIndex}`}
                                     onClick={(e) => handleClick(e, verse)}
-                                    className="p-1 pb-3 inline-block hover:text-[var(--g-color)] cursor-pointer"
+                                    className="p-1 pb-3 inline-block cursor-pointer"
                                 >
                                     {word.text}{" "}
                                 </span>

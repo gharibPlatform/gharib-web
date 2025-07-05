@@ -1,4 +1,5 @@
 "use client";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function QuranVerseModal({ verse, onClose }) {
@@ -33,6 +34,20 @@ export default function QuranVerseModal({ verse, onClose }) {
         setIsEditing(false);
     };
 
+    const router = useRouter(); 
+    const pathName = usePathname();
+
+    const segments = pathName.split('/').filter(Boolean); 
+    const lastSegment = segments[segments.length - 1]; 
+
+    const goToVerse = ( chapterId ) => {
+        if (lastSegment === chapterId) {
+            return;
+        }
+        router.push(`/quran/chapters/${chapterId}`);
+        onClose();
+    }
+
     return (
         <div className="fixed inset-0 z-[1000] modal-backdrop bg-black bg-opacity-70 flex items-center justify-center p-4">
             <div className="bg-[var(--secondary-color)] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
@@ -50,7 +65,10 @@ export default function QuranVerseModal({ verse, onClose }) {
                     </div>
 
                     <div className="flex flex-col gap-6">
+                        {/* verse section */}
+
                         <div
+                            onClick={() => goToVerse(verse.verse_key.split(":")[0])}
                             style={{ fontFamily: `p${pageNumberString}-v1`, direction: "rtl" }}
                             className="flex flex-wrap text-white bg-[var(--dark-color)] text-2xl cursor-pointer hover:bg-[var(--secondary-color)] p-2 border border-[var(--g-color)] rounded"
                         >
@@ -82,7 +100,7 @@ export default function QuranVerseModal({ verse, onClose }) {
                                             </button>
                                             <button 
                                                 onClick={handleSaveClick}
-                                                className="px-4 py-2 rounded bg-[var(--dark-color)] text-white border border-[var(--g-color)] hover:bg-[var(--main-color-hover)] transition-colors"
+                                                className="px-4 py-2 rounded bg-[var(--dark-color)] text-white border border-[var(--g-color)] hover:bg-[var(--darker-color)] transition-colors"
                                             >
                                                 Save
                                             </button>

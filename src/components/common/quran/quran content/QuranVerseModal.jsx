@@ -1,4 +1,5 @@
 "use client";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -40,11 +41,18 @@ export default function QuranVerseModal({ verse, onClose }) {
     const segments = pathName.split('/').filter(Boolean); 
     const lastSegment = segments[segments.length - 1]; 
 
-    const goToVerse = ( chapterId ) => {
+    const { setQuranHeaderVerse } = useQuranHeaderVerse();
+
+    const goToVerse = ( verse ) => {
+        const chapterId = verse.verse_key.split(":")[0];
+        console.log(verse)
         if (lastSegment === chapterId) {
+            setQuranHeaderVerse(verse.verse_number)
+            onClose();
             return;
         }
         router.push(`/quran/chapters/${chapterId}`);
+        setQuranHeaderVerse(verse.verse_number)
         onClose();
     }
 
@@ -68,7 +76,7 @@ export default function QuranVerseModal({ verse, onClose }) {
                         {/* verse section */}
 
                         <div
-                            onClick={() => goToVerse(verse.verse_key.split(":")[0])}
+                            onClick={() => goToVerse(verse)}
                             style={{ fontFamily: `p${pageNumberString}-v1`, direction: "rtl" }}
                             className="flex flex-wrap text-white bg-[var(--dark-color)] text-2xl cursor-pointer hover:bg-[var(--secondary-color)] p-2 border border-[var(--g-color)] rounded"
                         >

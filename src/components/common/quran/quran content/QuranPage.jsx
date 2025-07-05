@@ -13,6 +13,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress, setClick
     const observerRef = useRef(null);
     const ref = useRef(null)
 
+    const [activeVerse, setActiveVerse] = useState(null); //state for focusing in the background when clicking on it or when navigating to it;
     //headerVerse for scroll into view
     const { quranHeaderVerse } = useQuranHeaderVerse();
     useEffect(() => {
@@ -22,7 +23,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress, setClick
             );
 
             if (foundEntry) foundEntry[1].scrollIntoView({ behavior: "smooth" , block: "center"});
-
+            setActiveVerse(quranHeaderVerse);
         }
     }, [quranHeaderVerse])
 
@@ -92,7 +93,7 @@ export default function QuranPage({ verses, pageNumber, changeProgress, setClick
                             key={verse.verse_key}
                             id={`verse-${verse.verse_key}`}
                             data-verse-key={verse.verse_key}
-                            className="scroll-mt-20 hover:bg-[var(--g-color)]"
+                            className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] ${activeVerse == verse.verse_key.split(":")[1] ? "bg-[var(--g-color)]" : ""}`}
                             ref={el => {
                                 if (verseRefs.current[verse.verse_key]) {
                                     delete verseRefs.current[verse.verse_key];

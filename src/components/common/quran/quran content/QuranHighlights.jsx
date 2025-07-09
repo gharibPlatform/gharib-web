@@ -1,7 +1,6 @@
 import { verseByKey } from "@/utils/quran/quran"
 import { useEffect, useState } from "react"
 import QuranHighlightsVerse from "./QuranHighlightsVerse";
-import QuranVerseModal from "./QuranVerseModal";
 
 export default function QuranHighlights({handleVerseClick , highlights = ["3:23", "2:23", "4:23", "5:24", "2:13", "3:2"] }) {
     const [verses, setVerses] = useState({});

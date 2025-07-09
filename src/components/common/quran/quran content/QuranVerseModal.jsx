@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function QuranVerseModal({ verse, onClose }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [note, setNote] = useState("This is a note a very long one to explain why I highilighted this verse exactly and not any other one :::::");
+    const [note, setNote] = useState("any note*");
     const [tempNote, setTempNote] = useState(note);
 
     // Close modal when clicking outside

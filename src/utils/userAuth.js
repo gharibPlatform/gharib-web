@@ -20,11 +20,15 @@ export async function login(data) {
       headers: {
         'Content-Type': 'application/json'
       }
-    });
-    
+    }
+  );
+
+    const access = response.data.access;
+    const refresh = response.data.refresh;
+
     // Set cookies manually since we can't access Set-Cookie headers directly
-    document.cookie = `access_token=${response.data.access_token}; path=/; max-age=${60 * 60 * 24}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
-    document.cookie = `refresh_token=${response.data.refresh_token}; path=/; max-age=${60 * 60 * 24 * 7}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
+    document.cookie = `access_token=${access}; path=/; max-age=${60 * 60 * 24}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
+    document.cookie = `refresh_token=${refresh}; path=/; max-age=${60 * 60 * 24 * 7}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
     
     return response.data;
   } catch (error) {

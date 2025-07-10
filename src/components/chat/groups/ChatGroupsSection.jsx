@@ -49,7 +49,7 @@ export default function ChatGroupsSection() {
     const handleClick = (group, i) => {
         setActiveIndex(i);
         updateKhatmasContent({ activeTabStore: "groups" });
-        setNameHeader(group.name); 
+        setNameHeader(group); 
         router.push(`/chat/groups/${group.id}`); 
     };
 

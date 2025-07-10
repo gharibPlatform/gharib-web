@@ -16,14 +16,14 @@ export default function CreateDM() {
                 ? prev.filter((user) => user.id !== brother.id)
                 : [...prev, brother];
         });
-        setSearchQuery(""); 
+        setSearchQuery("");
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    }, [selectedUsers])
+    }, [selectedUsers]);
 
     const handleSuccess = () => {
         setIsSuccess(true);
@@ -36,15 +36,18 @@ export default function CreateDM() {
     };
 
     return (
-        <div className={`relative overflow-hidden ${showConfirmation ? "w-[500px] h-[385px]" : "w-[620px] h-[400px]"}`}>
+        <div
+            className={`relative overflow-hidden ${showConfirmation ? "w-[500px] h-[385px]" : "w-[620px] h-[400px]"}`}
+        >
             {/* Create DM Component */}
             <div
-                className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${
-                    showConfirmation ? "opacity-0 pointer-events-none" : "opacity-100"
-                }`}
+                className={`absolute inset-0 transition-opacity duration-500 overflow-y-auto hide-scrollbar ${showConfirmation ? "opacity-0 pointer-events-none" : "opacity-100"
+                    }`}
             >
                 <div className="max-h-[400px] pb-4 bg-[var(--main-color)] pt-4 px-4 rounded-sm border border-[var(--g-color)] flex flex-col">
-                    <h2 className="text-[var(--w-color)] text-2xl py-4">Select Brothers</h2>
+                    <h2 className="text-[var(--w-color)] text-2xl py-4">
+                        Select Brothers
+                    </h2>
 
                     {/* Search Input */}
                     <div className="relative">
@@ -73,9 +76,9 @@ export default function CreateDM() {
                     <div className="pb-2"></div>
 
                     {/* Pass searchQuery to filter the list */}
-                    <CreateDMListingBrothers 
-                        selectedUsers={selectedUsers} 
-                        toggleUser={toggleUser} 
+                    <CreateDMListingBrothers
+                        selectedUsers={selectedUsers}
+                        toggleUser={toggleUser}
                         searchQuery={searchQuery}
                     />
 
@@ -93,9 +96,8 @@ export default function CreateDM() {
 
             {/* Confirmation Component */}
             <div
-                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] transition-opacity duration-500 overflow-y-auto no-scrollbar ${
-                    showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
-                }`}
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] transition-opacity duration-500 overflow-y-auto no-scrollbar ${showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
+                    }`}
             >
                 {isSuccess ? (
                     <div className="bg-[var(--main-color)] p-6 rounded-sm border border-[var(--g-color)] h-full flex flex-col items-center justify-center">
@@ -108,8 +110,8 @@ export default function CreateDM() {
                         </p>
                     </div>
                 ) : (
-                    <CreateDMConfirmation 
-                        selectedUsers={selectedUsers} 
+                    <CreateDMConfirmation
+                        selectedUsers={selectedUsers}
                         onSuccess={handleSuccess}
                         onCancel={() => setShowConfirmation(false)}
                     />

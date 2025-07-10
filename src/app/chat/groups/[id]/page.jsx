@@ -7,24 +7,26 @@ import { getGroups } from "@/utils/apiGroup";
 import { useEffect, useState } from "react";
 const Page = () => {
   const { id } = useParams();
-  const [group, setGroup] = useState({});
+  const [group, setGroup] = useState();
   useEffect(() => {
     const getGroupById = async () => {
       const resp = await getGroups(id);
-      console.log(resp);
+
       setGroup(resp);
     };
 
     getGroupById();
   }, []);
-  const setNameHeader = useNameHeaderStore((state) => state.setNameHeader);
 
-  setNameHeader(group.name);
+  const setNameHeader = useNameHeaderStore((state) => state.setNameHeader);
+  if (group) {
+    setNameHeader(group.name);
+  }
 
   return (
     <GroupProvider>
       <div>
-        <ChatContent nameHeader={name} groupBool={true} />
+        <ChatContent nameHeader={group?.name} groupBool={true} />
       </div>
     </GroupProvider>
   );

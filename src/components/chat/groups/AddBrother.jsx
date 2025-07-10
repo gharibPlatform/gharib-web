@@ -35,11 +35,11 @@ export default function AddBrother() {
                             <div className="bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex flex-wrap items-center gap-2">
                                 {selectedUsers.map((user) => (
                                     <span
-                                        key={user}
+                                        key={user.id}
                                         onClick={() => toggleUser(user)}
                                         className="cursor-pointer bg-[var(--main-color-hover)] px-2 py-2 rounded-md text-sm flex items-center gap-2"
                                     >
-                                        <h2>{user}</h2>
+                                        <h2>{user.name}</h2>
                                         <h2>✕</h2>
                                     </span>
                                 ))}

@@ -28,17 +28,21 @@ export default function CreateDMConfirmation({ selectedUsers, onSuccess, onCance
         }
         setError("");
         setLoading(true);
-        
+
         try {
             const formData = new FormData();
             formData.append("name", groupName);
+
             if (groupIcon) {
                 formData.append("icon", groupIcon);
             }
-            formData.append("users", JSON.stringify(selectedUsers));
+
+            selectedUsers.forEach(userId => {
+                formData.append("users", userId);
+            });
 
             await createGroup(formData);
-            onSuccess(); // Notify parent component of success
+            onSuccess();
         } catch (error) {
             console.error("Failed to create group", error);
             setError("Failed to create group. Please try again.");
@@ -62,10 +66,10 @@ export default function CreateDMConfirmation({ selectedUsers, onSuccess, onCance
             <div className="text-[var(--w-color)] no-scrollbar rounded-[5px] text-lg flex flex-wrap items-center gap-2 mb-6">
                 {selectedUsers.map((user) => (
                     <span
-                        key={user}
+                        key={user.id}
                         className="cursor-pointer bg-[var(--main-color-hover)] px-2 py-2 rounded-md text-sm flex items-center gap-2"
                     >
-                        <h2>{user}</h2>
+                        <h2>{user.name}</h2>
                     </span>
                 ))}
             </div>

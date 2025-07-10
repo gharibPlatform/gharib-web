@@ -26,6 +26,9 @@ export async function login(data) {
     const access = response.data.access;
     const refresh = response.data.refresh;
 
+    localStorage.setItem('access_token', access);
+    localStorage.setItem('refresh_token', refresh);
+
     // Set cookies manually since we can't access Set-Cookie headers directly
     document.cookie = `access_token=${access}; path=/; max-age=${60 * 60 * 24}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;
     document.cookie = `refresh_token=${refresh}; path=/; max-age=${60 * 60 * 24 * 7}; sameSite=lax${process.env.NODE_ENV === 'production' ? '; secure' : ''}`;

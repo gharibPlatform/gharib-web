@@ -106,7 +106,7 @@ export default function GroupSideBar() {
           <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">
             <div className="absolute inset-0 pointer-events-none"></div>
             <div ref={editDMRef}>
-              <EditGroupSettings groupId={1} />
+              <EditGroupSettings groupId={group.id} />
             </div>
           </div>
         )}

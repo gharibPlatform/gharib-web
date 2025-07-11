@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { 
-    getGroupSettings, 
-    patchGroupSettings, 
+import {
+    getGroupSettings,
+    patchGroupSettings,
     updateGroupSettings,
     updateGroup,
-    patchGroup
+    patchGroup,
 } from "@/utils/apiGroup";
 
 export default function GroupSettingsEditor({ groupId }) {
@@ -12,16 +12,16 @@ export default function GroupSettingsEditor({ groupId }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    
+
     // Normal settings state
     const [normalSettings, setNormalSettings] = useState({
         name: "",
         icon: null,
         description: "",
         newIcon: null,
-        iconPreview: ""
+        iconPreview: "",
     });
-    
+
     // Advanced settings state
     const [advancedSettings, setAdvancedSettings] = useState({
         canAddMember: "all",
@@ -29,13 +29,13 @@ export default function GroupSettingsEditor({ groupId }) {
         AllCanLunchKhatma: true,
         AllCanManageCode: true,
         canAddMember_custom: [],
-        canSendMessage_custom: []
+        canSendMessage_custom: [],
     });
-    
+
     // Custom members selection
     const [showCustomMemberDialog, setShowCustomMemberDialog] = useState({
         for: null, // 'addMember' or 'sendMessage'
-        open: false
+        open: false,
     });
     const [availableMembers, setAvailableMembers] = useState([]);
     const [selectedCustomMembers, setSelectedCustomMembers] = useState([]);
@@ -58,7 +58,7 @@ export default function GroupSettingsEditor({ groupId }) {
         const fetchSettings = async () => {
             try {
                 setLoading(true);
-                
+
                 // Fetch normal settings
                 const normalData = await getGroupSettings(groupId);
                 setNormalSettings({
@@ -66,18 +66,16 @@ export default function GroupSettingsEditor({ groupId }) {
                     description: normalData.description || "",
                     icon: normalData.icon,
                     newIcon: null,
-                    iconPreview: normalData.icon || ""
+                    iconPreview: normalData.icon || "",
                 });
-                
+
                 // Fetch advanced settings
                 const advancedData = await getGroupSettings(`${groupId}/permissions`);
                 if (advancedData.results && advancedData.results.length > 0) {
                     setAdvancedSettings(advancedData.results[0]);
                 }
-                
-                // In a real app, you'd also fetch available members here
+
                 // setAvailableMembers(...);
-                
             } catch (err) {
                 console.error("Failed to fetch group settings", err);
                 setError("Failed to load group settings");
@@ -85,7 +83,7 @@ export default function GroupSettingsEditor({ groupId }) {
                 setLoading(false);
             }
         };
-        
+
         if (groupId) {
             fetchSettings();
         }
@@ -93,39 +91,39 @@ export default function GroupSettingsEditor({ groupId }) {
 
     const handleNormalSettingsChange = (e) => {
         const { name, value } = e.target;
-        setNormalSettings(prev => ({
+        setNormalSettings((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
     };
 
     const handleIconChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setNormalSettings(prev => ({
+            setNormalSettings((prev) => ({
                 ...prev,
                 newIcon: file,
-                iconPreview: URL.createObjectURL(file)
+                iconPreview: URL.createObjectURL(file),
             }));
         }
     };
 
     const handleAdvancedSettingsChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setAdvancedSettings(prev => ({
+        setAdvancedSettings((prev) => ({
             ...prev,
-            [name]: type === 'checkbox' ? checked : value
+            [name]: type === "checkbox" ? checked : value,
         }));
     };
 
     const openCustomMemberDialog = (forAction) => {
         setShowCustomMemberDialog({
             for: forAction,
-            open: true
+            open: true,
         });
-        
+
         // Pre-select currently allowed members
-        if (forAction === 'addMember') {
+        if (forAction === "addMember") {
             setSelectedCustomMembers([...advancedSettings.canAddMember_custom]);
         } else {
             setSelectedCustomMembers([...advancedSettings.canSendMessage_custom]);
@@ -133,65 +131,67 @@ export default function GroupSettingsEditor({ groupId }) {
     };
 
     const saveCustomMembers = () => {
-        if (showCustomMemberDialog.for === 'addMember') {
-            setAdvancedSettings(prev => ({
+        if (showCustomMemberDialog.for === "addMember") {
+            setAdvancedSettings((prev) => ({
                 ...prev,
-                canAddMember_custom: [...selectedCustomMembers]
+                canAddMember_custom: [...selectedCustomMembers],
             }));
         } else {
-            setAdvancedSettings(prev => ({
+            setAdvancedSettings((prev) => ({
                 ...prev,
-                canSendMessage_custom: [...selectedCustomMembers]
+                canSendMessage_custom: [...selectedCustomMembers],
             }));
         }
         setShowCustomMemberDialog({ for: null, open: false });
     };
 
-const saveNormalSettings = async () => {
-    try {
-        setLoading(true);
-        setError("");
-        
-        const formData = new FormData();
-        
-        formData.append("id", groupId);
-        formData.append("name", normalSettings.name);
-        formData.append("description", normalSettings.description);
-        
-        if (normalSettings.newIcon) {
-            formData.append("icon", normalSettings.newIcon);
-        } else if (normalSettings.icon) {
-            // If keeping existing icon, send the URL string
-            formData.append("icon", normalSettings.icon);
+    const saveNormalSettings = async () => {
+        try {
+            setLoading(true);
+            setError("");
+
+            const formData = new FormData();
+
+            formData.append("id", groupId);
+            formData.append("name", normalSettings.name);
+            formData.append("description", normalSettings.description);
+
+            if (normalSettings.newIcon) {
+                formData.append("icon", normalSettings.newIcon);
+            } else if (normalSettings.icon) {
+                // If keeping existing icon, send the URL string
+                formData.append("icon", normalSettings.icon);
+            }
+
+            await updateGroup(formData);
+
+            setSuccess("Group settings updated successfully");
+        } catch (err) {
+            console.error("Update error:", err);
+            setError(
+                err.response?.data?.detail ||
+                err.response?.data?.message ||
+                "Failed to update group settings",
+            );
+        } finally {
+            setLoading(false);
         }
-        
-        await updateGroup(formData);
-        
-        setSuccess("Group settings updated successfully");
-    } catch (err) {
-        console.error("Update error:", err);
-        setError(err.response?.data?.detail || 
-                err.response?.data?.message || 
-                "Failed to update group settings");
-    } finally {
-        setLoading(false);
-    }
-};
+    };
 
     const saveAdvancedSettings = async () => {
         try {
             setLoading(true);
             setError("");
-            
+
             const settingsToUpdate = {
                 canAddMember: advancedSettings.canAddMember,
                 canSendMessage: advancedSettings.canSendMessage,
                 AllCanLunchKhatma: advancedSettings.AllCanLunchKhatma,
                 AllCanManageCode: advancedSettings.AllCanManageCode,
                 canAddMember_custom: advancedSettings.canAddMember_custom,
-                canSendMessage_custom: advancedSettings.canSendMessage_custom
+                canSendMessage_custom: advancedSettings.canSendMessage_custom,
             };
-            
+
             await updateGroupSettings(groupId, settingsToUpdate);
 
             setSuccess("Advanced settings updated successfully");
@@ -210,35 +210,35 @@ const saveNormalSettings = async () => {
     return (
         <div className="bg-[var(--main-color)] w-[500px] no-scrollbar p-6 rounded-lg border border-[var(--g-color)] text-[var(--w-color)]">
             <h2 className="text-2xl font-semibold mb-4">Group Settings</h2>
-            
+
             <div className="flex border-b border-[var(--g-color)] mb-4">
                 <button
-                    className={`py-2 px-4 ${activeTab === 'normal' ? 'border-b-2 border-[var(--b-color)]' : ''}`}
-                    onClick={() => setActiveTab('normal')}
+                    className={`py-2 px-4 ${activeTab === "normal" ? "border-b-2 border-[var(--b-color)]" : ""}`}
+                    onClick={() => setActiveTab("normal")}
                 >
                     Normal Settings
                 </button>
                 <button
-                    className={`py-2 px-4 ${activeTab === 'advanced' ? 'border-b-2 border-[var(--b-color)]' : ''}`}
-                    onClick={() => setActiveTab('advanced')}
+                    className={`py-2 px-4 ${activeTab === "advanced" ? "border-b-2 border-[var(--b-color)]" : ""}`}
+                    onClick={() => setActiveTab("advanced")}
                 >
                     Advanced Settings
                 </button>
             </div>
-            
+
             {error && (
                 <div className="mb-4 p-2 bg-[var(--bright-r-color)] text-white rounded">
                     {error}
                 </div>
             )}
-            
+
             {success && (
                 <div className="mb-4 p-2 bg-green-500 text-white rounded">
                     {success}
                 </div>
             )}
-            
-            {activeTab === 'normal' ? (
+
+            {activeTab === "normal" ? (
                 <div className="space-y-4">
                     <div>
                         <label className="block mb-1">Group Name</label>
@@ -250,7 +250,7 @@ const saveNormalSettings = async () => {
                             className="w-full bg-[var(--dark-color)] border border-[var(--g-color)] rounded p-2"
                         />
                     </div>
-                    
+
                     <div>
                         <label className="block mb-1">Description</label>
                         <textarea
@@ -261,29 +261,29 @@ const saveNormalSettings = async () => {
                             rows="3"
                         />
                     </div>
-                    
+
                     <div>
                         <label className="block mb-1">Group Icon</label>
                         <div className="flex items-center gap-4">
                             <label className="cursor-pointer bg-[var(--dark-color)] py-2 px-4 rounded border border-[var(--g-color)] hover:bg-[var(--main-color-hover)]">
                                 Change Icon
-                                <input 
-                                    type="file" 
-                                    accept="image/*" 
-                                    className="hidden" 
-                                    onChange={handleIconChange} 
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleIconChange}
                                 />
                             </label>
                             {normalSettings.iconPreview && (
-                                <img 
-                                    src={normalSettings.iconPreview} 
-                                    alt="Group Icon" 
-                                    className="w-12 h-12 rounded-full border border-[var(--g-color)]" 
+                                <img
+                                    src={normalSettings.iconPreview}
+                                    alt="Group Icon"
+                                    className="w-12 h-12 rounded-full border border-[var(--g-color)]"
                                 />
                             )}
                         </div>
                     </div>
-                    
+
                     <button
                         onClick={saveNormalSettings}
                         disabled={loading}
@@ -306,11 +306,11 @@ const saveNormalSettings = async () => {
                             <option value="admins">Only Admins</option>
                             <option value="custom">Custom</option>
                         </select>
-                        
-                        {advancedSettings.canAddMember === 'custom' && (
+
+                        {advancedSettings.canAddMember === "custom" && (
                             <div className="mt-2">
-                                <button 
-                                    onClick={() => openCustomMemberDialog('addMember')}
+                                <button
+                                    onClick={() => openCustomMemberDialog("addMember")}
                                     className="text-sm bg-[var(--dark-color)] hover:bg-[var(--main-color-hover)] py-1 px-3 rounded border border-[var(--g-color)]"
                                 >
                                     Select Members
@@ -318,7 +318,7 @@ const saveNormalSettings = async () => {
                             </div>
                         )}
                     </div>
-                    
+
                     <div>
                         <label className="block mb-1">Who can send messages?</label>
                         <select
@@ -331,11 +331,11 @@ const saveNormalSettings = async () => {
                             <option value="admins">Only Admins</option>
                             <option value="custom">Custom</option>
                         </select>
-                        
-                        {advancedSettings.canSendMessage === 'custom' && (
+
+                        {advancedSettings.canSendMessage === "custom" && (
                             <div className="mt-2">
-                                <button 
-                                    onClick={() => openCustomMemberDialog('sendMessage')}
+                                <button
+                                    onClick={() => openCustomMemberDialog("sendMessage")}
                                     className="text-sm bg-[var(--dark-color)] hover:bg-[var(--main-color-hover)] py-1 px-3 rounded border border-[var(--g-color)]"
                                 >
                                     Select Members
@@ -343,7 +343,7 @@ const saveNormalSettings = async () => {
                             </div>
                         )}
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                         <input
                             type="checkbox"
@@ -353,9 +353,11 @@ const saveNormalSettings = async () => {
                             id="khatmaCheckbox"
                             className="w-4 h-4"
                         />
-                        <label htmlFor="khatmaCheckbox">All members can launch Khatma</label>
+                        <label htmlFor="khatmaCheckbox">
+                            All members can launch Khatma
+                        </label>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                         <input
                             type="checkbox"
@@ -367,7 +369,7 @@ const saveNormalSettings = async () => {
                         />
                         <label htmlFor="codeCheckbox">All members can manage code</label>
                     </div>
-                    
+
                     <button
                         onClick={saveAdvancedSettings}
                         disabled={loading}
@@ -377,26 +379,34 @@ const saveNormalSettings = async () => {
                     </button>
                 </div>
             )}
-            
+
             {/* Custom Members Selection Dialog */}
             {showCustomMemberDialog.open && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-[var(--main-color)] p-6 rounded-lg border border-[var(--g-color)] w-[400px]">
                         <h3 className="text-xl mb-4">
-                            Select members who can {showCustomMemberDialog.for === 'addMember' ? 'add members' : 'send messages'}
+                            Select members who can{" "}
+                            {showCustomMemberDialog.for === "addMember"
+                                ? "add members"
+                                : "send messages"}
                         </h3>
-                        
+
                         <div className="max-h-60 overflow-y-auto mb-4 border border-[var(--g-color)] rounded p-2">
-                            {availableMembers.map(member => (
+                            {availableMembers.map((member) => (
                                 <div key={member.id} className="flex items-center gap-2 p-1">
                                     <input
                                         type="checkbox"
                                         checked={selectedCustomMembers.includes(member.id)}
                                         onChange={(e) => {
                                             if (e.target.checked) {
-                                                setSelectedCustomMembers(prev => [...prev, member.id]);
+                                                setSelectedCustomMembers((prev) => [
+                                                    ...prev,
+                                                    member.id,
+                                                ]);
                                             } else {
-                                                setSelectedCustomMembers(prev => prev.filter(id => id !== member.id));
+                                                setSelectedCustomMembers((prev) =>
+                                                    prev.filter((id) => id !== member.id),
+                                                );
                                             }
                                         }}
                                     />
@@ -404,10 +414,12 @@ const saveNormalSettings = async () => {
                                 </div>
                             ))}
                         </div>
-                        
+
                         <div className="flex justify-end gap-2">
                             <button
-                                onClick={() => setShowCustomMemberDialog({ for: null, open: false })}
+                                onClick={() =>
+                                    setShowCustomMemberDialog({ for: null, open: false })
+                                }
                                 className="bg-[var(--dark-color)] hover:bg-[var(--main-color-hover)] py-1 px-4 rounded border border-[var(--g-color)]"
                             >
                                 Cancel

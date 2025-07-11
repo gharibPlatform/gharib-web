@@ -1,57 +1,48 @@
+"use client";
 import { useEffect, useState } from "react";
 import ChatGroupCard from "./ChatGroupCard";
-import { useRouter, useParams } from "next/navigation";
 import useNameHeaderStore from "@/stores/nameHeaderStore";
 import useKhatmasContentStore from "@/stores/khatmasContentStore";
-import { getGroups } from "@/utils/apiGroup";
+import useGroupStore from "@/stores/groupStore";
 
 export default function ChatGroupsSection() {
     const BACKGROUND_COLOR = "#212121";
     const BACKGROUND_COLOR_NEW = "#323232";
 
-    const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const nameStore = useParams();
 
     const setNameHeader = useNameHeaderStore((state) => state.setNameHeader);
+    const updateKhatmasContent = useKhatmasContentStore(
+        (state) => state.updateKhatmasContent,
+    );
+    const { groups, fetchGroups } = useGroupStore();
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(null);
-    const updateKhatmasContent = useKhatmasContentStore((state) => state.updateKhatmasContent);
 
     useEffect(() => {
-        const fetchGroups = async () => {
+        const load = async () => {
             try {
-                setLoading(true);
-                const groupsData = await getGroups();
-                console.log(groupsData);
-                setGroups(groupsData.results);
-                
-                if (nameStore.name) {
-                    const foundIndex = groupsData.results.findIndex(group => 
-                        group.name === nameStore.name || group.id === nameStore.name
-                    );
-                    if (foundIndex !== -1) {
-                        setActiveIndex(foundIndex);
-                    }
-                }
+                await fetchGroups();
             } catch (err) {
-                console.error("Failed to fetch groups:", err);
+                console.error("Error fetching groups:", err);
                 setError("Failed to load groups. Please try again.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchGroups();
-    }, [nameStore.name]);
+        load();
+    }, []);
 
-    const handleClick = (group, i) => {
-        setActiveIndex(i);
+    const handleClick = (group, index) => {
+        setActiveIndex(index);
         updateKhatmasContent({ activeTabStore: "groups" });
-        setNameHeader(group); 
-        router.push(`/chat/groups/${group.id}`); 
+        setNameHeader(group);
+        router.push(`/chat/groups/${group.id}`);
     };
+
+    const groupList = groups?.results || [];
 
     if (loading) {
         return (
@@ -69,7 +60,7 @@ export default function ChatGroupsSection() {
         );
     }
 
-    if (groups.length === 0) {
+    if (groupList.length === 0) {
         return (
             <div className="flex justify-center items-center h-20">
                 <p className="text-[var(--g-color)]">No groups found</p>
@@ -79,13 +70,15 @@ export default function ChatGroupsSection() {
 
     return (
         <div>
-            {groups.map((group, index) => (
+            {groupList.map((group, index) => (
                 <ChatGroupCard
-                    backgroundColor={index === activeIndex ? BACKGROUND_COLOR_NEW : BACKGROUND_COLOR}
                     key={group.id}
                     index={index}
-                    handleClick={() => handleClick(group, index)}
                     Name={group.name}
+                    backgroundColor={
+                        index === activeIndex ? BACKGROUND_COLOR_NEW : BACKGROUND_COLOR
+                    }
+                    handleClick={() => handleClick(group, index)}
                 />
             ))}
         </div>

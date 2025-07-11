@@ -4,6 +4,7 @@ import ChatGroupCard from "./ChatGroupCard";
 import useNameHeaderStore from "@/stores/nameHeaderStore";
 import useKhatmasContentStore from "@/stores/khatmasContentStore";
 import useGroupStore from "@/stores/groupStore";
+import { useRouter } from "next/navigation";
 
 export default function ChatGroupsSection() {
     const BACKGROUND_COLOR = "#212121";

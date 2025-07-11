@@ -34,8 +34,8 @@ export function ChatActionsProvider({ children }) {
     
     const handleDeleteBrother = async (userId) => {
         try {
-        await deleteBrother(userId);
-        setFriends((prevFriends) => prevFriends.filter((friend) => friend.id !== userId));
+          await deleteBrother(userId);
+          setFriends((prevFriends) => prevFriends.filter((friend) => friend.id !== userId));
         } catch (error) {
         console.error("Failed to delete chat:", error);
         }

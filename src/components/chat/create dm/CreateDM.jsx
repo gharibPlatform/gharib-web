@@ -37,7 +37,7 @@ export default function CreateDM() {
 
     return (
         <div
-            className={`relative overflow-hidden ${showConfirmation ? "w-[500px] h-[385px]" : "w-[620px] h-[400px]"}`}
+            className={`relative overflow-hidden ${showConfirmation ? "w-[500px] h-[500px]" : "w-[620px] h-[400px]"}`}
         >
             {/* Create DM Component */}
             <div
@@ -96,7 +96,7 @@ export default function CreateDM() {
 
             {/* Confirmation Component */}
             <div
-                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] transition-opacity duration-500 overflow-y-auto no-scrollbar ${showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] transition-opacity duration-500 overflow-y-auto no-scrollbar ${showConfirmation ? "opacity-100" : "opacity-0 pointer-events-none"
                     }`}
             >
                 {isSuccess ? (

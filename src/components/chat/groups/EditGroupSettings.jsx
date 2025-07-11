@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
-import {
-    getGroupSettings,
-    patchGroupSettings,
-    updateGroupSettings,
-    updateGroup,
-    patchGroup,
-} from "@/utils/apiGroup";
+import { updateGroup, patchGroup } from "@/utils/apiGroup";
+import useGroupStore from "@/stores/groupStore";
 
 export default function GroupSettingsEditor({ groupId }) {
     const [activeTab, setActiveTab] = useState("normal");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+
+    const {
+        group,
+        groupSettings,
+        fetchGroupSettings,
+        updateGroupSettings,
+        patchGroupSettings,
+    } = useGroupStore();
 
     // Normal settings state
     const [normalSettings, setNormalSettings] = useState({
@@ -20,16 +23,6 @@ export default function GroupSettingsEditor({ groupId }) {
         description: "",
         newIcon: null,
         iconPreview: "",
-    });
-
-    // Advanced settings state
-    const [advancedSettings, setAdvancedSettings] = useState({
-        canAddMember: "all",
-        canSendMessage: "all",
-        AllCanLunchKhatma: true,
-        AllCanManageCode: true,
-        canAddMember_custom: [],
-        canSendMessage_custom: [],
     });
 
     // Custom members selection
@@ -60,20 +53,16 @@ export default function GroupSettingsEditor({ groupId }) {
                 setLoading(true);
 
                 // Fetch normal settings
-                const normalData = await getGroupSettings(groupId);
                 setNormalSettings({
-                    name: normalData.name,
-                    description: normalData.description || "",
-                    icon: normalData.icon,
+                    name: group.name,
+                    description: group.description || "",
+                    icon: group.icon,
                     newIcon: null,
-                    iconPreview: normalData.icon || "",
+                    iconPreview: group.icon || "",
                 });
 
                 // Fetch advanced settings
-                const advancedData = await getGroupSettings(`${groupId}/permissions`);
-                if (advancedData.results && advancedData.results.length > 0) {
-                    setAdvancedSettings(advancedData.results[0]);
-                }
+                await fetchGroupSettings(groupId);
 
                 // setAvailableMembers(...);
             } catch (err) {
@@ -110,10 +99,9 @@ export default function GroupSettingsEditor({ groupId }) {
 
     const handleAdvancedSettingsChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setAdvancedSettings((prev) => ({
-            ...prev,
+        patchGroupSettings({
             [name]: type === "checkbox" ? checked : value,
-        }));
+        });
     };
 
     const openCustomMemberDialog = (forAction) => {
@@ -124,23 +112,21 @@ export default function GroupSettingsEditor({ groupId }) {
 
         // Pre-select currently allowed members
         if (forAction === "addMember") {
-            setSelectedCustomMembers([...advancedSettings.canAddMember_custom]);
+            setSelectedCustomMembers([...groupSettings.canAddMember_custom]);
         } else {
-            setSelectedCustomMembers([...advancedSettings.canSendMessage_custom]);
+            setSelectedCustomMembers([...groupSettings.canSendMessage_custom]);
         }
     };
 
     const saveCustomMembers = () => {
         if (showCustomMemberDialog.for === "addMember") {
-            setAdvancedSettings((prev) => ({
-                ...prev,
+            patchGroupSettings({
                 canAddMember_custom: [...selectedCustomMembers],
-            }));
+            });
         } else {
-            setAdvancedSettings((prev) => ({
-                ...prev,
+            patchGroupSettings({
                 canSendMessage_custom: [...selectedCustomMembers],
-            }));
+            });
         }
         setShowCustomMemberDialog({ for: null, open: false });
     };
@@ -183,16 +169,7 @@ export default function GroupSettingsEditor({ groupId }) {
             setLoading(true);
             setError("");
 
-            const settingsToUpdate = {
-                canAddMember: advancedSettings.canAddMember,
-                canSendMessage: advancedSettings.canSendMessage,
-                AllCanLunchKhatma: advancedSettings.AllCanLunchKhatma,
-                AllCanManageCode: advancedSettings.AllCanManageCode,
-                canAddMember_custom: advancedSettings.canAddMember_custom,
-                canSendMessage_custom: advancedSettings.canSendMessage_custom,
-            };
-
-            await updateGroupSettings(groupId, settingsToUpdate);
+            await updateGroupSettings(groupId, groupSettings);
 
             setSuccess("Advanced settings updated successfully");
         } catch (err) {
@@ -298,7 +275,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <label className="block mb-1">Who can add members?</label>
                         <select
                             name="canAddMember"
-                            value={advancedSettings.canAddMember}
+                            value={groupSettings?.canAddMember || "all"}
                             onChange={handleAdvancedSettingsChange}
                             className="w-full bg-[var(--dark-color)] border border-[var(--g-color)] rounded p-2"
                         >
@@ -307,7 +284,7 @@ export default function GroupSettingsEditor({ groupId }) {
                             <option value="custom">Custom</option>
                         </select>
 
-                        {advancedSettings.canAddMember === "custom" && (
+                        {groupSettings?.canAddMember === "custom" && (
                             <div className="mt-2">
                                 <button
                                     onClick={() => openCustomMemberDialog("addMember")}
@@ -323,7 +300,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <label className="block mb-1">Who can send messages?</label>
                         <select
                             name="canSendMessage"
-                            value={advancedSettings.canSendMessage}
+                            value={groupSettings?.canSendMessage || "all"}
                             onChange={handleAdvancedSettingsChange}
                             className="w-full bg-[var(--dark-color)] border border-[var(--g-color)] rounded p-2"
                         >
@@ -332,7 +309,7 @@ export default function GroupSettingsEditor({ groupId }) {
                             <option value="custom">Custom</option>
                         </select>
 
-                        {advancedSettings.canSendMessage === "custom" && (
+                        {groupSettings?.canSendMessage === "custom" && (
                             <div className="mt-2">
                                 <button
                                     onClick={() => openCustomMemberDialog("sendMessage")}
@@ -348,7 +325,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <input
                             type="checkbox"
                             name="AllCanLunchKhatma"
-                            checked={advancedSettings.AllCanLunchKhatma}
+                            checked={groupSettings?.AllCanLunchKhatma || true}
                             onChange={handleAdvancedSettingsChange}
                             id="khatmaCheckbox"
                             className="w-4 h-4"
@@ -362,7 +339,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <input
                             type="checkbox"
                             name="AllCanManageCode"
-                            checked={advancedSettings.AllCanManageCode}
+                            checked={groupSettings?.AllCanManageCode || true}
                             onChange={handleAdvancedSettingsChange}
                             id="codeCheckbox"
                             className="w-4 h-4"

@@ -184,6 +184,7 @@ export const generateGroupCode = async () => {
 export const getGroupSettings = async (id) => {
   try {
     const response = await api.get(`${API_BASE_URL}/group/settings/${id}/`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error getting group settings:", error);

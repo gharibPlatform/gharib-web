@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { updateGroup, patchGroup } from "@/utils/apiGroup";
+import { updateGroup } from "@/utils/apiGroup";
 import useGroupStore from "@/stores/groupStore";
 
 export default function GroupSettingsEditor({ groupId }) {
@@ -7,13 +7,13 @@ export default function GroupSettingsEditor({ groupId }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [initialized, setInitialized] = useState(false);
 
     const {
         group,
         groupSettings,
         fetchGroupSettings,
         updateGroupSettings,
-        patchGroupSettings,
     } = useGroupStore();
 
     // Normal settings state
@@ -25,13 +25,67 @@ export default function GroupSettingsEditor({ groupId }) {
         iconPreview: "",
     });
 
+    // Local advanced settings state
+    const [localAdvancedSettings, setLocalAdvancedSettings] = useState({
+        canAddMember: "all",
+        canSendMessage: "all",
+        AllCanLunchKhatma: true,
+        AllCanManageCode: true,
+        canAddMember_custom: [],
+        canSendMessage_custom: [],
+    });
+
     // Custom members selection
     const [showCustomMemberDialog, setShowCustomMemberDialog] = useState({
-        for: null, // 'addMember' or 'sendMessage'
+        for: null,
         open: false,
     });
-    const [availableMembers, setAvailableMembers] = useState([]);
     const [selectedCustomMembers, setSelectedCustomMembers] = useState([]);
+
+    // Initialize state only once when component mounts
+    useEffect(() => {
+        const initializeSettings = async () => {
+            try {
+                setLoading(true);
+                await fetchGroupSettings(groupId);
+
+                // Initialize normal settings
+                setNormalSettings({
+                    name: group.name,
+                    description: group.description || "",
+                    icon: group.icon,
+                    newIcon: null,
+                    iconPreview: group.icon || "",
+                });
+
+                // Initialize advanced settings
+                if (groupSettings) {
+                    setLocalAdvancedSettings({
+                        canAddMember: groupSettings.canAddMember || "all",
+                        canSendMessage: groupSettings.canSendMessage || "all",
+                        AllCanLunchKhatma: groupSettings.AllCanLunchKhatma !== undefined
+                            ? groupSettings.AllCanLunchKhatma
+                            : true,
+                        AllCanManageCode: groupSettings.AllCanManageCode !== undefined
+                            ? groupSettings.AllCanManageCode
+                            : true,
+                        canAddMember_custom: groupSettings.canAddMember_custom || [],
+                        canSendMessage_custom: groupSettings.canSendMessage_custom || [],
+                    });
+                }
+                setInitialized(true);
+            } catch (err) {
+                console.error("Failed to fetch group settings", err);
+                setError("Failed to load group settings");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (groupId && !initialized) {
+            initializeSettings();
+        }
+    }, [groupId, initialized]);
 
     useEffect(() => {
         if (error) {
@@ -47,40 +101,9 @@ export default function GroupSettingsEditor({ groupId }) {
         }
     }, [success]);
 
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                setLoading(true);
-
-                // Fetch normal settings
-                setNormalSettings({
-                    name: group.name,
-                    description: group.description || "",
-                    icon: group.icon,
-                    newIcon: null,
-                    iconPreview: group.icon || "",
-                });
-
-                // Fetch advanced settings
-                await fetchGroupSettings(groupId);
-
-                // setAvailableMembers(...);
-            } catch (err) {
-                console.error("Failed to fetch group settings", err);
-                setError("Failed to load group settings");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (groupId) {
-            fetchSettings();
-        }
-    }, [groupId]);
-
     const handleNormalSettingsChange = (e) => {
         const { name, value } = e.target;
-        setNormalSettings((prev) => ({
+        setNormalSettings(prev => ({
             ...prev,
             [name]: value,
         }));
@@ -89,7 +112,7 @@ export default function GroupSettingsEditor({ groupId }) {
     const handleIconChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setNormalSettings((prev) => ({
+            setNormalSettings(prev => ({
                 ...prev,
                 newIcon: file,
                 iconPreview: URL.createObjectURL(file),
@@ -99,9 +122,10 @@ export default function GroupSettingsEditor({ groupId }) {
 
     const handleAdvancedSettingsChange = (e) => {
         const { name, value, type, checked } = e.target;
-        patchGroupSettings({
+        setLocalAdvancedSettings(prev => ({
+            ...prev,
             [name]: type === "checkbox" ? checked : value,
-        });
+        }));
     };
 
     const openCustomMemberDialog = (forAction) => {
@@ -110,23 +134,24 @@ export default function GroupSettingsEditor({ groupId }) {
             open: true,
         });
 
-        // Pre-select currently allowed members
         if (forAction === "addMember") {
-            setSelectedCustomMembers([...groupSettings.canAddMember_custom]);
+            setSelectedCustomMembers([...localAdvancedSettings.canAddMember_custom]);
         } else {
-            setSelectedCustomMembers([...groupSettings.canSendMessage_custom]);
+            setSelectedCustomMembers([...localAdvancedSettings.canSendMessage_custom]);
         }
     };
 
     const saveCustomMembers = () => {
         if (showCustomMemberDialog.for === "addMember") {
-            patchGroupSettings({
+            setLocalAdvancedSettings(prev => ({
+                ...prev,
                 canAddMember_custom: [...selectedCustomMembers],
-            });
+            }));
         } else {
-            patchGroupSettings({
+            setLocalAdvancedSettings(prev => ({
+                ...prev,
                 canSendMessage_custom: [...selectedCustomMembers],
-            });
+            }));
         }
         setShowCustomMemberDialog({ for: null, open: false });
     };
@@ -137,7 +162,6 @@ export default function GroupSettingsEditor({ groupId }) {
             setError("");
 
             const formData = new FormData();
-
             formData.append("id", groupId);
             formData.append("name", normalSettings.name);
             formData.append("description", normalSettings.description);
@@ -145,12 +169,10 @@ export default function GroupSettingsEditor({ groupId }) {
             if (normalSettings.newIcon) {
                 formData.append("icon", normalSettings.newIcon);
             } else if (normalSettings.icon) {
-                // If keeping existing icon, send the URL string
                 formData.append("icon", normalSettings.icon);
             }
 
             await updateGroup(formData);
-
             setSuccess("Group settings updated successfully");
         } catch (err) {
             console.error("Update error:", err);
@@ -168,9 +190,7 @@ export default function GroupSettingsEditor({ groupId }) {
         try {
             setLoading(true);
             setError("");
-
-            await updateGroupSettings(groupId, groupSettings);
-
+            await updateGroupSettings(groupId, localAdvancedSettings);
             setSuccess("Advanced settings updated successfully");
         } catch (err) {
             console.error("Failed to update advanced settings", err);
@@ -180,7 +200,7 @@ export default function GroupSettingsEditor({ groupId }) {
         }
     };
 
-    if (loading && !normalSettings.name) {
+    if (loading && !initialized) {
         return <div className="p-6 text-center">Loading settings...</div>;
     }
 
@@ -275,7 +295,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <label className="block mb-1">Who can add members?</label>
                         <select
                             name="canAddMember"
-                            value={groupSettings?.canAddMember || "all"}
+                            value={localAdvancedSettings.canAddMember}
                             onChange={handleAdvancedSettingsChange}
                             className="w-full bg-[var(--dark-color)] border border-[var(--g-color)] rounded p-2"
                         >
@@ -284,7 +304,7 @@ export default function GroupSettingsEditor({ groupId }) {
                             <option value="custom">Custom</option>
                         </select>
 
-                        {groupSettings?.canAddMember === "custom" && (
+                        {localAdvancedSettings.canAddMember === "custom" && (
                             <div className="mt-2">
                                 <button
                                     onClick={() => openCustomMemberDialog("addMember")}
@@ -300,7 +320,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <label className="block mb-1">Who can send messages?</label>
                         <select
                             name="canSendMessage"
-                            value={groupSettings?.canSendMessage || "all"}
+                            value={localAdvancedSettings.canSendMessage}
                             onChange={handleAdvancedSettingsChange}
                             className="w-full bg-[var(--dark-color)] border border-[var(--g-color)] rounded p-2"
                         >
@@ -309,7 +329,7 @@ export default function GroupSettingsEditor({ groupId }) {
                             <option value="custom">Custom</option>
                         </select>
 
-                        {groupSettings?.canSendMessage === "custom" && (
+                        {localAdvancedSettings.canSendMessage === "custom" && (
                             <div className="mt-2">
                                 <button
                                     onClick={() => openCustomMemberDialog("sendMessage")}
@@ -325,7 +345,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <input
                             type="checkbox"
                             name="AllCanLunchKhatma"
-                            checked={groupSettings?.AllCanLunchKhatma || true}
+                            checked={localAdvancedSettings.AllCanLunchKhatma}
                             onChange={handleAdvancedSettingsChange}
                             id="khatmaCheckbox"
                             className="w-4 h-4"
@@ -339,7 +359,7 @@ export default function GroupSettingsEditor({ groupId }) {
                         <input
                             type="checkbox"
                             name="AllCanManageCode"
-                            checked={groupSettings?.AllCanManageCode || true}
+                            checked={localAdvancedSettings.AllCanManageCode}
                             onChange={handleAdvancedSettingsChange}
                             id="codeCheckbox"
                             className="w-4 h-4"
@@ -357,7 +377,6 @@ export default function GroupSettingsEditor({ groupId }) {
                 </div>
             )}
 
-            {/* Custom Members Selection Dialog */}
             {showCustomMemberDialog.open && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-[var(--main-color)] p-6 rounded-lg border border-[var(--g-color)] w-[400px]">

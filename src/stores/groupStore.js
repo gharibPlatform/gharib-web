@@ -1,4 +1,9 @@
-import { getGroups } from "@/utils/apiGroup";
+import {
+  getGroups,
+  getGroupSettings,
+  patchGroupSettings,
+  updateGroupSettings,
+} from "@/utils/apiGroup";
 import { create } from "zustand";
 
 const useGroupStore = create((set) => ({
@@ -11,6 +16,17 @@ const useGroupStore = create((set) => ({
   fetchOneGroup: async (id) => {
     const data = await getGroups(id);
     set({ group: data });
+  },
+  groupSettings: null,
+  fetchGroupSettings: async (id) => {
+    const data = await getGroupSettings(id);
+    set({ groupSettings: data });
+  },
+  updateGroupSettings: async (id, data) => {
+    await updateGroupSettings(id, data);
+  },
+  patchGroupSettings: async (id, data) => {
+    await patchGroupSettings(id, data);
   },
 }));
 

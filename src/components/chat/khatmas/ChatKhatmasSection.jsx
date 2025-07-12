@@ -2,13 +2,15 @@ import ChatKhatmaCard from "./ChatKhatmaCard";
 import useKhatmasContentStore from "@/stores/khatmasContentStore";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { getListKhatma } from "@/utils/apiKhatma";
+import { getListKhatma, getKhatmaByGroup } from "@/utils/apiKhatma";
 
 export default function ChatKhatmasSection() {
   const BACKGROUND_COLOR = "#212121";
   const BACKGROUND_COLOR_NEW = "#323232";
 
-  const updateKhatmasContent = useKhatmasContentStore((state) => state.updateKhatmasContent);
+  const updateKhatmasContent = useKhatmasContentStore(
+    (state) => state.updateKhatmasContent,
+  );
   const router = useRouter();
   const params = useParams();
   const [activeIndex, setActiveIndex] = useState(null);
@@ -20,16 +22,22 @@ export default function ChatKhatmasSection() {
     const fetchKhatmas = async () => {
       try {
         setLoading(true);
-        const response = await getListKhatma(13); 
+        const response = await getListKhatma(13);
+        const resp = await getKhatmaByGroup(14);
+
+        console.log(resp);
         // Combine current and historical khatmas
         const allKhatmas = [
           ...(response.current || []),
-          ...(response.history || [])
+          ...(response.history || []),
+          ...(response.results || []),
         ];
         setKhatmas(allKhatmas);
-        console.log(response)
-        // Set active index 
-        const foundIndex = allKhatmas.findIndex(item => item.name === params.name);
+        console.log(response);
+        // Set active index
+        const foundIndex = allKhatmas.findIndex(
+          (item) => item.name === params.name,
+        );
         if (foundIndex !== -1) {
           setActiveIndex(foundIndex);
         }
@@ -49,9 +57,11 @@ export default function ChatKhatmasSection() {
     updateKhatmasContent({
       name: khatma.name,
       percentage: khatma.progress || 0,
-      timeLeft: khatma.endDate ? calculateTimeLeft(khatma.endDate) : "No deadline",
+      timeLeft: khatma.endDate
+        ? calculateTimeLeft(khatma.endDate)
+        : "No deadline",
       status: khatma.status || "Active",
-      activeTabStore: "khatmas"
+      activeTabStore: "khatmas",
     });
     router.push(`/khatmas/${khatma.name}`);
   };
@@ -73,25 +83,46 @@ export default function ChatKhatmasSection() {
     return `${minutes}m ${seconds}s`;
   }
 
-  if (loading) return <div className="p-4 text-center">Loading khatmas...</div>;
-  if (error) return <div className="p-4 text-center text-red-500">Error loading khatmas</div>;
-  if (khatmas.length === 0) return <div className="p-4 text-center">No khatmas available</div>;
+  if (loading)
+    return (
+      <div className="p-4 text-[var(--g-color)] text-center">
+        Loading khatmas...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="p-4 text-center text-red-500">Error loading khatmas</div>
+    );
+  if (khatmas.length === 0)
+    return (
+      <div className="p-4 text-[var(--g-color)] text-center">
+        No khatmas available
+      </div>
+    );
 
   return (
     <div>
       {khatmas
-        .filter(khatma => khatma.status !== "Finished")
+        .filter((khatma) => khatma.status !== "Finished")
         .map((khatma, index) => (
-          <div 
+          <div
             key={`khatma-${khatma.id || index}`}
             onClick={() => handleCardClick(khatma, index)}
             className="cursor-pointer"
           >
-            <ChatKhatmaCard 
-              backgroundColor={khatma.name === params?.name ? BACKGROUND_COLOR_NEW : BACKGROUND_COLOR}
+            <ChatKhatmaCard
+              backgroundColor={
+                khatma.name === params?.name
+                  ? BACKGROUND_COLOR_NEW
+                  : BACKGROUND_COLOR
+              }
               name={khatma.name}
               percentage={khatma.progress || 0}
-              timeLeft={khatma.endDate ? calculateTimeLeft(khatma.endDate) : "No deadline"}
+              timeLeft={
+                khatma.endDate
+                  ? calculateTimeLeft(khatma.endDate)
+                  : "No deadline"
+              }
             />
           </div>
         ))}

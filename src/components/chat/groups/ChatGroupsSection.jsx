@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import ChatGroupCard from "./ChatGroupCard";
 import useNameHeaderStore from "@/stores/nameHeaderStore";
-import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import useKhatmasContentStore from "@/stores/khatmasStore";
 import useGroupStore from "@/stores/groupStore";
 import { useRouter } from "next/navigation";
 

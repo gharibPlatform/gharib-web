@@ -1,5 +1,5 @@
 import ChatKhatmaCard from "./ChatKhatmaCard";
-import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import useKhatmasContentStore from "@/stores/khatmasStore";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { getListKhatma, getKhatmaByGroup } from "@/utils/apiKhatma";

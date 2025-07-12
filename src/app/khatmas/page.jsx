@@ -1,5 +1,5 @@
 "use client";
-import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import useKhatmasContentStore from "@/stores/khatmasStore";
 import { useEffect } from "react";
 import GroupKhatmas from "@/components/khatmas/GroupKhatmas";
 import ChatHeader from "@/components/chat/ChatHeader";

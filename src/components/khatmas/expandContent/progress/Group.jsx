@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import useKhatmasContentStore from "@/stores/khatmasStore";
 function GroupContent() {
     const { length, startDate, endDate, status  } = useKhatmasContentStore();
 

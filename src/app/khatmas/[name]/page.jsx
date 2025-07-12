@@ -1,5 +1,5 @@
 "use client";
-import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import useKhatmasContentStore from "@/stores/khatmasStore";
 import KhatmasContent from "@/components/khatmas/KhatmasContent";
 import { useEffect } from "react";
 

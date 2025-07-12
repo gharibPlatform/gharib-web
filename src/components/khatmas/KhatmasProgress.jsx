@@ -1,4 +1,4 @@
-import useKhatmasContentStore from "@/stores/khatmasContentStore"; 
+import useKhatmasContentStore from "@/stores/khatmasStore"; 
 import Circle from "../common/circle/Circle";
 
 export default function KhatmasProgress() {

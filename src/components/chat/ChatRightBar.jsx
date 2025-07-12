@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import ChatBrotherSection from "./brothers/ChatBrothersSection";
 import ChatGroupsSection from "./groups/ChatGroupsSection";
 import ChatKhatmasSection from "./khatmas/ChatKhatmasSection";
-import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import useKhatmasContentStore from "@/stores/khatmasStore";
 import Tooltip from "../common/tooltip/Tooltip";
 import CreateDM from "./create dm/CreateDM";
 

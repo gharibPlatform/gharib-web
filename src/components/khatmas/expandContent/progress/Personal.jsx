@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useKhatmasContentStore from "@/stores/khatmasContentStore";
+import useKhatmasContentStore from "@/stores/khatmasStore";
 
 function PersonalContent() {
     const { share, pages, remainingPages, status  } = useKhatmasContentStore();

@@ -86,9 +86,9 @@ export const deleteKhatmaMembership = async (id) => {
   }
 };
 
-export const getKhatmaDetails = async (id) => {
+export const getKhatmaDetails = async (khatmaId) => {
   try {
-    const response = await api.get(`${API_BASE_URL}/khatma/khatma/${id}/`);
+    const response = await api.get(`${API_BASE_URL}/khatma/${khatmaId}/`);
     return response.data;
   } catch (error) {
     console.error("Error getting khatma details:", error);
@@ -96,12 +96,9 @@ export const getKhatmaDetails = async (id) => {
   }
 };
 
-export const updateKhatma = async (id, data) => {
+export const updateKhatma = async (khatmaId, data) => {
   try {
-    const response = await api.put(
-      `${API_BASE_URL}/khatma/khatma/${id}/`,
-      data,
-    );
+    const response = await api.put(`${API_BASE_URL}/khatma/${khatmaId}/`, data);
     return response.data;
   } catch (error) {
     console.error("Error updating khatma:", error);
@@ -124,7 +121,7 @@ export const patchKhatma = async (id, data) => {
 
 export const deleteKhatma = async (id) => {
   try {
-    const response = await api.delete(`${API_BASE_URL}/khatma/khatma/${id}/`);
+    const response = await api.delete(`${API_BASE_URL}/khatma/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Error deleting khatma:", error);

@@ -1,4 +1,8 @@
-import { getKhatmaDetails, updateKhatma } from "@/utils/apiKhatma";
+import {
+  deleteKhatma,
+  getKhatmaDetails,
+  updateKhatma,
+} from "@/utils/apiKhatma";
 import { create } from "zustand";
 
 const useKhatmaStore = create((set) => ({
@@ -17,4 +21,10 @@ const useKhatmaStore = create((set) => ({
       },
     }));
   },
+
+  deleteKhatma: async (khatmaId) => {
+    (await deleteKhatma(khatmaId), set({ khatmasDetails: null }));
+  },
 }));
+
+export default useKhatmaStore;

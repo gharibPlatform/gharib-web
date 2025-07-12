@@ -25,15 +25,17 @@ export default function ChatKhatmasSection() {
         const response = await getListKhatma(13);
         const resp = await getKhatmaByGroup(14);
 
-        console.log(resp);
         // Combine current and historical khatmas
         const allKhatmas = [
-          ...(response.current || []),
-          ...(response.history || []),
+          ...(response.next || []),
+          ...(response.previous || []),
           ...(response.results || []),
         ];
-        setKhatmas(allKhatmas);
-        console.log(response);
+
+        const khatmaList = allKhatmas?.map((item) => item.khatma);
+        console.log(allKhatmas);
+        console.log(khatmaList);
+        setKhatmas(khatmaList);
         // Set active index
         const foundIndex = allKhatmas.findIndex(
           (item) => item.name === params.name,

@@ -6,20 +6,18 @@ import { KhatmaProvider } from "@/context/KhatmaContext";
 
 const Layout = ({ children }) => {
   return (
-    <KhatmaProvider>
-      <div className="w-screen overflow-hidden h-screen flex flex-col">
-        <Header />
-        <div className="flex">
-          <SideBar />
-          <div className="ml-72 pt-14 flex w-full">
-            <div className="h-screen flex-grow">{children}</div>
-            <div>
-              <ChatRightBar />
-            </div>
+    <div className="w-screen overflow-hidden h-screen flex flex-col">
+      <Header />
+      <div className="flex">
+        <SideBar />
+        <div className="ml-72 pt-14 flex w-full">
+          <div className="h-screen flex-grow">{children}</div>
+          <div>
+            <ChatRightBar />
           </div>
         </div>
       </div>
-    </KhatmaProvider>
+    </div>
   );
 };
 

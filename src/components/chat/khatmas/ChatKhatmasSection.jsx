@@ -1,5 +1,4 @@
 import ChatKhatmaCard from "./ChatKhatmaCard";
-import useKhatmasContentStore from "@/stores/khatmasStore";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import useKhatmaStore from "@/stores/khatmasStore";
@@ -13,7 +12,6 @@ export default function ChatKhatmasSection() {
   const router = useRouter();
   const params = useParams();
   const [activeIndex, setActiveIndex] = useState(null);
-  const [khatmas, setKhatmas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -22,19 +20,6 @@ export default function ChatKhatmasSection() {
       try {
         setLoading(true);
         await fetchUserKhatmas();
-
-        // Combine current and historical khatmas
-
-        const khatmaList = userKhatmas?.map((item) => item.khatma);
-        console.log(khatmaList);
-        setKhatmas(khatmaList);
-        // Set active index
-        const foundIndex = userKhatmas?.findIndex(
-          (item) => item.name === params.name,
-        );
-        if (foundIndex !== -1) {
-          setActiveIndex(foundIndex);
-        }
       } catch (err) {
         console.error("Error fetching khatmas:", err);
         setError(err);
@@ -44,15 +29,27 @@ export default function ChatKhatmasSection() {
     };
 
     fetchKhatmas();
-  }, [params.name]);
+  }, [fetchUserKhatmas]);
+
+  useEffect(() => {
+    if (userKhatmas && params.name) {
+      const foundIndex = userKhatmas.findIndex(
+        (item) => item.khatma?.name === params.name,
+      );
+      if (foundIndex !== -1) {
+        setActiveIndex(foundIndex);
+      }
+    }
+  }, [userKhatmas, params.name]);
 
   const handleCardClick = (khatmaId, index) => {
     setActiveIndex(index);
-
     router.push(`/khatmas/${khatmaId}`);
   };
 
   function calculateTimeLeft(endDate) {
+    if (!endDate) return "No deadline";
+
     const now = new Date();
     const end = new Date(endDate);
     const diff = end - now;
@@ -79,7 +76,7 @@ export default function ChatKhatmasSection() {
     return (
       <div className="p-4 text-center text-red-500">Error loading khatmas</div>
     );
-  if (khatmas.length === 0)
+  if (!userKhatmas || userKhatmas.length === 0)
     return (
       <div className="p-4 text-[var(--g-color)] text-center">
         No khatmas available
@@ -88,30 +85,31 @@ export default function ChatKhatmasSection() {
 
   return (
     <div>
-      {khatmas
-        .filter((khatma) => khatma.status !== "Finished")
-        .map((khatma, index) => (
-          <div
-            key={`khatma-${khatma.id || index}`}
-            onClick={() => handleCardClick(khatma.id, index)}
-            className="cursor-pointer"
-          >
-            <ChatKhatmaCard
-              backgroundColor={
-                khatma.name === params?.name
-                  ? BACKGROUND_COLOR_NEW
-                  : BACKGROUND_COLOR
-              }
-              name={khatma.name}
-              percentage={khatma.progress || 0}
-              timeLeft={
-                khatma.endDate
-                  ? calculateTimeLeft(khatma.endDate)
-                  : "No deadline"
-              }
-            />
-          </div>
-        ))}
+      {userKhatmas
+        .filter((item) => item.khatma?.status !== "Finished")
+        .map((item, index) => {
+          const khatma = item.khatma;
+          if (!khatma) return null;
+
+          return (
+            <div
+              key={`khatma-${khatma.id || index}`}
+              onClick={() => handleCardClick(khatma.id, index)}
+              className="cursor-pointer"
+            >
+              <ChatKhatmaCard
+                backgroundColor={
+                  khatma.name === params?.name
+                    ? BACKGROUND_COLOR_NEW
+                    : BACKGROUND_COLOR
+                }
+                name={khatma.name}
+                percentage={khatma.progress || 0}
+                timeLeft={calculateTimeLeft(khatma.endDate)}
+              />
+            </div>
+          );
+        })}
     </div>
   );
 }

@@ -1,12 +1,14 @@
 import {
   deleteKhatma,
   getKhatmaDetails,
+  getListKhatma,
   updateKhatma,
 } from "@/utils/apiKhatma";
 import { create } from "zustand";
 
 const useKhatmaStore = create((set) => ({
   khatmaDetails: null,
+  userKhatmas: null,
   fetchKhatmaDetails: async (khatmaId) => {
     const data = await getKhatmaDetails(khatmaId);
     set({ khatmaDetails: data });
@@ -24,6 +26,11 @@ const useKhatmaStore = create((set) => ({
 
   deleteKhatma: async (khatmaId) => {
     (await deleteKhatma(khatmaId), set({ khatmasDetails: null }));
+  },
+
+  fetchUserKhatmas: async () => {
+    const data = await getListKhatma();
+    set({ userKhatmas: data.results });
   },
 }));
 

@@ -3,6 +3,7 @@ import useKhatmasContentStore from "@/stores/khatmasStore";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { getListKhatma, getKhatmaByGroup } from "@/utils/apiKhatma";
+import useKhatmaStore from "@/stores/khatmasStore";
 
 export default function ChatKhatmasSection() {
   const BACKGROUND_COLOR = "#212121";
@@ -11,6 +12,8 @@ export default function ChatKhatmasSection() {
   const updateKhatmasContent = useKhatmasContentStore(
     (state) => state.updateKhatmasContent,
   );
+  const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
+
   const router = useRouter();
   const params = useParams();
   const [activeIndex, setActiveIndex] = useState(null);
@@ -22,22 +25,15 @@ export default function ChatKhatmasSection() {
     const fetchKhatmas = async () => {
       try {
         setLoading(true);
-        const response = await getListKhatma(13);
-        const resp = await getKhatmaByGroup(14);
+        await fetchUserKhatmas();
 
         // Combine current and historical khatmas
-        const allKhatmas = [
-          ...(response.next || []),
-          ...(response.previous || []),
-          ...(response.results || []),
-        ];
 
-        const khatmaList = allKhatmas?.map((item) => item.khatma);
-        console.log(allKhatmas);
+        const khatmaList = userKhatmas?.map((item) => item.khatma);
         console.log(khatmaList);
         setKhatmas(khatmaList);
         // Set active index
-        const foundIndex = allKhatmas.findIndex(
+        const foundIndex = userKhatmas?.findIndex(
           (item) => item.name === params.name,
         );
         if (foundIndex !== -1) {

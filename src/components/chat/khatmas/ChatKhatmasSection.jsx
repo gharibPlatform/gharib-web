@@ -1,17 +1,13 @@
 import ChatKhatmaCard from "./ChatKhatmaCard";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import useKhatmaStore from "@/stores/khatmasStore";
 
 export default function ChatKhatmasSection() {
   const BACKGROUND_COLOR = "#212121";
-  const BACKGROUND_COLOR_NEW = "#323232";
 
   const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
-
   const router = useRouter();
-  const params = useParams();
-  const [activeIndex, setActiveIndex] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -31,19 +27,7 @@ export default function ChatKhatmasSection() {
     fetchKhatmas();
   }, [fetchUserKhatmas]);
 
-  useEffect(() => {
-    if (userKhatmas && params.name) {
-      const foundIndex = userKhatmas.findIndex(
-        (item) => item.khatma?.name === params.name,
-      );
-      if (foundIndex !== -1) {
-        setActiveIndex(foundIndex);
-      }
-    }
-  }, [userKhatmas, params.name]);
-
-  const handleCardClick = (khatmaId, index) => {
-    setActiveIndex(index);
+  const handleCardClick = (khatmaId) => {
     router.push(`/khatmas/${khatmaId}`);
   };
 
@@ -66,43 +50,44 @@ export default function ChatKhatmasSection() {
     return `${minutes}m ${seconds}s`;
   }
 
-  if (loading)
+  if (loading) {
     return (
       <div className="p-4 text-[var(--g-color)] text-center">
         Loading khatmas...
       </div>
     );
-  if (error)
+  }
+
+  if (error) {
     return (
       <div className="p-4 text-center text-red-500">Error loading khatmas</div>
     );
-  if (!userKhatmas || userKhatmas.length === 0)
+  }
+
+  if (!userKhatmas || userKhatmas.length === 0) {
     return (
       <div className="p-4 text-[var(--g-color)] text-center">
         No khatmas available
       </div>
     );
+  }
 
   return (
     <div>
       {userKhatmas
         .filter((item) => item.khatma?.status !== "Finished")
-        .map((item, index) => {
+        .map((item) => {
           const khatma = item.khatma;
           if (!khatma) return null;
 
           return (
             <div
-              key={`khatma-${khatma.id || index}`}
-              onClick={() => handleCardClick(khatma.id, index)}
+              key={`khatma-${khatma.id}`}
+              onClick={() => handleCardClick(khatma.id)}
               className="cursor-pointer"
             >
               <ChatKhatmaCard
-                backgroundColor={
-                  khatma.name === params?.name
-                    ? BACKGROUND_COLOR_NEW
-                    : BACKGROUND_COLOR
-                }
+                backgroundColor={BACKGROUND_COLOR}
                 name={khatma.name}
                 percentage={khatma.progress || 0}
                 timeLeft={calculateTimeLeft(khatma.endDate)}

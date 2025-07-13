@@ -50,18 +50,10 @@ export default function ChatKhatmasSection() {
     fetchKhatmas();
   }, [params.name]);
 
-  const handleCardClick = (khatma, index) => {
+  const handleCardClick = (khatmaId, index) => {
     setActiveIndex(index);
-    updateKhatmasContent({
-      name: khatma.name,
-      percentage: khatma.progress || 0,
-      timeLeft: khatma.endDate
-        ? calculateTimeLeft(khatma.endDate)
-        : "No deadline",
-      status: khatma.status || "Active",
-      activeTabStore: "khatmas",
-    });
-    router.push(`/khatmas/${khatma.name}`);
+
+    router.push(`/khatmas/${khatmaId}`);
   };
 
   function calculateTimeLeft(endDate) {
@@ -105,7 +97,7 @@ export default function ChatKhatmasSection() {
         .map((khatma, index) => (
           <div
             key={`khatma-${khatma.id || index}`}
-            onClick={() => handleCardClick(khatma, index)}
+            onClick={() => handleCardClick(khatma.id, index)}
             className="cursor-pointer"
           >
             <ChatKhatmaCard

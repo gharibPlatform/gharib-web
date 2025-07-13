@@ -2,16 +2,12 @@ import ChatKhatmaCard from "./ChatKhatmaCard";
 import useKhatmasContentStore from "@/stores/khatmasStore";
 import { useRouter, useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { getListKhatma, getKhatmaByGroup } from "@/utils/apiKhatma";
 import useKhatmaStore from "@/stores/khatmasStore";
 
 export default function ChatKhatmasSection() {
   const BACKGROUND_COLOR = "#212121";
   const BACKGROUND_COLOR_NEW = "#323232";
 
-  const updateKhatmasContent = useKhatmasContentStore(
-    (state) => state.updateKhatmasContent,
-  );
   const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
 
   const router = useRouter();

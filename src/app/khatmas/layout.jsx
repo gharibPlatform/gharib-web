@@ -2,7 +2,6 @@
 import ChatRightBar from "@/components/chat/ChatRightBar";
 import Header from "@/components/common/header/Header";
 import SideBar from "@/components/common/sidebar/Sidebar";
-import { KhatmaProvider } from "@/context/KhatmaContext";
 
 const Layout = ({ children }) => {
   return (

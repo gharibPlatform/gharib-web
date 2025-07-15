@@ -7,6 +7,7 @@ export default function GroupSettingsEditor({ groupId }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [initialized, setInitialized] = useState(false);
+  const [advancedSettingsLoaded, setAdvancedSettingsLoaded] = useState(false);
 
   const {
     group,
@@ -24,12 +25,7 @@ export default function GroupSettingsEditor({ groupId }) {
     iconPreview: "",
   });
 
-  const [localAdvancedSettings, setLocalAdvancedSettings] = useState({
-    can_add_member: "all",
-    can_send_message: "all",
-    all_can_launch_khatma: true,
-    all_can_manage_code: true,
-  });
+  const [localAdvancedSettings, setLocalAdvancedSettings] = useState(null);
 
   const [showCustomMemberDialog, setShowCustomMemberDialog] = useState({
     for: null,
@@ -75,6 +71,7 @@ export default function GroupSettingsEditor({ groupId }) {
           }
 
           setLocalAdvancedSettings(settings);
+          setAdvancedSettingsLoaded(true);
         }
         setInitialized(true);
       } catch (err) {
@@ -139,11 +136,11 @@ export default function GroupSettingsEditor({ groupId }) {
 
     if (forAction === "addMember") {
       setSelectedCustomMembers(
-        localAdvancedSettings.can_add_member_custom || [],
+        localAdvancedSettings?.can_add_member_custom || [],
       );
     } else {
       setSelectedCustomMembers(
-        localAdvancedSettings.can_send_message_custom || [],
+        localAdvancedSettings?.can_send_message_custom || [],
       );
     }
   };
@@ -332,6 +329,8 @@ export default function GroupSettingsEditor({ groupId }) {
             {loading ? "Saving..." : "Save Normal Settings"}
           </button>
         </div>
+      ) : !advancedSettingsLoaded ? (
+        <div className="p-6 text-center">Loading advanced settings...</div>
       ) : (
         <div className="space-y-4">
           <div>

@@ -1,6 +1,6 @@
 "use client"
 
-import BlockingSettings from "@/components/settings/BlockingSettings"
+import BlockingSettings from "../../../components/settings/BlockingSettings"
 
 export default function page() {
   return(

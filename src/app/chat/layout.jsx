@@ -1,10 +1,10 @@
 "use client";
-import ChatRightBar from "@/components/chat/ChatRightBar";
-import GroupSideBar from "@/components/chat/group sidebar/GroupSidebar";
-import Header from "@/components/common/header/Header";
-import SideBar from "@/components/common/sidebar/Sidebar";
-import useGroupSidebarStore from "@/stores/groupSidebarStore";
-import { ChatActionsProvider } from "@/context/ChatActionContext";
+import ChatRightBar from "../../components/chat/ChatRightBar";
+import GroupSideBar from "../../components/chat/group sidebar/GroupSidebar";
+import Header from "../../components/common/header/Header";
+import SideBar from "../../components/common/sidebar/Sidebar";
+import useGroupSidebarStore from "../../stores/groupSidebarStore";
+import { ChatActionsProvider } from "../../context/ChatActionContext";
 const Layout = ({ children }) => {
   const { isGroupSidebarOpen } = useGroupSidebarStore();
 

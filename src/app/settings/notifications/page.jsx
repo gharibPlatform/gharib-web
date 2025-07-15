@@ -1,5 +1,5 @@
 "use client"
-import NotificationsSettings from "@/components/settings/NotificaitonsSettings"
+import NotificationsSettings from "../../../components/settings/NotificaitonsSettings"
 
 export default function page() {
   return(

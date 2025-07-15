@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { logout } from "@/utils/userAuth";
+import { logout } from "../../../utils/userAuth";
 
 function UserMenu({ toggleUserMenu }) {
 

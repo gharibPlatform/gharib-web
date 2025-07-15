@@ -1,11 +1,11 @@
-import { listChapters } from "@/utils/quran/quran";
-import QuranHeaderSection from "@/components/common/quran/quran header/QuranHeaderSection";
-import ChapterDropdown from "@/components/common/quran/quran header/dropdown/ChapterDropdown";
-import VerseDropdown from "@/components/common/quran/quran header/dropdown/VerseDropdown";
-import PageDropdown from "@/components/common/quran/quran header/dropdown/PageDropdown";
-import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
-import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import { listChapters } from "../../../utils/quran/quran";
+import QuranHeaderSection from "../../common/quran/quran header/QuranHeaderSection";
+import ChapterDropdown from "../../common/quran/quran header/dropdown/ChapterDropdown";
+import VerseDropdown from "../../common/quran/quran header/dropdown/VerseDropdown";
+import PageDropdown from "../../common/quran/quran header/dropdown/PageDropdown";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderPage from "../../../stores/pageQuranHeaderStore";
+import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 import { useState, useEffect, useRef } from "react";
 
 export default function QuranHeader ({ selectionType }) {

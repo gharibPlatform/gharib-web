@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { resetPasswordConfirm } from '@/utils/userAuth';
+import { resetPasswordConfirm } from '../../../utils/userAuth';
 
 const ResetPassword = () => {
   const [password1, setPassword1] = useState('');

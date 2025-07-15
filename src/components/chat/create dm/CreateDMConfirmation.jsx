@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createGroup } from "@/utils/apiGroup";
+import { createGroup } from "../../../utils/apiGroup";
 
 export default function CreateDMConfirmation({
   selectedUsers,

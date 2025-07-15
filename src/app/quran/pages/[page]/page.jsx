@@ -1,9 +1,9 @@
 'use client'
-import QuranContent from "@/components/common/quran/QuranContent";
+import QuranContent from "../../../../components/common/quran/QuranContent";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import useShouldFetch from "@/stores/shouldFetch";
-import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
+import useShouldFetch from "../../../../stores/shouldFetch";
+import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore";
 
 const Page = () => {
     const { page } = useParams();

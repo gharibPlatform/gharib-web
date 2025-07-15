@@ -1,6 +1,6 @@
 "use client";
 
-import EmailVerification from "@/components/common/signup/EmailVerification";
+import EmailVerification from "../../../components/common/signup/EmailVerification";
 
 const Page = () => {
 

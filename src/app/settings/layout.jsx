@@ -1,6 +1,6 @@
 "use client";
-import Header from "@/components/common/header/Header";
-import SettingsSideBar from "@/components/settings/SettingsSideBar";
+import Header from "../../components/common/header/Header";
+import SettingsSideBar from "../../components/settings/SettingsSideBar";
 
 const Layout = ({ children }) => {
   return (

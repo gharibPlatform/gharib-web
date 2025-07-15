@@ -1,19 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import CreateDMListingBrothers from "../create dm/CreateDMListingBrothers";
 import CreateDMConfirmation from "./settings/GroupSettings";
-import Instagram from "@/components/common/iconButtons/Instagram";
-import Facebook from "@/components/common/iconButtons/Facebook";
-import Messanger from "@/components/common/iconButtons/Messanger";
-import Pinterest from "@/components/common/iconButtons/Pinterest";
-import Copy from "@/components/common/iconButtons/Copy";
-import Tooltip from "@/components/common/tooltip/Tooltip";
+import Instagram from "../../common/iconButtons/Instagram";
+import Facebook from "../../common/iconButtons/Facebook";
+import Messanger from "../../common/iconButtons/Messanger";
+import Pinterest from "../../common/iconButtons/Pinterest";
+import Copy from "../../common/iconButtons/Copy";
+import Tooltip from "../../common/tooltip/Tooltip";
 import {
   generateGroupCode,
   getGroupCodeInfo,
   patchGroupCodeInfo,
   updateGroupCodeInfo,
   deleteGroupCodeInfo,
-} from "@/utils/apiGroup";
+} from "../../../utils/apiGroup";
 export default function ShareGroup() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);

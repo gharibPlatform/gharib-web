@@ -1,6 +1,6 @@
 "use client";
 
-import ResetPassword from "@/components/common/password reset/ResetPassword";
+import ResetPassword from "../../../../components/common/password reset/ResetPassword";
 
 const Page = () => {
 

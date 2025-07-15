@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { verifyEmail } from '@/utils/userAuth';
+import { verifyEmail } from '../../../utils/userAuth';
 
 const EmailVerification = () => {
   const [error, setError] = useState('');

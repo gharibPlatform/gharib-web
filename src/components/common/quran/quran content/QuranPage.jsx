@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { audioByVerse } from "@/utils/quran/quranAudio";
+import { audioByVerse } from "../../../../utils/quran/quranAudio";
 import QuranSurahSeparator from "./QuranSurahSeparator";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
 import toast from "react-hot-toast";
 
 export default function QuranPage({ verses, pageNumber, changeProgress, setClickBoxBool, setBoxPosition, setVerseKey }) {

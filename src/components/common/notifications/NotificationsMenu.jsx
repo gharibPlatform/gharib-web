@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import BrotherRequestCard from "./BrotherRequestCard";
-import { acceptBrotherRequest, denyBrotherRequest, getBrotherRequests } from "@/utils/notifications";
+import { acceptBrotherRequest, denyBrotherRequest, getBrotherRequests } from "../../../utils/notifications";
 
 function NotificationsMenu({ toggleNotificationsMenu }) {
   const [requests, setRequests] = useState({ received: [], sent: [] });

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import ChatBrotherCard from "./ChatBrotherCard";
 import { useRouter, useParams } from "next/navigation";
-import useNameHeaderStore from "@/stores/nameHeaderStore";
-import useKhatmasContentStore from "@/stores/khatmasStore";
+import useNameHeaderStore from "../../../stores/nameHeaderStore";
+import useKhatmasContentStore from "../../../stores/khatmasStore";
 
 export default function ChatBrotherSection() {
     const BACKGROUND_COLOR = "#212121";

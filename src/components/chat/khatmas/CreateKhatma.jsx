@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, use } from "react";
-import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
-import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
-import { createKhatma } from "@/utils/apiKhatma";
-import { getUserData } from "@/utils/userAuth";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
+import useQuranHeaderPage from "../../../stores/pageQuranHeaderStore";
+import { createKhatma } from "../../../utils/apiKhatma";
+import { getUserData } from "../../../utils/userAuth";
 import QuranHeader from "./QuranHeaderCreateKhatma";
 
 export default function CreateKhatma() {

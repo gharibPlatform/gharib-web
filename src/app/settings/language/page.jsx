@@ -1,6 +1,6 @@
 "use client"
 
-import LanguageAndRegion from "@/components/settings/LanguageAndRegion"
+import LanguageAndRegion from "../../../components/settings/LanguageAndRegion"
 
 export default function page() {
   return(

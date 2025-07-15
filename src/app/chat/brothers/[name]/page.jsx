@@ -1,7 +1,7 @@
 'use client';
 import { useParams } from "next/navigation";
-import ChatContent from '@/components/chat/ChatContent';
-import useNameHeaderStore from "@/stores/nameHeaderStore";
+import ChatContent from '../../../../components/chat/ChatContent';
+import useNameHeaderStore from "../../../../stores/nameHeaderStore";
 
 const Page = () => {
     const { name } = useParams();

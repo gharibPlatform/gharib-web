@@ -1,7 +1,7 @@
 import { useState } from "react";
 import KhatmaCard from "../../KhatmaCard";
 import data from "../../../../data.json"
-import useKhatmasContentStore from "@/stores/khatmasStore";
+import useKhatmasContentStore from "../../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
 function CurrentContent() {
     const router = useRouter();

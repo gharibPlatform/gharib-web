@@ -1,5 +1,5 @@
 'use client'
-import QuranContent from "@/components/common/quran/QuranContent";
+import QuranContent from "../../components/common/quran/QuranContent";
 
 const Page = () => {
   return (

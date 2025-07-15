@@ -1,4 +1,4 @@
-import { verseByKey } from "@/utils/quran/quran"
+import { verseByKey } from "../../../../utils/quran/quran"
 import { useEffect, useState } from "react"
 import QuranHighlightsVerse from "./QuranHighlightsVerse";
 

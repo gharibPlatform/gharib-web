@@ -1,5 +1,5 @@
 "use client";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

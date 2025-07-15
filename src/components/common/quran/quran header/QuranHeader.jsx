@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
-import { listChapters, verseByChapter } from "@/utils/quran/quran";
+import { listChapters, verseByChapter } from "../../../../utils/quran/quran";
 import QuranHeaderSection from "./QuranHeaderSection";
 import ChapterDropdown from "/src/components/common/quran/quran header/dropdown/ChapterDropdown";
 import PageDropdown from "./dropdown/PageDropdown";
 import VerseDropdown from "./dropdown/VerseDropdown";
-import useQuranHeaderPage from "@/stores/pageQuranHeaderStore"
-import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore"
+import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
 import { useRouter , usePathname} from "next/navigation";
-import useBegginingOfTheSurah from "@/stores/begginingOfTheSurah";
+import useBegginingOfTheSurah from "../../../../stores/begginingOfTheSurah";
 import toast from "react-hot-toast";
 
 export default function QuranHeader() {

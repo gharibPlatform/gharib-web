@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import OpenMenu from "@/components/common/open menu/OpenMenu";
-import Tooltip from "@/components/common/tooltip/Tooltip";
+import OpenMenu from "../../common/open menu/OpenMenu";
+import Tooltip from "../../common/tooltip/Tooltip";
 import GroupSettings from "../groups/settings/GroupSettings";
 import AddBrother from "../groups/AddBrother";
 import ShareGroup from "../groups/ShareGroup";

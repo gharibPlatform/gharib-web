@@ -1,9 +1,9 @@
 "use client";
-import useKhatmasContentStore from "@/stores/khatmasStore";
+import useKhatmasContentStore from "../../stores/khatmasStore";
 import { useEffect } from "react";
-import GroupKhatmas from "@/components/khatmas/GroupKhatmas";
-import ChatHeader from "@/components/chat/ChatHeader";
-import useNameHeaderStore from "@/stores/nameHeaderStore";
+import GroupKhatmas from "../../components/khatmas/GroupKhatmas";
+import ChatHeader from "../../components/chat/ChatHeader";
+import useNameHeaderStore from "../../stores/nameHeaderStore";
 
 const Page = () => {
   const { name, percentage, timeLeft, status, personalProgress } = useKhatmasContentStore();

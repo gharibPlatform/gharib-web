@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import useGroupSidebarStore from "@/stores/groupSidebarStore"; 
+import useGroupSidebarStore from "../../stores/groupSidebarStore"; 
 import OpenMenu from "../common/open menu/OpenMenu";
 
 export default function ChatHeader({ Name }) {

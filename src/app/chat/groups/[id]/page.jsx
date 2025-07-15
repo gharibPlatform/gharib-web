@@ -1,9 +1,9 @@
 "use client";
 import { useParams } from "next/navigation";
-import ChatContent from "@/components/chat/ChatContent";
-import useNameHeaderStore from "@/stores/nameHeaderStore";
+import ChatContent from "../../../../components/chat/ChatContent";
+import useNameHeaderStore from "../../../../stores/nameHeaderStore";
 import { useEffect, useState } from "react";
-import useGroupStore from "@/stores/groupStore";
+import useGroupStore from "../../../../stores/groupStore";
 
 const Page = () => {
   const { id } = useParams();

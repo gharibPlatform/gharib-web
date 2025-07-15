@@ -1,4 +1,4 @@
-import Circle from "@/components/common/circle/Circle";
+import Circle from "../../common/circle/Circle";
 
 function Header({ name, timeLeft }) {
   return (

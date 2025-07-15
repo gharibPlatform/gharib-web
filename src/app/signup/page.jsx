@@ -1,6 +1,6 @@
 "use client";
 
-import Signup from "@/components/common/signup/Signup";
+import Signup from "../../components/common/signup/Signup";
 
 const Page = () => {
 

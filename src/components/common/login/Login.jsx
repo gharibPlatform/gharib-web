@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { login } from '@/utils/userAuth';
+import { login } from '../../../utils/userAuth';
 import { useRouter } from 'next/navigation';
 
 const Login = () => {

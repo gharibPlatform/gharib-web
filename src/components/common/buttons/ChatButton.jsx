@@ -1,4 +1,4 @@
-import useGroupSidebarStore from "@/stores/groupSidebarStore";
+import useGroupSidebarStore from "../../../stores/groupSidebarStore";
 import { useRouter } from "next/navigation";
 
 function ProgressButton() {

@@ -1,6 +1,6 @@
 "use client";
 
-import RegistrationSuccessful from "@/components/common/registration successful/RegistrationSuccessful";
+import RegistrationSuccessful from "../../components/common/registration successful/RegistrationSuccessful";
 
 
 const Page = () => {

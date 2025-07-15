@@ -1,10 +1,10 @@
 "use client";
-import Header from "@/components/common/header/Header";
-import QuranRightBar from "@/components/common/quran/QuranRightBar";
-import SideBar from "@/components/common/sidebar/Sidebar";
+import Header from "../../components/common/header/Header";
+import QuranRightBar from "../../components/common/quran/QuranRightBar";
+import SideBar from "../../components/common/sidebar/Sidebar";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react"; 
-import QuranVerseModal from "@/components/common/quran/quran content/QuranVerseModal";
+import QuranVerseModal from "../../components/common/quran/quran content/QuranVerseModal";
 
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);

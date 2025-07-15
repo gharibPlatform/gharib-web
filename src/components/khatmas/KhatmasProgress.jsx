@@ -1,16 +1,17 @@
-import useKhatmasContentStore from "@/stores/khatmasStore"; 
 import Circle from "../common/circle/Circle";
-
+import useKhatmaStore from "../../stores/khatmasStore";
 export default function KhatmasProgress() {
-    const { name, percentage, timeLeft, status, personalProgress } = useKhatmasContentStore();
-    const newPercentage = percentage * 2 ;
+    const { khatmaDetails } = useKhatmaStore();
+    const percentage = 23;
+    const personalProgress = 2;
+    const timeLeft = 28;
+    const newPercentage = percentage * 2;
     const newPersonalProgress = personalProgress * 2;
-    
+
     return (
         <div className="flex flex-col justify-center items-center pb-6">
-
             <h1 className="text-4xl text-[var(--w-color)] flex justify-center pt-12">
-                {name || "No Khatma Selected"}
+                {khatmaDetails.name || "No Khatma Selected"}
             </h1>
 
             <h1 className="text-3xl text-[var(--w-color)] flex justify-center pt-12">
@@ -18,27 +19,26 @@ export default function KhatmasProgress() {
             </h1>
 
             <div className="flex gap-24 pt-20">
-
                 <div className="flex flex-col justify-center items-center text-xl gap-6 text-[var(--w-color)]">
-                    <Circle 
-                        width={200} 
-                        height={200} 
+                    <Circle
+                        width={200}
+                        height={200}
                         degree={newPersonalProgress * 1.8}
-                        fontSize={26} 
-                        text={`${personalProgress || 0}%`} 
-                        backgroundColor={"var(--secondary-color)"} 
+                        fontSize={26}
+                        text={`${personalProgress || 0}%`}
+                        backgroundColor={"var(--secondary-color)"}
                     />
                     Personal
                 </div>
 
                 <div className="flex flex-col justify-center items-center text-xl gap-6 text-[var(--w-color)]">
-                    <Circle 
-                        width={200} 
-                        height={200} 
-                        degree={newPercentage * 1.8} 
-                        fontSize={26} 
-                        text={`${percentage || 0}%`} 
-                        backgroundColor={"var(--secondary-color)"} 
+                    <Circle
+                        width={200}
+                        height={200}
+                        degree={newPercentage * 1.8}
+                        fontSize={26}
+                        text={`${percentage || 0}%`}
+                        backgroundColor={"var(--secondary-color)"}
                     />
                     Group
                 </div>
@@ -47,7 +47,9 @@ export default function KhatmasProgress() {
             <div>
                 <div className="flex gap-5 pt-14 text-xl">
                     <p className="text-[var(--w-color)]">Status:</p>
-                    <p className="text-[var(--o-color)]">{status || "N/A"}</p>
+                    <p className="text-[var(--o-color)]">
+                        {khatmaDetails.status || "N/A"}
+                    </p>
                 </div>
 
                 <div className="flex gap-5 pt-6 text-xl">

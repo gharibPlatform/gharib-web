@@ -15,9 +15,12 @@ export const createKhatma = async (data) => {
   }
 };
 
-export const getKhatmaMembership = async (id) => {
+export const getKhatmaMembership = async (khatmaId) => {
   try {
-    const response = await api.get(`${API_BASE_URL}/khatma/membership/${id}/`);
+    const response = await api.get(
+      `${API_BASE_URL}/khatma/${khatmaId}/memberships/`,
+    );
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Error getting khatma membership:", error);

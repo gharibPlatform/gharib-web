@@ -4,9 +4,13 @@ import KhatmasProgress from "./KhatmasProgress";
 import Personal from "./expandContent/progress/Personal";
 import Group from "./expandContent/progress/Group";
 import Members from "./expandContent/progress/Members";
-import { postKhatmaMembership, getKhatmaMembership } from "@/utils/apiKhatma";
-import useQuranHeaderChapter from "@/stores/chapterQuranHeaderStore";
+import {
+    postKhatmaMembership,
+    getKhatmaMembership,
+} from "../../utils/apiKhatma";
+import useQuranHeaderChapter from "../../stores/chapterQuranHeaderStore";
 import QuranHeader from "../chat/khatmas/QuranHeaderCreateKhatma";
+import useKhatmaStore from "../../stores/khatmasStore";
 
 const JoinKhatmaForm = ({ onClose, khatmaId }) => {
     const [currentSurah, setCurrentSurah] = useState("");
@@ -16,8 +20,18 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-    const { fromChapter: fromChapterStart, toChapter: toChapterStart, fromVerse: fromVerseStart, toVerse: toVerseStart } = useQuranHeaderChapter();
-    const { fromChapter: fromChapterEnd, toChapter: toChapterEnd, fromVerse: fromVerseEnd, toVerse: toVerseEnd } = useQuranHeaderChapter();
+    const {
+        fromChapter: fromChapterStart,
+        toChapter: toChapterStart,
+        fromVerse: fromVerseStart,
+        toVerse: toVerseStart,
+    } = useQuranHeaderChapter();
+    const {
+        fromChapter: fromChapterEnd,
+        toChapter: toChapterEnd,
+        fromVerse: fromVerseEnd,
+        toVerse: toVerseEnd,
+    } = useQuranHeaderChapter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,7 +50,7 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
                 finishDate,
                 status: "ongoing",
                 groupMembership: groupId,
-                khatma: khatmaId
+                khatma: khatmaId,
             };
 
             await postKhatmaMembership(khatmaId, membershipData);
@@ -58,7 +72,9 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-[var(--main-color)] p-6 rounded-lg border border-[var(--g-color)] max-w-md w-full">
                     <h2 className="text-[var(--w-color)] text-xl mb-4">Success!</h2>
-                    <p className="text-[var(--w-color)]">You have successfully joined the khatma.</p>
+                    <p className="text-[var(--w-color)]">
+                        You have successfully joined the khatma.
+                    </p>
                 </div>
             </div>
         );
@@ -68,20 +84,26 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-[var(--main-color)] p-6 rounded-lg border border-[var(--g-color)]  overflow-y-auto max-h-[90vh]">
                 <h2 className="text-[var(--w-color)] text-xl mb-4">Join Khatma</h2>
-                
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="text-[var(--w-color)] block mb-2">Your Share (Start)</label>
+                        <label className="text-[var(--w-color)] block mb-2">
+                            Your Share (Start)
+                        </label>
                         <QuranHeader selectionType="from" />
                     </div>
 
                     <div>
-                        <label className="text-[var(--w-color)] block mb-2">Your Share (End)</label>
+                        <label className="text-[var(--w-color)] block mb-2">
+                            Your Share (End)
+                        </label>
                         <QuranHeader selectionType="to" />
                     </div>
 
                     <div>
-                        <label className="text-[var(--w-color)] block mb-2">Current Progress</label>
+                        <label className="text-[var(--w-color)] block mb-2">
+                            Current Progress
+                        </label>
                         <div className="flex space-x-2">
                             <input
                                 type="text"
@@ -103,7 +125,9 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
                     </div>
 
                     <div>
-                        <label className="text-[var(--w-color)] block mb-2">Target Finish Date</label>
+                        <label className="text-[var(--w-color)] block mb-2">
+                            Target Finish Date
+                        </label>
                         <input
                             type="datetime-local"
                             value={finishDate}
@@ -126,9 +150,8 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className={`px-4 py-2 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] hover:bg-[var(--b-color-hover)] ${
-                                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                            }`}
+                            className={`px-4 py-2 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] hover:bg-[var(--b-color-hover)] ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                                }`}
                         >
                             {isSubmitting ? "Joining..." : "Join Khatma"}
                         </button>
@@ -139,24 +162,28 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
     );
 };
 
-export default function KhatmasContent({ nameHeader, khatmaId = 2, groupId = 13 }) {
+export default function KhatmasContent({
+    nameHeader,
+    khatmaId = 1,
+    groupId = 13,
+}) {
     const [showJoinForm, setShowJoinForm] = useState(false);
     const [isMember, setIsMember] = useState(false);
     const [isCheckingMembership, setIsCheckingMembership] = useState(true);
     const [membershipError, setMembershipError] = useState(null);
     const [membershipData, setMembershipData] = useState(null);
+    const { khatmaMembership, fetchKhatmaMembership } = useKhatmaStore();
 
     useEffect(() => {
         const checkMembership = async () => {
             try {
                 const response = await getKhatmaMembership(khatmaId);
-                
+                await fetchKhatmaMembership(khatmaId);
                 if (response?.results?.length > 0) {
-                    const memberData = response.results.find(m => 
-                        m.groupMembership === groupId && 
-                        m.khatma === khatmaId
+                    const memberData = response.results.find(
+                        (m) => m.groupMembership === groupId && m.khatma === khatmaId,
                     );
-                    
+
                     if (memberData) {
                         setIsMember(true);
                         setMembershipData(memberData);
@@ -190,8 +217,8 @@ export default function KhatmasContent({ nameHeader, khatmaId = 2, groupId = 13 
         <div className="flex w-full flex-col h-[var(--height)] overflow-y-auto no-scrollbar">
             <div className="flex w-full flex-col relative">
                 <ChatHeader Name={nameHeader} GroupBool={true} />
-                
-                <KhatmasProgress 
+
+                <KhatmasProgress
                     startSurah={membershipData?.startShareSurah}
                     startVerse={membershipData?.startShareVerse}
                     endSurah={membershipData?.endShareSurah}
@@ -202,21 +229,21 @@ export default function KhatmasContent({ nameHeader, khatmaId = 2, groupId = 13 
                     status={membershipData?.status}
                     finishDate={membershipData?.finishDate}
                 />
-                
+
                 <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
                     {membershipError && (
                         <p className="text-[var(--r-color)] text-sm">{membershipError}</p>
                     )}
-                    
+
                     {isMember ? (
-                        <button 
+                        <button
                             className="py-2 px-5 text-[var(--w-color)] bg-[var(--g-color)] rounded-[4px] cursor-default"
                             disabled
                         >
                             Joined
                         </button>
                     ) : (
-                        <button 
+                        <button
                             onClick={() => setShowJoinForm(true)}
                             className="hover:bg-[var(--b-color-hover)] py-2 px-5 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] transition-colors duration-200"
                         >
@@ -229,7 +256,7 @@ export default function KhatmasContent({ nameHeader, khatmaId = 2, groupId = 13 
             {isMember ? (
                 <>
                     <div className="flex flex-col">
-                        <Personal 
+                        <Personal
                             startSurah={membershipData.startShareSurah}
                             startVerse={membershipData.startShareVerse}
                             endSurah={membershipData.endShareSurah}
@@ -250,13 +277,15 @@ export default function KhatmasContent({ nameHeader, khatmaId = 2, groupId = 13 
                 </>
             ) : (
                 <div className="flex justify-center items-center p-4">
-                    <p className="text-[var(--g-color)]">Join the khatma to see your progress and group details</p>
+                    <p className="text-[var(--g-color)]">
+                        Join the khatma to see your progress and group details
+                    </p>
                 </div>
             )}
 
             {showJoinForm && (
-                <JoinKhatmaForm 
-                    onClose={() => setShowJoinForm(false)} 
+                <JoinKhatmaForm
+                    onClose={() => setShowJoinForm(false)}
                     khatmaId={khatmaId}
                     groupId={groupId}
                 />

@@ -3,10 +3,12 @@ import KhatmasContent from "@/components/khatmas/KhatmasContent";
 import useKhatmaStore from "@/stores/khatmasStore";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
 const Page = () => {
   const { khatmaId } = useParams();
   const { khatmaDetails, fetchKhatmaDetails } = useKhatmaStore();
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchKhatmaContentFunction = async () => {
       try {
@@ -17,8 +19,15 @@ const Page = () => {
       }
     };
     fetchKhatmaContentFunction();
-    setIsLoading(false);
-  }, []);
+    console.log("done and the khatmaId is : ", khatmaId);
+  }, [khatmaId]);
+
+  useEffect(() => {
+    if (khatmaDetails) {
+      setIsLoading(false);
+    }
+  }, [khatmaDetails]);
+
   return (
     <div>
       {isLoading ? (

@@ -89,6 +89,7 @@ export const deleteKhatmaMembership = async (id) => {
 export const getKhatmaDetails = async (khatmaId) => {
   try {
     const response = await api.get(`${API_BASE_URL}/khatma/${khatmaId}/`);
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Error getting khatma details:", error);

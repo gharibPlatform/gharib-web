@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { updateGroup } from "@/utils/apiGroup";
-import useGroupStore from "@/stores/groupStore";
+import { updateGroup } from "../../../utils/apiGroup";
+import useGroupStore from "../../../stores/groupStore";
 
 export default function GroupSettingsEditor({ groupId }) {
   const [activeTab, setActiveTab] = useState("normal");
@@ -178,8 +178,8 @@ export default function GroupSettingsEditor({ groupId }) {
       console.error("Update error:", err);
       setError(
         err.response?.data?.detail ||
-          err.response?.data?.message ||
-          "Failed to update group settings",
+        err.response?.data?.message ||
+        "Failed to update group settings",
       );
     } finally {
       setLoading(false);

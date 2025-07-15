@@ -181,9 +181,11 @@ export const generateGroupCode = async () => {
 };
 
 // Group Settings
-export const getGroupSettings = async (id) => {
+export const getGroupSettings = async (groupId) => {
   try {
-    const response = await api.get(`${API_BASE_URL}/group/settings/${id}/`);
+    const response = await api.get(
+      `${API_BASE_URL}/group/settings/${groupId}/`,
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -192,10 +194,10 @@ export const getGroupSettings = async (id) => {
   }
 };
 
-export const updateGroupSettings = async (id, data) => {
+export const updateGroupSettings = async (groupId, data) => {
   try {
     const response = await api.put(
-      `${API_BASE_URL}/group/group-settings/${id}/`,
+      `${API_BASE_URL}/group/settings/${groupId}/`,
       data,
     );
     return response.data;
@@ -205,10 +207,10 @@ export const updateGroupSettings = async (id, data) => {
   }
 };
 
-export const patchGroupSettings = async (id, data) => {
+export const patchGroupSettings = async (groupId, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL}/group/group-settings/${id}/`,
+      `${API_BASE_URL}/group/settings/${groupId}/`,
       data,
     );
     return response.data;

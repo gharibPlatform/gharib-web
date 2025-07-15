@@ -23,9 +23,9 @@ export const createGroup = async (data) => {
   }
 };
 
-export const updateGroup = async (groupId, data) => {
+export const updateGroup = async (data) => {
   try {
-    const response = await api.put(`${API_BASE_URL}/group/${groupId}`, data);
+    const response = await api.put(`${API_BASE_URL}/group/`, data);
     return response.data;
   } catch (error) {
     console.error("Error updating group:", error);
@@ -35,7 +35,7 @@ export const updateGroup = async (groupId, data) => {
 
 export const patchGroup = async (data) => {
   try {
-    const response = await api.patch(`${API_BASE_URL}/group/`, data);
+    const response = await api.patch(`${API_BASE_URL} / group / `, data);
     return response.data;
   } catch (error) {
     console.error("Error patching group:", error);
@@ -45,7 +45,7 @@ export const patchGroup = async (data) => {
 
 export const deleteGroup = async () => {
   try {
-    const response = await api.delete(`${API_BASE_URL}/group/`);
+    const response = await api.delete(`${API_BASE_URL} / group / `);
     return response.data;
   } catch (error) {
     console.error("Error deleting group:", error);
@@ -57,7 +57,7 @@ export const deleteGroup = async () => {
 export const addMemberToGroup = async (groupId, data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/add-member-group/${groupId}/`,
+      `${API_BASE_URL} / group / add - member - group / ${groupId} / `,
       data,
     );
     return response.data;
@@ -70,7 +70,7 @@ export const addMemberToGroup = async (groupId, data) => {
 export const removeMemberFromGroup = async (groupId, userId) => {
   try {
     const response = await api.delete(
-      `${API_BASE_URL}/group/remove-member-group/${groupId}/${userId}/`,
+      `${API_BASE_URL} / group / remove - member - group / ${groupId} / ${userId} / `,
     );
     return response.data;
   } catch (error) {
@@ -82,7 +82,7 @@ export const removeMemberFromGroup = async (groupId, userId) => {
 // Group Authentication
 export const getGroupAuth = async () => {
   try {
-    const response = await api.get(`${API_BASE_URL}/group/auth/`);
+    const response = await api.get(`${API_BASE_URL} / group / auth / `);
     return response.data;
   } catch (error) {
     console.error("Error getting group auth:", error);
@@ -94,7 +94,7 @@ export const getGroupAuth = async () => {
 export const changeMemberRole = async (groupId, userId, data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/change-member-role/${groupId}/${userId}/`,
+      `${API_BASE_URL} / group / change - member - role / ${groupId} / ${userId} / `,
       data,
     );
     return response.data;
@@ -108,7 +108,7 @@ export const changeMemberRole = async (groupId, userId, data) => {
 export const getGroupCodeInfo = async (groupId) => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/group/code-info/${groupId}/`,
+      `${API_BASE_URL} / group / code - info / ${groupId} / `,
     );
     return response.data;
   } catch (error) {
@@ -120,7 +120,7 @@ export const getGroupCodeInfo = async (groupId) => {
 export const updateGroupCodeInfo = async (groupId, data) => {
   try {
     const response = await api.put(
-      `${API_BASE_URL}/group/code-info/${groupId}/`,
+      `${API_BASE_URL} / group / code - info / ${groupId} / `,
       data,
     );
     return response.data;
@@ -133,7 +133,7 @@ export const updateGroupCodeInfo = async (groupId, data) => {
 export const patchGroupCodeInfo = async (groupId, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL}/group/code-info/${groupId}/`,
+      `${API_BASE_URL} / group / code - info / ${groupId} / `,
       data,
     );
     return response.data;
@@ -146,7 +146,7 @@ export const patchGroupCodeInfo = async (groupId, data) => {
 export const deleteGroupCodeInfo = async (groupId) => {
   try {
     const response = await api.delete(
-      `${API_BASE_URL}/group/code-info/${groupId}/`,
+      `${API_BASE_URL} / group / code - info / ${groupId} / `,
     );
     return response.data;
   } catch (error) {
@@ -159,7 +159,7 @@ export const deleteGroupCodeInfo = async (groupId) => {
 export const deactivateGroupCode = async () => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/deactivate-group-code/`,
+      `${API_BASE_URL} / group / deactivate - group - code / `,
     );
     return response.data;
   } catch (error) {
@@ -171,7 +171,7 @@ export const deactivateGroupCode = async () => {
 export const generateGroupCode = async () => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/generate-group-code/`,
+      `${API_BASE_URL} / group / generate - group - code / `,
     );
     return response.data;
   } catch (error) {
@@ -197,7 +197,7 @@ export const getGroupSettings = async (groupId) => {
 export const updateGroupSettings = async (groupId, data) => {
   try {
     const response = await api.put(
-      `${API_BASE_URL}/group/settings/${groupId}/`,
+      `${API_BASE_URL} / group / settings / ${groupId} / `,
       data,
     );
     return response.data;
@@ -210,7 +210,7 @@ export const updateGroupSettings = async (groupId, data) => {
 export const patchGroupSettings = async (groupId, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL}/group/settings/${groupId}/`,
+      `${API_BASE_URL} / group / settings / ${groupId} / `,
       data,
     );
     return response.data;
@@ -224,7 +224,7 @@ export const patchGroupSettings = async (groupId, data) => {
 export const joinGroupByCode = async (data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/join-group-by-code/`,
+      `${API_BASE_URL} / group / join - group - by - code / `,
       data,
     );
     return response.data;
@@ -238,7 +238,7 @@ export const joinGroupByCode = async (data) => {
 export const uploadGroupMedia = async (groupId, formData) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/media/${groupId}/`,
+      `${API_BASE_URL} / group / media / ${groupId} / `,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -255,7 +255,7 @@ export const uploadGroupMedia = async (groupId, formData) => {
 export const getGroupMessages = async (groupId) => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/group/messages/${groupId}/`,
+      `${API_BASE_URL} / group / messages / ${groupId} / `,
     );
     return response.data;
   } catch (error) {

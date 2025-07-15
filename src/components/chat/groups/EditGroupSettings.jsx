@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { updateGroup } from "../../../utils/apiGroup";
 import useGroupStore from "../../../stores/groupStore";
 
 export default function GroupSettingsEditor({ groupId }) {
@@ -9,8 +8,13 @@ export default function GroupSettingsEditor({ groupId }) {
   const [success, setSuccess] = useState("");
   const [initialized, setInitialized] = useState(false);
 
-  const { group, groupSettings, fetchGroupSettings, updateGroupSettings } =
-    useGroupStore();
+  const {
+    group,
+    groupSettings,
+    fetchGroupSettings,
+    updateGroupSettings,
+    updateGroup,
+  } = useGroupStore();
 
   // Normal settings state
   const [normalSettings, setNormalSettings] = useState({
@@ -160,19 +164,20 @@ export default function GroupSettingsEditor({ groupId }) {
     try {
       setLoading(true);
       setError("");
-
-      const formData = new FormData();
-      formData.append("id", groupId);
-      formData.append("name", normalSettings.name);
-      formData.append("description", normalSettings.description);
+      console.log(normalSettings);
+      const formData = {
+        group_id: groupId,
+        name: normalSettings.name,
+        description: normalSettings.description,
+      };
 
       if (normalSettings.newIcon) {
         formData.append("icon", normalSettings.newIcon);
       } else if (normalSettings.icon) {
         formData.append("icon", normalSettings.icon);
       }
-
-      await updateGroup(groupId, formData);
+      console.log(formData);
+      await updateGroup(formData);
       setSuccess("Group settings updated successfully");
     } catch (err) {
       console.error("Update error:", err);

@@ -16,7 +16,6 @@ export default function GroupSettingsEditor({ groupId }) {
     updateGroup,
   } = useGroupStore();
 
-  // Normal settings state
   const [normalSettings, setNormalSettings] = useState({
     name: "",
     icon: null,
@@ -25,31 +24,25 @@ export default function GroupSettingsEditor({ groupId }) {
     iconPreview: "",
   });
 
-  // Local advanced settings state
   const [localAdvancedSettings, setLocalAdvancedSettings] = useState({
-    canAddMember: "all",
-    canSendMessage: "all",
-    AllCanLunchKhatma: true,
-    AllCanManageCode: true,
-    canAddMember_custom: [],
-    canSendMessage_custom: [],
+    can_add_member: "all",
+    can_send_message: "all",
+    all_can_launch_khatma: true,
+    all_can_manage_code: true,
   });
 
-  // Custom members selection
   const [showCustomMemberDialog, setShowCustomMemberDialog] = useState({
     for: null,
     open: false,
   });
   const [selectedCustomMembers, setSelectedCustomMembers] = useState([]);
 
-  // Initialize state only once when component mounts
   useEffect(() => {
     const initializeSettings = async () => {
       try {
         setLoading(true);
         await fetchGroupSettings(groupId);
 
-        // Initialize normal settings
         setNormalSettings({
           name: group.name,
           description: group.description || "",
@@ -58,22 +51,30 @@ export default function GroupSettingsEditor({ groupId }) {
           iconPreview: group.icon || "",
         });
 
-        // Initialize advanced settings
         if (groupSettings) {
-          setLocalAdvancedSettings({
-            canAddMember: groupSettings.canAddMember || "all",
-            canSendMessage: groupSettings.canSendMessage || "all",
-            AllCanLunchKhatma:
-              groupSettings.AllCanLunchKhatma !== undefined
-                ? groupSettings.AllCanLunchKhatma
+          const settings = {
+            can_add_member: groupSettings.can_add_member || "all",
+            can_send_message: groupSettings.can_send_message || "all",
+            all_can_launch_khatma:
+              groupSettings.all_can_launch_khatma !== undefined
+                ? groupSettings.all_can_launch_khatma
                 : true,
-            AllCanManageCode:
-              groupSettings.AllCanManageCode !== undefined
-                ? groupSettings.AllCanManageCode
+            all_can_manage_code:
+              groupSettings.all_can_manage_code !== undefined
+                ? groupSettings.all_can_manage_code
                 : true,
-            canAddMember_custom: groupSettings.canAddMember_custom || [],
-            canSendMessage_custom: groupSettings.canSendMessage_custom || [],
-          });
+          };
+
+          if (groupSettings.can_add_member_custom) {
+            settings.can_add_member_custom =
+              groupSettings.can_add_member_custom;
+          }
+          if (groupSettings.can_send_message_custom) {
+            settings.can_send_message_custom =
+              groupSettings.can_send_message_custom;
+          }
+
+          setLocalAdvancedSettings(settings);
         }
         setInitialized(true);
       } catch (err) {
@@ -137,24 +138,31 @@ export default function GroupSettingsEditor({ groupId }) {
     });
 
     if (forAction === "addMember") {
-      setSelectedCustomMembers([...localAdvancedSettings.canAddMember_custom]);
+      setSelectedCustomMembers(
+        localAdvancedSettings.can_add_member_custom || [],
+      );
     } else {
-      setSelectedCustomMembers([
-        ...localAdvancedSettings.canSendMessage_custom,
-      ]);
+      setSelectedCustomMembers(
+        localAdvancedSettings.can_send_message_custom || [],
+      );
     }
   };
 
   const saveCustomMembers = () => {
+    if (selectedCustomMembers.length === 0) {
+      setError("Please select at least one member");
+      return;
+    }
+
     if (showCustomMemberDialog.for === "addMember") {
       setLocalAdvancedSettings((prev) => ({
         ...prev,
-        canAddMember_custom: [...selectedCustomMembers],
+        can_add_member_custom: [...selectedCustomMembers],
       }));
     } else {
       setLocalAdvancedSettings((prev) => ({
         ...prev,
-        canSendMessage_custom: [...selectedCustomMembers],
+        can_send_message_custom: [...selectedCustomMembers],
       }));
     }
     setShowCustomMemberDialog({ for: null, open: false });
@@ -164,7 +172,6 @@ export default function GroupSettingsEditor({ groupId }) {
     try {
       setLoading(true);
       setError("");
-      console.log(normalSettings);
       const formData = {
         group_id: groupId,
         name: normalSettings.name,
@@ -172,19 +179,19 @@ export default function GroupSettingsEditor({ groupId }) {
       };
 
       if (normalSettings.newIcon) {
-        formData.append("icon", normalSettings.newIcon);
+        formData.icon = normalSettings.newIcon;
       } else if (normalSettings.icon) {
-        formData.append("icon", normalSettings.icon);
+        formData.icon = normalSettings.icon;
       }
-      console.log(formData);
+
       await updateGroup(formData);
       setSuccess("Group settings updated successfully");
     } catch (err) {
       console.error("Update error:", err);
       setError(
         err.response?.data?.detail ||
-        err.response?.data?.message ||
-        "Failed to update group settings",
+          err.response?.data?.message ||
+          "Failed to update group settings",
       );
     } finally {
       setLoading(false);
@@ -195,11 +202,42 @@ export default function GroupSettingsEditor({ groupId }) {
     try {
       setLoading(true);
       setError("");
-      await updateGroupSettings(groupId, localAdvancedSettings);
+
+      if (
+        localAdvancedSettings.can_add_member === "custom" &&
+        (!localAdvancedSettings.can_add_member_custom ||
+          localAdvancedSettings.can_add_member_custom.length === 0)
+      ) {
+        throw new Error(
+          "Please select at least one member who can add members",
+        );
+      }
+
+      if (
+        localAdvancedSettings.can_send_message === "custom" &&
+        (!localAdvancedSettings.can_send_message_custom ||
+          localAdvancedSettings.can_send_message_custom.length === 0)
+      ) {
+        throw new Error(
+          "Please select at least one member who can send messages",
+        );
+      }
+
+      const settingsToSave = {
+        ...localAdvancedSettings,
+        ...(localAdvancedSettings.can_add_member !== "custom" && {
+          can_add_member_custom: undefined,
+        }),
+        ...(localAdvancedSettings.can_send_message !== "custom" && {
+          can_send_message_custom: undefined,
+        }),
+      };
+
+      await updateGroupSettings(groupId, settingsToSave);
       setSuccess("Advanced settings updated successfully");
     } catch (err) {
       console.error("Failed to update advanced settings", err);
-      setError("Failed to update advanced settings");
+      setError(err.message || "Failed to update advanced settings");
     } finally {
       setLoading(false);
     }
@@ -299,8 +337,8 @@ export default function GroupSettingsEditor({ groupId }) {
           <div>
             <label className="block mb-1">Who can add members?</label>
             <select
-              name="canAddMember"
-              value={localAdvancedSettings.canAddMember}
+              name="can_add_member"
+              value={localAdvancedSettings.can_add_member}
               onChange={handleAdvancedSettingsChange}
               className="w-full bg-[var(--dark-color)] border border-[var(--g-color)] rounded p-2"
             >
@@ -309,7 +347,7 @@ export default function GroupSettingsEditor({ groupId }) {
               <option value="custom">Custom</option>
             </select>
 
-            {localAdvancedSettings.canAddMember === "custom" && (
+            {localAdvancedSettings.can_add_member === "custom" && (
               <div className="mt-2">
                 <button
                   onClick={() => openCustomMemberDialog("addMember")}
@@ -324,8 +362,8 @@ export default function GroupSettingsEditor({ groupId }) {
           <div>
             <label className="block mb-1">Who can send messages?</label>
             <select
-              name="canSendMessage"
-              value={localAdvancedSettings.canSendMessage}
+              name="can_send_message"
+              value={localAdvancedSettings.can_send_message}
               onChange={handleAdvancedSettingsChange}
               className="w-full bg-[var(--dark-color)] border border-[var(--g-color)] rounded p-2"
             >
@@ -334,7 +372,7 @@ export default function GroupSettingsEditor({ groupId }) {
               <option value="custom">Custom</option>
             </select>
 
-            {localAdvancedSettings.canSendMessage === "custom" && (
+            {localAdvancedSettings.can_send_message === "custom" && (
               <div className="mt-2">
                 <button
                   onClick={() => openCustomMemberDialog("sendMessage")}
@@ -349,8 +387,8 @@ export default function GroupSettingsEditor({ groupId }) {
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              name="AllCanLunchKhatma"
-              checked={localAdvancedSettings.AllCanLunchKhatma}
+              name="all_can_launch_khatma"
+              checked={localAdvancedSettings.all_can_launch_khatma}
               onChange={handleAdvancedSettingsChange}
               id="khatmaCheckbox"
               className="w-4 h-4"
@@ -363,8 +401,8 @@ export default function GroupSettingsEditor({ groupId }) {
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              name="AllCanManageCode"
-              checked={localAdvancedSettings.AllCanManageCode}
+              name="all_can_manage_code"
+              checked={localAdvancedSettings.all_can_manage_code}
               onChange={handleAdvancedSettingsChange}
               id="codeCheckbox"
               className="w-4 h-4"
@@ -391,6 +429,9 @@ export default function GroupSettingsEditor({ groupId }) {
                 ? "add members"
                 : "send messages"}
             </h3>
+            <p className="text-sm text-yellow-500 mb-2">
+              You must select at least one member
+            </p>
 
             <div className="max-h-60 overflow-y-auto mb-4 border border-[var(--g-color)] rounded p-2">
               {availableMembers.map((member) => (
@@ -416,21 +457,27 @@ export default function GroupSettingsEditor({ groupId }) {
               ))}
             </div>
 
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() =>
-                  setShowCustomMemberDialog({ for: null, open: false })
-                }
-                className="bg-[var(--dark-color)] hover:bg-[var(--main-color-hover)] py-1 px-4 rounded border border-[var(--g-color)]"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={saveCustomMembers}
-                className="bg-[var(--b-color)] hover:bg-[var(--b-color-hover)] text-white py-1 px-4 rounded"
-              >
-                Save
-              </button>
+            <div className="flex justify-between items-center">
+              <span className="text-sm">
+                Selected: {selectedCustomMembers.length} members
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() =>
+                    setShowCustomMemberDialog({ for: null, open: false })
+                  }
+                  className="bg-[var(--dark-color)] hover:bg-[var(--main-color-hover)] py-1 px-4 rounded border border-[var(--g-color)]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveCustomMembers}
+                  disabled={selectedCustomMembers.length === 0}
+                  className="bg-[var(--b-color)] hover:bg-[var(--b-color-hover)] text-white py-1 px-4 rounded disabled:opacity-50"
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>

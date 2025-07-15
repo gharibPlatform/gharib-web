@@ -197,7 +197,7 @@ export const getGroupSettings = async (groupId) => {
 export const updateGroupSettings = async (groupId, data) => {
   try {
     const response = await api.put(
-      `${API_BASE_URL} / group / settings / ${groupId} / `,
+      `${API_BASE_URL}/group/settings/${groupId}/`,
       data,
     );
     return response.data;
@@ -210,7 +210,7 @@ export const updateGroupSettings = async (groupId, data) => {
 export const patchGroupSettings = async (groupId, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL} / group / settings / ${groupId} / `,
+      `${API_BASE_URL}/group/settings/${groupId}/`,
       data,
     );
     return response.data;

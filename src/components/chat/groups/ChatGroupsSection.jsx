@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import ChatGroupCard from "./ChatGroupCard";
 import useNameHeaderStore from "@/stores/nameHeaderStore";
-import useKhatmasContentStore from "@/stores/khatmasStore";
 import useGroupStore from "@/stores/groupStore";
 import { useRouter } from "next/navigation";
+import useUiStore from "@/stores/uiStore";
 
 export default function ChatGroupsSection() {
     const BACKGROUND_COLOR = "#212121";
@@ -14,9 +14,7 @@ export default function ChatGroupsSection() {
     const [error, setError] = useState(null);
 
     const setNameHeader = useNameHeaderStore((state) => state.setNameHeader);
-    const updateKhatmasContent = useKhatmasContentStore(
-        (state) => state.updateKhatmasContent,
-    );
+    const { setActiveTab } = useUiStore();
     const { groups, fetchGroups } = useGroupStore();
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(null);
@@ -38,7 +36,7 @@ export default function ChatGroupsSection() {
 
     const handleClick = (group, index) => {
         setActiveIndex(index);
-        updateKhatmasContent({ activeTabStore: "groups" });
+        setActiveTab("group");
         setNameHeader(group);
         router.push(`/chat/groups/${group.id}`);
     };

@@ -63,10 +63,10 @@ export default function GroupSideBar() {
     <div className="flex justify-between flex-col p-6 w-[360px] border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]">
       <div className="flex-col flex-nowrap w-full h-min">
         <div
-          className="w-full py-2 text-lg font-semibold mb-5 text-[var(--w-color)] flex  gap-12 items-center"
+          className="w-full py-2 text-lg font-semibold mb-5 text-[var(--w-color)] flex justify-between items-center"
           onClick={() => setShowEditDMConfirmation(true)}
         >
-          Edit group settings
+          Edit settings
           <button className="flex gap-2 items-center justify-center rounded-sm py-2 bg-[var(--darker-color)] px-4 text-[var(--w-color)] hover:bg-[var(--dark-color)]">
             Edit
             <svg
@@ -111,10 +111,20 @@ export default function GroupSideBar() {
             </div>
           </div>
         )}
-
-        <h2 className="text-lg font-semibold text-[var(--w-color)] mb-2">
-          Group Members
-        </h2>
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="text-lg font-semibold text-[var(--w-color)] mb-2">
+            Group Members
+          </h2>
+          <span>
+            <a
+              onClick={() => setShowAddBrotherConfirmation(true)}
+              className="text-[var(--b-color)] font-bold cursor-pointer hover:text-blue-500"
+            >
+              {" "}
+              Add brothers
+            </a>
+          </span>
+        </div>
         <div className="mb-4" ref={menuRef}>
           {brothersDataArray.map((brother) => (
             <GroupSidebarCard
@@ -137,12 +147,6 @@ export default function GroupSideBar() {
         </button>
         <button className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]">
           Leave Group
-        </button>
-        <button
-          onClick={() => setShowAddBrotherConfirmation(true)}
-          className="w-full py-2 px-4 text-[var(--w-color)] hover:bg-[var(--g-color)]"
-        >
-          Add Brother
         </button>
 
         <button

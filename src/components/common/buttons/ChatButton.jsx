@@ -1,6 +1,16 @@
+import { useRouter } from "next/navigation";
+
 export default function ChatButton() {
+    const router = useRouter();
+    const handleClick = () => {
+        router.push("/chat");
+    };
+
     return (
-        <div className="p-2 hover:bg-[var(--main-color-hover)] rounded-md cursor-pointer transition-all duration-100 ease-in">
+        <div
+            onClick={handleClick}
+            className="p-2 hover:bg-[var(--main-color-hover)] rounded-md cursor-pointer transition-all duration-100 ease-in"
+        >
             <svg
                 className="w-8 h-8"
                 viewBox="0 0 24 24"

@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 
 export default function SettingsSideBar() {
     return (
-        <div className=" fixed h-[var(--height)] left-0 top-14 border-r border-[var(--g-color)] bg-[var(--main-color)] inline-block">
+        <div className="h-screen border-r border-[var(--g-color)] bg-[var(--main-color)] inline-block">
             <div className="inline-block flex-col pt-4">
                 <SettingsItem title="Account" path="/settings/account" />
                 <SettingsItem title="Profile" path="/settings/profile" />
@@ -19,14 +19,14 @@ export default function SettingsSideBar() {
 
 function SettingsItem({ title, path }) {
     const router = useRouter();
-    
+
     const handleClick = () => {
         router.push(path);
-    }
+    };
 
     return (
-        <div 
-            onClick={handleClick} 
+        <div
+            onClick={handleClick}
             className="hover:bg-[var(--secondary-color)] pt-3 pb-3 flex flex-inline items-center gap-4 cursor-pointer pl-9 pr-28"
         >
             <p className="text-r text-white">{title}</p>

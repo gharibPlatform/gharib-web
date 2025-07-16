@@ -13,12 +13,12 @@ const Layout = ({ children }) => {
       <div className="w-screen overflow-hidden h-screen flex flex-col">
         <Header />
         <div className="flex">
-          <SideBar />
-          <div className="ml-72 pt-14 flex w-full">
-            <div className="h-screen flex-grow">{children}</div>
-            <div>
+          <div className="pt-14 flex w-full">
+            <SideBar />
+            <div className="border-r border-[var(--g-color)]">
               {isGroupSidebarOpen ? <GroupSideBar /> : <ChatRightBar />}
             </div>
+            <div className="h-screen flex-grow">{children}</div>
           </div>
         </div>
       </div>

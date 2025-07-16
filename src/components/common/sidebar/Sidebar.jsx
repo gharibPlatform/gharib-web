@@ -1,35 +1,18 @@
-import ChatButton from "../buttons/ChatButton";
-import HomeButton from "../buttons/HomeButton";
+import ChatButton from "../buttons/ChatButton.jsx";
 import ExploreButton from "../buttons/ExploreButton";
-import ProgressButton from "../buttons/ProgressButton";
-import TerminologyButton from "../buttons/TerminologyButton";
+import ProgressButton from "../buttons/ChatButton";
+import HomeButton from "../buttons/HomeButton";
+import HumburgerMenu from "../buttons/HumburgerMenu.jsx";
 
-function Top() {
+export default function SideBar() {
   return (
-    <>
-      <div className="inline-block flex-col w-min pt-4 ">
-        <HomeButton />
-        <ChatButton />
-        <ExploreButton />
-        <ProgressButton />
-        <TerminologyButton />
+    <div className="bg-[var(--main-color)] p-2 flex flex-col gap-6 items-center">
+      <HomeButton />
+      <ChatButton />
+      <ExploreButton />
+      <div className="mt-auto mb-24">
+        <HumburgerMenu />
       </div>
-    </>
+    </div>
   );
 }
-
-import Community from "../community/Community";
-
-function SideBar() {
-  return (
-    <>
-      <div className="w-72 z-50 fixed h-[var(--height)] left-0 top-14 border-r border-[var(--g-color)] bg-[var(--main-color)] inline-block">
-        <Top />
-        <div className="mt-2 h-px bg-[var(--g-color)]"></div>
-        <Community />
-      </div>
-    </>
-  );
-}
-
-export default SideBar;

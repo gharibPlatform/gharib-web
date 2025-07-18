@@ -1,6 +1,7 @@
+import SidebarLink from "../sidebar/SidebarLink";
 export default function HomeButton() {
     return (
-        <div className="p-2 hover:bg-[var(--main-color-hover)] rounded-md cursor-pointer transition-all duration-100 ease-in">
+        <SidebarLink href="/home">
             <svg
                 className="w-8 h-8 "
                 viewBox="0 0 24 24"
@@ -24,6 +25,6 @@ export default function HomeButton() {
                     ></path>{" "}
                 </g>
             </svg>
-        </div>
+        </SidebarLink>
     );
 }

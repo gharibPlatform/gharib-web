@@ -1,16 +1,8 @@
-import { useRouter } from "next/navigation";
+import SidebarLink from "../sidebar/SidebarLink.jsx";
 
 export default function HumburgerMenu() {
-  const router = useRouter();
-  const handleClick = () => {
-    router.push("/settings");
-  };
-
   return (
-    <div
-      onClick={handleClick}
-      className="p-2 hover:bg-[var(--main-color-hover)] rounded-md cursor-pointer transition-all duration-100 ease-in"
-    >
+    <SidebarLink href="/settings">
       <svg
         className="w-8 h-8"
         viewBox="0 0 24 24"
@@ -49,11 +41,11 @@ export default function HumburgerMenu() {
                 clip-rule="evenodd"
                 d="M2.25 18C2.25 17.5858 2.58579 17.25 3 17.25H21C21.4142 17.25 21.75 17.5858 21.75 18C21.75 18.4142 21.4142 18.75 21 18.75H3C2.58579 18.75 2.25 18.4142 2.25 18Z"
                 fill="#ffffff"
-              ></path>{" "}
-            </g>{" "}
-          </g>{" "}
+              ></path>
+            </g>
+          </g>
         </g>
-      </svg>{" "}
-    </div>
+      </svg>
+    </SidebarLink>
   );
 }

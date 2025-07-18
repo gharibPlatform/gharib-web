@@ -1,11 +1,13 @@
 "use client";
+import { redirect } from "next/navigation";
+import { usePathname } from "next/navigation";
 
-import SettingsSideBar from "../../components/settings/SettingsSideBar";
+export default function Page() {
+  const pathname = usePathname();
 
-export default function page() {
-  return (
-    <div className="bg-[#fff] w-screen">
-      <SettingsSideBar />
-    </div>
-  );
+  if (pathname === "/settings") {
+    redirect("/settings/account");
+  }
+
+  return null;
 }

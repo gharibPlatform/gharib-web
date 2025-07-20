@@ -5,6 +5,7 @@ import SideBar from "../../components/common/sidebar/Sidebar";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react"; 
 import QuranVerseModal from "../../components/common/quran/quran content/QuranVerseModal";
+import QuranSidebar from "@/components/common/quran/quran_sidebar/QuranSidebar";
 
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);
@@ -35,6 +36,7 @@ const Layout = ({ children }) => {
       <Header />
       <div className="flex">
         <SideBar />
+        <QuranSidebar />
         <div className={`ml-72 pt-14 flex w-full ${showRightBar ? 'mr-64' : 'mr-0'}`}>
           <div className="h-screen flex-grow relative">
             {children}

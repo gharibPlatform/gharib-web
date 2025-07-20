@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import toast from "react-hot-toast";
 
 const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   const router = useRouter();
@@ -35,6 +37,12 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   const handleChapterClick = (chapterId) => {
     router.push(`/quran/chapters/${chapterId}`);
   };
+  const { quranHeaderVerse, setQuranHeaderVerse, setGoToVerse } =
+    useQuranHeaderVerse();
+
+  const handleVerseClick = (verse) => {
+    setQuranHeaderVerse(verse);
+  };
 
   return (
     <div>
@@ -58,7 +66,10 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
           <div className="h-screen pb-40 overflow-y-auto">
             {Array.from({ length: quranHeaderChapter.verses_count }).map(
               (_, index) => (
-                <div className="flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ">
+                <div
+                  onClick={() => handleVerseClick(index + 1)}
+                  className={`flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${quranHeaderVerse == index + 1 ? "bg-[var(--main-color-hover)]" : ""} `}
+                >
                   {index + 1}
                 </div>
               )

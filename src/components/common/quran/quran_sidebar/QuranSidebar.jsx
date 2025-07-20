@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
-import { usePathname, useRouter } from "next/navigation";
 
-const ChapterTab = ({ chapters, isLoading }) => {
-  const pathname = usePathname();
-  const currentChapterId = pathname.split('/').filter(Boolean).pop();
-
+const ChapterTab = ({ chapters, isLoading, quranHeaderChapter}) => {
   const router = useRouter();
   const handleChapterClick = (chapterId) => {
     router.push(`/quran/chapters/${chapterId}`)
@@ -16,31 +13,62 @@ const ChapterTab = ({ chapters, isLoading }) => {
     {isLoading ? (
       <div className="text-[var(--g-color)]">Loading...</div>
     ) : (
-      <div className="flex flex-col gap-1 p-2">
+      <div className="flex flex-col gap-1 p-2 overflow-y-auto h-screen pb-40">
         {chapters.map(chapter=>(
           <div 
             key={chapter.id}
             onClick={() => handleChapterClick(chapter.id)}
-            className={`grid grid-cols-2  py-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] ${currentChapterId == chapter.id ? "bg-[var(--main-color-hover)]" : ""}`}
+            className={`grid grid-cols-2  py-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${quranHeaderChapter.id == chapter.id ? "bg-[var(--main-color-hover)]" : ""}`}
           >
             <p>{chapter.id}</p>
-            <p className="-ml-16">{chapter.name_simple}</p>
+            <p className="-ml-20">{chapter.name_simple}</p>
           </div>
         ))}
       </div>
     )}
-  </div>)
+  </div>
+  )
 };
 
-const VerseTab = () => <div>Verse Content</div>;
+const VerseTab = ({chapters, isLoading, quranHeaderChapter}) => {
+  const router = useRouter();
+
+  return(
+  <div >
+    {isLoading ? (
+      <div className="text-[var(--g-color)]">Loading...</div>
+    ) : (
+      <div className="flex">
+        <div className="w-3/4 flex flex-col gap-1 p-2 overflow-y-auto h-screen pb-40">
+          {chapters.map(chapter=>(
+            <div
+              key={chapter.id}
+              // onClick={() => handleChapterClick(chapter.id)}
+              className={`grid grid-cols-[1fr_3fr] py-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 `}
+            >
+              <p>{chapter.id}</p>
+                <p className="">{chapter.name_simple}</p>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          verses
+        </div>
+      </div>
+    )}
+  </div>
+  )
+}
 const PageTab = () => <div>Page Content</div>;
 
 export default function QuranSidebar() {
-  const { quranChapters, fetchQuranChapters } = useQuranHeaderChapter();
-  const [activeTab, setActiveTab] = useState("chapter");
+  const { quranChapters, fetchQuranChapters, quranHeaderChapter } = useQuranHeaderChapter();
 
-  
+  const [activeTab, setActiveTab] = useState("chapter");
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log(quranHeaderChapter)
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
@@ -56,20 +84,20 @@ export default function QuranSidebar() {
   }, []);
   
   const tabs = [
-    { id: "chapter", label: "Chapter", Component: <ChapterTab chapters={quranChapters} isLoading={isLoading}/> },
-    { id: "verse", label: "Verse", Component: <VerseTab /> },
+    { id: "chapter", label: "Chapter", Component: <ChapterTab chapters={quranChapters} isLoading={isLoading} quranHeaderChapter={quranHeaderChapter}/> },
+    { id: "verse", label: "Verse", Component: <VerseTab chapters={quranChapters} isLoading={isLoading} quranHeaderChapter={quranHeaderChapter} />},
     { id: "page", label: "Page", Component: <PageTab /> },
   ];
 
   return (
-    <div className="flex flex-col gap-4 pt-4 bg-[var(--main-color)] border border-[var(--g-color)] text-white px-4">
+    <div className="flex flex-col gap-4 pt-4 bg-[var(--main-color)] border-r border-[var(--g-color)] text-white px-4 w-[600px]">
       {/* Tab Navigation */}
-      <div className="flex gap-4 py-1.5 px-2 bg-[var(--secondary-color)] rounded-sm">
+      <div className="flex gap-4 py-1.5 px-2 bg-[var(--secondary-color)] rounded-sm ">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`hover:bg-[var(--main-color-hover)] px-4 py-2 rounded-sm ${
+            className={`hover:bg-[var(--main-color-hover)] px-4 py-2 rounded-sm transition-all duration-100 ${
               activeTab === tab.id ? "bg-[var(--main-color-hover)]" : ""
             }`}
           >

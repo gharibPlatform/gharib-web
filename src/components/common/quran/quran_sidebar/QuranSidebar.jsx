@@ -124,8 +124,8 @@ export default function QuranSidebar() {
 
   return (
     <div className="flex flex-col gap-4 pt-4 bg-[var(--main-color)] border-r border-[var(--g-color)] text-white px-4 w-[600px]">
-      {/* Tab Navigation */}
-      <div className="flex gap-4 py-1.5 px-2 bg-[var(--secondary-color)] rounded-sm ">
+
+      <div className="flex justify-between gap-4 py-1.5 px-2 bg-[var(--secondary-color)] rounded-sm ">
         {tabs.map((tab) => (
           <button
             key={tab.id}

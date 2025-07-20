@@ -35,7 +35,7 @@ function Header() {
     
         <div className="w-screen h-14 flex z-50 items-center justify-between bg-[var(--main-color)] border-b border-[var(--g-color)] pt-2 pb-3">
             <Gharib />
-            <QuranHeader />
+            {/* <QuranHeader /> */}
             <RightElements toggleUserMenu={toggleUserMenu} toggleNotificationsMenu={toggleNotificationsMenu}/>
         </div>
 

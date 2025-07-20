@@ -37,16 +37,13 @@ const Layout = ({ children }) => {
       <div className="flex">
         <SideBar />
         <QuranSidebar />
-        <div className={`ml-72 pt-14 flex w-full ${showRightBar ? 'mr-64' : 'mr-0'}`}>
+        <div className={`flex w-full ${showRightBar ? 'mr-64' : 'mr-0'}`}>
           <div className="h-screen flex-grow relative">
             {children}
           </div>
         </div>
         {showRightBar && 
-        <QuranRightBar 
-          handleVerseClick={handleVerseClick}
-
-        />}
+        <QuranRightBar handleVerseClick={handleVerseClick}/>}
         
         {/* Toggle Button */}
         <button

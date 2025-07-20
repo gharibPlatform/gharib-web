@@ -65,7 +65,35 @@ const VerseTab = ({chapters, isLoading, quranHeaderChapter}) => {
   </div>
   )
 }
-const PageTab = () => <div>Page Content</div>;
+
+const PageTab = ({isLoading, quranHeaderChapter}) => {
+  const router = useRouter();
+  const handlePageClick = (pageNumber) => {
+    router.push(`/quran/pages/${pageNumber}`)
+  }
+
+  return(
+  <div >
+    {isLoading ? (
+      <div className="text-[var(--g-color)]">Loading...</div>
+    ) : (
+      <div className="flex">
+
+        <div className="h-screen pb-40 overflow-y-auto w-full">
+          {Array.from({ length: 604 }).map((_, index) => (
+            <div 
+             className="flex items-center p-2 px-8 w-full cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 "
+             onClick={()=>handlePageClick(index + 1)}
+             >
+            Page {index + 1}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+  )
+}
 
 export default function QuranSidebar() {
   const { quranChapters, fetchQuranChapters, quranHeaderChapter } = useQuranHeaderChapter();
@@ -91,7 +119,7 @@ export default function QuranSidebar() {
   const tabs = [
     { id: "chapter", label: "Chapter", Component: <ChapterTab chapters={quranChapters} isLoading={isLoading} quranHeaderChapter={quranHeaderChapter}/> },
     { id: "verse", label: "Verse", Component: <VerseTab chapters={quranChapters} isLoading={isLoading} quranHeaderChapter={quranHeaderChapter} />},
-    { id: "page", label: "Page", Component: <PageTab /> },
+    { id: "page", label: "Page", Component: <PageTab isLoading={isLoading} /> },
   ];
 
   return (

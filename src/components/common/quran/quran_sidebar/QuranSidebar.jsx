@@ -32,6 +32,9 @@ const ChapterTab = ({ chapters, isLoading, quranHeaderChapter}) => {
 
 const VerseTab = ({chapters, isLoading, quranHeaderChapter}) => {
   const router = useRouter();
+  const handleChapterClick = (chapterId) => {
+    router.push(`/quran/chapters/${chapterId}`)
+  }
 
   return(
   <div >
@@ -43,8 +46,8 @@ const VerseTab = ({chapters, isLoading, quranHeaderChapter}) => {
           {chapters.map(chapter=>(
             <div
               key={chapter.id}
-              // onClick={() => handleChapterClick(chapter.id)}
-              className={`grid grid-cols-[1fr_3fr] py-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 `}
+              onClick={() => handleChapterClick(chapter.id)}
+              className={`grid grid-cols-[1fr_3fr] py-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${quranHeaderChapter.id == chapter.id ? "bg-[var(--main-color-hover)]" : ""}`}
             >
               <p>{chapter.id}</p>
                 <p className="">{chapter.name_simple}</p>
@@ -52,8 +55,10 @@ const VerseTab = ({chapters, isLoading, quranHeaderChapter}) => {
           ))}
         </div>
 
-        <div>
-          verses
+        <div className="h-screen pb-40 overflow-y-auto">
+          {Array.from({ length: quranHeaderChapter.verses_count }).map((_, index) => (
+            <div className="flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ">{index + 1}</div>
+          ))}
         </div>
       </div>
     )}

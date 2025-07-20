@@ -1,3 +1,4 @@
+import { listChapters } from '@/utils/quran/quran';
 import { create } from 'zustand';
 
 const useQuranHeaderChapter = create((set) => ({
@@ -6,6 +7,11 @@ const useQuranHeaderChapter = create((set) => ({
     goToPath: false,
     fromChapter: null,
     toChapter: null,
+    quranChapters: null,
+  fetchQuranChapters: async () => {
+    const data = await listChapters();
+    set({ quranChapters: data });
+  },
   setFromChapter: (chapter) => set({ fromChapter: chapter }),
   setToChapter: (chapter) => set({ toChapter: chapter }),
   setQuranHeaderChapter: (chapter) => set({ quranHeaderChapter: chapter }),

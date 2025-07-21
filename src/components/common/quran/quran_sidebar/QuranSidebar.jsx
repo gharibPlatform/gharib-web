@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
@@ -34,16 +34,26 @@ const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {
 
 const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   const router = useRouter();
+  const versesRefs = useRef({});
+
+  const { quranHeaderVerse, setQuranHeaderVerse, setGoToVerse } =
+    useQuranHeaderVerse();
+
   const handleChapterClick = (chapterId) => {
     router.push(`/quran/chapters/${chapterId}`);
   };
-  const { quranHeaderVerse, setQuranHeaderVerse, setGoToVerse } =
-    useQuranHeaderVerse();
 
   const handleVerseClick = (verse) => {
     setQuranHeaderVerse(verse);
     setGoToVerse(verse);
   };
+
+  useEffect(() => {
+    const currentVerse = versesRefs.current[quranHeaderVerse];
+    if (currentVerse) {
+      currentVerse.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [quranHeaderVerse]);
 
   return (
     <div>
@@ -69,6 +79,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
               (_, index) => (
                 <div
                   onClick={() => handleVerseClick(index + 1)}
+                  ref={(el) => (versesRefs.current[index + 1] = el)}
                   className={`flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${quranHeaderVerse == index + 1 ? "bg-[var(--main-color-hover)]" : ""} `}
                 >
                   {index + 1}

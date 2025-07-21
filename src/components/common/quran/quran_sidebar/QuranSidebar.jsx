@@ -6,7 +6,10 @@ import toast from "react-hot-toast";
 
 const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   const router = useRouter();
+  const {setGoToVerse} = useQuranHeaderVerse();
+
   const handleChapterClick = (chapterId) => {
+    setGoToVerse(null);
     router.push(`/quran/chapters/${chapterId}`);
   };
 
@@ -43,6 +46,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
 
   const handleChapterClick = (chapterId) => {
     router.push(`/quran/chapters/${chapterId}`);
+    setGoToVerse(null);
   };
 
   const handleVerseClick = (verse) => {

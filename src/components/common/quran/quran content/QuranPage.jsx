@@ -22,7 +22,8 @@ export default function QuranPage({
 
   const [activeVerse, setActiveVerse] = useState(null); //state for focusing in the background when clicking on it or when navigating to it;
   //headerVerse for scroll into view
-  const { goToVerse } = useQuranHeaderVerse();
+  const { goToVerse, setQuranHeaderVerse } = useQuranHeaderVerse();
+  
   useEffect(() => {
     if (goToVerse) {
       const foundEntry = Object.entries(verseRefs.current).find(([key, _]) =>
@@ -43,7 +44,7 @@ export default function QuranPage({
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const verseKey = entry.target.dataset.verseKey.split(":")[1];
-            changeProgress(verseKey);
+            setQuranHeaderVerse(verseKey);
           }
         });
       },

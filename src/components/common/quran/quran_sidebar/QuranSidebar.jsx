@@ -42,6 +42,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
 
   const handleVerseClick = (verse) => {
     setQuranHeaderVerse(verse);
+    setGoToVerse(verse);
   };
 
   return (

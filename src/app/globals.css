@@ -62,9 +62,12 @@ body{
   margin: 0;
   padding: 0;
   background-color: var(--secondary-color);
+  overflow: hidden;
   
 }
-
+html{
+  overflow: hidden;
+}
 ::-webkit-scrollbar {
   display: none;
 }

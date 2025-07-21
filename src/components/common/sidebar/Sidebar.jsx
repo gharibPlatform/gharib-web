@@ -4,7 +4,7 @@ import HomeButton from "../buttons/HomeButton";
 import HumburgerMenu from "../buttons/HumburgerMenu.jsx";
 export default function SideBar() {
   return (
-    <div className="bg-[var(--dark-color)] p-2 flex flex-col gap-6 items-center h-screen border-r border-[var(--g-color)]">
+    <div className="bg-[var(--dark-color)] p-2 flex flex-col gap-6 items-center h-screen border-r border-[var(--g-color)] overflow-hidden">
       <HomeButton />
       <ChatButton />
       <ExploreButton />

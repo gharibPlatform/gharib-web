@@ -48,10 +48,13 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
     setGoToVerse(verse);
   };
 
+  const scrollContainerRef = useRef();
+
   useEffect(() => {
     const currentVerse = versesRefs.current[quranHeaderVerse];
-    if (currentVerse) {
-      currentVerse.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (currentVerse && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop =
+        currentVerse.offsetTop - scrollContainerRef.current.offsetHeight / 2;
     }
   }, [quranHeaderVerse]);
 
@@ -60,7 +63,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
       {isLoading ? (
         <div className="text-[var(--g-color)]">Loading...</div>
       ) : (
-        <div className="flex overflow-hidden">
+        <div className="flex overflow-hidden h-screen">
           <div className="w-3/4 flex flex-col gap-1 p-2 overflow-y-auto h-screen pb-40">
             {chapters.map((chapter) => (
               <div
@@ -74,7 +77,10 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
             ))}
           </div>
 
-          <div className="h-screen pb-40 overflow-y-auto">
+          <div
+            className="h-full pb-40 overflow-y-auto"
+            ref={scrollContainerRef}
+          >
             {Array.from({ length: quranHeaderChapter.verses_count }).map(
               (_, index) => (
                 <div
@@ -187,7 +193,9 @@ export default function QuranSidebar() {
 
       <div className="w-full h-[1px] bg-[var(--g-color)]"></div>
 
-      <div>{tabs.find((tab) => tab.id === activeTab)?.Component}</div>
+      <div className="overflow-hidden">
+        {tabs.find((tab) => tab.id === activeTab)?.Component}
+      </div>
     </div>
   );
 }

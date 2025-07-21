@@ -34,10 +34,10 @@ const Layout = ({ children }) => {
         )}
 
       <Header />
-      <div className="flex">
+      <div className="flex overflow-hidden">
         <SideBar />
         <QuranSidebar />
-        <div className={`flex w-full`}>
+        <div className={`flex w-full overflow-hidden`}>
           <div className="h-screen flex-grow relative">
             {children}
           </div>

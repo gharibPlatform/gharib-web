@@ -3,7 +3,7 @@ import QuranContent from "../../components/common/quran/QuranContent";
 
 const Page = () => {
   return (
-    <div>
+    <div className="overflow-hidde">
         <QuranContent />
     </div>
   );

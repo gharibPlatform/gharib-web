@@ -2,7 +2,6 @@ import QuranPage from "./QuranPage";
 
 export default function QuranSurah({
   cache,
-  changeProgress,
   setClickBoxBool,
   setBoxPosition,
   setVerseKey,
@@ -14,7 +13,6 @@ export default function QuranSurah({
           key={pageNumber}
           verses={verses}
           pageNumber={pageNumber}
-          changeProgress={changeProgress}
           setClickBoxBool={setClickBoxBool}
           setBoxPosition={setBoxPosition}
           setVerseKey={setVerseKey}

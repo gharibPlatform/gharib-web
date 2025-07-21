@@ -7,7 +7,6 @@ import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
 export default function QuranPage({
   verses,
   pageNumber,
-  changeProgress,
   setClickBoxBool,
   setBoxPosition,
   setVerseKey,
@@ -23,7 +22,7 @@ export default function QuranPage({
   const [activeVerse, setActiveVerse] = useState(null); //state for focusing in the background when clicking on it or when navigating to it;
   //headerVerse for scroll into view
   const { goToVerse, setQuranHeaderVerse } = useQuranHeaderVerse();
-  
+
   useEffect(() => {
     if (goToVerse) {
       const foundEntry = Object.entries(verseRefs.current).find(([key, _]) =>

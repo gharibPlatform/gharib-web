@@ -15,6 +15,7 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import toast from "react-hot-toast";
 import VersePopup from "./quran content/VersePopup";
 import { audioByVerse } from "../../../utils/quran/quranAudio";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 
 export default function QuranContent() {
   const scrollRef = useRef(null);
@@ -29,9 +30,10 @@ export default function QuranContent() {
     setQuranHeaderChapter,
     setGoToPath,
   } = useQuranHeaderChapter();
+
+  const {quranHeaderVerse} = useQuranHeaderVerse();
   const { shouldFetch } = useShouldFetch();
 
-  const [currentVerse, setCurrentVerse] = useState();
   const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
   const [progress, setProgress] = useState(0);
   const rate = 100 / totalVersesInChapter;
@@ -121,10 +123,9 @@ export default function QuranContent() {
   }, [lastFetchedPage]);
 
   //change the progress for the tracker line
-  const changeProgress = (verseKey) => {
-    setCurrentVerse(verseKey);
-    setProgress(verseKey * rate);
-  };
+  useEffect(() => {
+    setProgress(quranHeaderVerse * rate)
+  }, [quranHeaderVerse]);
 
   //hide header and footer when scrolling
   const [isFooterVisible, setIsFooterVisible] = useState(true);
@@ -223,12 +224,12 @@ export default function QuranContent() {
       // let completedVerses = 0;
 
       // //case 1 : still not reached
-      // if (quranHeaderChapter.id < startingChapter || quranHeaderChapter.id === startingChapter && currentVerse < startingVerse) {
+      // if (quranHeaderChapter.id < startingChapter || quranHeaderChapter.id === startingChapter && quranHeaderVerse < startingVerse) {
       //     completedVerses = 0;
       // }
 
       // //case 2 : ended
-      // else if (quranHeaderChapter.id > endingChapter || quranHeaderChapter.id === endingChapter && currentVerse > endingVerse) {
+      // else if (quranHeaderChapter.id > endingChapter || quranHeaderChapter.id === endingChapter && quranHeaderVerse > endingVerse) {
       //     completedVerses = totalVerses;
       // }
 
@@ -236,7 +237,7 @@ export default function QuranContent() {
       // else {
       //     //case1 : both same chapter
       //     if( quranHeaderChapter.id  === startingChapter ) {
-      //         completedVerses += currentVerse - startingVerse + 1;
+      //         completedVerses += quranHeaderVerse - startingVerse + 1;
       //     }
 
       //     //case 2 : in between
@@ -247,7 +248,7 @@ export default function QuranContent() {
       //             completedVerses += //verses couhnt of the chapter
       //         }
 
-      //         completedVerses += currentVerse;
+      //         completedVerses += quranHeaderVerse;
       //     }
 
       //     //case 3: at the end
@@ -258,7 +259,7 @@ export default function QuranContent() {
       //             completedVerses += //count of the chapter
       //         }
 
-      //         completedVerses += currentVerse;
+      //         completedVerses += quranHeaderVerse;
       //     }
       // }
 
@@ -273,21 +274,21 @@ export default function QuranContent() {
       let progress = 0;
 
       if (
-        currentVerse >= startingVerse &&
-        currentVerse <= endingVerse &&
+        quranHeaderVerse >= startingVerse &&
+        quranHeaderVerse <= endingVerse &&
         startingChapter === endingChapter &&
         startingChapter === quranHeaderChapter.id &&
         endingChapter === quranHeaderChapter.id
       ) {
         const totalVerses = endingVerse - startingVerse + 1;
-        const current = currentVerse - startingVerse + 1;
+        const current = quranHeaderVerse - startingVerse + 1;
         progress = (current / totalVerses) * 100;
       }
 
       return {
         ...khatma,
         progress:
-          currentVerse > endingVerse &&
+          quranHeaderVerse > endingVerse &&
           startingChapter === quranHeaderChapter.id &&
           endingChapter === quranHeaderChapter.id
             ? 100
@@ -296,7 +297,7 @@ export default function QuranContent() {
     });
 
     setKhatmasWithProgress(updated);
-  }, [currentVerse]);
+  }, [quranHeaderVerse]);
 
   const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
   const [clickBoxBool, setClickBoxBool] = useState(false);
@@ -377,7 +378,6 @@ export default function QuranContent() {
 
         <QuranSurah
           cache={cache}
-          changeProgress={changeProgress}
           setClickBoxBool={setClickBoxBool}
           setBoxPosition={setBoxPosition}
           setVerseKey={setVerseKey}

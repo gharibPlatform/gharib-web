@@ -60,7 +60,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
       {isLoading ? (
         <div className="text-[var(--g-color)]">Loading...</div>
       ) : (
-        <div className="flex">
+        <div className="flex overflow-hidden">
           <div className="w-3/4 flex flex-col gap-1 p-2 overflow-y-auto h-screen pb-40">
             {chapters.map((chapter) => (
               <div

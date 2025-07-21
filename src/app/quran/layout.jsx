@@ -37,7 +37,7 @@ const Layout = ({ children }) => {
       <div className="flex">
         <SideBar />
         <QuranSidebar />
-        <div className={`flex w-full ${showRightBar ? 'mr-64' : 'mr-0'}`}>
+        <div className={`flex w-full`}>
           <div className="h-screen flex-grow relative">
             {children}
           </div>

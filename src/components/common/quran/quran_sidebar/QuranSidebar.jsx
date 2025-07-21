@@ -34,38 +34,28 @@ const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {
 
 const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   const router = useRouter();
+  
   const versesRefs = useRef({});
+  const scrollContainerRef = useRef();  
 
-  const { quranHeaderVerse, setQuranHeaderVerse, setGoToVerse } =
+  const { goToVerse, setGoToVerse } =
     useQuranHeaderVerse();
-
-  const [currentVerse, setCurrentVerse] = useState(null);
-  const [lockVerse, setLockVerse] = useState(false);
-
-  useEffect(() => {
-    if (lockVerse) return;
-    setCurrentVerse(quranHeaderVerse);
-  }, [quranHeaderVerse]);
 
   const handleChapterClick = (chapterId) => {
     router.push(`/quran/chapters/${chapterId}`);
   };
 
   const handleVerseClick = (verse) => {
-    setLockVerse(true);
-    setCurrentVerse(verse);
     setGoToVerse(verse);
   };
 
-  const scrollContainerRef = useRef();
-
   useEffect(() => {
-    const currentVerse = versesRefs.current[quranHeaderVerse];
+    const currentVerse = versesRefs.current[goToVerse];
     if (currentVerse && scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop =
         currentVerse.offsetTop - scrollContainerRef.current.offsetHeight / 2;
     }
-  }, [quranHeaderVerse]);
+  }, [goToVerse]);
 
   return (
     <div>
@@ -95,8 +85,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
                 <div
                   onClick={() => handleVerseClick(index + 1)}
                   ref={(el) => (versesRefs.current[index + 1] = el)}
-                  className={`flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px]
-                              transition-all duration-100 ${currentVerse == index + 1 ? "bg-[var(--main-color-hover)]" : ""} `}
+                  className={`flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${goToVerse == index + 1 ? "bg-[var(--main-color-hover)]" : ""} `}
                 >
                   {index + 1}
                 </div>

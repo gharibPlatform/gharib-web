@@ -31,7 +31,7 @@ export default function QuranContent() {
     setGoToPath,
   } = useQuranHeaderChapter();
 
-  const {quranHeaderVerse} = useQuranHeaderVerse();
+  const { quranHeaderVerse } = useQuranHeaderVerse();
   const { shouldFetch } = useShouldFetch();
 
   const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
@@ -124,7 +124,7 @@ export default function QuranContent() {
 
   //change the progress for the tracker line
   useEffect(() => {
-    setProgress(quranHeaderVerse * rate)
+    setProgress(quranHeaderVerse * rate);
   }, [quranHeaderVerse]);
 
   //hide header and footer when scrolling
@@ -191,6 +191,7 @@ export default function QuranContent() {
 
   //updating progress of the khatmas logic
   useEffect(() => {
+    if (!quranHeaderChapter) return;
     const updated = khatmas.map((khatma) => {
       const startingVerse = parseInt(khatma.startingVerse.split(":")[1]);
       const startingChapter = parseInt(khatma.startingVerse.split(":")[0]);
@@ -347,8 +348,7 @@ export default function QuranContent() {
 
   return (
     <div className="flex flex-col h-screen">
-      <ProgressTrackerLine progress={progress} />
-
+      {shouldFetch === "chapter" && <ProgressTrackerLine progress={progress} />}
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto no-scrollbar relative"

@@ -3,10 +3,12 @@ import { useRouter } from "next/navigation";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import toast from "react-hot-toast";
+import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
+import { X } from "lucide-react";
 
 const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   const router = useRouter();
-  const {setGoToVerse} = useQuranHeaderVerse();
+  const { setGoToVerse } = useQuranHeaderVerse();
 
   const handleChapterClick = (chapterId) => {
     setGoToVerse(null);
@@ -23,7 +25,7 @@ const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {
             <div
               key={chapter.id}
               onClick={() => handleChapterClick(chapter.id)}
-              className={`grid grid-cols-2  py-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${quranHeaderChapter.id == chapter.id ? "bg-[var(--main-color-hover)]" : ""}`}
+              className={`grid grid-cols-2  py-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${quranHeaderChapter?.id == chapter.id ? "bg-[var(--main-color-hover)]" : ""}`}
             >
               <p>{chapter.id}</p>
               <p className="-ml-20">{chapter.name_simple}</p>
@@ -37,12 +39,11 @@ const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {
 
 const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   const router = useRouter();
-  
-  const versesRefs = useRef({});
-  const scrollContainerRef = useRef();  
 
-  const { goToVerse, setGoToVerse } =
-    useQuranHeaderVerse();
+  const versesRefs = useRef({});
+  const scrollContainerRef = useRef();
+
+  const { goToVerse, setGoToVerse } = useQuranHeaderVerse();
 
   const handleChapterClick = (chapterId) => {
     router.push(`/quran/chapters/${chapterId}`);
@@ -104,7 +105,10 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
 
 const PageTab = ({ isLoading, quranHeaderChapter }) => {
   const router = useRouter();
+  const { quranHeaderPage, setQuranHeaderPage } = useQuranHeaderPage();
+
   const handlePageClick = (pageNumber) => {
+    setQuranHeaderPage(pageNumber);
     router.push(`/quran/pages/${pageNumber}`);
   };
 
@@ -117,7 +121,8 @@ const PageTab = ({ isLoading, quranHeaderChapter }) => {
           <div className="h-screen pb-40 overflow-y-auto w-full">
             {Array.from({ length: 604 }).map((_, index) => (
               <div
-                className="flex items-center p-2 px-8 w-full cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 "
+                className={`flex items-center p-2 px-8 w-full cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100
+                            ${quranHeaderPage == index + 1 ? "bg-[var(--main-color-hover)]" : ""}`}
                 onClick={() => handlePageClick(index + 1)}
               >
                 Page {index + 1}
@@ -130,7 +135,7 @@ const PageTab = ({ isLoading, quranHeaderChapter }) => {
   );
 };
 
-export default function QuranSidebar() {
+export default function QuranSidebar({ onClose }) {
   const { quranChapters, fetchQuranChapters, quranHeaderChapter } =
     useQuranHeaderChapter();
 
@@ -180,18 +185,26 @@ export default function QuranSidebar() {
 
   return (
     <div className="flex flex-col gap-4 pt-4 bg-[var(--main-color)] border-r border-[var(--g-color)] text-white px-4 w-[600px]">
-      <div className="flex justify-between gap-4 py-1.5 px-2 bg-[var(--secondary-color)] rounded-sm ">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`hover:bg-[var(--main-color-hover)] px-4 py-2 rounded-sm transition-all duration-100 ${
-              activeTab === tab.id ? "bg-[var(--main-color-hover)]" : ""
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className="flex items-center justify-between">
+        <div className="flex justify-between gap-4 py-1.5 px-2 bg-[var(--secondary-color)] rounded-sm ">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`hover:bg-[var(--main-color-hover)] px-4 py-2 rounded-sm transition-all duration-100 ${
+                activeTab === tab.id ? "bg-[var(--main-color-hover)]" : ""
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={onClose}
+          className="text-white rounded-full hover:bg-[var(--g-color)] p-2"
+        >
+          <X size={20} />
+        </button>
       </div>
 
       <div className="w-full h-[1px] bg-[var(--g-color)]"></div>

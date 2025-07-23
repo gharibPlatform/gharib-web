@@ -1,5 +1,5 @@
 "use client";
-import KhatmasContent from "../../../components/khatmas/KhatmasContent";
+import KhatmasContent from "../../../components/khatmas/khatma_content/KhatmasContent";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";

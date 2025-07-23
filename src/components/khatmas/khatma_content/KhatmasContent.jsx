@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import ChatHeader from "../chat/ChatHeader";
+import ChatHeader from "../../chat/ChatHeader";
 import KhatmasProgress from "./KhatmasProgress";
-import Personal from "./expandContent/progress/Personal";
-import Group from "./expandContent/progress/Group";
-import Members from "./expandContent/progress/Members";
+import Personal from "../expandContent/progress/Personal";
+import Group from "../expandContent/progress/Group";
+import Members from "../expandContent/progress/Members";
 import {
   postKhatmaMembership,
   getKhatmaMembership,
-} from "../../utils/apiKhatma";
-import useQuranHeaderChapter from "../../stores/chapterQuranHeaderStore";
-import QuranHeader from "../chat/khatmas/QuranHeaderCreateKhatma";
-import useKhatmaStore from "../../stores/khatmasStore";
+} from "../../../utils/apiKhatma";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import QuranHeader from "../../chat/khatmas/QuranHeaderCreateKhatma";
+import useKhatmaStore from "../../../stores/khatmasStore";
 
 const JoinKhatmaForm = ({ onClose, khatmaId }) => {
   const [currentSurah, setCurrentSurah] = useState("");

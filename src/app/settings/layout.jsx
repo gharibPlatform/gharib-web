@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
     return (
         <div className="w-screen h-screen flex flex-col overflow-hidden">
             <Header />
-            <div className="flex h-full pt-14">
+            <div className="flex h-full">
                 <SideBar />
                 <SettingsSideBar />
                 <div className="mx-auto flex w-full no-scrollbar overflow-y-auto overflow-x-hidden">

@@ -1,10 +1,10 @@
-'use client'
-import QuranContent from "../../components/common/quran/QuranContent";
+"use client";
+import QuranContent from "../../components/common/quran/quran content/QuranContent";
 
 const Page = () => {
   return (
     <div className="overflow-hidde">
-        <QuranContent />
+      <QuranContent />
     </div>
   );
 };

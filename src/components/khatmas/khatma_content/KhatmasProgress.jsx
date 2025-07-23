@@ -17,17 +17,7 @@ export default function KhatmasProgress() {
       progress: 45,
     },
     {
-      name: "Ahmed Mohamed",
-      joined_date: "2024-03-15",
-      progress: 45,
-    },
-    {
-      name: "Ahmed Mohamed",
-      joined_date: "2024-03-15",
-      progress: 45,
-    },
-    {
-      name: "Fatima Al-Mansoori",
+      name: "Ahmed Al-Mansoori",
       joined_date: "2024-03-20",
       progress: 72,
     },
@@ -37,7 +27,7 @@ export default function KhatmasProgress() {
       progress: 18,
     },
     {
-      name: "Aisha Al-Farsi",
+      name: "Aymen Al-Farsi",
       joined_date: "2024-03-25",
       progress: 90,
     },
@@ -49,43 +39,53 @@ export default function KhatmasProgress() {
   ];
 
   return (
-    <div className="flex flex-col gap-4 px-10 py-12 w-full overflow-hidden ">
+    <div className="flex flex-col gap-4 px-10 py-12 w-full h-min max-h-[900px] overflow-hidden">
       <div className="flex gap-4 w-full">
         <div
-          className="bg-[var(--dark-color)] text-white border border-[var(--g-color)] p-6 flex-1"
+          className="bg-[var(--dark-color)] text-white p-6 flex-1 flex flex-col justify-between"
           style={{ flex: "2" }}
         >
-          <h2 className="text-lg font-semibold mb-4">Personal Progress</h2>
-          <div className="flex flex-col justify-between h-[calc(100%-2.5rem)]">
-            <PersonalTrackerLine
-              progress={30}
-              currentVerse={3}
-              wantedVerse={90}
-            />
+          <div>
+            <h2 className="text-lg font-semibold mb-4">Personal Progress</h2>
+            <div className="flex flex-col justify-between gap-4">
+              <PersonalTrackerLine
+                progress={30}
+                currentVerse={3}
+                wantedVerse={90}
+              />
+            <h3>Your share is from : </h3>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-3xl flex items-center justify-center gap-4">
+              <a href="">Al-Baqarah 13</a> to <a href="">Al-Baqarah 201</a>
+            </h3>
           </div>
         </div>
 
         <div
-          className="bg-[var(--dark-color)] text-white border border-[var(--g-color)] p-6 flex-1"
+          className="bg-[var(--dark-color)] text-white p-6 flex-1"
           style={{ flex: "1" }}
         >
           <h2 className="text-lg font-semibold mb-4">Group Progress</h2>
-          <div className="flex-grow flex items-center justify-center">
+          <div className="flex-grow flex flex-col items-center justify-center gap-4">
             <Circle
               width={180}
               height={180}
               degree={120}
               fontSize={20}
-              text={percentage}
+              text={`${percentage}%`}
               backgroundColor={"var(--main-color)"}
             />
+            <h2>Time left : 4h 23m</h2>
           </div>
         </div>
       </div>
 
-      <div className="flex gap-4 w-full overflow-hidden">
+      <div className="flex gap-4 w-full h-full overflow-hidden">
         <div
-          className="bg-[var(--dark-color)] text-white border border-[var(--g-color)] p-6 flex-1"
+          className="bg-[var(--dark-color)] text-white p-6 flex-1 flex flex-col"
           style={{ flex: "2" }}
         >
           <h2 className="text-lg font-semibold mb-4">Members</h2>
@@ -96,10 +96,10 @@ export default function KhatmasProgress() {
             <span className="col-span-3 font-medium text-right">Progress</span>
           </div>
 
-          <div className="max-h-96 overflow-y-auto pr-2">
-            {users.map((user) => (
+          <div className="overflow-y-auto flex-1 pr-2">
+            {users.map((user, index) => (
               <div
-                key={user.name}
+                key={`${user.name}-${index}`}
                 className="grid grid-cols-12 gap-4 py-3 px-2 hover:bg-[var(--darker-color)] rounded-lg items-center"
               >
                 <span className="col-span-6 truncate flex items-center">
@@ -117,7 +117,7 @@ export default function KhatmasProgress() {
         </div>
 
         <div
-          className="bg-[var(--dark-color)] text-white border border-[var(--g-color)] p-6 flex-1"
+          className="bg-[var(--dark-color)] text-white p-6 flex-1"
           style={{ flex: "1" }}
         >
           <h2 className="text-lg font-semibold mb-4">Statistics</h2>

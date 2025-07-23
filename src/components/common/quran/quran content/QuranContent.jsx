@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import useQuranHeaderPage from "../../../stores/pageQuranHeaderStore";
-import useShouldFetch from "../../../stores/shouldFetch";
+import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore";
+import useShouldFetch from "../../../../stores/shouldFetch";
 
-import QuranSurah from "./quran content/QuranSurah";
-import QuranFooter from "./QuranFooter";
-import ProgressTrackerLine from "../progress tracker line/ProgressTrackerLine";
-import KhatmasInQuran from "./KhatmasInQuran";
+import QuranSurah from "./QuranSurah";
+import QuranFooter from "../QuranFooter";
+import ProgressTrackerLine from "../../progress tracker line/ProgressTrackerLine";
+import KhatmasInQuran from "../KhatmasInQuran";
 
-import { getChapter, verseByPageAndChapter } from "../../../utils/quran/quran";
-import { verseByPage, verseByChapter } from "../../../utils/quran/quran";
+import { getChapter, verseByPageAndChapter } from "../../../../utils/quran/quran";
+import { verseByPage, verseByChapter } from "../../../../utils/quran/quran";
 
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import toast from "react-hot-toast";
-import VersePopup from "./quran content/VersePopup";
-import { audioByVerse } from "../../../utils/quran/quranAudio";
+import VersePopup from "./VersePopup";
+import { audioByVerse } from "../../../../utils/quran/quranAudio";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 
 export default function QuranContent() {

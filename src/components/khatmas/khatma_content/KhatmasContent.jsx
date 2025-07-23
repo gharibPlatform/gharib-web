@@ -209,7 +209,7 @@ export default function KhatmasContent({
   }
 
   return (
-    <div className="flex w-full flex-col h-[var(--height)] overflow-y-auto no-scrollbar">
+    <div className="flex w-full flex-col overflow-y-auto no-scrollbar">
       <div className="flex w-full flex-col relative">
         <KhatmasProgress
           startSurah={membershipData?.startShareSurah}
@@ -223,7 +223,7 @@ export default function KhatmasContent({
           finishDate={membershipData?.finishDate}
         />
 
-        <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
+        {/* <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
           {membershipError && (
             <p className="text-[var(--r-color)] text-sm">{membershipError}</p>
           )}
@@ -243,10 +243,10 @@ export default function KhatmasContent({
               Join
             </button>
           )}
-        </div>
+        </div> */}
       </div>
 
-      {isMember ? (
+      {/* {isMember ? (
         <>
           <div className="flex flex-col">
             <Personal
@@ -282,7 +282,7 @@ export default function KhatmasContent({
           khatmaId={khatmaId}
           groupId={groupId}
         />
-      )}
+      )} */}
     </div>
   );
 }

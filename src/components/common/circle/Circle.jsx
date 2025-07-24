@@ -1,10 +1,11 @@
 export default function Circle({
   width,
   height,
-  orangeDegree, 
-  blueDegree, 
+  orangeDegree,
+  blueDegree,
   fontSize,
-  text,
+  groupProgress,
+  personalProgress,
   backgroundColor,
 }) {
   const innerWidth = width - 40;
@@ -26,8 +27,8 @@ export default function Circle({
         className="absolute w-full h-full"
         viewBox={`0 0 ${width} ${height}`}
       >
-        <circle cx={width / 2} cy={height / 2} r={radius + 5} fill="#323232" /> {/* Adjusted background */}
-
+        <circle cx={width / 2} cy={height / 2} r={radius + 5} fill="#323232" />{" "}
+        {/* Adjusted background */}
         <path
           d={`
             M ${width / 2} ${height / 2}
@@ -41,7 +42,6 @@ export default function Circle({
           strokeLinecap="round"
           strokeDasharray={`${(orangeDegree / 360) * 2 * Math.PI * radius}, 1000`}
         />
-
         <path
           d={`
             M ${width / 2} ${height / 2}
@@ -67,7 +67,10 @@ export default function Circle({
           boxShadow: "0 0 10px rgba(0,0,0,0.3)",
         }}
       >
-        <p className="text-2xl font-bold">{text}</p>
+        <div className="flex flex-col items-center">
+          <p className="text-2xl font-bold">{groupProgress}</p>
+          <p className="text-[var(--b-color)]">{personalProgress}</p>
+        </div>
       </div>
     </div>
   );

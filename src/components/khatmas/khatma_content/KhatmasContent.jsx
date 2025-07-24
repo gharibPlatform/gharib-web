@@ -211,6 +211,7 @@ export default function KhatmasContent({
   return (
     <div className="flex w-full flex-col overflow-y-auto no-scrollbar">
       <div className="flex w-full flex-col relative">
+        <div className="flex items-center justify-center text-white text-3xl py-4">Name</div>
         <KhatmasProgress
           startSurah={membershipData?.startShareSurah}
           startVerse={membershipData?.startShareVerse}

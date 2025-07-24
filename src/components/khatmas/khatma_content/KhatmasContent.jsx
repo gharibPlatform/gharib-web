@@ -167,7 +167,7 @@ export default function KhatmasContent({
   const [isCheckingMembership, setIsCheckingMembership] = useState(true);
   const [membershipError, setMembershipError] = useState(null);
   const [membershipData, setMembershipData] = useState(null);
-  const { khatmaMembership, fetchKhatmaMembership } = useKhatmaStore();
+  const { khatmaDetails, fetchKhatmaMembership, fetchKhatmaDetails } = useKhatmaStore();
 
   useEffect(() => {
     const checkMembership = async () => {
@@ -200,6 +200,23 @@ export default function KhatmasContent({
     }
   }, [khatmaId, groupId]);
 
+  useEffect(() => {
+    const getDetails = async () => {
+      try {
+        await fetchKhatmaDetails(khatmaId);
+      } catch (err) {
+        console.error("API Error:", err);
+      }
+    };
+    if (khatmaId) {
+      getDetails();
+    }
+  }, [khatmaId]);
+
+useEffect(() => {
+  console.log(khatmaDetails);
+}, [khatmaDetails])
+
   if (isCheckingMembership) {
     return (
       <div className="flex justify-center items-center h-20">
@@ -211,7 +228,9 @@ export default function KhatmasContent({
   return (
     <div className="flex w-full flex-col overflow-y-auto no-scrollbar">
       <div className="flex w-full flex-col relative">
-        <div className="flex items-center justify-center text-white text-3xl py-4">Name</div>
+        <div className="flex items-center justify-center text-white text-3xl py-4">
+          {khatmaDetails.name}
+        </div>
         <KhatmasProgress
           startSurah={membershipData?.startShareSurah}
           startVerse={membershipData?.startShareVerse}

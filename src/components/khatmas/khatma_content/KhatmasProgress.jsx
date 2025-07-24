@@ -75,7 +75,8 @@ export default function KhatmasProgress() {
             <Circle
               width={180}
               height={180}
-              degree={220}
+              orangeDegree={220}
+              blueDegree={70}
               fontSize={20}
               text={`${percentage}%`}
               backgroundColor={"var(--dark-color)"}

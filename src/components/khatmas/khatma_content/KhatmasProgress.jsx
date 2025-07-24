@@ -41,6 +41,7 @@ export default function KhatmasProgress() {
   return (
     <div className="flex flex-col gap-4 px-10 py-12 w-full h-min max-h-[900px] overflow-hidden">
       <div className="flex gap-4 w-full">
+
         <div
           className="bg-[var(--dark-color)] text-white p-6 flex-1 flex flex-col justify-between"
           style={{ flex: "2" }}
@@ -61,6 +62,7 @@ export default function KhatmasProgress() {
             <h3 className="text-3xl flex items-center justify-center gap-4">
               <a href="">Al-Baqarah 13</a> to <a href="">Al-Baqarah 201</a>
             </h3>
+            <h3 className="text-center text-[var(--g-color)]">42 verses</h3>
           </div>
         </div>
 
@@ -73,14 +75,15 @@ export default function KhatmasProgress() {
             <Circle
               width={180}
               height={180}
-              degree={120}
+              degree={220}
               fontSize={20}
               text={`${percentage}%`}
-              backgroundColor={"var(--main-color)"}
+              backgroundColor={"var(--dark-color)"}
             />
             <h2>Time left : 4h 23m</h2>
           </div>
         </div>
+
       </div>
 
       <div className="flex gap-4 w-full h-full overflow-hidden">

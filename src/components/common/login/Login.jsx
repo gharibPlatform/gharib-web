@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { login } from '../../../utils/userAuth';
 import { useRouter } from 'next/navigation';
+import useUserStore from '@/stores/user';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const { setUser } = useUserStore();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -15,8 +17,9 @@ const Login = () => {
     
     login(loginData)
       .then(response => {
-        console.log('Login successful:', response);
         router.push('/chat');
+        console.log("user : ", response.user)
+        setUser(response.user);
       })
       .catch(error => {
         console.error('Login failed:', error);

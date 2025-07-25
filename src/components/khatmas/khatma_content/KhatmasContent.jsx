@@ -7,6 +7,7 @@ import {
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import QuranHeader from "../../chat/khatmas/QuranHeaderCreateKhatma";
 import useKhatmaStore from "../../../stores/khatmasStore";
+import useUserStore from "@/stores/user";
 
 const JoinKhatmaForm = ({ onClose, khatmaId }) => {
   const [currentSurah, setCurrentSurah] = useState("");
@@ -154,25 +155,27 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
 };
 
 export default function KhatmasContent() {
-
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [isMember, setIsMember] = useState(false);
   const [isCheckingMembership, setIsCheckingMembership] = useState(true);
-  const [membershipError, setMembershipError] = useState(null);
   const [membershipData, setMembershipData] = useState(null);
   const { khatmaDetails, khatmaMembership } = useKhatmaStore();
+  const { user } = useUserStore();
 
   useEffect(() => {
     const checkingMemberShip = () => {
       for (let index = 0; index < khatmaMembership.length; index++) {
-        const member = array[index];
-        if (member.id === user.id) {
+        const member = khatmaMembership[index];
+        if (member.id === user?.id) {
+          setMembershipData(member);
           setIsCheckingMembership(false);
+          return;
         }
       }
-    }
+    };
     checkingMemberShip();
-  }, [khatmaMembership])
+    console.log(user)
+  }, [khatmaMembership]);
 
   if (isCheckingMembership) {
     return (

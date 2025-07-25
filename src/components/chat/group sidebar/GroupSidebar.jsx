@@ -27,6 +27,7 @@ export default function GroupSideBar() {
 
   // Close the modal when clicking outside
   useEffect(() => {
+    console.log(group)
     function handleClickOutside(event) {
       if (editDMRef.current && !editDMRef.current.contains(event.target)) {
         setShowEditDMConfirmation(false);
@@ -120,7 +121,6 @@ export default function GroupSideBar() {
               onClick={() => setShowAddBrotherConfirmation(true)}
               className="text-[var(--b-color)] font-bold cursor-pointer hover:text-blue-500"
             >
-              {" "}
               Add brothers
             </a>
           </span>

@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
-import ChatHeader from "../../chat/ChatHeader";
 import KhatmasProgress from "./KhatmasProgress";
-import Personal from "../expandContent/progress/Personal";
-import Group from "../expandContent/progress/Group";
-import Members from "../expandContent/progress/Members";
 import {
   postKhatmaMembership,
   getKhatmaMembership,
@@ -157,65 +153,26 @@ const JoinKhatmaForm = ({ onClose, khatmaId }) => {
   );
 };
 
-export default function KhatmasContent({
-  nameHeader,
-  khatmaId = 1,
-  groupId = 13,
-}) {
+export default function KhatmasContent() {
+
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [isMember, setIsMember] = useState(false);
   const [isCheckingMembership, setIsCheckingMembership] = useState(true);
   const [membershipError, setMembershipError] = useState(null);
   const [membershipData, setMembershipData] = useState(null);
-  const { khatmaDetails, fetchKhatmaMembership, fetchKhatmaDetails } = useKhatmaStore();
+  const { khatmaDetails, khatmaMembership } = useKhatmaStore();
 
   useEffect(() => {
-    const checkMembership = async () => {
-      try {
-        await fetchKhatmaMembership(khatmaId);
-
-        if (response?.results?.length > 0) {
-          const memberData = response.results.find(
-            (m) => m.groupMembership === groupId && m.khatma === khatmaId
-          );
-
-          if (memberData) {
-            setIsMember(true);
-            setMembershipData(memberData);
-          }
+    const checkingMemberShip = () => {
+      for (let index = 0; index < khatmaMembership.length; index++) {
+        const member = array[index];
+        if (member.id === user.id) {
+          setIsCheckingMembership(false);
         }
-      } catch (err) {
-        console.error("API Error:", err);
-
-        if (err.response?.data?.error !== "khatma membership not found") {
-          setMembershipError("Failed to connect to server");
-        }
-      } finally {
-        setIsCheckingMembership(false);
       }
-    };
-
-    if (khatmaId) {
-      checkMembership();
     }
-  }, [khatmaId, groupId]);
-
-  useEffect(() => {
-    const getDetails = async () => {
-      try {
-        await fetchKhatmaDetails(khatmaId);
-      } catch (err) {
-        console.error("API Error:", err);
-      }
-    };
-    if (khatmaId) {
-      getDetails();
-    }
-  }, [khatmaId]);
-
-useEffect(() => {
-  console.log(khatmaDetails);
-}, [khatmaDetails])
+    checkingMemberShip();
+  }, [khatmaMembership])
 
   if (isCheckingMembership) {
     return (
@@ -231,17 +188,7 @@ useEffect(() => {
         <div className="flex items-center justify-center text-white text-3xl py-4">
           {khatmaDetails.name}
         </div>
-        <KhatmasProgress
-          startSurah={membershipData?.startShareSurah}
-          startVerse={membershipData?.startShareVerse}
-          endSurah={membershipData?.endShareSurah}
-          endVerse={membershipData?.endShareVerse}
-          currentSurah={membershipData?.currentSurah}
-          currentVerse={membershipData?.currentVerse}
-          progress={membershipData?.progress}
-          status={membershipData?.status}
-          finishDate={membershipData?.finishDate}
-        />
+        <KhatmasProgress />
 
         {/* <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
           {membershipError && (

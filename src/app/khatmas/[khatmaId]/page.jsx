@@ -6,27 +6,37 @@ import { useEffect, useState } from "react";
 
 const Page = () => {
   const { khatmaId } = useParams();
-  const { khatmaDetails, fetchKhatmaDetails } = useKhatmaStore();
+  const {
+    khatmaMembership,
+    khatmaDetails,
+    fetchKhatmaDetails,
+    fetchKhatmaMembership,
+  } = useKhatmaStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchKhatmaContentFunction = async () => {
+    const fetchAll = async () => {
       try {
-        await fetchKhatmaDetails(khatmaId);
+        await Promise.all([
+          fetchKhatmaDetails(khatmaId),
+          fetchKhatmaMembership(khatmaId),
+        ]);
       } catch (error) {
-        console.log("An error occured when trying to fetch khatmas : ", error);
+        console.log("Error fetching khatma data:", error);
+      } finally {
         setIsLoading(false);
       }
     };
-    fetchKhatmaContentFunction();
-    console.log("done and the khatmaId is : ", khatmaId);
+    fetchAll();
   }, [khatmaId]);
 
   useEffect(() => {
-    if (khatmaDetails) {
+    if (khatmaDetails && khatmaMembership) {
       setIsLoading(false);
+      console.log("details : ", khatmaDetails);
+      console.log("membership : ", khatmaMembership);
     }
-  }, [khatmaDetails]);
+  }, [khatmaDetails, khatmaMembership]);
 
   return (
     <div>
@@ -35,13 +45,7 @@ const Page = () => {
           Loading your khatma details...
         </div>
       ) : (
-        <KhatmasContent
-          nameHeader={khatmaDetails.name}
-          percentage={khatmaDetails.percentage}
-          timeLeft={khatmaDetails.timeLeft}
-          status={khatmaDetails.status}
-          personalProgress={khatmaDetails.personalProgress}
-        />
+        <KhatmasContent />
       )}
     </div>
   );

@@ -1,15 +1,19 @@
 import { useState } from "react";
 import KhatmaCard from "../../khatma_content/KhatmaCard";
-import data from "../../../../data.json";
 import useKhatmasContentStore from "../../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
 
 function CurrentContent() {
   const { groupKhatmas } = useKhatmasContentStore();
+  const router = useRouter();
+
+  const handleClick = (khatmaId) => {
+    router.push(`/khatmas/${khatmaId}`);
+  };
   return (
     <div className="flex gap-12 px-8 py-4 w-full flex-wrap">
       {groupKhatmas?.current.map((khatma, index) => (
-        <div key={khatma.name} onClick={() => handleClick(khatma)}>
+        <div key={khatma.name} onClick={() => handleClick(khatma.id)}>
           <KhatmaCard
             key={index}
             name={khatma.name}

@@ -20,6 +20,7 @@ const Page = () => {
 
   useEffect(() => {
     groupKhatmas ? setIsLoading(false) : setIsLoading(true);
+    console.log(groupKhatmas)
   }, [groupKhatmas]);
 
   return (

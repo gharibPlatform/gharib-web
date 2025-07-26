@@ -9,10 +9,10 @@ export default function KhatmaCard({ name, progress }) {
       <Circle
         width={180}
         height={180}
+        groupProgress={progress}
         orangeDegree={orangeDegree}
         blueDegree={null}
         fontSize={26}
-        text={`${progress}%`}
         backgroundColor="var(--main-color)"
       />
       <div className="flex pt-8">

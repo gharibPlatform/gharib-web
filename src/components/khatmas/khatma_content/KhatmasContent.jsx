@@ -160,7 +160,7 @@ export default function KhatmasContent() {
   const [isMember, setIsMember] = useState(false);
   const [isCheckingMembership, setIsCheckingMembership] = useState(true);
   const [membershipData, setMembershipData] = useState(null);
-  const { khatmaDetails, khatmaMembership } = useKhatmaStore();
+  const { khatmaDetails, khatmaMembership, setKhatmaSelfMembership } = useKhatmaStore();
   const { user } = useUserStore();
 
   useEffect(() => {
@@ -170,9 +170,9 @@ export default function KhatmasContent() {
           const member = khatmaMembership[index];
           console.log(member)
           if (member.groupMembership.id === user?.id) {
-            setMembershipData(member);
+            setIsMember(true)
+            setKhatmaSelfMembership(member);
             setIsCheckingMembership(false);
-            console.log("foundem");
             return;
           }
         }

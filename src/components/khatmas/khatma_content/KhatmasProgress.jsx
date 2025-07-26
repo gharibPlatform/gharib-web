@@ -1,14 +1,22 @@
 import Circle from "../../common/circle/Circle";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import PersonalTrackerLine from "./PersonalTrackerLine";
+import { useEffect } from "react";
 
 export default function KhatmasProgress() {
-  const { khatmaDetails } = useKhatmaStore();
+  const { khatmaDetails, khatmaMembership, khatmaSelfMembership } =
+    useKhatmaStore();
 
-  const personalProgress = 2;
-  const groupProgress = 23;
+  useEffect(() => {
+    console.log(khatmaSelfMembership);
+    console.log(personalProgress)
+    console.log(blueDegree);
+  }, []);
+
   const timeLeft = 28;
-  const orangeDegree = (groupProgress * 360) / 100;
+
+  const orangeDegree = (khatmaDetails.progress * 360) / 100;
+  const personalProgress = khatmaSelfMembership.progress / khatmaMembership.length;
   const blueDegree = (personalProgress * 360) / 100;
 
   const users = [
@@ -40,8 +48,9 @@ export default function KhatmasProgress() {
   ];
 
   const handleClickVerse = () => {
-    //router push verse
+    console.log(khatmaDetails);
   };
+
   return (
     <div className="flex px-10 w-full h-[calc(100vh-9rem)] gap-4 overflow-hidden">
       <div className="flex flex-col w-2/3 gap-4">
@@ -51,7 +60,7 @@ export default function KhatmasProgress() {
             <h2 className="text-lg font-semibold mb-4">Personal Progress</h2>
             <div className="flex flex-col justify-between gap-8">
               <PersonalTrackerLine
-                progress={30}
+                progress={khatmaSelfMembership.progress}
                 currentVerse={3}
                 wantedVerse={90}
               />
@@ -66,7 +75,8 @@ export default function KhatmasProgress() {
                 onClick={() => handleClickVerse()}
                 href=""
               >
-                Al-Baqarah 13
+                {khatmaSelfMembership.startShareSurah}{" "}
+                {khatmaSelfMembership.startShareVerse}
               </a>{" "}
               to{" "}
               <a
@@ -74,14 +84,15 @@ export default function KhatmasProgress() {
                 onClick={() => handleClickVerse()}
                 href=""
               >
-                Al-Baqarah 201
+                {khatmaSelfMembership.endShareSurah}{" "}
+                {khatmaSelfMembership.endShareVerse}
               </a>
             </h3>
 
             <div className="flex items-center justify-between mt-4">
               <h3 className="text-center text-[var(--g-color)]">42 verses</h3>
               <h3 className="text-center text-[var(--g-color)]">
-                joined khatma at : date
+                joined khatma at : {khatmaSelfMembership.created_at}
               </h3>
             </div>
           </div>
@@ -98,11 +109,11 @@ export default function KhatmasProgress() {
           </div>
 
           <div className="overflow-y-auto flex-1 pr-2">
-            {users
+            {khatmaMembership
               .sort((a, b) => b.progress - a.progress)
               .map((user, index) => (
                 <div
-                  key={`${user.name}-${index}`}
+                  key={`${user.groupMembership.userName}-${index}`}
                   className={`grid grid-cols-12 gap-4 py-3 px-2 hover:bg-[var(--darker-color)] rounded-[4px] items-center cursor-pointer ${
                     index % 2 === 0 ? "" : "bg-[var(--secondary-color)]"
                   } ${index == 0 ? "text-[var(--o-color)]" : ""}`}
@@ -110,11 +121,11 @@ export default function KhatmasProgress() {
                   <span className="col-span-6 truncate flex items-center">
                     <div className="flex gap-2 items-center">
                       <span className="w-6 text-right">#{index + 1}</span>
-                      <span>{user.name}</span>
+                      <span>{user.groupMembership.username}</span>
                     </div>
                   </span>
                   <span className="col-span-3 text-sm">
-                    {new Date(user.joined_date).toLocaleDateString()}
+                    {new Date(user.created_at).toLocaleDateString()}
                   </span>
                   <span className="col-span-3 text-right">
                     <span className="font-bold">{user.progress}%</span>
@@ -135,7 +146,7 @@ export default function KhatmasProgress() {
               orangeDegree={orangeDegree}
               blueDegree={blueDegree}
               fontSize={20}
-              groupProgress={`${groupProgress}%`}
+              groupProgress={`${khatmaDetails.progress}%`}
               personalProgress={`${personalProgress}%`}
               backgroundColor={"var(--dark-color)"}
             />
@@ -195,7 +206,6 @@ export default function KhatmasProgress() {
                   {khatmaDetails.launcher_data?.username || "Not specified"}
                 </span>
               </div>
-
             </div>
           </div>
         </div>

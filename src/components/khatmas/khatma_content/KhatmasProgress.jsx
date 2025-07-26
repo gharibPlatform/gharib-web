@@ -1,7 +1,7 @@
 import Circle from "../../common/circle/Circle";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import PersonalTrackerLine from "./PersonalTrackerLine";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import { useRouter } from "next/navigation";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
@@ -17,53 +17,77 @@ export default function KhatmasProgress() {
 
   const timeLeft = 28;
 
-  const orangeDegree = khatmaDetails?.progress
-    ? (khatmaDetails.progress * 360) / 100
-    : 0;
+  const orangeDegree = (khatmaDetails.progress * 360) / 100;
+
   const personalProgress =
-    khatmaSelfMembership?.progress && khatmaMembership?.length
-      ? khatmaSelfMembership.progress / khatmaMembership.length
-      : 0;
+    khatmaSelfMembership.progress / khatmaMembership.length;
+
   const blueDegree = (personalProgress * 360) / 100;
 
+  const [selfStartChapter, setSelfStartChapter] = useState();
+  const [selfEndChapter, setSelfEndChapter] = useState();
+  const [groupStartChapter, setGroupStartChapter] = useState();
+  const [groupEndChapter, setGroupEndChapter] = useState();
+  const [loading, setLoading] = useState(true);
+
+  //getting the chapters from the quranChapters for the id/name_simple
   useEffect(() => {
     if (khatmaSelfMembership && quranChapters) {
-      const startChapter = quranChapters.find(
+      const startChapterSelf = quranChapters.find(
         (ch) =>
           ch.translated_name.name.toLowerCase() ===
           khatmaSelfMembership.startShareSurah.toLowerCase()
       );
 
-      const endChapter = quranChapters.find(
+      const endChapterSelf = quranChapters.find(
         (ch) =>
           ch.translated_name.name.toLowerCase() ===
           khatmaSelfMembership.endShareSurah.toLowerCase()
       );
 
+      const startChapterGroup = quranChapters.find(
+        (ch) =>
+          ch.translated_name.name.toLowerCase() ===
+          khatmaDetails.startSurah.toLowerCase()
+      );
+
+      const endChapterGruop = quranChapters.find(
+        (ch) =>
+          ch.translated_name.name.toLowerCase() ===
+          khatmaDetails.endSurah.toLowerCase()
+      );
+
+      setSelfStartChapter(startChapterSelf);
+      setSelfEndChapter(endChapterSelf);
+      setGroupStartChapter(startChapterGroup);
+      setGroupEndChapter(endChapterGruop);
       setRange(
-        startChapter.id,
+        startChapterSelf.id,
         khatmaSelfMembership.startShareVerse,
-        endChapter.id,
+        endChapterSelf.id,
         khatmaSelfMembership.endShareVerse,
         quranChapters
       );
+      setLoading(false);
     }
   }, [khatmaSelfMembership, quranChapters, setRange]);
 
-  const handleClickVerse = (chapter, verse) => {
-    const foundChapter = quranChapters.find(
-      (ch) => ch.translated_name.name.toLowerCase() === chapter.toLowerCase()
-    );
-
-    if (foundChapter) {
-      router.push(`/quran/chapters/${foundChapter.id}`);
-      setGoToVerse(verse);
-    }
+  const handleClickVerse = (chapterId, verse) => {
+    router.push(`/quran/chapters/${chapterId}`);
+    setGoToVerse(verse);
   };
 
   useEffect(() => {
     console.log(totalVerses);
   }, [totalVerses]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center w-full h-[calc(100vh-9rem)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--o-color)]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex px-10 w-full h-[calc(100vh-9rem)] gap-4 overflow-hidden">
@@ -88,12 +112,12 @@ export default function KhatmasProgress() {
                 className="cursor-pointer hover:text-[var(--b-color)]"
                 onClick={() =>
                   handleClickVerse(
-                    khatmaSelfMembership.startShareSurah,
+                    selfStartChapter.id,
                     khatmaSelfMembership.startShareVerse
                   )
                 }
               >
-                {khatmaSelfMembership.startShareSurah}{" "}
+                {selfStartChapter.name_simple}{" "}
                 {khatmaSelfMembership.startShareVerse}
               </a>{" "}
               to{" "}
@@ -101,18 +125,20 @@ export default function KhatmasProgress() {
                 className="cursor-pointer hover:text-[var(--b-color)]"
                 onClick={() =>
                   handleClickVerse(
-                    khatmaSelfMembership.endShareSurah,
+                    selfEndChapter.id,
                     khatmaSelfMembership.endShareVerse
                   )
                 }
               >
-                {khatmaSelfMembership.endShareSurah}{" "}
+                {selfEndChapter.name_simple}{" "}
                 {khatmaSelfMembership.endShareVerse}
               </a>
             </h3>
 
             <div className="flex items-center justify-between mt-4">
-              <h3 className="text-center text-[var(--g-color)]">{totalVerses}</h3>
+              <h3 className="text-center text-[var(--g-color)]">
+                {totalVerses} Verses
+              </h3>
               <h3 className="text-center text-[var(--g-color)]">
                 joined khatma at : {khatmaSelfMembership.created_at}
               </h3>
@@ -196,12 +222,12 @@ export default function KhatmasProgress() {
                   className="cursor-pointer hover:text-[var(--b-color)]"
                   onClick={() =>
                     handleClickVerse(
-                      khatmaDetails.startSurah,
+                      groupStartChapter.id,
                       khatmaDetails.startVerse
                     )
                   }
                 >
-                  {khatmaDetails.startSurah} : {khatmaDetails.startVerse}
+                  {groupStartChapter.name_simple} : {khatmaDetails.startVerse}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -209,13 +235,10 @@ export default function KhatmasProgress() {
                 <span
                   className="cursor-pointer hover:text-[var(--b-color)]"
                   onClick={() =>
-                    handleClickVerse(
-                      khatmaDetails.endSurah,
-                      khatmaDetails.endVerse
-                    )
+                    handleClickVerse(groupEndChapter.id, khatmaDetails.endVerse)
                   }
                 >
-                  {khatmaDetails.endSurah} : {khatmaDetails.endVerse}
+                  {groupEndChapter.name_simple} : {khatmaDetails.endVerse}
                 </span>
               </div>
               <div className="flex justify-between">

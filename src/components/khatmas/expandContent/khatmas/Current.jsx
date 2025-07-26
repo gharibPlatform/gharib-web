@@ -3,44 +3,20 @@ import KhatmaCard from "../../khatma_content/KhatmaCard";
 import data from "../../../../data.json";
 import useKhatmasContentStore from "../../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
+
 function CurrentContent() {
-  const router = useRouter();
-  const updateKhatmasContent = useKhatmasContentStore(
-    (state) => state.updateKhatmasContent
-  );
-
-  const handleClick = (khatma) => {
-    updateKhatmasContent({
-      name: khatma.name,
-      percentage: khatma.percentage,
-      timeLeft: khatma.timeLeft,
-      status: khatma.status,
-      personalProgress: khatma.personalProgress,
-      share: khatma.share,
-      pages: khatma.pages,
-      remainingPages: khatma.remainingPages,
-      length: khatma.length,
-      startDate: khatma.startDate,
-      endDate: khatma.endDate,
-      activeTabStore: "khatmas",
-    });
-    router.push(`/khatmas/${khatma.name}`);
-    console.log("Current name is : ", khatma.name);
-  };
-
+  const { groupKhatmas } = useKhatmasContentStore();
   return (
     <div className="flex gap-12 px-8 py-4 w-full flex-wrap">
-      {data
-        .filter((element) => element.status === "In Progress")
-        .map((element, index) => (
-          <div key={element.name} onClick={() => handleClick(element)}>
-            <KhatmaCard
-              key={index}
-              Name={element.name}
-              Percentage={element.percentage}
-            />
-          </div>
-        ))}
+      {groupKhatmas?.current.map((khatma, index) => (
+        <div key={khatma.name} onClick={() => handleClick(khatma)}>
+          <KhatmaCard
+            key={index}
+            name={khatma.name}
+            progress={khatma.progress}
+          />
+        </div>
+      ))}
     </div>
   );
 }

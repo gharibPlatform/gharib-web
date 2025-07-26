@@ -1,26 +1,38 @@
 "use client";
-import useKhatmasContentStore from "../../stores/khatmasStore";
-import { useEffect } from "react";
+import useKhatmaStore from "@/stores/khatmasStore";
 import GroupKhatmas from "../../components/khatmas/GroupKhatmas";
-import ChatHeader from "../../components/chat/ChatHeader";
-import useNameHeaderStore from "../../stores/nameHeaderStore";
+import { useEffect, useState } from "react";
 
 const Page = () => {
-  const { name, percentage, timeLeft, status, personalProgress } = useKhatmasContentStore();
+  const [isLoading, setIsLoading] = useState();
+  const { groupKhatmas, fetchGroupKhatmas } = useKhatmaStore();
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        await fetchGroupKhatmas(14);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetch();
+    console.log("Done");
+  }, []);
 
   useEffect(() => {
-    console.log("Current Khatmas Content:", { name, percentage, timeLeft, status, personalProgress });
-  }, [name, percentage, timeLeft, status, personalProgress]);
-
-  const headerName = useNameHeaderStore((state) => state.nameHeader);
-  console.log("The name is : ", {headerName})
+    groupKhatmas ? setIsLoading(false) : setIsLoading(true);
+  }, [groupKhatmas]);
 
   return (
-    <div className="overflow-y-auto"> 
-      <ChatHeader Name={headerName} />
-      <GroupKhatmas />
+    <div className="overflow-y-auto">
+      {isLoading ? (
+        <div className="flex justify-center pt-8 text-[var(--g-color)]">
+          Loading kahtmas...
+        </div>
+      ) : (
+        <GroupKhatmas />
+      )}
     </div>
   );
-}
+};
 
 export default Page;

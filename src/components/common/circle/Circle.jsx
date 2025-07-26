@@ -68,7 +68,7 @@ export default function Circle({
         }}
       >
         <div className="flex flex-col items-center">
-          <p className="text-2xl font-bold">{groupProgress}</p>
+          <p className="text-2xl text-[var(--o-color)] font-bold">{groupProgress}</p>
           <p className="text-[var(--b-color)]">{personalProgress}</p>
         </div>
       </div>

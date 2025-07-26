@@ -4,12 +4,14 @@ import PersonalTrackerLine from "./PersonalTrackerLine";
 import { useEffect } from "react";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import { useRouter } from "next/navigation";
+import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 
 export default function KhatmasProgress() {
   const { khatmaDetails, khatmaMembership, khatmaSelfMembership } =
     useKhatmaStore();
 
   const { quranChapters } = useQuranHeaderChapter();
+  const { setGoToVerse } = useQuranHeaderVerse();
 
   const timeLeft = 28;
 
@@ -20,12 +22,13 @@ export default function KhatmasProgress() {
 
   const router = useRouter();
 
-  const handleClickVerse = (data) => {
-    const chapter = quranChapters.find(
-      (ch) => ch.translated_name.name.toLowerCase() === data.toLowerCase()
+  const handleClickVerse = (chapter, verse) => {
+    const foundChapter = quranChapters.find(
+      (ch) => ch.translated_name.name.toLowerCase() === chapter.toLowerCase()
     );
 
-    router.push(`/quran/chapters/${chapter.id}`)
+    router.push(`/quran/chapters/${foundChapter.id}`);
+    setGoToVerse(verse);
   };
 
   return (
@@ -50,7 +53,10 @@ export default function KhatmasProgress() {
               <a
                 className="hover:text-[var(--b-color)]"
                 onClick={() =>
-                  handleClickVerse(khatmaSelfMembership.startShareSurah)
+                  handleClickVerse(
+                    khatmaSelfMembership.startShareSurah,
+                    khatmaSelfMembership.startShareVerse
+                  )
                 }
               >
                 {khatmaSelfMembership.startShareSurah}{" "}
@@ -60,7 +66,10 @@ export default function KhatmasProgress() {
               <a
                 className="hover:text-[var(--b-color)]"
                 onClick={() =>
-                  handleClickVerse(khatmaSelfMembership.endShareSurah)
+                  handleClickVerse(
+                    khatmaSelfMembership.endShareSurah,
+                    khatmaSelfMembership.endShareVerse
+                  )
                 }
               >
                 {khatmaSelfMembership.endShareSurah}{" "}
@@ -151,7 +160,12 @@ export default function KhatmasProgress() {
                 <span className="text-[var(--g-color)]">Start verse:</span>
                 <span
                   className="cursor-pointer hover:text-[var(--b-color)]"
-                  onClick={() => handleClickVerse(khatmaDetails.startSurah)}
+                  onClick={() =>
+                    handleClickVerse(
+                      khatmaDetails.startSurah,
+                      khatmaDetails.startVerse
+                    )
+                  }
                 >
                   {khatmaDetails.startSurah} : {khatmaDetails.startVerse}
                 </span>
@@ -160,7 +174,12 @@ export default function KhatmasProgress() {
                 <span className="text-[var(--g-color)]">End verse:</span>
                 <span
                   className="cursor-pointer hover:text-[var(--b-color)]"
-                  onClick={() => handleClickVerse(khatmaDetails.endSurah)}
+                  onClick={() =>
+                    handleClickVerse(
+                      khatmaDetails.endSurah,
+                      khatmaDetails.endVerse
+                    )
+                  }
                 >
                   {khatmaDetails.endSurah} : {khatmaDetails.endVerse}
                 </span>

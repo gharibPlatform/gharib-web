@@ -161,6 +161,7 @@ export default function KhatmasContent() {
   const [membershipData, setMembershipData] = useState(null);
   const { khatmaDetails, khatmaMembership, setKhatmaSelfMembership } =
     useKhatmaStore();
+  const { quranChapters } = useQuranHeaderChapter();
   const { user } = useUserStore();
 
   useEffect(() => {
@@ -179,7 +180,7 @@ export default function KhatmasContent() {
       }
     };
     checkingMemberShip();
-  }, []);
+  }, [khatmaMembership]);
 
   if (isCheckingMembership) {
     return (
@@ -195,7 +196,7 @@ export default function KhatmasContent() {
         <div className="flex items-center justify-center text-white text-3xl py-4">
           {khatmaDetails.name}
         </div>
-        <KhatmasContent />
+        <KhatmasProgress quranChapters={quranChapters} />
 
         {/* <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
           {membershipError && (

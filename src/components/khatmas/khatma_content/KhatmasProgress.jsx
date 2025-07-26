@@ -28,10 +28,22 @@ export default function KhatmasProgress() {
 
   useEffect(() => {
     if (khatmaSelfMembership && quranChapters) {
+      const startChapter = quranChapters.find(
+        (ch) =>
+          ch.translated_name.name.toLowerCase() ===
+          khatmaSelfMembership.startShareSurah.toLowerCase()
+      );
+
+      const endChapter = quranChapters.find(
+        (ch) =>
+          ch.translated_name.name.toLowerCase() ===
+          khatmaSelfMembership.endShareSurah.toLowerCase()
+      );
+
       setRange(
-        khatmaSelfMembership.startShareSurah,
+        startChapter.id,
         khatmaSelfMembership.startShareVerse,
-        khatmaSelfMembership.endShareSurah,
+        endChapter.id,
         khatmaSelfMembership.endShareVerse,
         quranChapters
       );
@@ -48,6 +60,10 @@ export default function KhatmasProgress() {
       setGoToVerse(verse);
     }
   };
+
+  useEffect(() => {
+    console.log(totalVerses);
+  }, [totalVerses]);
 
   return (
     <div className="flex px-10 w-full h-[calc(100vh-9rem)] gap-4 overflow-hidden">
@@ -96,7 +112,7 @@ export default function KhatmasProgress() {
             </h3>
 
             <div className="flex items-center justify-between mt-4">
-              <h3 className="text-center text-[var(--g-color)]">42 verses</h3>
+              <h3 className="text-center text-[var(--g-color)]">{totalVerses}</h3>
               <h3 className="text-center text-[var(--g-color)]">
                 joined khatma at : {khatmaSelfMembership.created_at}
               </h3>

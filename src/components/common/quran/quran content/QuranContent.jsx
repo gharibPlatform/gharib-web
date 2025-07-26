@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore";
-import useShouldFetch from "../../../../stores/shouldFetch";
+import useShouldFetch from "../../../../stores/shouldFetchStore";
 
 import QuranSurah from "./QuranSurah";
 import QuranFooter from "../QuranFooter";
 import ProgressTrackerLine from "../../progress tracker line/ProgressTrackerLine";
 import KhatmasInQuran from "../KhatmasInQuran";
 
-import { getChapter, verseByPageAndChapter } from "../../../../utils/quran/quran";
+import {
+  getChapter,
+  verseByPageAndChapter,
+} from "../../../../utils/quran/quran";
 import { verseByPage, verseByChapter } from "../../../../utils/quran/quran";
 
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";

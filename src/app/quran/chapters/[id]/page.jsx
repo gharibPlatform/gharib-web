@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { getChapter } from "../../../../utils/quran/quran";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import { useEffect } from "react";
-import useShouldFetch from "../../../../stores/shouldFetch";
+import useShouldFetch from "../../../../stores/shouldFetchStore";
 
 const Page = () => {
   const { id } = useParams();

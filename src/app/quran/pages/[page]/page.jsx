@@ -2,7 +2,7 @@
 import QuranContent from "../../../../components/common/quran/quran content/QuranContent";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import useShouldFetch from "../../../../stores/shouldFetch";
+import useShouldFetch from "../../../../stores/shouldFetchStore";
 import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore";
 
 const Page = () => {

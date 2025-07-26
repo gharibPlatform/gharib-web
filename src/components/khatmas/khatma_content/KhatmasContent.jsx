@@ -7,7 +7,7 @@ import {
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import QuranHeader from "../../chat/khatmas/QuranHeaderCreateKhatma";
 import useKhatmaStore from "../../../stores/khatmasStore";
-import useUserStore from "@/stores/user";
+import useUserStore from "@/stores/userStore";
 import useGroupStore from "@/stores/groupStore";
 
 const JoinKhatmaForm = ({ onClose, khatmaId }) => {
@@ -160,7 +160,8 @@ export default function KhatmasContent() {
   const [isMember, setIsMember] = useState(false);
   const [isCheckingMembership, setIsCheckingMembership] = useState(true);
   const [membershipData, setMembershipData] = useState(null);
-  const { khatmaDetails, khatmaMembership, setKhatmaSelfMembership } = useKhatmaStore();
+  const { khatmaDetails, khatmaMembership, setKhatmaSelfMembership } =
+    useKhatmaStore();
   const { user } = useUserStore();
 
   useEffect(() => {
@@ -168,9 +169,9 @@ export default function KhatmasContent() {
       if (khatmaMembership && user) {
         for (let index = 0; index < khatmaMembership.length; index++) {
           const member = khatmaMembership[index];
-          console.log(member)
+          console.log(member);
           if (member.groupMembership.id === user?.id) {
-            setIsMember(true)
+            setIsMember(true);
             setKhatmaSelfMembership(member);
             setIsCheckingMembership(false);
             return;

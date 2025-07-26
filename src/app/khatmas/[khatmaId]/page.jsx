@@ -4,6 +4,7 @@ import KhatmasContent from "../../../components/khatmas/khatma_content/KhatmasCo
 import useKhatmaStore from "../../../stores/khatmasStore";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 
 const Page = () => {
   const { khatmaId } = useParams();
@@ -14,6 +15,7 @@ const Page = () => {
     fetchKhatmaMembership,
   } = useKhatmaStore();
 
+  const { quranChapters, fetchQuranChapters } = useQuranHeaderChapter();
   const { group, fetchOneGroup } = useGroupStore();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,7 +26,10 @@ const Page = () => {
           fetchKhatmaDetails(khatmaId),
           fetchKhatmaMembership(khatmaId),
         ]);
-        
+        if (!quranChapters) {
+          fetchQuranChapters();
+        }
+
         if (khatmaDetails?.group_data?.id) {
           await fetchOneGroup(khatmaDetails.group_data.id);
         }

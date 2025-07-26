@@ -2,53 +2,30 @@ import Circle from "../../common/circle/Circle";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import PersonalTrackerLine from "./PersonalTrackerLine";
 import { useEffect } from "react";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import { useRouter } from "next/navigation";
 
 export default function KhatmasProgress() {
   const { khatmaDetails, khatmaMembership, khatmaSelfMembership } =
     useKhatmaStore();
 
-  useEffect(() => {
-    console.log(khatmaSelfMembership);
-    console.log(personalProgress)
-    console.log(blueDegree);
-  }, []);
+  const { quranChapters } = useQuranHeaderChapter();
 
   const timeLeft = 28;
 
   const orangeDegree = (khatmaDetails.progress * 360) / 100;
-  const personalProgress = khatmaSelfMembership.progress / khatmaMembership.length;
+  const personalProgress =
+    khatmaSelfMembership.progress / khatmaMembership.length;
   const blueDegree = (personalProgress * 360) / 100;
 
-  const users = [
-    {
-      name: "Ahmed Mohamed",
-      joined_date: "2024-03-15",
-      progress: 45,
-    },
-    {
-      name: "Ahmed Al-Mansoori",
-      joined_date: "2024-03-20",
-      progress: 72,
-    },
-    {
-      name: "Youssef Khan",
-      joined_date: "2024-03-10",
-      progress: 18,
-    },
-    {
-      name: "Aymen Al-Farsi",
-      joined_date: "2024-03-25",
-      progress: 90,
-    },
-    {
-      name: "Omar Abdullah",
-      joined_date: "2024-03-05",
-      progress: 33,
-    },
-  ];
+  const router = useRouter();
 
-  const handleClickVerse = () => {
-    console.log(khatmaDetails);
+  const handleClickVerse = (data) => {
+    const chapter = quranChapters.find(
+      (ch) => ch.translated_name.name.toLowerCase() === data.toLowerCase()
+    );
+
+    router.push(`/quran/chapters/${chapter.id}`)
   };
 
   return (
@@ -72,8 +49,9 @@ export default function KhatmasProgress() {
             <h3 className="text-3xl flex items-center justify-center gap-4">
               <a
                 className="hover:text-[var(--b-color)]"
-                onClick={() => handleClickVerse()}
-                href=""
+                onClick={() =>
+                  handleClickVerse(khatmaSelfMembership.startShareSurah)
+                }
               >
                 {khatmaSelfMembership.startShareSurah}{" "}
                 {khatmaSelfMembership.startShareVerse}
@@ -81,8 +59,9 @@ export default function KhatmasProgress() {
               to{" "}
               <a
                 className="hover:text-[var(--b-color)]"
-                onClick={() => handleClickVerse()}
-                href=""
+                onClick={() =>
+                  handleClickVerse(khatmaSelfMembership.endShareSurah)
+                }
               >
                 {khatmaSelfMembership.endShareSurah}{" "}
                 {khatmaSelfMembership.endShareVerse}
@@ -170,13 +149,19 @@ export default function KhatmasProgress() {
             <div className="grid grid-cols-1 gap-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-[var(--g-color)]">Start verse:</span>
-                <span>
+                <span
+                  className="cursor-pointer hover:text-[var(--b-color)]"
+                  onClick={() => handleClickVerse(khatmaDetails.startSurah)}
+                >
                   {khatmaDetails.startSurah} : {khatmaDetails.startVerse}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--g-color)]">End verse:</span>
-                <span>
+                <span
+                  className="cursor-pointer hover:text-[var(--b-color)]"
+                  onClick={() => handleClickVerse(khatmaDetails.endSurah)}
+                >
                   {khatmaDetails.endSurah} : {khatmaDetails.endVerse}
                 </span>
               </div>

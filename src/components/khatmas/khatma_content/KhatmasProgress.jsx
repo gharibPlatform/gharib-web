@@ -10,25 +10,43 @@ export default function KhatmasProgress() {
   const { khatmaDetails, khatmaMembership, khatmaSelfMembership } =
     useKhatmaStore();
 
+  const { setGoToVerse, setRange, totalVerses } = useQuranHeaderVerse();
   const { quranChapters } = useQuranHeaderChapter();
-  const { setGoToVerse } = useQuranHeaderVerse();
+
+  const router = useRouter();
 
   const timeLeft = 28;
 
-  const orangeDegree = (khatmaDetails.progress * 360) / 100;
+  const orangeDegree = khatmaDetails?.progress
+    ? (khatmaDetails.progress * 360) / 100
+    : 0;
   const personalProgress =
-    khatmaSelfMembership.progress / khatmaMembership.length;
+    khatmaSelfMembership?.progress && khatmaMembership?.length
+      ? khatmaSelfMembership.progress / khatmaMembership.length
+      : 0;
   const blueDegree = (personalProgress * 360) / 100;
 
-  const router = useRouter();
+  useEffect(() => {
+    if (khatmaSelfMembership && quranChapters) {
+      setRange(
+        khatmaSelfMembership.startShareSurah,
+        khatmaSelfMembership.startShareVerse,
+        khatmaSelfMembership.endShareSurah,
+        khatmaSelfMembership.endShareVerse,
+        quranChapters
+      );
+    }
+  }, [khatmaSelfMembership, quranChapters, setRange]);
 
   const handleClickVerse = (chapter, verse) => {
     const foundChapter = quranChapters.find(
       (ch) => ch.translated_name.name.toLowerCase() === chapter.toLowerCase()
     );
 
-    router.push(`/quran/chapters/${foundChapter.id}`);
-    setGoToVerse(verse);
+    if (foundChapter) {
+      router.push(`/quran/chapters/${foundChapter.id}`);
+      setGoToVerse(verse);
+    }
   };
 
   return (
@@ -41,8 +59,8 @@ export default function KhatmasProgress() {
             <div className="flex flex-col justify-between gap-8">
               <PersonalTrackerLine
                 progress={khatmaSelfMembership.progress}
-                currentVerse={3}
-                wantedVerse={90}
+                currentVerse={khatmaSelfMembership.currentVerse}
+                wantedVerse={totalVerses}
               />
               <h3>Your share is from:</h3>
             </div>
@@ -51,7 +69,7 @@ export default function KhatmasProgress() {
           <div className="flex flex-col justify-between flex-grow mt-6">
             <h3 className="text-3xl flex items-center justify-center gap-4">
               <a
-                className="hover:text-[var(--b-color)]"
+                className="cursor-pointer hover:text-[var(--b-color)]"
                 onClick={() =>
                   handleClickVerse(
                     khatmaSelfMembership.startShareSurah,
@@ -64,7 +82,7 @@ export default function KhatmasProgress() {
               </a>{" "}
               to{" "}
               <a
-                className="hover:text-[var(--b-color)]"
+                className="cursor-pointer hover:text-[var(--b-color)]"
                 onClick={() =>
                   handleClickVerse(
                     khatmaSelfMembership.endShareSurah,

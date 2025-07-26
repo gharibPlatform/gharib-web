@@ -22,30 +22,44 @@ const Page = () => {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        await Promise.all([
+        setIsLoading(true);
+        console.log("Starting data fetching...");
+
+        const [details] = await Promise.all([
           fetchKhatmaDetails(khatmaId),
           fetchKhatmaMembership(khatmaId),
+          fetchQuranChapters(),
         ]);
-        if (!quranChapters) {
-          fetchQuranChapters();
-        }
 
-        if (khatmaDetails?.group_data?.id) {
-          await fetchOneGroup(khatmaDetails.group_data.id);
+        if (details?.group_data?.id) {
+          console.log(
+            "Fetching group data for group ID:",
+            details.group_data.id
+          );
+          await fetchOneGroup(details.group_data.id);
+        } else {
+          console.log("No group data found in khatmaDetails");
         }
       } catch (error) {
-        console.log("Error fetching data:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchAllData();
-  }, [khatmaId, khatmaDetails?.group_data?.id]);
+  }, [khatmaId]);
+
+  const isDataReady =
+    !isLoading &&
+    khatmaDetails &&
+    khatmaMembership &&
+    quranChapters &&
+    (!khatmaDetails.group_data?.id || (khatmaDetails.group_data?.id && group));
 
   return (
     <div>
-      {isLoading || !khatmaDetails || !khatmaMembership || !group ? (
+      {!isDataReady ? (
         <div className="text-[var(--lighter-color)] text-lg pt-4 text-center mx-auto w-fit">
           Loading your khatma details...
         </div>

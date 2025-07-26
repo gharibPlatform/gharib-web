@@ -7,8 +7,7 @@ import {
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import QuranHeader from "../../chat/khatmas/QuranHeaderCreateKhatma";
 import useKhatmaStore from "../../../stores/khatmasStore";
-import useUserStore from "@/stores/userStore";
-import useGroupStore from "@/stores/groupStore";
+import useUserStore from "../../../stores/userStore";
 
 const JoinKhatmaForm = ({ onClose, khatmaId }) => {
   const [currentSurah, setCurrentSurah] = useState("");
@@ -180,7 +179,7 @@ export default function KhatmasContent() {
       }
     };
     checkingMemberShip();
-  }, [khatmaMembership]);
+  }, []);
 
   if (isCheckingMembership) {
     return (
@@ -196,7 +195,7 @@ export default function KhatmasContent() {
         <div className="flex items-center justify-center text-white text-3xl py-4">
           {khatmaDetails.name}
         </div>
-        <KhatmasProgress />
+        <KhatmasContent />
 
         {/* <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
           {membershipError && (

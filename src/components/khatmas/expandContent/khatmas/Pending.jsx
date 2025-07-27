@@ -5,45 +5,30 @@ import { useRouter } from "next/navigation";
 import useKhatmasContentStore from "../../../../stores/khatmasStore";
 
 function PendingContent() {
+  const { groupKhatmas } = useKhatmasContentStore();
   const router = useRouter();
-  const updateKhatmasContent = useKhatmasContentStore(
-    (state) => state.updateKhatmasContent
-  );
 
-  const handleClick = (khatma) => {
-    updateKhatmasContent({
-      name: khatma.name,
-      percentage: khatma.percentage,
-      timeLeft: khatma.timeLeft,
-      status: khatma.status,
-      personalProgress: khatma.personalProgress,
-      share: khatma.share,
-      pages: khatma.pages,
-      remainingPages: khatma.remainingPages,
-      length: khatma.length,
-      startDate: khatma.startDate,
-      endDate: khatma.endDate,
-      activeTabStore: "khatmas",
-    });
-    router.push(`/khatmas/${khatma.name}`);
+  const handleClick = (khatmaId) => {
+    router.push(`/khatmas/${khatmaId}`);
   };
 
   return (
     <div className="flex gap-12 px-8 py-4 w-full flex-wrap">
-      {data
-        .filter((element) => element.status === "Pending")
-        .map((element, index) => (
-          <div key={element.name} onClick={() => handleClick(element)}>
+      {groupKhatmas?.current
+        .filter((khatma) => khatma.status === "pending")
+        .map((khatma, index) => (
+          <div key={khatma.name} onClick={() => handleClick(khatma.id)}>
             <KhatmaCard
               key={index}
-              Name={element.name}
-              Percentage={element.percentage}
+              name={khatma.name}
+              progress={khatma.progress}
             />
           </div>
         ))}
     </div>
   );
 }
+
 export default function Pending() {
   const [rotate, setRotate] = useState(180);
 

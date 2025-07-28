@@ -20,7 +20,7 @@ const Page = () => {
 
   return (
     <div>
-      <ChatContent nameHeader={group?.name} groupBool={true} />
+      <ChatContent nameHeader={group?.name} groupBool={true} chatId={id} />
     </div>
   );
 };

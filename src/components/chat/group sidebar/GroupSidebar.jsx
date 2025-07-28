@@ -27,7 +27,7 @@ export default function GroupSideBar() {
 
   // Close the modal when clicking outside
   useEffect(() => {
-    console.log(group)
+    console.log(group);
     function handleClickOutside(event) {
       if (editDMRef.current && !editDMRef.current.contains(event.target)) {
         setShowEditDMConfirmation(false);
@@ -61,7 +61,7 @@ export default function GroupSideBar() {
   }, []);
 
   return (
-    <div className="flex justify-between flex-col p-6 w-[360px] border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]">
+    <div className="flex justify-between flex-col p-6 w-[380px] border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]">
       <div className="flex-col flex-nowrap w-full h-min">
         <div
           className="w-full py-2 text-lg font-semibold mb-5 text-[var(--w-color)] flex justify-between items-center"
@@ -134,7 +134,7 @@ export default function GroupSideBar() {
               isActive={activeUser === brother.username} // Pass if it's active
               onClick={() =>
                 setActiveUser(
-                  activeUser === brother.username ? null : brother.username,
+                  activeUser === brother.username ? null : brother.username
                 )
               } // Toggle menu
             />
@@ -155,6 +155,13 @@ export default function GroupSideBar() {
         >
           Share group
         </button>
+
+        <a
+          href="/khatmas"
+          className="w-full text-[var(--w-color)] flex items-center justify-end hover:text-[var(--lighter-color)]"
+        >
+          See khatmas
+        </a>
 
         {showAddBrotherConfirmation && (
           <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center z-50">

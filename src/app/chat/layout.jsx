@@ -15,10 +15,9 @@ const Layout = ({ children }) => {
         <div className="flex">
           <div className="flex w-full">
             <SideBar />
-            <div className="border-r border-[var(--g-color)]">
-              {isGroupSidebarOpen ? <GroupSideBar /> : <ChatRightBar />}
-            </div>
+            <ChatRightBar />
             <div className="h-screen flex-grow">{children}</div>
+            {isGroupSidebarOpen && <GroupSideBar />}
           </div>
         </div>
       </div>

@@ -10,23 +10,30 @@ function CurrentContent() {
   const handleClick = (khatmaId) => {
     router.push(`/khatmas/${khatmaId}`);
   };
+  
   return (
-    <div className="flex gap-12 px-8 py-4 w-full flex-wrap">
-      {groupKhatmas?.current.map((khatma, index) => (
-        <div key={khatma.name} onClick={() => handleClick(khatma.id)}>
-          <KhatmaCard
-            key={index}
-            name={khatma.name}
-            progress={khatma.progress}
-          />
+    <div className="flex gap-12 px-8 w-full flex-wrap">
+      {groupKhatmas?.current.length > 0 ? (
+        groupKhatmas?.current.map((khatma, index) => (
+          <div key={khatma.name} onClick={() => handleClick(khatma.id)}>
+            <KhatmaCard
+              key={index}
+              name={khatma.name}
+              progress={khatma.progress}
+            />
+          </div>
+        ))
+      ) : (
+        <div className="flex flex-col items-center justify-center gap-4 text-2xl text-[var(--g-color)] pl-6 pt-6">
+          <div>No current khatmas</div>
         </div>
-      ))}
+      )}
     </div>
   );
 }
 
 export default function Current() {
-  const [rotate, setRotate] = useState(270);
+  const [rotate, setRotate] = useState(180);
 
   const changeRotation = () => {
     if (rotate == 180) {
@@ -49,7 +56,7 @@ export default function Current() {
   return (
     <div>
       <div
-        className="flex items-center cursor-pointer gap-4 text-2xl text-[var(--w-color)] pl-6 pt-12"
+        className="flex items-center cursor-pointer gap-4 text-2xl text-[var(--w-color)] pl-6"
         onClick={handleClick}
       >
         Current
@@ -78,7 +85,7 @@ export default function Current() {
           </g>
         </svg>
       </div>
-      {isClicked ? <CurrentContent /> : <div />}
+      {isClicked ? <div /> : <CurrentContent />}
     </div>
   );
 }

@@ -10,10 +10,8 @@ const Layout = ({ children }) => {
       <div className="flex">
         <SideBar />
         <div className="flex w-full">
+          <ChatRightBar />
           <div className="h-screen flex-grow">{children}</div>
-          <div>
-            <ChatRightBar />
-          </div>
         </div>
       </div>
     </div>

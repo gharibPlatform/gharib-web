@@ -26,7 +26,7 @@ function PendingContent() {
           </div>
         ))
       ) : (
-        <div className="flex flex-col items-center justify-center gap-4 text-2xl text-[var(--g-color)] pl-6 pt-6">
+        <div className="flex flex-col items-center justify-center gap-4 text-2xl text-[var(--lighter-color)] pl-6 pt-6">
           <div>No pending khatmas</div>
         </div>
       )}

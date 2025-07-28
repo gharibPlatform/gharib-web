@@ -10,7 +10,7 @@ function CurrentContent() {
   const handleClick = (khatmaId) => {
     router.push(`/khatmas/${khatmaId}`);
   };
-  
+
   return (
     <div className="flex gap-12 px-8 w-full flex-wrap">
       {groupKhatmas?.current.length > 0 ? (
@@ -24,7 +24,7 @@ function CurrentContent() {
           </div>
         ))
       ) : (
-        <div className="flex flex-col items-center justify-center gap-4 text-2xl text-[var(--g-color)] pl-6 pt-6">
+        <div className="flex flex-col items-center justify-center gap-4 text-2xl text-[var(--lighter-color)] pl-6 pt-6">
           <div>No current khatmas</div>
         </div>
       )}

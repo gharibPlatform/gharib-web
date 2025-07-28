@@ -37,7 +37,7 @@ export default function ChatRightBar({ changeNameHeader }) {
 
   return (
     <div  
-      className=" w-[360px] border-l border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]"
+      className=" w-[360px] border-r border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]"
     >
       <div className="flex p-7 pb-[27px] gap-8 justify-between border-b border-[var(--g-color)]">
         <div 

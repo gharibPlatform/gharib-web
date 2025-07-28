@@ -194,7 +194,7 @@ export default function KhatmasProgress() {
               orangeDegree={orangeDegree}
               blueDegree={blueDegree}
               fontSize={20}
-              groupProgress={`${khatmaDetails.progress}%`}
+              groupProgress={`${khatmaDetails.progress}`}
               personalProgress={`${personalProgress}%`}
               backgroundColor={"var(--dark-color)"}
             />

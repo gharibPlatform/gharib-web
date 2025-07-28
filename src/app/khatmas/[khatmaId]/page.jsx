@@ -18,12 +18,12 @@ const Page = () => {
   const { quranChapters, fetchQuranChapters } = useQuranHeaderChapter();
   const { group, fetchOneGroup } = useGroupStore();
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         setIsLoading(true);
-        console.log("Starting data fetching...");
 
         const [details] = await Promise.all([
           fetchKhatmaDetails(khatmaId),
@@ -42,6 +42,7 @@ const Page = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        setError(error.response.status);
       } finally {
         setIsLoading(false);
       }
@@ -50,6 +51,13 @@ const Page = () => {
     fetchAllData();
   }, [khatmaId]);
 
+  if (error === 403) {
+    return (
+      <div className="text-[var(--r-color)] text-lg pt-4 text-center mx-auto my-auto w-fit">
+        Sorry you're not part of the group so you can't see the khatma details
+      </div>
+    );
+  }
   const isDataReady =
     !isLoading &&
     khatmaDetails &&

@@ -1,113 +1,92 @@
 import { useState, useEffect } from "react";
 import InputChat from "./InputChat";
 import ChatHeader from "./ChatHeader";
-import webSocketInstance from "../../utils/webSocketInstance";
-import api from "../../utils/api";
+import webSocketInstance from "../../utils/chat/socket/webSocketInstance";
 
 export default function ChatContent({ nameHeader, groupBool, chatId }) {
-  const [messages, setMessages] = useState([]);
+  const [logs, setLogs] = useState(["Initializing test..."]);
   const [isConnected, setIsConnected] = useState(false);
 
+  const addLog = (message) => {
+    setLogs((prev) => [
+      ...prev,
+      `${new Date().toLocaleTimeString()}: ${message}`,
+    ]);
+  };
+
   useEffect(() => {
-    // Connect to WebSocket
-    webSocketInstance.connect(chatId, groupBool);
-
-    // Set up message handlers
-    webSocketInstance.addCallbacks({
-      new_message: (data) => {
-        setMessages((prev) => [...prev, data]);
-      },
-      message_error: (error) => {
-        console.error("WebSocket message error:", error);
-        if (error.code === "token_expired") {
-          handleTokenRefresh();
-        }
-      },
-    });
-
-    // Initial message load
-    const fetchInitialMessages = async () => {
-      try {
-        const endpoint = groupBool
-          ? `/api/groups/${chatId}/messages/`
-          : `/api/direct-messages/${chatId}/`;
-
-        const response = await api.get(endpoint);
-        setMessages(response.data);
-      } catch (error) {
-        console.error("Error loading messages:", error);
-      }
+    const handleConnectionChange = (connected) => {
+      setIsConnected(connected);
+      addLog(`Connection ${connected ? "established" : "lost"}`);
     };
 
-    fetchInitialMessages();
+    const handleMessage = (data) => {
+      addLog(`Received: ${JSON.stringify(data)}`);
+    };
+
+    const handleError = (error) => {
+      addLog(`Error: ${error.message || JSON.stringify(error)}`);
+    };
+
+    addLog("Registering WebSocket callbacks...");
+    webSocketInstance.addCallbacks({
+      connection_change: handleConnectionChange,
+      new_message: handleMessage,
+      error: handleError,
+    });
+
+    addLog("Attempting to connect...");
+    webSocketInstance.connect(chatId, groupBool).catch((err) => {
+      addLog(`Connection failed: ${err.message}`);
+    });
 
     return () => {
       webSocketInstance.disconnect();
     };
   }, [chatId, groupBool]);
 
-  const handleTokenRefresh = async () => {
-    try {
-      const refreshToken = localStorage.getItem("refresh_token");
-      const response = await api.post("/api/token/refresh/", {
-        refresh: refreshToken,
-      });
-      localStorage.setItem("access_token", response.data.access);
-
-      // Reconnect with new token
-      webSocketInstance.disconnect();
-      webSocketInstance.connect(chatId, groupBool);
-    } catch (error) {
-      console.error("Token refresh failed:", error);
-    }
-  };
-
-  const handleSendMessage = async (messageText) => {
-    if (!messageText.trim()) return;
-
-    try {
-      const messageData = {
-        action: "send_message",
-        text: messageText,
-        timestamp: new Date().toISOString(),
-      };
-
-      // Optimistic UI update
-      setMessages((prev) => [
-        ...prev,
-        {
-          ...messageData,
-          sender: "You",
-          status: "sending",
-        },
-      ]);
-
-      webSocketInstance.sendMessage(messageData);
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  };
+const sendTestMessage = () => {
+  try {
+    const testMsg = {
+      action: "send_message",
+      message: `TEST_${Date.now()}`,  // Changed from 'text' to 'message'
+      timestamp: new Date().toISOString(),
+    };
+    
+    addLog(`Sending: ${JSON.stringify(testMsg)}`);
+    
+    // Must stringify the message before sending
+    webSocketInstance.send(JSON.stringify(testMsg));
+  } catch (error) {
+    addLog(`Error sending message: ${error}`);
+  }
+};
 
   return (
-    <div className="flex flex-col relative bg-[var(--dark-color)] w-full h-[var(--height)]">
-      <ChatHeader Name={nameHeader} GroupBool={groupBool} />
-
-      <div className="grow overflow-y-auto p-4">
-        {messages.map((msg, index) => (
+    <div className="flex flex-col h-screen bg-gray-900 text-white">
+      <div className="p-4 border-b">
+        <h1 className="text-xl font-bold">WebSocket Debugger</h1>
+        <div className="flex items-center gap-4 my-2">
           <div
-            key={index}
-            className={`mb-2 p-2 rounded ${msg.status === "sending" ? "opacity-60" : ""}`}
+            className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}
+          />
+          <span>{isConnected ? "Connected" : "Disconnected"}</span>
+          <button
+            onClick={sendTestMessage}
+            className="px-3 py-1 bg-blue-600 rounded disabled:opacity-50"
+            disabled={!isConnected}
           >
-            <strong>{msg.sender || "You"}:</strong> {msg.text}
-            {msg.status === "sending" && (
-              <span className="ml-2 text-xs">Sending...</span>
-            )}
-          </div>
-        ))}
+            Send Test
+          </button>
+        </div>
       </div>
 
-      <div className="flex flex-row items-center justify-between pl-4 pr-4">
-        <InputChat onSendMessage={handleSendMessage} />
+      <div className="grow overflow-y-auto p-4 font-mono text-sm">
+        {logs.map((log, i) => (
+          <div key={i} className="mb-1 pb-1 border-b border-gray-700">
+            {log}
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -53,6 +53,7 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch (refreshError) {
+        //this is the possible to do things if the refresh token is invalid
         // Refresh failed - logout user
         // localStorage.removeItem('access_token');
         // localStorage.removeItem('refresh_token');

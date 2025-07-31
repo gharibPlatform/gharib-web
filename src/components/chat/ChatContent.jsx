@@ -49,14 +49,14 @@ const sendTestMessage = () => {
   try {
     const testMsg = {
       action: "send_message",
-      message: `TEST_${Date.now()}`,  // Changed from 'text' to 'message'
+      message: `TEST_${Date.now()}`,
       timestamp: new Date().toISOString(),
     };
     
     addLog(`Sending: ${JSON.stringify(testMsg)}`);
     
     // Must stringify the message before sending
-    webSocketInstance.send(JSON.stringify(testMsg));
+    webSocketInstance.send(testMsg);
   } catch (error) {
     addLog(`Error sending message: ${error}`);
   }

@@ -230,7 +230,11 @@ class WebSocketService {
 
     if (typeof actionType === "string" && wsActions[actionType]) {
       message = wsActions[actionType](...Object.values(payload));
-    } else if (typeof actionType === "object") {
+    } else if (
+      actionType &&
+      typeof actionType === "object" &&
+      !Array.isArray(actionType)
+    ) {
       message = actionType;
     } else {
       console.error("Invalid action type or payload");
@@ -245,6 +249,7 @@ class WebSocketService {
 
     try {
       this.socket.send(JSON.stringify(message));
+      console.log("Message sent:", message);
       return true;
     } catch (error) {
       console.error("Error sending message:", error);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import webSocketInstance from "../../../utils/chat/socket/webSocketInstance";
-import ChatContentUI from "./ChatContentUI";
+import ChatUIContainer from "./ChatUIContainer";
 
 export default function ChatContent({ nameHeader, groupBool, chatId }) {
   const [logs, setLogs] = useState(["Initializing test..."]);
@@ -63,7 +63,7 @@ export default function ChatContent({ nameHeader, groupBool, chatId }) {
 
   return (
     <div className="h-full w-full">
-      <ChatContentUI />
+      <ChatUIContainer />
     </div>
   );
 }

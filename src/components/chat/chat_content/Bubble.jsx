@@ -28,8 +28,8 @@ const Bubble = ({
           px-4 py-2 rounded-2xl 
           ${
             isSent
-              ? "bg-blue-500 text-white rounded-br-none"
-              : "bg-gray-200 text-gray-800 rounded-bl-none"
+              ? "bg-[var(--b-color)] text-white rounded-br-none"
+              : "bg-[var(--main-color-hover)] text-white rounded-bl-none"
           }
           shadow-sm
         `}
@@ -38,9 +38,9 @@ const Bubble = ({
         </div>
 
         <div className="flex items-center mt-1 space-x-1">
-          <span className="text-xs text-gray-500">{timestamp}</span>
+          <span className="text-xs text-[var(--lighter-color)]">{timestamp}</span>
           {isSent && status && (
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-[var(--lighter-color)]">
               {status === "read" ? "✓✓" : status === "delivered" ? "✓✓" : "✓"}
             </span>
           )}

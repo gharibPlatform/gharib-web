@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import CreateDM from "./create dm/CreateDM";
 import DirectMessagesSection from "./direct_messages/DirectMessagesSection";
+import useGroupStore from "../../stores/groupStore";
 
 export default function ChatRightBar() {
   const [showCreateDM, setShowCreateDM] = useState(false);
@@ -19,6 +20,11 @@ export default function ChatRightBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showCreateDM]);
+  const { loadingGroups, errorGroups, fetchGroups } = useGroupStore();
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
 
   return (
     <div className=" w-[420px] border-r border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]">
@@ -41,6 +47,18 @@ export default function ChatRightBar() {
           <div ref={createDMRef}>
             <CreateDM close={() => setShowCreateDM(false)} />
           </div>
+        </div>
+      )}
+
+      {loadingGroups && (
+        <div className="flex justify-center items-center h-20">
+          <p className="text-[var(--lighter-color)]">Loading groups...</p>
+        </div>
+      )}
+
+      {errorGroups && (
+        <div className="flex justify-center items-center h-20">
+          <p className="text-[var(--bright-r-color)]">{errorGroups}</p>
         </div>
       )}
 

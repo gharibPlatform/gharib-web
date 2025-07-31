@@ -7,11 +7,19 @@ import {
 } from "@/utils/apiGroup";
 import { create } from "zustand";
 
-const useGroupStore = create((set) => ({
+const useGroupStore = create((set, get) => ({
   groups: null,
+  loadingGroups: false,
+  errorGroups: null,
   fetchGroups: async () => {
-    const data = await getGroups();
-    set({ groups: data });
+    if (get().groups || get().loadingGroups) return;
+    try {
+      set({ loadingGroups: true });
+      const data = await getGroups();
+      set({ groups: data, loadingGroups: false });
+    } catch (error) {
+      set({ errorGroups: error, loadingGroups: false });
+    }
   },
 
   group: null,

@@ -2,7 +2,7 @@
 import { useParams } from "next/navigation";
 import ChatContent from "../../../../components/chat/ChatContent";
 import useNameHeaderStore from "../../../../stores/nameHeaderStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useGroupStore from "../../../../stores/groupStore";
 
 const Page = () => {

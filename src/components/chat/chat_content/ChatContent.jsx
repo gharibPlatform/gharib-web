@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import InputChat from "./InputChat";
-import ChatHeader from "./ChatHeader";
-import webSocketInstance from "../../utils/chat/socket/webSocketInstance";
+import webSocketInstance from "../../../utils/chat/socket/webSocketInstance";
+import ChatContentUI from "./ChatContentUI";
 
 export default function ChatContent({ nameHeader, groupBool, chatId }) {
   const [logs, setLogs] = useState(["Initializing test..."]);
@@ -62,5 +61,9 @@ export default function ChatContent({ nameHeader, groupBool, chatId }) {
     }
   };
 
-  return <div></div>;
+  return (
+    <div className="h-full w-full">
+      <ChatContentUI />
+    </div>
+  );
 }

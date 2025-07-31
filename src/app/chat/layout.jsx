@@ -4,24 +4,22 @@ import GroupSideBar from "../../components/chat/group sidebar/GroupSidebar";
 import Header from "../../components/common/header/Header";
 import SideBar from "../../components/common/sidebar/Sidebar";
 import useGroupSidebarStore from "../../stores/groupSidebarStore";
-import { ChatActionsProvider } from "../../context/ChatActionContext";
+
 const Layout = ({ children }) => {
   const { isGroupSidebarOpen } = useGroupSidebarStore();
 
   return (
-    <ChatActionsProvider>
-      <div className="w-screen overflow-hidden h-screen flex flex-col">
-        <Header />
-        <div className="flex">
-          <div className="flex w-full">
-            <SideBar />
-            <ChatRightBar />
-            <div className="h-screen flex-grow">{children}</div>
-            {isGroupSidebarOpen && <GroupSideBar />}
-          </div>
-        </div>
+    <div className="w-screen overflow-hidden h-screen flex flex-col">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <SideBar />
+        <ChatRightBar />
+
+        <div className="flex flex-col flex-1 overflow-hidden">{children}</div>
+
+        {isGroupSidebarOpen && <GroupSideBar />}
       </div>
-    </ChatActionsProvider>
+    </div>
   );
 };
 

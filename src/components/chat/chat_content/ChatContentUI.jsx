@@ -1,10 +1,8 @@
-"use client";
-
 import React from "react";
 import ChatUI, { Bubble, useMessages } from "@chatui/core";
 import "@chatui/core/dist/index.css";
 
-const Page = () => {
+export default function ChatContentUI() {
   const { messages, appendMsg } = useMessages([]);
 
   function handleSend(type, val) {
@@ -42,6 +40,4 @@ const Page = () => {
       onSend={handleSend}
     />
   );
-};
-
-export default Page;
+}

@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import ChatContent from "../../../../components/chat/ChatContent";
+import ChatContent from "../../../../components/chat/chat_content/ChatContent";
 import useNameHeaderStore from "../../../../stores/nameHeaderStore";
 import { useEffect } from "react";
 import useGroupStore from "../../../../stores/groupStore";
@@ -19,7 +19,7 @@ const Page = () => {
   }, [group]);
 
   return (
-    <div>
+    <div className="h-full">
       <ChatContent nameHeader={group?.name} groupBool={true} chatId={id} />
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import CreateDM from "./create dm/CreateDM";
+import DirectMessagesSection from "./direct_messages/DirectMessagesSection";
 
 export default function ChatRightBar() {
   const [showCreateDM, setShowCreateDM] = useState(false);

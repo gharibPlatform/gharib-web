@@ -27,7 +27,7 @@ export default function ChatRightBar() {
   }, []);
 
   return (
-    <div className=" w-[420px] border-r border-[var(--g-color)] bg-[var(--main-color)] h-[var(--height)]">
+    <div className=" w-[420px] border-r border-[var(--g-color)] bg-[var(--main-color)]">
       <div className="flex flex-col px-4 gap-2 pt-4">
         <h2 className="text-[var(--lighter-color)] text-white text-xl font-bold">
           Messages

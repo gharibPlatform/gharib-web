@@ -366,7 +366,7 @@ export default function QuranContent() {
             </button>
 
             {showKhatmas && (
-              <div className="mt-2 p-2 rounded-lg shadow-lg flex flex-col gap-1 border border-[var(--main-color)]">
+              <div className="absolute top-4 right-6 mt-2 p-2 rounded-lg shadow-lg flex flex-col gap-1 border border-[var(--main-color)]"> 
                 {khatmasWithProgress.map((khatma) => (
                   <KhatmasInQuran
                     key={khatma.name}
@@ -399,8 +399,8 @@ export default function QuranContent() {
 
       <div
         className={`transition-all duration-300 ease-in-out 
-                            ${isFooterVisible ? "max-h-[500px] opacity-100 py-2" : "max-h-0 opacity-0 overflow-hidden"}
-                            `}
+                  ${isFooterVisible ? "max-h-[500px] opacity-100 py-2" : "max-h-0 opacity-0 overflow-hidden"}
+              `}
       >
         <QuranFooter />
       </div>

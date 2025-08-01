@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">
-      <Header />
+      {/* <Header /> */}
       <div className="flex flex-1 overflow-hidden">
         <SideBar />
         <ChatRightBar />

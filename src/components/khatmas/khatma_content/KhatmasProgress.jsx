@@ -1,22 +1,28 @@
 import Circle from "../../common/circle/Circle";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import PersonalTrackerLine from "./PersonalTrackerLine";
-import { useEffect, useState } from "react";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import { useRouter } from "next/navigation";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
+import { useKhatmaProgress } from "../../../hooks/useKhatmaProgress";
 
 export default function KhatmasProgress() {
   const { khatmaDetails, khatmaMembership, khatmaSelfMembership } =
     useKhatmaStore();
-
-  const { setGoToVerse, setRange, totalVerses } = useQuranHeaderVerse();
   const { quranChapters } = useQuranHeaderChapter();
+  const { setGoToVerse } = useQuranHeaderVerse();
+
+  const {
+    selfStartChapter,
+    selfEndChapter,
+    groupStartChapter,
+    groupEndChapter,
+    userProgress,
+    loading,
+  } = useKhatmaProgress(khatmaSelfMembership, khatmaDetails, quranChapters);
 
   const router = useRouter();
-
   const timeLeft = 28;
-
   const orangeDegree = (khatmaDetails.progress * 360) / 100;
 
   const personalProgress =
@@ -24,62 +30,10 @@ export default function KhatmasProgress() {
 
   const blueDegree = (personalProgress * 360) / 100;
 
-  const [selfStartChapter, setSelfStartChapter] = useState();
-  const [selfEndChapter, setSelfEndChapter] = useState();
-  const [groupStartChapter, setGroupStartChapter] = useState();
-  const [groupEndChapter, setGroupEndChapter] = useState();
-  const [loading, setLoading] = useState(true);
-
-  //getting the chapters from the quranChapters for the id/name_simple
-  useEffect(() => {
-    if (khatmaSelfMembership && quranChapters) {
-      const startChapterSelf = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaSelfMembership.startShareSurah.toLowerCase()
-      );
-
-      const endChapterSelf = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaSelfMembership.endShareSurah.toLowerCase()
-      );
-
-      const startChapterGroup = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaDetails.startSurah.toLowerCase()
-      );
-
-      const endChapterGruop = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaDetails.endSurah.toLowerCase()
-      );
-
-      setSelfStartChapter(startChapterSelf);
-      setSelfEndChapter(endChapterSelf);
-      setGroupStartChapter(startChapterGroup);
-      setGroupEndChapter(endChapterGruop);
-      setRange(
-        startChapterSelf.id,
-        khatmaSelfMembership.startShareVerse,
-        endChapterSelf.id,
-        khatmaSelfMembership.endShareVerse,
-        quranChapters
-      );
-      setLoading(false);
-    }
-  }, [khatmaSelfMembership, quranChapters, setRange]);
-
   const handleClickVerse = (chapterId, verse) => {
     router.push(`/quran/chapters/${chapterId}`);
     setGoToVerse(verse);
   };
-
-  useEffect(() => {
-    console.log(totalVerses);
-  }, [totalVerses]);
 
   if (loading) {
     return (
@@ -99,8 +53,8 @@ export default function KhatmasProgress() {
             <div className="flex flex-col justify-between gap-8">
               <PersonalTrackerLine
                 progress={khatmaSelfMembership.progress}
-                currentVerse={khatmaSelfMembership.currentVerse}
-                wantedVerse={totalVerses}
+                currentVerse={userProgress.completed}
+                wantedVerse={userProgress.total}
               />
               <h3>Your share is from:</h3>
             </div>
@@ -137,7 +91,7 @@ export default function KhatmasProgress() {
 
             <div className="flex items-center justify-between mt-4">
               <h3 className="text-center text-[var(--g-color)]">
-                {totalVerses} Verses
+                {userProgress.total} Verses
               </h3>
               <h3 className="text-center text-[var(--g-color)]">
                 joined khatma at : {khatmaSelfMembership.created_at}

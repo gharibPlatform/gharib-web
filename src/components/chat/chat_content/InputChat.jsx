@@ -2,7 +2,7 @@ import Create from "../../common/iconButtons/Create";
 import CreateKhatma from "../khatmas/CreateKhatma";
 import { useState, useEffect, useRef } from "react";
 
-export default function InputChat({ handleKeyPress, value, handleOnChange, handleSendMessage }) {
+export default function InputChat({ handleKeyPress, value, handleOnChange, handleSendMessage, disabled }) {
   const [showCreateKhatmaConfirmation, setShowCreateKhatmaConfirmation] =
     useState(false);
   const showKhatmaRef = useRef(null);
@@ -49,7 +49,7 @@ export default function InputChat({ handleKeyPress, value, handleOnChange, handl
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="#585858"
+            stroke={disabled ? "#585858" : "#3B82F6"}
           >
             <path
               strokeLinecap="round"

@@ -51,7 +51,7 @@ const ChatUIContainer = ({ initialMessages = [] }) => {
               hour: "2-digit",
               minute: "2-digit",
             }),
-            avatarUrl: "https://i.pravatar.cc/150?img=5",
+            avatarUrl: "https://i.pravatar.cc/150?img=1",
           };
           setMessages((prev) => [...prev, reply]);
           setIsTyping(false);
@@ -74,7 +74,7 @@ const ChatUIContainer = ({ initialMessages = [] }) => {
 
   return (
     <div className="flex flex-col h-full w-full mx-auto overflow-hidden">
-      {/* Messages Area */}
+
       <div className="flex-1 overflow-y-auto p-4 ">
         <MessagesList messages={messages} currentUserId={currentUser.id} />
         {isTyping && <TypingIndicator />}
@@ -85,6 +85,7 @@ const ChatUIContainer = ({ initialMessages = [] }) => {
         handleOnChange={handleOnChange}
         value={newMessage}
         handleSendMessage={handleSendMessage}
+        disabled={!newMessage.trim()}
       />
     </div>
   );

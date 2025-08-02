@@ -3,10 +3,32 @@ import QuranContent from "../../../../components/common/quran/quran content/Qura
 import { useParams } from "next/navigation";
 import { getChapter } from "../../../../utils/quran/quran";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useShouldFetch from "../../../../stores/shouldFetchStore";
+import useKhatmaStore from "../../../../stores/khatmasStore";
 
 const Page = () => {
+  const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
+
+  const [isLoadingUserKhatmas, setIsLoadingUserKhatmas] = useState(true);
+  useEffect(() => {
+    const fetchKhatmas = async () => {
+      try {
+        await fetchUserKhatmas();
+        setIsLoadingUserKhatmas(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchKhatmas();
+  }, []);
+
+  useEffect(() => {
+    if (userKhatmas) {
+      console.log(userKhatmas);
+      setIsLoadingUserKhatmas(false);
+    }
+  }, [userKhatmas]);
   const { id } = useParams();
   const setShouldFetch = useShouldFetch((state) => state.setShouldFetch);
   const setQuranHeaderChapter = useQuranHeaderChapter(
@@ -24,7 +46,7 @@ const Page = () => {
 
   return (
     <div>
-      <QuranContent />
+      <QuranContent isLoadingUserKhatmas={isLoadingUserKhatmas} />
     </div>
   );
 };

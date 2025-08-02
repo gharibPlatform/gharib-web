@@ -20,8 +20,9 @@ import toast from "react-hot-toast";
 import VersePopup from "./VersePopup";
 import { audioByVerse } from "../../../../utils/quran/quranAudio";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useKhatmaStore from "../../../../stores/khatmasStore";
 
-export default function QuranContent() {
+export default function QuranContent({ isLoadingUserKhatmas }) {
   const scrollRef = useRef(null);
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
@@ -193,6 +194,8 @@ export default function QuranContent() {
   const [khatmasWithProgress, setKhatmasWithProgress] = useState(khatmas);
   const [showKhatmas, setShowKhatmas] = useState(false);
 
+  const { khatmaSelfMembership, khatmaDetails, quranChapters, userKhatmas } =
+    useKhatmaStore();
   const {
     userProgress,
     loading: progressLoading,
@@ -211,6 +214,10 @@ export default function QuranContent() {
 
     setKhatmasWithProgress(updated);
   }, [userProgress?.percentage]);
+
+  useEffect(() => {
+    console.log("here is userProgress ", userProgress);
+  }, [userProgress]);
 
   const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
   const [clickBoxBool, setClickBoxBool] = useState(false);
@@ -276,13 +283,19 @@ export default function QuranContent() {
 
             {showKhatmas && (
               <div className="absolute top-4 right-6 mt-2 p-2 rounded-lg shadow-lg flex flex-col gap-1 border border-[var(--main-color)]">
-                {khatmasWithProgress.map((khatma) => (
-                  <KhatmasInQuran
-                    key={khatma.name}
-                    name={khatma.name}
-                    percentage={Math.round(khatma.progress || 0)}
-                  />
-                ))}
+                {isLoadingUserKhatmas ? (
+                  <div className="flex justify-center items-center h-20">
+                    <p className="text-[var(--lighter-color)]">Loading...</p>
+                  </div>
+                ) : (
+                  userKhatmas.map((khatma) => (
+                    <KhatmasInQuran
+                      key={khatma.khatma.id}
+                      name={khatma.khatma.name}
+                      percentage={Math.round(khatma.progress || 0)}
+                    />
+                  ))
+                )}
               </div>
             )}
           </div>

@@ -22,7 +22,7 @@ export default function InputChat({ handleKeyPress, value, handleOnChange, handl
   }, []);
 
   return (
-    <div className="border-t border-[var(--g-color)] flex items-center justify-center w-full py-4 px-4">
+    <div className="border-t border-[var(--g-color)] flex items-center justify-center w-full py-4 px-4 bg-[var(--secondary-color)]">
       <div className="w-full px-4">
         <input
           className="focus:outline-none px-2 py-1 rounded-sm border border-[var(--g-color)] placeholder-gray-500 bg-[var(--secondary-color)] text-[var(--w-color)] w-full"

@@ -75,7 +75,7 @@ const ChatUIContainer = ({ initialMessages = [] }) => {
   return (
     <div className="flex flex-col h-full w-full mx-auto overflow-hidden">
 
-      <div className="flex-1 overflow-y-auto p-4 ">
+      <div className="flex-1 overflow-y-auto p-4 bg-[var(--secondary-color)]">
         <MessagesList messages={messages} currentUserId={currentUser.id} />
         {isTyping && <TypingIndicator />}
       </div>

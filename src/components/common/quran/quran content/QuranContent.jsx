@@ -292,7 +292,8 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
                     <KhatmasInQuran
                       key={khatma.khatma.id}
                       name={khatma.khatma.name}
-                      percentage={Math.round(khatma.progress || 0)}
+                      progress={khatma.khatma.progress}
+                      selfProgress={khatma.progress}
                     />
                   ))
                 )}

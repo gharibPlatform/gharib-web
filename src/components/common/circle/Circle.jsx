@@ -12,8 +12,9 @@ export default function Circle({
   const innerHeight = height - 40;
   const radius = Math.min(width, height) / 2 - 12;
 
-  const blueThickness = 20;
-  const orangeThickness = 14;
+  const sizeFactor = Math.min(width, height) / 100; 
+  const blueThickness = 6 + sizeFactor * 4; 
+  const orangeThickness = 4 + sizeFactor * 3;
 
   return (
     <div
@@ -28,7 +29,7 @@ export default function Circle({
         viewBox={`0 0 ${width} ${height}`}
       >
         <circle cx={width / 2} cy={height / 2} r={radius + 5} fill="#323232" />
-        
+
         {orangeDegree > 0 && (
           <path
             d={`
@@ -44,7 +45,7 @@ export default function Circle({
             strokeDasharray={`${(orangeDegree / 360) * 2 * Math.PI * radius}, 1000`}
           />
         )}
-        
+
         {blueDegree > 0 && (
           <path
             d={`
@@ -73,8 +74,22 @@ export default function Circle({
         }}
       >
         <div className="flex flex-col items-center">
-          <p className="text-2xl text-[var(--o-color)] font-bold">{groupProgress ? groupProgress : 0}%</p>
-          <p className="text-[var(--b-color)] text-sm">{personalProgress ? `${personalProgress}` : ""}</p>
+          <p
+            className="text-[var(--o-color)] font-bold"
+            style={{
+              fontSize: `${fontSize}px`,
+            }}
+          >
+            {groupProgress ? groupProgress : 0}%
+          </p>
+          <p
+            style={{
+              fontSize: `${fontSize - 2}px`,
+            }}
+            className="text-[var(--b-color)]"
+          >
+            {personalProgress ? `${personalProgress}` : ""}
+          </p>
         </div>
       </div>
     </div>

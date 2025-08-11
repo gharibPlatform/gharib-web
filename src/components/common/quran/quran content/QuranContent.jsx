@@ -21,6 +21,7 @@ import VersePopup from "./VersePopup";
 import { audioByVerse } from "../../../../utils/quran/quranAudio";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import useKhatmaStore from "../../../../stores/khatmasStore";
+import QuranVerseModal from "./QuranVerseModal";
 
 export default function QuranContent({ isLoadingUserKhatmas }) {
   const scrollRef = useRef(null);
@@ -36,7 +37,7 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     setGoToPath,
   } = useQuranHeaderChapter();
 
-  const { quranHeaderVerse } = useQuranHeaderVerse();
+  const { quranHeaderVerse, activeVerse, setActiveVerse } = useQuranHeaderVerse();
   const { shouldFetch } = useShouldFetch();
 
   const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
@@ -264,6 +265,14 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     });
   };
 
+  const [showHighlightsConfirmation, setShowHighlightsConfirmation] =
+    useState(false);
+
+  const handleHighlightVerse = () => {
+    setClickBoxBool(false);
+    setShowHighlightsConfirmation(true);
+  };
+
   return (
     <div className="flex flex-col h-screen">
       {shouldFetch === "chapter" && <ProgressTrackerLine progress={progress} />}
@@ -314,9 +323,16 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
               left={boxPosition.x}
               top={boxPosition.y + (scrollRef.current?.scrollTop || 0)}
               playVerse={playVerse}
+              setClickBoxBool={setClickBoxBool}
+              handleHighlightVerse={handleHighlightVerse}
             />
           </div>
         )}
+
+        {showHighlightsConfirmation && (
+          <QuranVerseModal create={true} verse={activeVerse} onClose={() => setShowHighlightsConfirmation(false)} />
+        )}
+
       </div>
 
       <div

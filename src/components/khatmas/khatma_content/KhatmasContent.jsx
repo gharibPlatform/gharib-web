@@ -3,7 +3,7 @@ import KhatmasProgress from "./KhatmasProgress";
 import {
   postKhatmaMembership,
   getKhatmaMembership,
-} from "../../../utils/apiKhatma";
+} from "../../../utils/khatma/apiKhatma";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import QuranHeader from "../../chat/khatmas/QuranHeaderCreateKhatma";
 import useKhatmaStore from "../../../stores/khatmasStore";

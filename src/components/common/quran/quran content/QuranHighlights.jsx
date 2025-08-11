@@ -7,7 +7,8 @@ export default function QuranHighlights({
   highlights = ["3:23", "2:23", "4:23", "5:24", "2:13", "3:2"],
 }) {
   const [verses, setVerses] = useState({});
-  // fetch all highlighted verses
+
+  // fetch all highlighted verses (get the actual quran data since it's in a different api)
   useEffect(() => {
     const fetchVerses = async () => {
       const newVerses = {};

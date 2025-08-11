@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore";
 import useShouldFetch from "../../../../stores/shouldFetchStore";
@@ -40,7 +40,6 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
   const { shouldFetch } = useShouldFetch();
 
   const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
-  const [progress, setProgress] = useState(0);
   const rate = 100 / totalVersesInChapter;
 
   //fetch for one page
@@ -128,8 +127,8 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
   }, [lastFetchedPage]);
 
   //change the progress for the tracker line
-  useEffect(() => {
-    setProgress(quranHeaderVerse * rate);
+  const progress = useMemo(() => {
+    return quranHeaderVerse * rate;
   }, [quranHeaderVerse]);
 
   //hide header and footer when scrolling

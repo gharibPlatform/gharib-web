@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api";
 const API_BASE_URL = "http://localhost:8000";
 
 // Khatma APIs
@@ -6,7 +6,7 @@ export const createKhatma = async (data) => {
   try {
     const response = await api.post(
       `${API_BASE_URL}/khatma/create-khatma/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -18,7 +18,7 @@ export const createKhatma = async (data) => {
 export const getKhatmaMembership = async (khatmaId) => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/khatma/${khatmaId}/memberships/`,
+      `${API_BASE_URL}/khatma/${khatmaId}/memberships/`
     );
     console.log(response);
     return response.data;
@@ -42,7 +42,7 @@ export const updateKhatmaMembership = async (id, data) => {
   try {
     const response = await api.put(
       `${API_BASE_URL}/khatma/khatma-membership/${id}/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -55,7 +55,7 @@ export const postKhatmaMembership = async (id, data) => {
   try {
     const response = await api.post(
       `${API_BASE_URL}/khatma/khatma-membership/${id}/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -68,7 +68,7 @@ export const patchKhatmaMembership = async (id, data) => {
   try {
     const response = await api.patch(
       `${API_BASE_URL}/khatma/khatma-membership/${id}/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -80,7 +80,7 @@ export const patchKhatmaMembership = async (id, data) => {
 export const deleteKhatmaMembership = async (id) => {
   try {
     const response = await api.delete(
-      `${API_BASE_URL}/khatma/khatma-membership/${id}/`,
+      `${API_BASE_URL}/khatma/khatma-membership/${id}/`
     );
     return response.data;
   } catch (error) {
@@ -114,7 +114,7 @@ export const patchKhatma = async (id, data) => {
   try {
     const response = await api.patch(
       `${API_BASE_URL}/khatma/khatma/${id}/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -136,7 +136,7 @@ export const deleteKhatma = async (id) => {
 export const getListKhatmaMembership = async () => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/khatma/list-khatma-membership/`,
+      `${API_BASE_URL}/khatma/list-khatma-membership/`
     );
     return response.data;
   } catch (error) {
@@ -149,7 +149,7 @@ export const createListKhatmaMembership = async (data) => {
   try {
     const response = await api.post(
       `${API_BASE_URL}/khatma/list-khatma-membership/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -162,7 +162,7 @@ export const updateListKhatmaMembership = async (data) => {
   try {
     const response = await api.put(
       `${API_BASE_URL}/khatma/list-khatma-membership/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -175,7 +175,7 @@ export const patchListKhatmaMembership = async (data) => {
   try {
     const response = await api.patch(
       `${API_BASE_URL}/khatma/list-khatma-membership/`,
-      data,
+      data
     );
     return response.data;
   } catch (error) {
@@ -187,7 +187,7 @@ export const patchListKhatmaMembership = async (data) => {
 export const deleteListKhatmaMembership = async () => {
   try {
     const response = await api.delete(
-      `${API_BASE_URL}/khatma/list-khatma-membership/`,
+      `${API_BASE_URL}/khatma/list-khatma-membership/`
     );
     return response.data;
   } catch (error) {

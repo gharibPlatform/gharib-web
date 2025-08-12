@@ -3,7 +3,7 @@ import QuranHighlights from "./quran content/QuranHighlights";
 import { useState } from "react";
 import { X } from "lucide-react";
 
-export default function QuranRightBar({ handleVerseClick, onClose }) {
+export default function QuranRightBar({ handleVerseClick, onClose, isLoadingHighlights }) {
   const [rotation, setRotation] = useState(90);
   const [showHighlights, setShowHighlights] = useState(false);
 
@@ -37,7 +37,7 @@ export default function QuranRightBar({ handleVerseClick, onClose }) {
         </div>
       </div>
       {showHighlights && (
-        <QuranHighlights handleVerseClick={handleVerseClick} />
+        <QuranHighlights isLoadingHighlights={isLoadingHighlights} handleVerseClick={handleVerseClick} />
       )}
     </div>
   );

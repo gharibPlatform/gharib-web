@@ -2,10 +2,11 @@
 import Header from "../../components/common/header/Header";
 import QuranRightBar from "../../components/common/quran/QuranRightBar";
 import SideBar from "../../components/common/sidebar/Sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QuranVerseModal from "../../components/common/quran/quran content/QuranVerseModal";
-import QuranSidebar from "@/components/common/quran/quran_sidebar/QuranSidebar";
+import QuranSidebar from "../../components/common/quran/quran_sidebar/QuranSidebar";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import useQuranHighlightStore from "../../stores/quranHighlightStore";
 
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);
@@ -16,6 +17,19 @@ const Layout = ({ children }) => {
   const toggleSidebar = () => setShowSidebar(!showSidebar);
   const handleVerseClick = (verse) => setSelectedVerse(verse);
   const closeModal = () => setSelectedVerse(null);
+
+  const { quranHighlights, fetchQuranHighlights } = useQuranHighlightStore();
+  const [isLoadingHighlights, setIsLoadingHihglights] = useState(true);
+
+  useEffect(() => {
+    fetchQuranHighlights();
+  }, []);
+
+  useEffect(() => {
+    if (quranHighlights) {
+      setIsLoadingHihglights(false);
+    }
+  }, [quranHighlights]);
 
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">
@@ -47,6 +61,7 @@ const Layout = ({ children }) => {
           <QuranRightBar
             handleVerseClick={handleVerseClick}
             onClose={toggleRightBar}
+            isLoadingHighlights={isLoadingHighlights}
           />
         )}
 

@@ -6,11 +6,12 @@ import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import { useEffect, useState } from "react";
 import useShouldFetch from "../../../../stores/shouldFetchStore";
 import useKhatmaStore from "../../../../stores/khatmasStore";
+import useQuranHighlightStore from "@/stores/quranHighlightStore";
 
 const Page = () => {
   const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
-
   const [isLoadingUserKhatmas, setIsLoadingUserKhatmas] = useState(true);
+
   useEffect(() => {
     const fetchKhatmas = async () => {
       try {
@@ -29,6 +30,7 @@ const Page = () => {
       setIsLoadingUserKhatmas(false);
     }
   }, [userKhatmas]);
+
   const { id } = useParams();
   const setShouldFetch = useShouldFetch((state) => state.setShouldFetch);
   const setQuranHeaderChapter = useQuranHeaderChapter(

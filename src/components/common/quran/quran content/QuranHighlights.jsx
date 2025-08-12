@@ -5,6 +5,7 @@ import QuranHighlightsVerse from "./QuranHighlightsVerse";
 export default function QuranHighlights({
   handleVerseClick,
   highlights = ["3:23", "2:23", "4:23", "5:24", "2:13", "3:2"],
+  isLoadingHighlights,
 }) {
   const [verses, setVerses] = useState({});
 
@@ -30,15 +31,19 @@ export default function QuranHighlights({
 
   return (
     <>
-      <div className="flex flex-col text-white flex-wrap px-2 gap-6">
-        {Object.entries(verses).map(([key, verseData]) => (
-          <QuranHighlightsVerse
-            key={key}
-            verse={verseData}
-            onClick={() => handleVerseClick(verseData)}
-          />
-        ))}
-      </div>
+      {isLoadingHighlights ? (
+        <div className="text-[var(--lighter-color)] mx-auto">Loading...</div>
+      ) : (
+        <div className="flex flex-col text-white flex-wrap px-2 gap-6">
+          {Object.entries(verses).map(([key, verseData]) => (
+            <QuranHighlightsVerse
+              key={key}
+              verse={verseData}
+              onClick={() => handleVerseClick(verseData)}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }

@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";

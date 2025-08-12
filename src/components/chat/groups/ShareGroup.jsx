@@ -13,7 +13,7 @@ import {
   patchGroupCodeInfo,
   updateGroupCodeInfo,
   deleteGroupCodeInfo,
-} from "../../../utils/apiGroup";
+} from "../../../utils/group/apiGroup";
 export default function ShareGroup() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -26,7 +26,7 @@ export default function ShareGroup() {
     setSelectedUsers((prev) =>
       prev.includes(brother)
         ? prev.filter((name) => name !== brother)
-        : [...prev, brother],
+        : [...prev, brother]
     );
     setSearchQuery("");
   };

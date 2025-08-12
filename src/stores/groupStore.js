@@ -4,7 +4,7 @@ import {
   patchGroupSettings,
   updateGroup,
   updateGroupSettings,
-} from "@/utils/apiGroup";
+} from "@/utils/group/apiGroup";
 import { create } from "zustand";
 
 const useGroupStore = create((set, get) => ({

@@ -24,10 +24,8 @@ class WebSocketService {
         throw new Error("No access token available");
       }
 
-      const endpoint = isGroupChat
-        ? `ws://localhost:8000/group/${chatId}/`
-        : `ws://localhost:8000/dm/${chatId}/`;
-
+      const endpoint = "ws://localhost:8000/"
+      
       this.socket = new WebSocket(
         `${endpoint}?token=${encodeURIComponent(token)}`
       );
@@ -50,7 +48,7 @@ class WebSocketService {
     this.notifyStatusChange(true);
   }
 
-  handleMessage(e) {
+handleMessage(e) {
     try {
       let data;
       try {
@@ -93,7 +91,7 @@ class WebSocketService {
     } catch (error) {
       console.error("Unexpected error in message handling:", error);
     }
-  }
+  }  
 
   // New method to handle non-JSON messages
   handleNonJsonMessage(rawData) {

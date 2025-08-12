@@ -21,6 +21,7 @@ export default function ChatContent({
   useEffect(() => {
     const handleConnectionChange = (connected) => {
       setIsConnected(connected);
+      console.log("connection change", connected);
       addLog(`Connection ${connected ? "established" : "lost"}`);
     };
 
@@ -49,28 +50,27 @@ export default function ChatContent({
     };
   }, [chatId, groupBool]);
 
-  const sendTestMessage = () => {
+  const sendMessage = () => {
     try {
       const msg = {
         action: "send_message",
+        chat: `g_${chatId}`,
         message: `TEST_${Date.now()}`,
-        timestamp: new Date().toISOString(),
       };
 
-      addLog(`Sending: ${JSON.stringify(msg)}`);
-
-      // Must stringify the message before sending
       webSocketInstance.send(msg);
     } catch (error) {
       addLog(`Error sending message: ${error}`);
     }
   };
-  
+
   return (
     <div className="h-full w-full">
       <ChatUIContainer
+        sendMessage={sendMessage}
         isLoadingMessages={isLoadingMessages}
         initialMessages={messages}
+        chatId={chatId}
       />
     </div>
   );

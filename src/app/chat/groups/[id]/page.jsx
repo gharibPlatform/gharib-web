@@ -5,6 +5,7 @@ import useNameHeaderStore from "../../../../stores/nameHeaderStore";
 import { useEffect, useState } from "react";
 import useGroupStore from "../../../../stores/groupStore";
 import useChatStore from "../../../../stores/useChatStore";
+import webSocketInstance from "@/utils/chat/socket/webSocketInstance";
 
 const Page = () => {
   const { id } = useParams();

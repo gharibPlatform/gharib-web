@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import MessagesList from "./MessagesList";
 import TypingIndicator from "./TypingIndicator";
 import InputChat from "./InputChat";
+import webSocketInstance from "../../../utils/chat/socket/webSocketInstance";
 
-const ChatUIContainer = ({ isLoadingMessages, initialMessages }) => {
+const ChatUIContainer = ({ isLoadingMessages, initialMessages, chatId }) => {
   const [messages, setMessages] = useState(initialMessages || []);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -14,52 +15,18 @@ const ChatUIContainer = ({ isLoadingMessages, initialMessages }) => {
   };
 
   const handleSendMessage = () => {
-    if (newMessage.trim() === "") return;
+    try {
+      const msg = {
+        action: "send_message",
+        chat: `g_${chatId}`,
+        message: newMessage,
+      };
 
-    const message = {
-      id: Date.now(),
-      message: newMessage,
-      sender: {
-        id: currentUser.id,
-      },
-      updated_at: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      // status: "sent",
-    };
-
-    setMessages([...messages, message]);
-    setNewMessage("");
-
-    // Simulate reply after 1-3 seconds
-    if (Math.random() > 0.3) {
-      setIsTyping(true);
-      setTimeout(
-        () => {
-          const replies = [
-            "That's interesting!",
-            "I see what you mean.",
-            "Let me think about that...",
-            "Thanks for sharing!",
-            "What else is new?",
-            "I agree with you.",
-          ];
-          const reply = {
-            id: Date.now(),
-            text: replies[Math.floor(Math.random() * replies.length)],
-            senderId: "other-user",
-            timestamp: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-            avatarUrl: "https://i.pravatar.cc/150?img=1",
-          };
-          setMessages((prev) => [...prev, reply]);
-          setIsTyping(false);
-        },
-        1000 + Math.random() * 2000
-      );
+      webSocketInstance.send(msg);
+      // setMessages([...messages, msg]);
+      // setNewMessage("");
+    } catch (error) {
+      console.log(`Error sending message: ${error}`);
     }
   };
 
@@ -76,10 +43,10 @@ const ChatUIContainer = ({ isLoadingMessages, initialMessages }) => {
 
   useEffect(() => {
     console.log("initial messages : ", initialMessages);
-    console.log("messages : ", messages)
+    console.log("messages : ", messages);
   }, [initialMessages]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (initialMessages && initialMessages.length > 0) {
       setMessages(initialMessages);
     }

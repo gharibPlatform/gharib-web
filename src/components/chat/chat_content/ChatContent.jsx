@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import webSocketInstance from "../../../utils/chat/socket/webSocketInstance";
 import ChatUIContainer from "./ChatUIContainer";
 
-export default function ChatContent({ nameHeader, groupBool, chatId }) {
+export default function ChatContent({
+  isLoadingMessages,
+  groupBool,
+  chatId,
+  messages,
+}) {
   const [logs, setLogs] = useState(["Initializing test..."]);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -60,10 +65,13 @@ export default function ChatContent({ nameHeader, groupBool, chatId }) {
       addLog(`Error sending message: ${error}`);
     }
   };
-
+  
   return (
     <div className="h-full w-full">
-      <ChatUIContainer />
+      <ChatUIContainer
+        isLoadingMessages={isLoadingMessages}
+        initialMessages={messages}
+      />
     </div>
   );
 }

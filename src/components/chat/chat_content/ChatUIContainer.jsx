@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MessagesList from "./MessagesList";
 import TypingIndicator from "./TypingIndicator";
 import InputChat from "./InputChat";
 
-const ChatUIContainer = ({ initialMessages = [] }) => {
-  const [messages, setMessages] = useState(initialMessages);
+const ChatUIContainer = ({ isLoadingMessages, initialMessages }) => {
+  const [messages, setMessages] = useState(initialMessages || []);
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
@@ -18,13 +18,15 @@ const ChatUIContainer = ({ initialMessages = [] }) => {
 
     const message = {
       id: Date.now(),
-      text: newMessage,
-      senderId: currentUser.id,
-      timestamp: new Date().toLocaleTimeString([], {
+      message: newMessage,
+      sender: {
+        id: currentUser.id,
+      },
+      updated_at: new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),
-      status: "sent",
+      // status: "sent",
     };
 
     setMessages([...messages, message]);
@@ -72,22 +74,40 @@ const ChatUIContainer = ({ initialMessages = [] }) => {
     setNewMessage(e.target.value);
   };
 
+  useEffect(() => {
+    console.log("initial messages : ", initialMessages);
+    console.log("messages : ", messages)
+  }, [initialMessages]);
+
+    useEffect(() => {
+    if (initialMessages && initialMessages.length > 0) {
+      setMessages(initialMessages);
+    }
+  }, [initialMessages]);
+
   return (
-    <div className="flex flex-col h-full w-full mx-auto overflow-hidden">
+    <>
+      {isLoadingMessages ? (
+        <div className="flex flex-col h-full w-full mx-auto text-[var(--lighter-color)]">
+          Loading messages ...
+        </div>
+      ) : (
+        <div className="flex flex-col h-full w-full mx-auto overflow-hidden">
+          <div className="flex-1 overflow-y-auto p-4 bg-[var(--secondary-color)]">
+            <MessagesList messages={messages} currentUserId={currentUser.id} />
+            {isTyping && <TypingIndicator />}
+          </div>
 
-      <div className="flex-1 overflow-y-auto p-4 bg-[var(--secondary-color)]">
-        <MessagesList messages={messages} currentUserId={currentUser.id} />
-        {isTyping && <TypingIndicator />}
-      </div>
-
-      <InputChat
-        handleKeyPress={handleKeyPress}
-        handleOnChange={handleOnChange}
-        value={newMessage}
-        handleSendMessage={handleSendMessage}
-        disabled={!newMessage.trim()}
-      />
-    </div>
+          <InputChat
+            handleKeyPress={handleKeyPress}
+            handleOnChange={handleOnChange}
+            value={newMessage}
+            handleSendMessage={handleSendMessage}
+            disabled={!newMessage.trim()}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

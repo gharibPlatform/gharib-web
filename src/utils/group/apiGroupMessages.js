@@ -23,7 +23,7 @@ export const uploadGroupMedia = async (groupId, formData) => {
 export const getGroupMessages = async (groupId) => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/group/ messages/${groupId}/`
+      `${API_BASE_URL}/group/messages/${groupId}/`
     );
     return response.data;
   } catch (error) {

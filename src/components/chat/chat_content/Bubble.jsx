@@ -2,13 +2,14 @@ import React from "react";
 
 const Bubble = ({
   text,
+  username,
   isSent = false,
   timestamp,
   status,
   showAvatar = false,
   avatarUrl,
 }) => {
-  const username = "KMalek101";
+
   return (
     <div className={`flex mb-3 ${isSent ? "justify-end" : "justify-start"}`}>
       {showAvatar && !isSent && (

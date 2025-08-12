@@ -1,7 +1,9 @@
 "use client";
 import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { createHighlights, getHighlights } from "@/utils/khatma/apiHighlight";
+import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 
 const Textarea = ({
   value,
@@ -144,6 +146,14 @@ export default function QuranVerseModal({ verse, create, onClose }) {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [onClose]);
 
+  useEffect(() => {
+    if (create) {
+      getHighlights().then((res) => {
+        console.log(res);
+      });
+    }
+  }, [create]);
+
   const pageNumberString = verse.page_number.toString().padStart(3, "0");
 
   const handleEditClick = () => {
@@ -151,20 +161,35 @@ export default function QuranVerseModal({ verse, create, onClose }) {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  const { quranHeaderChapter } = useQuranHeaderChapter();
+
+  const handleSaveClick = async () => {
     setNote(tempNote);
     setIsEditing(false);
+
     if (create) {
-      // Handle create logic here 
-      onClose();
+      try {
+        const data = {
+          surah: quranHeaderChapter.translated_name.name.toLowerCase(),
+          start_verse: verse.verse_number,
+          end_verse: verse.verse_number,
+          content: tempNote,
+          user: 0,
+        };
+
+        await createHighlights(data);
+        onClose();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   const handleCancelClick = () => {
     if (create) {
-      onClose(); 
+      onClose();
     } else {
-      setIsEditing(false); 
+      setIsEditing(false);
     }
   };
 

@@ -6,7 +6,7 @@ const API_BASE_URL = "http://localhost:8000";
 export const getHighlights = async () => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/highlights/khatma/`
+      `${API_BASE_URL}/highlight/`
     );
     return response.data;
   } catch (error) {
@@ -18,7 +18,7 @@ export const getHighlights = async () => {
 export const getHighlightById = async (id) => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/highlights/${id}/`
+      `${API_BASE_URL}/highlight/${id}/`
     );
     return response.data;
   } catch (error) {
@@ -30,7 +30,7 @@ export const getHighlightById = async (id) => {
 export const createHighlights = async (data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/highlights/`,
+      `${API_BASE_URL}/highlight/`,
       data
     );
     return response.data;
@@ -43,7 +43,7 @@ export const createHighlights = async (data) => {
 export const updateHighlights = async (id, data) => {
   try {
     const response = await api.put(
-      `${API_BASE_URL}/highlights/${id}/`,
+      `${API_BASE_URL}/highlight/${id}/`,
       data
     );
     return response.data;
@@ -56,7 +56,7 @@ export const updateHighlights = async (id, data) => {
 export const patchHighlights = async (id, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL}/highlights/${id}/`,
+      `${API_BASE_URL}/highlight/${id}/`,
       data
     );
     return response.data;
@@ -69,7 +69,7 @@ export const patchHighlights = async (id, data) => {
 export const deleteHighlights = async (id) => {
   try {
     const response = await api.delete(
-      `${API_BASE_URL}/highlights/${id}/`
+      `${API_BASE_URL}/highlight/${id}/`
     );
     return response.data;
   } catch (error) {

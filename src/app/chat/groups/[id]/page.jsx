@@ -1,16 +1,23 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import ChatContent from "../../../../components/chat/chat_content/ChatContent";
 import useNameHeaderStore from "../../../../stores/nameHeaderStore";
 import { useEffect, useState } from "react";
 import useGroupStore from "../../../../stores/groupStore";
 import useChatStore from "../../../../stores/useChatStore";
 import useChatWebSocket from "../../../../hooks/socket/useChatWebSocket.js";
+import authMiddleware from "../../../../utils/authMiddleware";
 
 const Page = () => {
   const { id } = useParams();
+  const router = useRouter();
   const { group, fetchOneGroup } = useGroupStore();
   const setNameHeader = useNameHeaderStore((state) => state.setNameHeader);
+
+  useEffect(() => {
+    const isAuthenticated = authMiddleware.checkAuth();
+    
+  }, []);
 
   useEffect(() => {
     fetchOneGroup(id);
@@ -21,6 +28,7 @@ const Page = () => {
   }, [group]);
 
   const { chats, openChat } = useChatStore();
+  
   useEffect(() => {
     openChat(id);
   }, []);
@@ -30,11 +38,11 @@ const Page = () => {
     isLoading: true,
     hasMessages: false,
   });
+
   const { isConnected } = useChatWebSocket(id, true);
 
   useEffect(() => {
     if (!messages) return;
-
     if (messages.length > 0) {
       setMessageState({
         isLoading: false,

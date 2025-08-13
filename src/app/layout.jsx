@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <ReactQueryProvider>
       <html lang="en">
-        <body className={`${cairo.className} w-[100vw] overflow-hidden`}>
+        <body className={`${cairo.className} w-[100vw] `}>
           <Toaster />
           {children}
         </body>

@@ -8,7 +8,7 @@ const useUserStore = create(
       setUser: (userData) => set({ user: userData }),
     }),
     {
-      name: "my-zustand-store",
+      name: "userStore",
     }
   )
 );

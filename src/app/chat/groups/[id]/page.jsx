@@ -5,7 +5,7 @@ import useNameHeaderStore from "../../../../stores/nameHeaderStore";
 import { useEffect, useState } from "react";
 import useGroupStore from "../../../../stores/groupStore";
 import useChatStore from "../../../../stores/useChatStore";
-import webSocketInstance from "@/utils/chat/socket/webSocketInstance";
+import useChatWebSocket from "../../../../hooks/socket/useChatWebSocket.js";
 
 const Page = () => {
   const { id } = useParams();
@@ -26,13 +26,27 @@ const Page = () => {
   }, []);
 
   const messages = chats[id]?.messages || [];
-  const [isLoadingMessages, setIsLoadingMessages] = useState(true);
+  const [messageState, setMessageState] = useState({
+    isLoading: true,
+    hasMessages: false,
+  });
+  const { isConnected } = useChatWebSocket(id, true);
 
   useEffect(() => {
+    if (!messages) return;
+
     if (messages.length > 0) {
-      setIsLoadingMessages(false);
+      setMessageState({
+        isLoading: false,
+        hasMessages: true,
+      });
+    } else if (isConnected) {
+      setMessageState({
+        isLoading: false,
+        hasMessages: false,
+      });
     }
-  }, [messages]);
+  }, [messages, isConnected]);
 
   return (
     <div className="h-full">
@@ -41,7 +55,8 @@ const Page = () => {
         groupBool={true}
         chatId={id}
         messages={messages}
-        isLoadingMessages={isLoadingMessages}
+        isLoadingMessages={messageState.isLoading}
+        isThereMessages={messageState.hasMessages}
       />
     </div>
   );

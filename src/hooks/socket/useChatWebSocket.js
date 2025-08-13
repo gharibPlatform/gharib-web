@@ -14,7 +14,6 @@ export default function useChatWebSocket(chatId, groupBool) {
       console.log("Adding message to store:", data.message);
       addMessage(chatId, {
         ...data,
-
       });
     },
     [chatId, addMessage]
@@ -49,10 +48,7 @@ export default function useChatWebSocket(chatId, groupBool) {
         const message = {
           action: "send_message",
           chat: groupBool ? `g_${chatId}` : chatId,
-          message: {
-            content: messageContent,
-            timestamp: new Date().toISOString(),
-          },
+          message: messageContent,
         };
         webSocketInstance.send(message);
       } catch (error) {

@@ -6,16 +6,18 @@ export default function ChatContent({
   groupBool,
   chatId,
   messages,
+  isThereMessages,
 }) {
   const { sendMessage } = useChatWebSocket(chatId, groupBool);
 
   return (
     <div className="h-full w-full">
       <ChatUIContainer
-        sendMessage={sendMessage} 
+        sendMessage={sendMessage}
         isLoadingMessages={isLoadingMessages}
         messages={messages}
         chatId={chatId}
+        isThereMessages={isThereMessages}
       />
     </div>
   );

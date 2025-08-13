@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import useUserStore from "@/stores/userStore";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
@@ -13,7 +13,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const loginData = { email: email, password: password };
+    const loginData = { username: username, password: password };
 
     login(loginData)
       .then((response) => {
@@ -51,7 +51,7 @@ const Login = () => {
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           style={{ width: "380px" }}
           className="px-4 py-2 bg-[var(--secondary-color)] text-xl text-[var(--w-color)] placeholder-[var(--g-color)] rounded-sm border border-[var(--main-color-hover)]"
           type="text"

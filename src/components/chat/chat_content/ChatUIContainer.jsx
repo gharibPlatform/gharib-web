@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import MessagesList from "./MessagesList";
 import TypingIndicator from "./TypingIndicator";
 import InputChat from "./InputChat";
-import webSocketInstance from "../../../utils/chat/socket/webSocketInstance";
+import useChatWebSocket from "../../../hooks/socket/useChatWebSocket.js";
 
-const ChatUIContainer = ({ isLoadingMessages, initialMessages, chatId }) => {
-  const [messages, setMessages] = useState(initialMessages || []);
+const ChatUIContainer = ({ isLoadingMessages, messages, sendMessage }) => {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+
 
   const currentUser = {
     id: 1,
@@ -16,15 +16,8 @@ const ChatUIContainer = ({ isLoadingMessages, initialMessages, chatId }) => {
 
   const handleSendMessage = () => {
     try {
-      const msg = {
-        action: "send_message",
-        chat: `g_${chatId}`,
-        message: newMessage,
-      };
-
-      webSocketInstance.send(msg);
-      // setMessages([...messages, msg]);
-      // setNewMessage("");
+      sendMessage(newMessage);
+      setNewMessage("");
     } catch (error) {
       console.log(`Error sending message: ${error}`);
     }
@@ -40,17 +33,6 @@ const ChatUIContainer = ({ isLoadingMessages, initialMessages, chatId }) => {
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);
   };
-
-  useEffect(() => {
-    console.log("initial messages : ", initialMessages);
-    console.log("messages : ", messages);
-  }, [initialMessages]);
-
-  useEffect(() => {
-    if (initialMessages && initialMessages.length > 0) {
-      setMessages(initialMessages);
-    }
-  }, [initialMessages]);
 
   return (
     <>

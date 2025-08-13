@@ -4,6 +4,7 @@ import Bubble from "./Bubble";
 const MessagesList = ({ messages, currentUserId }) => {
   const formatTime = (isoString) => {
     const date = new Date(isoString.replace(/(\.\d{3})\d+Z$/, "$1Z"));
+    
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import MessagesList from "./MessagesList";
 import TypingIndicator from "./TypingIndicator";
 import InputChat from "./InputChat";
-import useChatWebSocket from "../../../hooks/socket/useChatWebSocket.js";
 import useUserStore from "../../../stores/userStore";
 
 const ChatUIContainer = ({

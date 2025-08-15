@@ -1,4 +1,3 @@
-import useChatWebSocket from "../../../hooks/socket/useChatWebSocket.js";
 import ChatUIContainer from "./ChatUIContainer.jsx";
 
 export default function ChatContent({
@@ -7,8 +6,8 @@ export default function ChatContent({
   chatId,
   messages,
   isThereMessages,
+  sendMessage,
 }) {
-  const { sendMessage } = useChatWebSocket(chatId, groupBool);
 
   return (
     <div className="h-full w-full">

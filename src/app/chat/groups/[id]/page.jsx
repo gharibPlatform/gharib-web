@@ -16,7 +16,6 @@ const Page = () => {
 
   useEffect(() => {
     const isAuthenticated = authMiddleware.checkAuth();
-    
   }, []);
 
   useEffect(() => {
@@ -28,7 +27,7 @@ const Page = () => {
   }, [group]);
 
   const { chats, openChat } = useChatStore();
-  
+
   useEffect(() => {
     openChat(id);
   }, []);
@@ -39,7 +38,7 @@ const Page = () => {
     hasMessages: false,
   });
 
-  const { isConnected } = useChatWebSocket(id, true);
+  const { isConnected, sendMessage } = useChatWebSocket(id, true);
 
   useEffect(() => {
     if (!messages) return;
@@ -59,6 +58,7 @@ const Page = () => {
   return (
     <div className="h-full">
       <ChatContent
+        sendMessage={sendMessage}
         nameHeader={group?.name}
         groupBool={true}
         chatId={id}

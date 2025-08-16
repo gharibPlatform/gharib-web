@@ -1,4 +1,5 @@
 import { useNotificationsSettings } from "../../../hooks/settings/useNotificationsSettings";
+import { ActionButton } from "../../common/buttons/ActionButton";
 
 export default function NotificationsSettings() {
   const {
@@ -66,17 +67,12 @@ export default function NotificationsSettings() {
 
       {/* Save Button */}
       <div className="mt-8 flex">
-        <button
+        <ActionButton
+          label="Confirm Changes"
+          value="dirty-check"
+          isDirty={isDirty}
           onClick={handleSave}
-          disabled={!isDirty}
-          className={`mt-5 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap ${
-            isDirty
-              ? "hover:bg-[var(--r-color)] hover:text-white cursor-pointer"
-              : "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          Confirm Changes
-        </button>
+        />
       </div>
     </div>
   );

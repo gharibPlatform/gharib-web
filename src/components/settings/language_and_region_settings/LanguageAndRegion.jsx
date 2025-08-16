@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CustomDropdown } from "../common/CustomDropdown";
 import { useLanguageAndRegionSettings } from "../../../hooks/settings/useLanguageAndRegionSettings";
 import { FormInput } from "../common/FormInput";
+import { ActionButton } from "../../common/buttons/ActionButton";
 
 export default function LanguageAndRegion() {
   const {
@@ -35,7 +36,7 @@ export default function LanguageAndRegion() {
           options={availableLanguages}
           rotate={rotate}
           setRotate={setRotate}
-          onClick={changeRotation} // this toggles rotation
+          onClick={changeRotation}
           label="Select your preferred language"
           description="Choose between English and Arabic"
         />
@@ -59,17 +60,12 @@ export default function LanguageAndRegion() {
 
       {/* Save Button */}
       <div className="flex">
-        <button
+        <ActionButton
+          label="Save Changes"
+          value="dirty-check"
+          isDirty={isDirty}
           onClick={handleSave}
-          disabled={!isDirty}
-          className={`bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap ${
-            isDirty
-              ? "hover:bg-[var(--main-color-hover)] hover:text-white cursor-pointer"
-              : "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          Save Changes
-        </button>
+        />
       </div>
     </div>
   );

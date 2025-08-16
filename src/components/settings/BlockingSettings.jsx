@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { ConfirmationPopup } from "./common/ConfirmationPopup";
+import { ActionButton } from "../common/buttons/ActionButton";
 
 export default function BlockingSettings() {
   const [searchInput, setSearchInput] = useState("");
-  const [popupOpen, setPopupOpen] = useState(false);
+  const [blockPopupOpen, setBlockPopupOpen] = useState(false);
+  const [unblockPopupOpen, setUnblockPopupOpen] = useState(false);
   const [userToBlock, setUserToBlock] = useState(null);
+  const [userToUnblock, setUserToUnblock] = useState(null);
   const [blockedUsers, setBlockedUsers] = useState([
     { id: 1, username: "toxic_malek23", avatar: "", blockedDate: "2023-05-15" },
     { id: 2, username: "spam_bot", avatar: "", blockedDate: "2023-06-20" },
   ]);
 
-  const handleSearch = (e) => {
-    setSearchInput(e.target.value);
-  };
+  const handleSearch = (e) => setSearchInput(e.target.value);
 
   const handleBlockUser = () => {
     if (userToBlock) {
@@ -27,19 +28,25 @@ export default function BlockingSettings() {
           },
         ]);
       }
-      setPopupOpen(false);
+      setBlockPopupOpen(false);
       setUserToBlock(null);
       setSearchInput("");
     }
   };
 
-  const handleUnblockUser = (userId) => {
-    setBlockedUsers(blockedUsers.filter((user) => user.id !== userId));
+  const handleUnblockUser = () => {
+    if (userToUnblock) {
+      setBlockedUsers(
+        blockedUsers.filter((user) => user.id !== userToUnblock.id)
+      );
+      setUnblockPopupOpen(false);
+      setUserToUnblock(null);
+    }
   };
 
   return (
-    <div className="px-8 pt-4 flex flex-col">
-      {/* search and block section */}
+    <div className="px-8 pt-4 flex flex-col gap-8">
+      {/* Search & Block Section */}
       <div className="flex flex-col pt-4">
         <h1 className="text-white font-medium text-3xl">Block Users</h1>
         <div className="flex items-center justify-center py-2 w-4/5 pb-4">
@@ -62,23 +69,23 @@ export default function BlockingSettings() {
               placeholder="Enter username..."
               className="w-min flex-1 bg-[var(--main-color)] border border-[var(--g-color)] rounded px-4 py-2 text-white focus:outline-none focus:border-[var(--main-color-hover)]"
             />
-            <button
+
+            <ActionButton
+              label="Block"
+              value={searchInput}
+              isDirty={!!searchInput.trim()}
+              error={false}
               onClick={() => {
-                if (searchInput.trim()) {
-                  setUserToBlock(searchInput.trim());
-                  setPopupOpen(true);
-                }
+                setUserToBlock(searchInput.trim());
+                setBlockPopupOpen(true);
               }}
-              disabled={!searchInput.trim()}
-              className="w-min px-4 py-2 bg-[var(--r-color)] text-white rounded border border-[var(--r-color)] hover:bg-[var(--bright-r-color)] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Block
-            </button>
+              destructive
+            />
           </div>
         </div>
       </div>
 
-      {/* Blocked users list */}
+      {/* Blocked Users List */}
       <div className="flex flex-col">
         <h2 className="text-white text-xl font-medium mb-4">
           Blocked Users ({blockedUsers.length})
@@ -110,12 +117,17 @@ export default function BlockingSettings() {
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={() => handleUnblockUser(user.id)}
-                  className="px-3 py-1 text-[var(--w-color)] border border-[var(--g-color)] rounded hover:bg-[var(--g-color)] transition-colors"
-                >
-                  Unblock
-                </button>
+
+                <ActionButton
+                  label="Unblock"
+                  value={user.id}
+                  isDirty={true}
+                  error={false}
+                  onClick={() => {
+                    setUserToUnblock(user);
+                    setUnblockPopupOpen(true);
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -126,14 +138,24 @@ export default function BlockingSettings() {
         )}
       </div>
 
-      {/* Block confirmation popup */}
+      {/* Block Confirmation Popup */}
       <ConfirmationPopup
-        isOpen={popupOpen}
-        onClose={() => setPopupOpen(false)}
-        onConfirm={handleBlockUser} 
+        isOpen={blockPopupOpen}
+        onClose={() => setBlockPopupOpen(false)}
+        onConfirm={handleBlockUser}
         title={`Block ${userToBlock}?`}
         description={`Are you sure you want to block ${userToBlock}? You won't see their messages or content anymore.`}
         actionType="block"
+      />
+
+      {/* Unblock Confirmation Popup */}
+      <ConfirmationPopup
+        isOpen={unblockPopupOpen}
+        onClose={() => setUnblockPopupOpen(false)}
+        onConfirm={handleUnblockUser}
+        title={`Unblock ${userToUnblock?.username}?`}
+        description={`Are you sure you want to unblock ${userToUnblock?.username}? You'll start seeing their messages and content again.`}
+        actionType="confirm"
       />
     </div>
   );

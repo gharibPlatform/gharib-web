@@ -1,6 +1,7 @@
 import { ConfirmationPopup } from "../common/ConfirmationPopup";
 import { FormInput } from "../common/FormInput";
 import { useSecuritySettings } from "../../../hooks/settings/useSecuritySettings";
+import { ActionButton } from "../../common/buttons/ActionButton";
 
 export default function SecuritySettings() {
   const {
@@ -15,7 +16,7 @@ export default function SecuritySettings() {
   } = useSecuritySettings();
 
   return (
-    <div className="px-8 pt-4 flex flex-col">
+    <div className="px-8 pt-4 flex flex-col gap-6">
       <ConfirmationPopup
         isOpen={popupOpen}
         onClose={() => setPopupOpen(false)}
@@ -64,18 +65,19 @@ export default function SecuritySettings() {
           placeholder="Confirm new password"
         />
 
-        <div className="flex gap-4 items-center">
-          <button
-            className={`mt-2 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap hover:bg-[var(--main-color-hover)] ${
-              !isFormValid() ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+        <div className="flex gap-4 items-center pt-2">
+          <ActionButton
+            label="Change Password"
+            value="password-form"
+            error={false}
+            isDirty={isFormValid()}
             onClick={handleSubmit}
-            disabled={!isFormValid()}
-          >
-            Change Password
-          </button>
+          />
 
-          <div className="text-[var(--b-color)] text-lg pt-2 hover:underline cursor-pointer">
+          <div
+            className="text-[var(--b-color)] text-lg pt-2 hover:underline cursor-pointer"
+            onClick={() => alert("Redirect to password recovery flow")}
+          >
             I forgot my password
           </div>
         </div>

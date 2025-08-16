@@ -1,5 +1,6 @@
 import { FormInput } from "../common/FormInput";
 import { SectionHeader } from "../common/SectionHeader";
+import { ActionButton } from "../../common/buttons/ActionButton";
 
 export function ChangeUsernameSection({
   username,
@@ -22,20 +23,18 @@ export function ChangeUsernameSection({
         placeholder="Enter new username"
       />
 
-      <button
-        className={`mt-2 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap hover:bg-[var(--main-color-hover)] ${
-          !username || error ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+      <ActionButton
+        label="Change Username"
+        value={username}
+        error={error}
+        isDirty={isDirty}
         onClick={() =>
           onButtonClick(
             "Change Username",
             "Are you sure you want to change your username? You'll need to use the new username to log in next time."
           )
         }
-        disabled={!username || !!error}
-      >
-        Change username
-      </button>
+      />
     </div>
   );
 }
@@ -62,20 +61,18 @@ export function ChangeEmailSection({
         placeholder="Enter new email"
       />
 
-      <button
-        className={`mt-2 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap hover:bg-[var(--main-color-hover)] ${
-          !email || error ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+      <ActionButton
+        label="Change Email"
+        value={email}
+        error={error}
+        isDirty={isDirty}
         onClick={() =>
           onButtonClick(
             "Change Email",
             "We'll send a verification link to your new email address. Are you sure you want to proceed?"
           )
         }
-        disabled={!email || !!error}
-      >
-        Change email
-      </button>
+      />
     </div>
   );
 }
@@ -90,8 +87,11 @@ export function DeleteAccountSection({ onButtonClick }) {
         restore your account after deletion.
       </p>
 
-      <button
-        className="mt-5 bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap hover:bg-[var(--r-color)] hover:text-white"
+      <ActionButton
+        label="Delete Account"
+        destructive
+        value="confirmed" 
+        isDirty={true}
         onClick={() =>
           onButtonClick(
             "Delete Account",
@@ -99,9 +99,7 @@ export function DeleteAccountSection({ onButtonClick }) {
             "delete"
           )
         }
-      >
-        Delete account
-      </button>
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SectionHeader } from "../common/SectionHeader";
 import { CustomDropdown } from "../common/CustomDropdown";
 import { useQuranSettings } from "../../../hooks/settings/useQuranSettings";
+import { ActionButton } from "../../common/buttons/ActionButton";
 
 export default function QuranSettings() {
   const { settings, isDirty, options, handleSettingChange, handleSave } =
@@ -61,17 +62,12 @@ export default function QuranSettings() {
 
       {/* Save Button */}
       <div className="flex pb-8">
-        <button
+        <ActionButton
+          label="Save Changes"
+          value="dirty-check"
+          isDirty={isDirty}
           onClick={handleSave}
-          disabled={!isDirty}
-          className={`bg-[var(--main-color)] text-[var(--w-color)] px-4 py-2 flex justify-center items-center rounded-[4px] border border-[var(--g-color)] w-min whitespace-nowrap ${
-            isDirty
-              ? "hover:bg-[var(--main-color-hover)] hover:text-white cursor-pointer"
-              : "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          Save Changes
-        </button>
+        />
       </div>
     </div>
   );

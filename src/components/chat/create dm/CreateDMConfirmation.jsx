@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { createGroup } from "../../../utils/group/apiGroup";
+import { ActionButton } from "../../common/buttons/ActionButton";
+import { FormInput } from "../../common/input/FormInput";
 
 export default function CreateDMConfirmation({
   selectedUsers,
@@ -82,15 +84,16 @@ export default function CreateDMConfirmation({
 
       <label className="no-scrollbar flex flex-col gap-2 mb-4">
         <span className="text-lg pt-2">Group Name</span>
-        <div className="no-scrollbar bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex items-center gap-2">
-          <input
+        {/* <div className="no-scrollbar bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex items-center gap-2"> */}
+         
+          <FormInput
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             placeholder="Enter group name"
             className="bg-transparent outline-none flex-grow"
-            type="text"
+            type="text" 
           />
-        </div>
+
         {error && (
           <p className="text-[var(--bright-r-color)] flex items-center justify-center">
             {error}
@@ -128,21 +131,26 @@ export default function CreateDMConfirmation({
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <button
+      <div className="flex gap-2">
+        <ActionButton
+          label="Cancel"
+          value="1"
+          isDirty={true}
+          isDisabled={false}
           onClick={onCancel}
-          className="hover:bg-[var(--main-color-hover)] w-full bg-[var(--dark-color)] text-[var(--w-color)] py-2 px-4 rounded-[4px] text-lg border border-[var(--g-color)]"
-        >
-          Cancel
-        </button>
-        <button
+          className="flex-1 hover:bg-[var(--bright-b-color)]"
+        />
+
+        <ActionButton
+          label={`${loading ? "Creating..." : "Create DM"}`}
+          value="2"
+          isDirty={true}
+          isDisabled={selectedUsers.length === 0}
           onClick={handleCreateGroup}
-          disabled={loading}
-          className={`hover:bg-[var(--b-color-hover)] w-full bg-[var(--b-color)] text-white py-2 px-4 rounded-[4px] text-lg ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          {loading ? "Creating..." : "Create"}
-        </button>
+          className="flex-1 bg-blue-600 hover:bg-blue-500"
+        />
       </div>
+
     </div>
   );
 }

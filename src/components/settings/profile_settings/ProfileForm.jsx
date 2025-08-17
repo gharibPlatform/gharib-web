@@ -1,4 +1,4 @@
-import { FormInput } from "../common/FormInput";
+import { FormInput } from "../../common/input/FormInput";
 import { ActionButton } from "../../common/buttons/ActionButton";
 import { SectionHeader } from "../common/SectionHeader";
 

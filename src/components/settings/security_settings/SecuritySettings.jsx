@@ -1,5 +1,5 @@
 import { ConfirmationPopup } from "../common/ConfirmationPopup";
-import { FormInput } from "../common/FormInput";
+import { FormInput } from "../../common/input/FormInput";
 import { useSecuritySettings } from "../../../hooks/settings/useSecuritySettings";
 import { ActionButton } from "../../common/buttons/ActionButton";
 

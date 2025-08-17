@@ -1,4 +1,4 @@
-import { FormInput } from "../common/FormInput";
+import { FormInput } from "../../common/input/FormInput";
 import { SectionHeader } from "../common/SectionHeader";
 import { ActionButton } from "../../common/buttons/ActionButton";
 
@@ -90,7 +90,7 @@ export function DeleteAccountSection({ onButtonClick }) {
       <ActionButton
         label="Delete Account"
         destructive
-        value="confirmed" 
+        value="confirmed"
         isDirty={true}
         onClick={() =>
           onButtonClick(

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CustomDropdown } from "../common/CustomDropdown";
 import { useLanguageAndRegionSettings } from "../../../hooks/settings/useLanguageAndRegionSettings";
-import { FormInput } from "../common/FormInput";
+import { FormInput } from "../../common/input/FormInput";
 import { ActionButton } from "../../common/buttons/ActionButton";
 
 export default function LanguageAndRegion() {

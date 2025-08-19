@@ -51,7 +51,7 @@ export default function CreateDM({ close }) {
 
           {/* Search Input */}
           <div className="relative">
-            <div className="bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex flex-wrap items-center gap-2">
+            <div className="bg-[var(--main-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4 text-lg flex flex-wrap items-center gap-2">
               {selectedUsers.map((user) => (
                 <span
                   key={user.id}

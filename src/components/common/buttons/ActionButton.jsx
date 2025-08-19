@@ -15,7 +15,7 @@ export function ActionButton({
   return (
     <button
       className={clsx(
-        "mt-2 px-4 py-2 flex justify-center items-center rounded-[4px] border whitespace-nowrap",
+        "mt-2 px-4 py-2 inline-flex self-start justify-center items-center rounded-[4px] border whitespace-nowrap",
         disabled && "opacity-50 cursor-not-allowed",
         destructive
           ? "bg-[var(--r-color)] text-[var(--w-color)] border-[var(--r-color)] hover:bg-[var(--bright-r-color)]"

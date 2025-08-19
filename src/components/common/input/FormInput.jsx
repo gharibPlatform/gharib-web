@@ -18,7 +18,7 @@ export function FormInput({
         id={id}
         value={value}
         onChange={onChange}
-        className={`w-72 bg-[var(--bg-color)] border ${
+        className={`w-72 bg-[var(--main-color)] border ${
           error && isDirty
             ? "border-[var(--r-color)]"
             : "border-[var(--g-color)]"

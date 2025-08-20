@@ -1,17 +1,15 @@
 "use client";
-import ChatRightBar from "../../components/chat/ChatRightBar";
 import Header from "../../components/common/header/Header";
 import SideBar from "../../components/common/sidebar/Sidebar";
 
 const Layout = ({ children }) => {
   return (
-    <div className="w-screen overflow-hidden h-screen flex flex-col">
+    <div className="flex flex-col h-screen">
       <Header />
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         <SideBar />
-        <div className="flex w-full">
-          <ChatRightBar />
-          <div className="h-screen flex-grow">{children}</div>
+        <div className="flex-1 flex overflow-hidden">
+          <div className="flex-1 w-full overflow-hidden">{children}</div>
         </div>
       </div>
     </div>

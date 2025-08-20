@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState();
-  const { groupKhatmas, fetchGroupKhatmas } = useKhatmaStore();
+  const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
+
   useEffect(() => {
     const fetch = async () => {
       try {
-        await fetchGroupKhatmas(14);
+        await fetchUserKhatmas();
       } catch (error) {
         console.log(error);
       }
@@ -19,12 +20,12 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    groupKhatmas ? setIsLoading(false) : setIsLoading(true);
-    console.log(groupKhatmas)
-  }, [groupKhatmas]);
+    userKhatmas ? setIsLoading(false) : setIsLoading(true);
+    console.log(userKhatmas);
+  }, [userKhatmas]);
 
   return (
-    <div className="overflow-y-auto">
+    <div className="h-full overflow-hidden ">
       {isLoading ? (
         <div className="flex justify-center pt-8 text-[var(--g-color)]">
           Loading kahtmas...

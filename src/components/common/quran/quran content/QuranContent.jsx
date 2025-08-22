@@ -6,7 +6,7 @@ import useShouldFetch from "../../../../stores/shouldFetchStore";
 import QuranSurah from "./QuranSurah";
 import QuranFooter from "../QuranFooter";
 import ProgressTrackerLine from "../../progress tracker line/ProgressTrackerLine";
-import KhatmasInQuran from "../KhatmasInQuran";
+import CurrentKhatma from "../quran khatmas/CurrentKhatma";
 import { useKhatmaProgress } from "../../../../hooks/useKhatmaProgress";
 
 import {
@@ -15,8 +15,6 @@ import {
 } from "../../../../utils/quran/quran";
 import { verseByPage, verseByChapter } from "../../../../utils/quran/quran";
 
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
-import toast from "react-hot-toast";
 import VersePopup from "./VersePopup";
 import { audioByVerse } from "../../../../utils/quran/quranAudio";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
@@ -37,8 +35,11 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     setGoToPath,
   } = useQuranHeaderChapter();
 
-  const { quranHeaderVerse, activeVerse, setActiveVerse } = useQuranHeaderVerse();
+  const { quranHeaderVerse, activeVerse, setActiveVerse } =
+    useQuranHeaderVerse();
   const { shouldFetch } = useShouldFetch();
+
+  const { currentKhatma } = useKhatmaStore();
 
   const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
   const rate = 100 / totalVersesInChapter;
@@ -280,35 +281,16 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
         ref={scrollRef}
         className="flex-1 overflow-y-auto no-scrollbar relative"
       >
-        <div className="sticky top-10 right-5 float-right z-30 flex justify-end">
-          <div className="flex flex-col items-end">
-            <button
-              onClick={() => setShowKhatmas(!showKhatmas)}
-              className="p-2 bg-[var(--main-color)] border border-[var(--g-color)] text-[var(--g-color)] rounded-full shadow-md hover:bg-gray-100 transition-colors"
-            >
-              {showKhatmas ? <FiChevronUp /> : <FiChevronDown />}
-            </button>
-
-            {showKhatmas && (
-              <div className="absolute top-4 right-6 mt-2 p-2 rounded-lg shadow-lg flex flex-col gap-1 border border-[var(--main-color)]">
-                {isLoadingUserKhatmas ? (
-                  <div className="flex justify-center items-center h-20">
-                    <p className="text-[var(--lighter-color)]">Loading...</p>
-                  </div>
-                ) : (
-                  userKhatmas.map((khatma) => (
-                    <KhatmasInQuran
-                      key={khatma.khatma.id}
-                      name={khatma.khatma.name}
-                      progress={khatma.khatma.progress}
-                      selfProgress={khatma.progress}
-                    />
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+        {true && (
+          <CurrentKhatma
+            name={currentKhatma?.name}
+            group={currentKhatma?.group}
+            timeLeft={currentKhatma?.timeLeft}
+            currentlyAt={currentKhatma?.currentlyAt}
+            progress={currentKhatma?.progress}
+            selfProgress={currentKhatma?.selfProgress}
+          />
+        )}
 
         <QuranSurah
           cache={cache}
@@ -330,9 +312,12 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
         )}
 
         {showHighlightsConfirmation && (
-          <QuranVerseModal create={true} verse={activeVerse} onClose={() => setShowHighlightsConfirmation(false)} />
+          <QuranVerseModal
+            create={true}
+            verse={activeVerse}
+            onClose={() => setShowHighlightsConfirmation(false)}
+          />
         )}
-
       </div>
 
       <div

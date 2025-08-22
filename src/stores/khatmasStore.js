@@ -14,6 +14,9 @@ const useKhatmaStore = create((set) => ({
   khatmaMembership: null,
   khatmaSelfMembership: null,
   groupKhatmas: null,
+  currentKhatma: null,
+
+  setCurrentKhatma: (data) => set({ currentKhatma: data }),
   setKhatmaSelfMembership: (data) => set({ khatmaSelfMembership: data }),
   fetchKhatmaDetails: async (khatmaId) => {
     const data = await getKhatmaDetails(khatmaId);

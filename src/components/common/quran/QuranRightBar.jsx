@@ -6,6 +6,7 @@ import { X, Bookmark, Users, Sparkles, Plus, Target } from "lucide-react";
 export default function QuranRightBar({
   handleVerseClick,
   onClose,
+  highlights,
   isLoadingHighlights,
 }) {
   const [activeTab, setActiveTab] = useState("highlights");
@@ -120,6 +121,7 @@ export default function QuranRightBar({
       <div className="flex-1 overflow-y-auto">
         {activeTab === "highlights" && (
           <QuranHighlights
+            highlights={highlights}
             isLoadingHighlights={isLoadingHighlights}
             handleVerseClick={handleVerseClick}
           />

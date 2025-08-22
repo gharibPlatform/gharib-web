@@ -32,7 +32,9 @@ export default function QuranHighlights({
   return (
     <>
       {isLoadingHighlights ? (
-        <div className="text-[var(--lighter-color)] text-center pt-2">Loading...</div>
+        <div className="text-[var(--lighter-color)] text-center pt-2">
+          Loading...
+        </div>
       ) : (
         <div className="flex flex-col text-white flex-wrap px-2 gap-6 pt-2">
           {Object.entries(verses).map(([key, verseData]) => (

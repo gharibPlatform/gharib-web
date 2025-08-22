@@ -28,6 +28,7 @@ const Layout = ({ children }) => {
   useEffect(() => {
     if (quranHighlights) {
       setIsLoadingHihglights(false);
+      console.log("actual quranHighlights is here : ", quranHighlights);
     }
   }, [quranHighlights]);
 
@@ -61,6 +62,7 @@ const Layout = ({ children }) => {
           <QuranRightBar
             handleVerseClick={handleVerseClick}
             onClose={toggleRightBar}
+            highlights={quranHighlights}
             isLoadingHighlights={isLoadingHighlights}
           />
         )}

@@ -6,7 +6,7 @@ import useShouldFetch from "../../../../stores/shouldFetchStore";
 import QuranSurah from "./QuranSurah";
 import QuranFooter from "../QuranFooter";
 import ProgressTrackerLine from "../../progress tracker line/ProgressTrackerLine";
-import CurrentKhatma from "../quran khatmas/CurrentKhatma";
+import CurrentKhatma from "../quranKhatmas/CurrentKhatma";
 import { useKhatmaProgress } from "../../../../hooks/useKhatmaProgress";
 
 import {

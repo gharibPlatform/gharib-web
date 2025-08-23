@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { listChapters, verseByChapter } from "../../../../utils/quran/quran";
 import QuranHeaderSection from "./QuranHeaderSection";
-import ChapterDropdown from "/src/components/common/quran/quran header/dropdown/ChapterDropdown";
+import ChapterDropdown from "/src/components/common/quran/quranHeader/dropdown/ChapterDropdown";
 import PageDropdown from "./dropdown/PageDropdown";
 import VerseDropdown from "./dropdown/VerseDropdown";
 import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore"

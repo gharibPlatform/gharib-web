@@ -1,12 +1,13 @@
 "use client";
 import Header from "../../components/common/header/Header";
-import QuranRightBar from "../../components/common/quran/QuranRightBar";
+import QuranRightBar from "../../components/common/quran/quranRightbar/QuranRightBar";
 import SideBar from "../../components/common/sidebar/Sidebar";
 import { useState, useEffect } from "react";
-import QuranVerseModal from "../../components/common/quran/quran content/QuranVerseModal";
-import QuranSidebar from "../../components/common/quran/quran_sidebar/QuranSidebar";
+import QuranVerseModal from "../../components/common/quran/quranContent/QuranVerseModal";
+import QuranSidebar from "../../components/common/quran/quranSidebar/QuranSidebar";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import useQuranHighlightStore from "../../stores/quranHighlightStore";
+import useKhatmaStore from "../../stores/khatmasStore";
 
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);
@@ -31,6 +32,27 @@ const Layout = ({ children }) => {
       console.log("actual quranHighlights is here : ", quranHighlights);
     }
   }, [quranHighlights]);
+
+  const [isLoadingKhatmas, setIsLoadingKhatmas] = useState();
+  const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
+
+  useEffect(() => {
+    if (userKhatmas) return;
+    const fetch = async () => {
+      try {
+        await fetchUserKhatmas();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetch();
+    console.log("Done");
+  }, []);
+
+  useEffect(() => {
+    userKhatmas ? setIsLoadingKhatmas(false) : setIsLoadingKhatmas(true);
+    console.log("userkhatmas are : ", userKhatmas);
+  }, [userKhatmas]);
 
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">
@@ -63,6 +85,8 @@ const Layout = ({ children }) => {
             handleVerseClick={handleVerseClick}
             onClose={toggleRightBar}
             highlights={quranHighlights}
+            userKhatmas={userKhatmas}
+            isLoadingKhatmas={isLoadingKhatmas}
             isLoadingHighlights={isLoadingHighlights}
           />
         )}

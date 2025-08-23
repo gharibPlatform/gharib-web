@@ -52,8 +52,6 @@ export default function QuranPage({
     );
 
     //Observing the verses
-    console.log(verseRefs.current);
-
     Object.values(verseRefs.current).forEach((el) => {
       if (el) observerRef.current.observe(el);
     });

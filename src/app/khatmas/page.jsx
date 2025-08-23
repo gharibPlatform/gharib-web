@@ -21,7 +21,7 @@ const Page = () => {
 
   useEffect(() => {
     userKhatmas ? setIsLoading(false) : setIsLoading(true);
-    console.log(userKhatmas);
+    console.log("userkhatmas are : ", userKhatmas);
   }, [userKhatmas]);
 
   return (

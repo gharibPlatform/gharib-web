@@ -15,8 +15,7 @@ export default function KhatmaCard({ khatma }) {
 
   const handleContinueClick = (e, khatma) => {
     e.stopPropagation();
-    setGoToVerse(khatma.currentVerse);
-    setActiveVerse(khatma.currentVerse);
+    setGoToVerse(khatma.currentSurah + ":" + khatma.currentVerse);
   };
 
   const formatDate = (dateString) => {

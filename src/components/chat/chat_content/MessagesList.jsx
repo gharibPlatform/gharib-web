@@ -14,14 +14,14 @@ const MessagesList = ({ messages, currentUserId }) => {
   };
 
   return (
-    <>
+    <AnimatePresence initial={false}>
       {messages.map((message) => (
         <motion.div
           key={message.id}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
         >
           <Bubble
             text={message.message}
@@ -33,7 +33,7 @@ const MessagesList = ({ messages, currentUserId }) => {
           />
         </motion.div>
       ))}
-    </>
+    </AnimatePresence>
   );
 };
 

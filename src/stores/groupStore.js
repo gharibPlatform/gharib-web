@@ -23,6 +23,9 @@ const useGroupStore = create((set, get) => ({
   },
 
   group: null,
+
+  setGroups: (newGroups) => set({ groups: newGroups }),
+  
   fetchOneGroup: async (id) => {
     const data = await getGroups(id);
     set({ group: data });

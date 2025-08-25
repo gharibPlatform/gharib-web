@@ -15,9 +15,9 @@ const MessagesList = ({ messages, currentUserId }) => {
 
   return (
     <AnimatePresence initial={false}>
-      {messages.map((message) => (
+      {messages.map((message, index) => (
         <motion.div
-          key={message.id}
+          key={message.message_id || index}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}

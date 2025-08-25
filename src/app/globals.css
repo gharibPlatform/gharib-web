@@ -65,8 +65,7 @@ body{
   background-color: var(--secondary-color);
   
 }
-html{
-}
+
 ::-webkit-scrollbar {
   display: none;
 }

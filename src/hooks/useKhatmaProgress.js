@@ -13,10 +13,11 @@ export function useKhatmaProgress(
   const [loading, setLoading] = useState(true);
 
   const currentChapter = useMemo(() => {
-    return quranChapters?.find(
-      (ch) =>
-        ch.translated_name.name.toLowerCase() ===
-        khatmaSelfMembership?.currentSurah?.toLowerCase()
+    if (!khatmaSelfMembership?.currentSurah || !quranChapters) return null;
+
+    // currentSurah is now an integer (like 2)
+    return quranChapters.find(
+      (ch) => ch.id === parseInt(khatmaSelfMembership.currentSurah)
     );
   }, [quranChapters, khatmaSelfMembership?.currentSurah]);
 
@@ -25,7 +26,7 @@ export function useKhatmaProgress(
       !selfStartChapter ||
       !selfEndChapter ||
       !currentChapter ||
-      !khatmaSelfMembership.currentVerse
+      !khatmaSelfMembership?.currentVerse
     )
       return null;
 
@@ -36,6 +37,8 @@ export function useKhatmaProgress(
     const startAbs = verseIndexMap[startKey];
     const endAbs = verseIndexMap[endKey];
     const currentAbs = verseIndexMap[currentKey];
+
+    if (!startAbs || !endAbs || !currentAbs) return null;
 
     return {
       currentAbsolute: currentAbs,
@@ -49,27 +52,19 @@ export function useKhatmaProgress(
   }, [selfStartChapter, selfEndChapter, currentChapter, khatmaSelfMembership]);
 
   useEffect(() => {
-    if (khatmaSelfMembership && quranChapters) {
+    if (khatmaSelfMembership && khatmaDetails && quranChapters) {
+      // All chapter references are now integers
       const startChapterSelf = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaSelfMembership.startShareSurah.toLowerCase()
+        (ch) => ch.id === parseInt(khatmaSelfMembership.startShareSurah)
       );
       const endChapterSelf = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaSelfMembership.endShareSurah.toLowerCase()
+        (ch) => ch.id === parseInt(khatmaSelfMembership.endShareSurah)
       );
-
       const startChapterGroup = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaDetails.startSurah.toLowerCase()
+        (ch) => ch.id === parseInt(khatmaDetails.startSurah)
       );
       const endChapterGroup = quranChapters.find(
-        (ch) =>
-          ch.translated_name.name.toLowerCase() ===
-          khatmaDetails.endSurah.toLowerCase()
+        (ch) => ch.id === parseInt(khatmaDetails.endSurah)
       );
 
       setSelfStartChapter(startChapterSelf);

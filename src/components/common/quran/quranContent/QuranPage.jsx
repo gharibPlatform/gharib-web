@@ -46,6 +46,12 @@ export default function QuranPage({
     }
   }, [goToVerse]);
 
+  useEffect(() => {
+    if (activeVerse) {
+      console.log("active verse is :", activeVerse);
+    }
+  }, [activeVerse]);
+
   //observing the verses
   useEffect(() => {
     //Creating the observer
@@ -109,7 +115,7 @@ export default function QuranPage({
               key={verse.verse_key}
               id={`verse-${verse.verse_key}`}
               data-verse-key={verse.verse_key}
-              className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] ${activeVerse == verse.verse_key ? "bg-[var(--g-color)]" : ""}`}
+              className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] ${activeVerse?.verse_key == verse.verse_key ? "bg-[var(--g-color)]" : ""}`}
               ref={(el) => {
                 if (verseRefs.current[verse.verse_key]) {
                   delete verseRefs.current[verse.verse_key];
@@ -117,7 +123,7 @@ export default function QuranPage({
                 if (el) verseRefs.current[verse.verse_key] = el;
               }}
               style={{ display: "inline" }}
-              onClick={() => setActiveVerse(verse.verse_key)}
+              onClick={() => setActiveVerse(verse)}
             >
               {/* Surah separator logic */}
               {verse.verse_number === 1 &&

@@ -191,11 +191,8 @@ export default function KhatmasContent() {
   }
 
   return (
-    <div className="flex w-full flex-col overflow-y-auto no-scrollbar">
-      <div className="flex w-full flex-col relative">
-        <div className="flex items-center justify-center text-white text-3xl py-4">
-          {khatmaDetails.name}
-        </div>
+    <div className="flex w-full flex-1 flex-col overflow-y-auto no-scrollbar">
+      <div className="flex w-full flex-col flex-1 relative justify-center items-center">
         <KhatmasProgress quranChapters={quranChapters} />
 
         {/* <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">

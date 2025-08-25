@@ -8,7 +8,7 @@ export default function KhatmaCard({ khatma }) {
   const [timeLeft, setTimeLeft] = useState("");
   const router = useRouter();
 
-  const { setGoToVerse, setActiveVerse } = useQuranHeaderVerse();
+  const { setGoToVerse } = useQuranHeaderVerse();
   const handleKhatmaCardClick = (id) => {
     router.push(`/khatmas/${id}`);
   };
@@ -60,7 +60,7 @@ export default function KhatmaCard({ khatma }) {
   return (
     <div className="rounded-xl bg-[var(--dark-color)] hover:bg-[var(--main-color)] p-4 border border-white/5 cursor-pointer">
       <div
-        onClick={() => handleKhatmaCardClick(khatma.id)}
+        onClick={() => handleKhatmaCardClick(khatma.khatma.id)}
         className="cursor-pointer"
       >
         <div className="flex justify-between items-start mb-3">

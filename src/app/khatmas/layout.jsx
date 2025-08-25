@@ -5,7 +5,6 @@ import SideBar from "../../components/common/sidebar/Sidebar";
 const Layout = ({ children }) => {
   return (
     <div className="flex flex-col h-screen">
-      <Header />
       <div className="flex flex-1 overflow-hidden">
         <SideBar />
         <div className="flex-1 flex overflow-hidden">

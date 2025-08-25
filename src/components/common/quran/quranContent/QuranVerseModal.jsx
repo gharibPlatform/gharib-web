@@ -80,6 +80,30 @@ const CloseIcon = () => (
   </svg>
 );
 
+const SuccessIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-12 h-12 text-green-500 mx-auto mb-4"
+  >
+    <path
+      d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M22 4L12 14.01l-3-3"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const VerseContent = ({ verse, pageNumberString, onClick }) => (
   <div
     onClick={onClick}
@@ -131,10 +155,31 @@ const NoteViewer = ({ note, onEditClick }) => (
   </div>
 );
 
-export default function QuranVerseModal({ verse, create, onClose }) {
+const SuccessComponent = ({ onClose }) => (
+  <div className="fixed inset-0 z-[1000] modal-backdrop bg-black bg-opacity-70 flex items-center justify-center p-4">
+    <div className="bg-[var(--secondary-color)] rounded-lg max-w-md w-full p-6 border border-gray-700">
+      <div className="text-center">
+        <SuccessIcon />
+        <h3 className="text-xl font-semibold text-white mb-2">
+          Highlight Created Successfully!
+        </h3>
+        <p className="text-gray-400 mb-6">
+          Your highlight has been saved successfully.
+        </p>
+        <Button onClick={onClose} variant="primary" className="w-full">
+          Close
+        </Button>
+      </div>
+    </div>
+  </div>
+);
+
+export default function QuranVerseModal({ verse, highlight, create, onClose }) {
   const [isEditing, setIsEditing] = useState(create);
   const [note, setNote] = useState(create ? "" : "any note*");
   const [tempNote, setTempNote] = useState(note);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -164,24 +209,37 @@ export default function QuranVerseModal({ verse, create, onClose }) {
   const { quranHeaderChapter } = useQuranHeaderChapter();
 
   const handleSaveClick = async () => {
-    setNote(tempNote);
-    setIsEditing(false);
+    setIsLoading(true);
 
     if (create) {
       try {
         const data = {
-          surah: quranHeaderChapter.translated_name.name.toLowerCase(),
+          surah: quranHeaderChapter.id,
           start_verse: verse.verse_number,
           end_verse: verse.verse_number,
           content: tempNote,
-          user: 0,
         };
 
         await createHighlights(data);
-        onClose();
+        setNote(tempNote);
+        setIsEditing(false);
+        setShowSuccess(true);
+
+        // Auto-close after 2 seconds
+        setTimeout(() => {
+          setShowSuccess(false);
+          onClose();
+        }, 2000);
       } catch (error) {
         console.log(error);
+        alert("Failed to create highlight. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
+    } else {
+      setNote(tempNote);
+      setIsEditing(false);
+      setIsLoading(false);
     }
   };
 
@@ -215,6 +273,10 @@ export default function QuranVerseModal({ verse, create, onClose }) {
     onClose();
   };
 
+  if (showSuccess) {
+    return <SuccessComponent onClose={onClose} />;
+  }
+
   return (
     <div className="fixed inset-0 z-[1000] modal-backdrop bg-black bg-opacity-70 flex items-center justify-center p-4">
       <div className="bg-[var(--secondary-color)] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
@@ -242,11 +304,17 @@ export default function QuranVerseModal({ verse, create, onClose }) {
                   onCancel={handleCancelClick}
                 />
               ) : (
-                <NoteViewer note={note} onEditClick={handleEditClick} />
+                <NoteViewer note={highlight.content} onEditClick={handleEditClick} />
               )}
             </div>
 
             <VerseInfo verse={verse} />
+
+            {isLoading && (
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--g-color)]"></div>
+              </div>
+            )}
           </div>
         </div>
       </div>

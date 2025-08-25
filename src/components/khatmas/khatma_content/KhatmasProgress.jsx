@@ -19,15 +19,14 @@ export default function KhatmasProgress() {
     groupEndChapter,
     userProgress,
     loading,
+    currentChapter,
   } = useKhatmaProgress(khatmaSelfMembership, khatmaDetails, quranChapters);
 
   const router = useRouter();
   const timeLeft = 28;
   const orangeDegree = (khatmaDetails.progress * 360) / 100;
-
   const personalProgress =
     khatmaSelfMembership.progress / khatmaMembership.length;
-
   const blueDegree = (personalProgress * 360) / 100;
 
   const handleClickVerse = (chapterId, verse) => {
@@ -38,188 +37,268 @@ export default function KhatmasProgress() {
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full h-[calc(100vh-9rem)]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--o-color)]"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--o-color)]"></div>
       </div>
     );
   }
 
   return (
-    <div className="flex px-10 w-full h-[calc(100vh-9rem)] gap-4 overflow-hidden">
-      <div className="flex flex-col w-2/3 gap-4">
-        {/* Personal Progress */}
-        <div className="bg-[var(--dark-color)] text-white p-6 flex-1 flex flex-col min-h-0">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold mb-4">Personal Progress</h2>
-            <div className="flex flex-col justify-between gap-8">
-              <PersonalTrackerLine
-                progress={khatmaSelfMembership.progress}
-                currentVerse={userProgress.completed}
-                wantedVerse={userProgress.total}
-              />
-              <h3>Your share is from:</h3>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between flex-grow mt-6">
-            <h3 className="text-3xl flex items-center justify-center gap-4">
-              <a
-                className="cursor-pointer hover:text-[var(--b-color)]"
-                onClick={() =>
-                  handleClickVerse(
-                    selfStartChapter.id,
-                    khatmaSelfMembership.startShareVerse
-                  )
-                }
-              >
-                {selfStartChapter.name_simple}{" "}
-                {khatmaSelfMembership.startShareVerse}
-              </a>{" "}
-              to{" "}
-              <a
-                className="cursor-pointer hover:text-[var(--b-color)]"
-                onClick={() =>
-                  handleClickVerse(
-                    selfEndChapter.id,
-                    khatmaSelfMembership.endShareVerse
-                  )
-                }
-              >
-                {selfEndChapter.name_simple}{" "}
-                {khatmaSelfMembership.endShareVerse}
-              </a>
-            </h3>
-
-            <div className="flex items-center justify-between mt-4">
-              <h3 className="text-center text-[var(--g-color)]">
-                {userProgress.total} Verses
-              </h3>
-              <h3 className="text-center text-[var(--g-color)]">
-                joined khatma at : {khatmaSelfMembership.created_at}
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        {/* Members */}
-        <div className="bg-[var(--dark-color)] text-white p-6 flex-1 flex flex-col min-h-0">
-          <h2 className="text-lg font-semibold mb-4">Members</h2>
-
-          <div className="grid grid-cols-12 gap-4 mb-3 px-2">
-            <span className="col-span-6 font-medium">Name</span>
-            <span className="col-span-3 font-medium">Joined</span>
-            <span className="col-span-3 font-medium text-right">Progress</span>
-          </div>
-
-          <div className="overflow-y-auto flex-1 pr-2">
-            {khatmaMembership
-              .sort((a, b) => b.progress - a.progress)
-              .map((user, index) => (
-                <div
-                  key={`${user.groupMembership.userName}-${index}`}
-                  className={`grid grid-cols-12 gap-4 py-3 px-2 hover:bg-[var(--darker-color)] rounded-[4px] items-center cursor-pointer ${
-                    index % 2 === 0 ? "" : "bg-[var(--secondary-color)]"
-                  } ${index == 0 ? "text-[var(--o-color)]" : ""}`}
-                >
-                  <span className="col-span-6 truncate flex items-center">
-                    <div className="flex gap-2 items-center">
-                      <span className="w-6 text-right">#{index + 1}</span>
-                      <span>{user.groupMembership.username}</span>
-                    </div>
-                  </span>
-                  <span className="col-span-3 text-sm">
-                    {new Date(user.created_at).toLocaleDateString()}
-                  </span>
-                  <span className="col-span-3 text-right">
-                    <span className="font-bold">{user.progress}%</span>
-                  </span>
-                </div>
-              ))}
-          </div>
-        </div>
+    <div className="flex flex-col p-4 h-full w-full gap-4 overflow-hidden bg-[var(--secondary-color)]">
+      <div className="bg-[var(--main-color)] rounded-lg text-white p-4">
+        <h1 className="text-2xl font-bold text-center">{khatmaDetails.name}</h1>
       </div>
 
-      <div className="flex flex-col w-1/3 ">
-        <div className="bg-[var(--dark-color)] text-white p-6 flex-1 flex flex-col min-h-0">
-          <h2 className="text-lg font-semibold">Group Progress</h2>
-          <div className="flex-grow flex flex-col items-center justify-center gap-4">
-            <Circle
-              width={180}
-              height={180}
-              orangeDegree={orangeDegree}
-              blueDegree={blueDegree}
-              fontSize={20}
-              groupProgress={`${khatmaDetails.progress}`}
-              personalProgress={`${personalProgress}%`}
-              backgroundColor={"var(--dark-color)"}
-            />
-
-            <h2>Time left: {timeLeft}h</h2>
-
-            {/* legend */}
-            <div className="flex gap-4 mb-6">
-              <div className="flex gap-2 items-center">
-                <div className="bg-[var(--b-color)] w-6 h-6 rounded-[4px]"></div>
-                <span>Personal</span>
+      <div className="flex h-full w-full gap-4">
+        {/* Left Column - 2/3 width */}
+        <div className="flex flex-col w-2/3 gap-4">
+          {/* Personal Progress Card */}
+          <div className="bg-[var(--main-color)] rounded-lg text-white p-6 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Personal Progress</h2>
+              <div className="bg-[var(--dark-color)] px-3 py-1 rounded-full text-xs">
+                {userProgress
+                  ? `${userProgress.percentage.toFixed(1)}%`
+                  : "Loading..."}
               </div>
-              <div className="flex gap-2 items-center">
-                <div className="bg-[var(--o-color)] w-6 h-6 rounded-[4px]"></div>
-                <span>Group</span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="text-center p-3 bg-[var(--dark-color)] rounded-lg">
+                <div className="text-lg font-bold text-[var(--b-color)]">
+                  {userProgress?.completed || 0}
+                </div>
+                <div className="text-xs text-gray-400">Current</div>
+              </div>
+              <div className="text-center p-3 bg-[var(--dark-color)] rounded-lg">
+                <div className="text-lg font-bold text-[var(--o-color)]">
+                  {userProgress?.percentage.toFixed(1)}%
+                </div>
+                <div className="text-xs text-gray-400">Progress</div>
+              </div>
+              <div className="text-center p-3 bg-[var(--dark-color)] rounded-lg">
+                <div className="text-lg font-bold text-green-400">
+                  {userProgress?.total || 0}
+                </div>
+                <div className="text-xs text-gray-400">Goal</div>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <PersonalTrackerLine
+                progress={khatmaSelfMembership.progress}
+                currentVerse={userProgress?.completed || 0}
+                wantedVerse={userProgress?.total || 0}
+              />
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-xs text-gray-400 mb-2">Current position:</h3>
+              <div className="flex justify-center mb-4">
+                <button
+                  onClick={() =>
+                    handleClickVerse(
+                      currentChapter.id,
+                      khatmaSelfMembership.currentVerse
+                    )
+                  }
+                  className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-4 py-2 rounded-lg transition-colors text-sm"
+                >
+                  {currentChapter.name_simple}{" "}
+                  {khatmaSelfMembership.currentVerse}
+                </button>
+              </div>
+
+              <h3 className="text-xs text-gray-400 mb-2">
+                Your share is from:
+              </h3>
+              <div className="flex items-center justify-center gap-3">
+                <button
+                  onClick={() =>
+                    handleClickVerse(
+                      selfStartChapter.id,
+                      khatmaSelfMembership.startShareVerse
+                    )
+                  }
+                  className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-3 py-2 rounded-lg transition-colors text-sm flex items-center gap-1"
+                >
+                  <span className="text-[10px] text-gray-400">Start</span>
+                  {selfStartChapter.name_simple}{" "}
+                  {khatmaSelfMembership.startShareVerse}
+                </button>
+
+                <div className="text-gray-400 text-sm">→</div>
+
+                <button
+                  onClick={() =>
+                    handleClickVerse(
+                      selfEndChapter.id,
+                      khatmaSelfMembership.endShareVerse
+                    )
+                  }
+                  className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-3 py-2 rounded-lg transition-colors text-sm flex items-center gap-1"
+                >
+                  <span className="text-[10px] text-gray-400">End</span>
+                  {selfEndChapter.name_simple}{" "}
+                  {khatmaSelfMembership.endShareVerse}
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-auto pt-3 border-t border-[var(--dark-color)]">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-gray-400">
+                  {userProgress?.total || 0} Verses
+                </span>
+                <span className="text-gray-400">
+                  Joined:{" "}
+                  {new Date(
+                    khatmaSelfMembership.created_at
+                  ).toLocaleDateString()}
+                </span>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-[var(--secondary-color)] pt-4 mt-auto">
-            <div className="grid grid-cols-1 gap-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-[var(--g-color)]">Start verse:</span>
-                <span
-                  className="cursor-pointer hover:text-[var(--b-color)]"
-                  onClick={() =>
-                    handleClickVerse(
-                      groupStartChapter.id,
-                      khatmaDetails.startVerse
-                    )
-                  }
-                >
-                  {groupStartChapter.name_simple} : {khatmaDetails.startVerse}
-                </span>
+          {/* Members Card */}
+          <div className="bg-[var(--main-color)] rounded-lg text-white p-6 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Members</h2>
+              <div className="bg-[var(--dark-color)] px-3 py-1 rounded-full text-xs">
+                {khatmaMembership.length} users
               </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--g-color)]">End verse:</span>
-                <span
-                  className="cursor-pointer hover:text-[var(--b-color)]"
-                  onClick={() =>
-                    handleClickVerse(groupEndChapter.id, khatmaDetails.endVerse)
-                  }
-                >
-                  {groupEndChapter.name_simple} : {khatmaDetails.endVerse}
-                </span>
+            </div>
+            <div className="grid grid-cols-12 gap-3 mb-3 px-1 text-gray-400 text-xs">
+              <span className="col-span-7 font-medium">Name</span>
+              <span className="col-span-3 font-medium">Joined</span>
+              <span className="col-span-2 font-medium text-right">
+                Progress
+              </span>
+            </div>
+            <div className="overflow-y-auto flex-1 pr-1">
+              {khatmaMembership
+                .sort((a, b) => b.progress - a.progress)
+                .map((user, index) => (
+                  <div
+                    key={`${user.groupMembership.userName}-${index}`}
+                    className={`grid grid-cols-12 gap-3 py-2 px-2 hover:bg-[var(--dark-color)] rounded-lg transition-colors items-center cursor-pointer text-sm ${
+                      index === 0 ? "bg-[var(--dark-color)]" : ""
+                    }`}
+                  >
+                    <span className="col-span-7 flex items-center gap-2">
+                      <div className="w-6 h-6 bg-[var(--dark-color)] rounded-full flex items-center justify-center text-xs font-bold">
+                        #{index + 1}
+                      </div>
+                      <span
+                        className={`truncate ${index === 0 ? "text-[var(--o-color)]" : "text-white"}`}
+                      >
+                        {user.groupMembership.username}
+                      </span>
+                    </span>
+                    <span className="col-span-3 text-xs text-gray-400">
+                      {new Date(user.created_at).toLocaleDateString()}
+                    </span>
+                    <span className="col-span-2 text-right">
+                      <span
+                        className={`font-bold ${index === 0 ? "text-[var(--o-color)]" : "text-[var(--b-color)]"}`}
+                      >
+                        {user.progress}%
+                      </span>
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - 1/3 width */}
+        <div className="flex flex-col w-1/3 gap-4">
+          {/* Group Progress Card */}
+          <div className="bg-[var(--main-color)] rounded-lg text-white p-6 flex flex-col h-full">
+            <h2 className="text-lg font-semibold mb-4">Group Progress</h2>
+            <div className="flex flex-col items-center justify-center gap-4 mb-6">
+              <Circle
+                width={180}
+                height={180}
+                orangeDegree={orangeDegree}
+                blueDegree={blueDegree}
+                fontSize={16}
+                groupProgress={`${khatmaDetails.progress}`}
+                personalProgress={`${personalProgress}%`}
+                backgroundColor={"var(--main-color)"}
+              />
+
+              <div className="text-center">
+                <div className="text-xs text-gray-400">Time left</div>
+                <div className="text-lg font-bold text-white">{timeLeft}h</div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--g-color)]">Created at:</span>
-                <span>
-                  {new Date(khatmaDetails.created_at).toLocaleDateString()}
-                </span>
+
+              <div className="flex gap-4">
+                <div className="flex gap-1 items-center">
+                  <div className="bg-[var(--b-color)] w-3 h-3 rounded-sm"></div>
+                  <span className="text-xs text-gray-400">Personal</span>
+                </div>
+                <div className="flex gap-1 items-center">
+                  <div className="bg-[var(--o-color)] w-3 h-3 rounded-sm"></div>
+                  <span className="text-xs text-gray-400">Group</span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--g-color)]">End date:</span>
-                <span>
-                  {khatmaDetails.endDate
-                    ? new Date(khatmaDetails.endDate).toLocaleDateString()
-                    : "Not set"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--g-color)]">Intention:</span>
-                <span className="text-right">
-                  {khatmaDetails.intentions || "Not specified"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--g-color)]">Launcher:</span>
-                <span className="text-right">
-                  {khatmaDetails.launcher_data?.username || "Not specified"}
-                </span>
+            </div>
+            <div className="mt-auto border-t border-[var(--dark-color)] pt-4">
+              <div className="grid grid-cols-1 gap-2 text-xs">
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Start verse:</span>
+                  <button
+                    onClick={() =>
+                      handleClickVerse(
+                        groupStartChapter.id,
+                        khatmaDetails.startVerse
+                      )
+                    }
+                    className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-2 py-1 rounded text-xs transition-colors"
+                  >
+                    {groupStartChapter.name_simple}:{khatmaDetails.startVerse}
+                  </button>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">End verse:</span>
+                  <button
+                    onClick={() =>
+                      handleClickVerse(
+                        groupEndChapter.id,
+                        khatmaDetails.endVerse
+                      )
+                    }
+                    className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-2 py-1 rounded text-xs transition-colors"
+                  >
+                    {groupEndChapter.name_simple}:{khatmaDetails.endVerse}
+                  </button>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Created at:</span>
+                  <span className="text-white">
+                    {new Date(khatmaDetails.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">End date:</span>
+                  <span className="text-white">
+                    {khatmaDetails.endDate
+                      ? new Date(khatmaDetails.endDate).toLocaleDateString()
+                      : "Not set"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Intention:</span>
+                  <span className="text-white text-right max-w-[100px] truncate">
+                    {khatmaDetails.intentions || "Not specified"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Launcher:</span>
+                  <span className="text-white">
+                    {khatmaDetails.launcher_data?.username || "Not specified"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

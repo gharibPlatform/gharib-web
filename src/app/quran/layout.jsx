@@ -12,12 +12,24 @@ import useKhatmaStore from "../../stores/khatmasStore";
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);
   const [selectedVerse, setSelectedVerse] = useState(null);
+  const [selectedHighlight, setSelectedHighlight] = useState(null); // Add this
   const [showSidebar, setShowSidebar] = useState(true);
 
   const toggleRightBar = () => setShowRightBar(!showRightBar);
   const toggleSidebar = () => setShowSidebar(!showSidebar);
-  const handleVerseClick = (verse) => setSelectedVerse(verse);
-  const closeModal = () => setSelectedVerse(null);
+
+  const handleVerseClick = (verse, highlightContent, highlightCreatedAt) => {
+    setSelectedVerse(verse);
+    setSelectedHighlight({
+      content: highlightContent,
+      created_at: highlightCreatedAt,
+    });
+  };
+
+  const closeModal = () => {
+    setSelectedVerse(null);
+    setSelectedHighlight(null);
+  };
 
   const { quranHighlights, fetchQuranHighlights } = useQuranHighlightStore();
   const [isLoadingHighlights, setIsLoadingHihglights] = useState(true);
@@ -29,7 +41,7 @@ const Layout = ({ children }) => {
   useEffect(() => {
     if (quranHighlights) {
       setIsLoadingHihglights(false);
-      console.log("actual quranHighlights is here : ", quranHighlights);
+      console.log("actual quranHighlights are here : ", quranHighlights);
     }
   }, [quranHighlights]);
 
@@ -57,7 +69,11 @@ const Layout = ({ children }) => {
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">
       {selectedVerse && (
-        <QuranVerseModal verse={selectedVerse} onClose={closeModal} />
+        <QuranVerseModal
+          verse={selectedVerse}
+          highlight={selectedHighlight}
+          onClose={closeModal}
+        />
       )}
 
       <Header />
@@ -82,7 +98,7 @@ const Layout = ({ children }) => {
 
         {showRightBar && (
           <QuranRightBar
-            handleVerseClick={handleVerseClick}
+            handleVerseClick={handleVerseClick} 
             onClose={toggleRightBar}
             highlights={quranHighlights}
             userKhatmas={userKhatmas}

@@ -66,7 +66,7 @@ const Page = () => {
     (!khatmaDetails.group_data?.id || (khatmaDetails.group_data?.id && group));
 
   return (
-    <div>
+    <div className="flex flex-col h-full w-full">
       {!isDataReady ? (
         <div className="text-[var(--lighter-color)] text-lg pt-4 text-center mx-auto w-fit">
           Loading your khatma details...

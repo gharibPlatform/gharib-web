@@ -4,46 +4,96 @@ import QuranHighlightsVerse from "./QuranHighlightsVerse";
 
 export default function QuranHighlights({
   handleVerseClick,
-  highlights = ["3:23", "2:23", "4:23", "5:24", "2:13", "3:2"],
+  highlights,
   isLoadingHighlights,
 }) {
   const [verses, setVerses] = useState({});
 
-  // fetch all highlighted verses (get the actual quran data since it's in a different api)
   useEffect(() => {
     const fetchVerses = async () => {
       const newVerses = {};
 
-      for (const key of highlights) {
+      for (const highlight of highlights) {
         try {
-          const verseData = await verseByKey(key);
-          newVerses[key] = verseData;
+          const verseKey = `${highlight.surah}:${highlight.start_verse}`;
+
+          if (!newVerses[verseKey]) {
+            const verseData = await verseByKey(verseKey);
+            newVerses[verseKey] = verseData;
+          }
         } catch (error) {
-          console.error(`Failed to fetch verse ${key}:`, error);
-          newVerses[key] = { text: `Error loading verse ${key}` };
+          console.error(
+            `Failed to fetch verse for highlight ${highlight.id}:`,
+            error
+          );
+          const verseKey = `${highlight.surah}:${highlight.start_verse}`;
+          newVerses[verseKey] = {
+            verse_key: verseKey,
+            text: `Verse ${verseKey}`,
+            error: true,
+          };
         }
       }
 
       setVerses(newVerses);
     };
-    fetchVerses();
-  }, []);
+
+    if (highlights?.length > 0) {
+      fetchVerses();
+    } else {
+      setVerses({});
+    }
+  }, [highlights]);
+
+  const sortedVerseKeys = Object.keys(verses).sort((a, b) => {
+    const highlightA = highlights.find(
+      (h) => `${h.surah}:${h.start_verse}` === a
+    );
+    const highlightB = highlights.find(
+      (h) => `${h.surah}:${h.start_verse}` === b
+    );
+    const dateA = new Date(highlightA?.created_at || 0);
+    const dateB = new Date(highlightB?.created_at || 0);
+    return dateB - dateA;
+  });
+
+  const handleVerseClickWithHighlight = (verseKey) => {
+    const highlight = highlights.find(
+      (h) => `${h.surah}:${h.start_verse}` === verseKey
+    );
+    const verseData = verses[verseKey];
+
+    handleVerseClick(verseData, highlight.content, highlight.created_at);
+  };
 
   return (
     <>
       {isLoadingHighlights ? (
         <div className="text-[var(--lighter-color)] text-center pt-2">
-          Loading...
+          Loading your highlights...
+        </div>
+      ) : !highlights || highlights.length === 0 ? (
+        <div className="text-[var(--lighter-color)] text-center pt-4">
+          No highlights yet. Click on a verse to create your first highlight!
         </div>
       ) : (
         <div className="flex flex-col text-white flex-wrap px-2 gap-6 pt-2">
-          {Object.entries(verses).map(([key, verseData]) => (
-            <QuranHighlightsVerse
-              key={key}
-              verse={verseData}
-              onClick={() => handleVerseClick(verseData)}
-            />
-          ))}
+          {sortedVerseKeys.map((verseKey) => {
+            const verseData = verses[verseKey];
+            const highlight = highlights.find(
+              (h) => `${h.surah}:${h.start_verse}` === verseKey
+            );
+
+            return (
+              <QuranHighlightsVerse
+                key={verseKey}
+                verse={verseData}
+                highlightContent={highlight.content}
+                highlightDate={highlight.created_at}
+                onClick={() => handleVerseClickWithHighlight(verseKey)}
+              />
+            );
+          })}
         </div>
       )}
     </>

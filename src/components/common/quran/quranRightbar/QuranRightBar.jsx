@@ -18,37 +18,6 @@ export default function QuranRightBar({
     setIsCollapsed(!isCollapsed);
   };
 
-  const khatmas = [
-    {
-      id: 1,
-      title: "Ramadan Challenge",
-      group: "Family & Friends Group",
-      personalProgress: 25,
-      groupProgress: 42,
-      timeLeft: "24m left",
-      startDate: "Mar 10, 2023",
-      endDate: "Apr 10, 2023",
-      type: "group",
-    },
-    {
-      id: 3,
-      title: "Weekend Recitation",
-      group: "Community Center",
-      personalProgress: 15,
-      groupProgress: 35,
-      timeLeft: "2 days left",
-      startDate: "Mar 15, 2023",
-      endDate: "Apr 15, 2023",
-      type: "group",
-    },
-  ];
-
-  const handleContinueKhatma = (khatma) => {
-    console.log("Continue khatma:", khatma);
-    // Implement your continue logic here
-  };
-
-  // Collapsed sidebar view
   if (isCollapsed) {
     return (
       <div className="w-16 h-[var(--height)] border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col items-center py-4">

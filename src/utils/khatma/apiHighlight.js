@@ -8,7 +8,7 @@ export const getHighlights = async () => {
     const response = await api.get(
       `${API_BASE_URL}/highlight/`
     );
-    return response.data;
+    return response.data.results;
   } catch (error) {
     console.error("Error getting highlights:", error);
     throw error;

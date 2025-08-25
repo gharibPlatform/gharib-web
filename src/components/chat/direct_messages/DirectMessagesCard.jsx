@@ -178,10 +178,6 @@ export default function DirectMessagesCard({
           </p>
         </div>
       </div>
-
-      {isActive && (
-        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full"></div>
-      )}
     </div>
   );
 }

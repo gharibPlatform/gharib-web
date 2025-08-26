@@ -42,10 +42,10 @@ export default function CreateDM({ close }) {
   };
 
   return (
-    <div className="relative w-[620px] h-[900px] bg-[var(--main-color)] rounded-sm overflow-hidden">
+    <div className="relative w-[620px] h-[900px] bg-[var(--main-color)] rounded-lg overflow-hidden border border-[var(--g-color)] border-opacity-30">
       {/* Create DM Component */}
       <div
-        className={`absolute inset-0 transition-all duration-300 ease-in-out overflow-y-auto hide-scrollbar ${
+        className={`absolute inset-0 transition-all duration-300 ease-in-out overflow-y-auto no-scrollbar ${
           showConfirmation
             ? "opacity-0 -translate-x-4 pointer-events-none"
             : "opacity-100"
@@ -58,7 +58,7 @@ export default function CreateDM({ close }) {
             </h2>
             <button
               onClick={close}
-              className="text-[var(--g-color)] hover:text-[var(--w-color)] p-1 rounded-full hover:bg-[var(--main-color-hover)] transition-colors"
+              className="text-[var(--g-color)] hover:text-[var(--w-color)] p-2 rounded-full hover:bg-[var(--main-color-hover)] transition-colors"
             >
               <FiX size={24} />
             </button>
@@ -68,13 +68,12 @@ export default function CreateDM({ close }) {
             Select brothers to start a conversation with
           </p>
 
-          {/* Search Input */}
           <div className="relative mb-6">
-            <div className="bg-[var(--main-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-3 px-4 text-lg flex flex-wrap items-center gap-2 min-h-[56px] transition-all focus-within:border-[var(--bright-b-color)]">
+            <div className="bg-[var(--main-color)] text-[var(--w-color)] rounded-lg border border-[var(--g-color)] border-opacity-40 py-3 px-4 flex flex-wrap items-center gap-2 min-h-[56px] transition-all focus-within:border-[var(--bright-b-color)] focus-within:border-opacity-80">
               {selectedUsers.map((user) => (
                 <span
                   key={user.id}
-                  className="cursor-pointer bg-[var(--bright-b-color)] px-3 py-1.5 rounded-md text-sm flex items-center gap-2 group hover:bg-[var(--bright-b-color)] transition-colors"
+                  className="cursor-pointer bg-[var(--bright-b-color)] bg-opacity-90 px-3 py-1.5 rounded-md text-sm flex items-center gap-2 group hover:bg-opacity-100 transition-colors"
                 >
                   <span className="font-medium text-white">{user.name}</span>
                   <button
@@ -85,8 +84,8 @@ export default function CreateDM({ close }) {
                   </button>
                 </span>
               ))}
-              <div className="flex items-center flex-grow">
-                <FiSearch className="text-[var(--g-color)] mr-2" size={20} />
+              <div className="flex items-center flex-grow min-w-[120px]">
+                <FiSearch className="text-[var(--g-color)] mr-2 flex-shrink-0" size={20} />
                 <input
                   ref={inputRef}
                   value={searchQuery}
@@ -96,7 +95,7 @@ export default function CreateDM({ close }) {
                       ? "Search for brothers..."
                       : "Add more brothers..."
                   }
-                  className="bg-transparent outline-none flex-grow placeholder-[var(--g-color)]"
+                  className="bg-transparent outline-none flex-grow placeholder-[var(--g-color)] text-[var(--w-color)]"
                   type="text"
                 />
               </div>
@@ -105,7 +104,8 @@ export default function CreateDM({ close }) {
 
           {/* User listing */}
           <div className="flex-grow overflow-hidden">
-            <h3 className="text-[var(--g-color)] text-sm font-medium uppercase tracking-wide mb-3">
+            <h3 className="text-[var(--g-color)] text-sm font-medium uppercase tracking-wide mb-3 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--bright-b-color)]"></span>
               {searchQuery ? "Search Results" : "All Brothers"}
             </h3>
 
@@ -118,7 +118,7 @@ export default function CreateDM({ close }) {
             </div>
           </div>
 
-          <div className="pt-6 border-t border-[var(--g-color)] mt-auto">
+          <div className="pt-6 border-t border-[var(--g-color)] border-opacity-30 mt-auto">
             <div className="flex gap-3">
               <ActionButton
                 label="Cancel"
@@ -126,7 +126,7 @@ export default function CreateDM({ close }) {
                 isDirty={true}
                 isDisabled={false}
                 onClick={close}
-                className="flex-1 bg-[var(--secondary-color)] hover:bg-[var(--bright-b-color)] text-[var(--w-color)]"
+                className="flex-1 bg-[var(--secondary-color)] hover:bg-[var(--main-color-hover)] text-[var(--w-color)] border border-[var(--g-color)] border-opacity-40"
               />
 
               <ActionButton
@@ -135,7 +135,7 @@ export default function CreateDM({ close }) {
                 isDirty={true}
                 isDisabled={selectedUsers.length === 0}
                 onClick={() => setShowConfirmation(true)}
-                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white disabled:bg-[var(--main-color-hover)] disabled:text-[var(--g-color)]"
+                className="flex-1 bg-[var(--bright-b-color)] hover:bg-[var(--b-color-hover)] text-white disabled:bg-[var(--main-color-hover)] disabled:text-[var(--g-color)] transition-colors"
               />
             </div>
           </div>
@@ -144,14 +144,14 @@ export default function CreateDM({ close }) {
 
       {/* Confirmation Component */}
       <div
-        className={`absolute inset-0 p-6 transition-all duration-300 ease-in-out overflow-y-auto no-scrollbar ${
+        className={`absolute inset-0 transition-all duration-300 ease-in-out overflow-y-auto no-scrollbar ${
           showConfirmation
             ? "opacity-100"
             : "opacity-0 pointer-events-none translate-x-4"
         }`}
       >
         {isSuccess ? (
-          <div className="bg-[var(--main-color)] p-8 rounded-sm h-full flex flex-col items-center justify-center text-center border border-[var(--g-color)]">
+          <div className="bg-[var(--main-color)] h-full flex flex-col items-center justify-center text-center p-6">
             <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
               <FiCheck className="text-green-500" size={32} />
             </div>
@@ -162,14 +162,14 @@ export default function CreateDM({ close }) {
               Your direct message group has been created.
             </p>
 
-            <div className="mt-8 w-12 h-1 bg-[var(--g-color)] rounded-full mx-auto"></div>
+            <div className="mt-8 w-12 h-1 bg-[var(--g-color)] bg-opacity-40 rounded-full mx-auto"></div>
           </div>
         ) : (
-          <div className="bg-[var(--main-color)] rounded-sm h-full flex flex-col border border-[var(--g-color)]">
-            <div className="flex items-center mb-6 p-6 border-b border-[var(--g-color)]">
+          <div className="bg-[var(--main-color)] h-full flex flex-col">
+            <div className="flex items-center p-6 border-b border-[var(--g-color)] border-opacity-30">
               <button
                 onClick={() => setShowConfirmation(false)}
-                className="text-[var(--g-color)] hover:text-[var(--w-color)] p-1 rounded-full hover:bg-[var(--main-color-hover)] transition-colors mr-3"
+                className="text-[var(--g-color)] hover:text-[var(--w-color)] p-2 rounded-full hover:bg-[var(--main-color-hover)] transition-colors mr-3"
               >
                 <FiArrowLeft size={24} />
               </button>

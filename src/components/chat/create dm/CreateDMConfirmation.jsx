@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import { createGroup } from "../../../utils/group/apiGroup";
 import { ActionButton } from "../../common/buttons/ActionButton";
 import { FormInput } from "../../common/input/FormInput";
-import { FiX, FiUpload, FiImage, FiUsers, FiUser, FiCheck } from "react-icons/fi";
+import {
+  FiX,
+  FiUpload,
+  FiImage,
+  FiUsers,
+  FiUser,
+  FiCheck,
+} from "react-icons/fi";
 
 export default function CreateDMConfirmation({
   selectedUsers,
@@ -79,37 +86,19 @@ export default function CreateDMConfirmation({
 
   return (
     <div className="bg-[var(--main-color)] w-full h-full flex flex-col rounded-lg overflow-hidden shadow-xl">
-      {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-[var(--g-color)] bg-[var(--main-color-dark)]">
-        <h2 className="text-[var(--w-color)] text-xl font-semibold flex items-center gap-3">
-          <div className="p-2 rounded-full bg-[var(--bright-b-color)] bg-opacity-20">
-            <FiUsers size={20} className="text-[var(--bright-b-color)]" />
-          </div>
-          Create Group Chat
-        </h2>
-        <button
-          onClick={onCancel}
-          className="text-[var(--g-color)] hover:text-[var(--w-color)] p-2 rounded-full hover:bg-[var(--main-color-hover)] transition-colors"
-          aria-label="Close"
-        >
-          <FiX size={20} />
-        </button>
-      </div>
-
-      {/* Content */}
       <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-        {/* Group Members */}
         <div className="mb-6">
-          <h3 className="text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2 uppercase tracking-wide text-[var(--g-color)]">
+          <h3 className="text-[var(--g-color)] text-sm font-medium mb-3 flex items-center gap-2 uppercase tracking-wide">
+            <FiUser size={14} />
             Group Members • {selectedUsers.length}
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-40 overflow-y-auto p-1 custom-scrollbar">
             {selectedUsers.map((user) => (
               <div
                 key={user.id}
-                className="bg-[var(--main-color-hover)] p-3 rounded-lg flex items-center gap-3 border border-[var(--g-color)] border-opacity-30 transition-colors hover:border-opacity-50"
+                className="bg-[var(--main-color-hover)] p-3 rounded-lg flex items-center gap-3 border border-[var(--g-color)] border-opacity-20 transition-colors hover:border-opacity-40"
               >
-                <div className="w-8 h-8 rounded-full bg-[var(--bright-b-color)] flex items-center justify-center text-xs font-medium text-white flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[var(--circle-color)] flex items-center justify-center text-xs font-medium text-[var(--w-color)] flex-shrink-0">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-[var(--w-color)] text-sm truncate">
@@ -120,12 +109,10 @@ export default function CreateDMConfirmation({
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="h-px bg-[var(--g-color)] bg-opacity-30 my-6"></div>
+        <div className="h-px bg-[var(--g-color)] bg-opacity-20 my-6"></div>
 
-        {/* Group Name */}
         <div className="mb-6">
-          <label className="block text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
+          <label className=" text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[var(--bright-b-color)]"></span>
             Group Name
           </label>
@@ -133,13 +120,21 @@ export default function CreateDMConfirmation({
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             placeholder="Enter a name for your group"
-            className="w-full bg-[var(--input-bg)] border border-[var(--g-color)] border-opacity-40 px-4 py-3 rounded-lg text-[var(--w-color)] focus:outline-none focus:ring-2 focus:ring-[var(--bright-b-color)] focus:border-transparent transition-all"
+            className="w-full bg-[var(--input-color)] border border-[var(--g-color)] border-opacity-40 px-4 py-3 rounded-lg text-[var(--w-color)] focus:outline-none focus:ring-2 focus:ring-[var(--bright-b-color)] focus:border-transparent transition-all"
             type="text"
             maxLength={50}
           />
           <div className="flex justify-between text-xs mt-2">
-            <span className="text-[var(--g-color)]">Required (min 2 characters)</span>
-            <span className={groupName.length === 50 ? "text-[var(--bright-r-color)]" : "text-[var(--g-color)]"}>
+            <span className="text-[var(--g-color)]">
+              Required (min 2 characters)
+            </span>
+            <span
+              className={
+                groupName.length === 50
+                  ? "text-[var(--bright-r-color)]"
+                  : "text-[var(--g-color)]"
+              }
+            >
               {groupName.length}/50
             </span>
           </div>
@@ -147,14 +142,16 @@ export default function CreateDMConfirmation({
 
         {/* Group Icon */}
         <div className="mb-6">
-          <label className="block text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
+          <label className=" text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
             <FiImage size={16} className="text-[var(--bright-b-color)]" />
             Group Icon
-            <span className="text-xs font-normal text-[var(--g-color)]">(Optional)</span>
+            <span className="text-xs font-normal text-[var(--g-color)]">
+              (Optional)
+            </span>
           </label>
-          
+
           <div className="flex flex-col sm:flex-row items-start gap-4">
-            <label className="cursor-pointer flex flex-col items-center justify-center gap-2 bg-[var(--main-color-hover)] hover:bg-[var(--main-color-hover-dark)] p-4 rounded-lg border-2 border-dashed border-[var(--g-color)] border-opacity-40 transition-colors text-[var(--w-color)] text-center w-full sm:w-auto">
+            <label className="cursor-pointer flex flex-col items-center justify-center gap-2 bg-[var(--main-color-hover)] hover:bg-[var(--main-color-hover-darker)] p-4 rounded-lg border-2 border-dashed border-[var(--g-color)] border-opacity-40 transition-colors text-[var(--w-color)] text-center w-full sm:w-auto">
               <FiUpload size={20} className="text-[var(--bright-b-color)]" />
               <span className="text-sm">Upload Image</span>
               <input
@@ -164,7 +161,7 @@ export default function CreateDMConfirmation({
                 onChange={handleFileChange}
               />
             </label>
-            
+
             {groupIcon && (
               <div className="flex items-center gap-4 p-3 bg-[var(--main-color-hover)] rounded-lg w-full">
                 <div className="relative">
@@ -189,11 +186,11 @@ export default function CreateDMConfirmation({
                     {(groupIcon.size / 1024).toFixed(0)} KB
                   </p>
                 </div>
-                <FiCheck size={16} className="text-[var(--success-color)] flex-shrink-0" />
+                <FiCheck size={16} className="text-green-500 flex-shrink-0" />
               </div>
             )}
           </div>
-          
+
           <p className="text-xs text-[var(--g-color)] mt-3">
             Supported formats: JPG, PNG, GIF. Max size: 5MB
           </p>
@@ -201,7 +198,7 @@ export default function CreateDMConfirmation({
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 p-3 bg-[var(--bright-r-color)] bg-opacity-15 border border-[var(--bright-r-color)] border-opacity-30 rounded-lg flex items-start gap-3 animate-fadeIn">
+          <div className="mb-4 p-3 bg-[var(--bright-r-color)] bg-opacity-15 border border-[var(--bright-r-color)] border-opacity-30 rounded-lg flex items-start gap-3">
             <div className="p-1 rounded-full bg-[var(--bright-r-color)] bg-opacity-20 flex-shrink-0 mt-0.5">
               <FiX size={14} className="text-[var(--bright-r-color)]" />
             </div>
@@ -210,8 +207,7 @@ export default function CreateDMConfirmation({
         )}
       </div>
 
-      {/* Footer Buttons */}
-      <div className="p-6 border-t border-[var(--g-color)] border-opacity-30 bg-[var(--main-color-dark)]">
+      <div className="p-6 border-t border-[var(--g-color)] border-opacity-20 bg-[var(--main-color-dark)]">
         <div className="flex flex-col sm:flex-row gap-3">
           <ActionButton
             label="Cancel"
@@ -226,9 +222,11 @@ export default function CreateDMConfirmation({
             label={loading ? "Creating Group..." : "Create Group"}
             value="2"
             isDirty={true}
-            isDisabled={selectedUsers.length === 0 || loading || groupName.length < 2}
+            isDisabled={
+              selectedUsers.length === 0 || loading || groupName.length < 2
+            }
             onClick={handleCreateGroup}
-            className="bg-[var(--bright-b-color)] hover:bg-[var(--bright-b-color-dark)] text-white disabled:bg-[var(--main-color-hover)] disabled:text-[var(--g-color)] transition-colors shadow-md"
+            className="bg-[var(--bright-b-color)] hover:bg-[var(--b-color-hover)] text-white disabled:bg-[var(--main-color-hover)] disabled:text-[var(--g-color)] transition-colors shadow-md"
           />
         </div>
       </div>

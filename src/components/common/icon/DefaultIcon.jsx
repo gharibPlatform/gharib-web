@@ -1,4 +1,4 @@
-export default function DefaultIcon({ name }) {
+export default function DefaultIcon({ name, width, height }) {
   const firstLetter = name?.charAt(0)?.toUpperCase() || '?';
   
   const getRandomColor = (letter) => {
@@ -16,7 +16,7 @@ export default function DefaultIcon({ name }) {
   const textColor = 'text-white';
 
   return (
-    <div className={`${bgColor} ${textColor} w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm`}>
+    <div className={`${bgColor} ${textColor} w-${width} h-${height} rounded-full flex items-center justify-center font-semibold text-sm`}>
       {firstLetter}
     </div>
   );

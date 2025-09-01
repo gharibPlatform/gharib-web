@@ -33,7 +33,7 @@ const Bubble = ({
   return (
     <div className={`flex mb-1 ${isSent ? "justify-end" : "justify-start"}`}>
       {/* Avatar container - always present but conditionally visible */}
-      <div className={`flex-shrink-0 ${isSent ? "order-2" : "order-1"}`}>
+      <div className={`flex-shrink-0 ${isSent ? "" : "order-1"}`}>
         {!isSent && showAvatar ? (
           <div className="w-9 h-9 mr-2">
             {avatarUrl ? (

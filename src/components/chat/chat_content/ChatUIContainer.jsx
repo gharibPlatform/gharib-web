@@ -5,7 +5,9 @@ import TypingIndicator from "./TypingIndicator";
 import InputChat from "./InputChat";
 import useUserStore from "../../../stores/userStore";
 import { useParams } from "next/navigation";
-import useGroupStore from "@/stores/groupStore";
+import useGroupStore from "../../../stores/groupStore";
+import ChatHeader from "./ChatHeader";
+import ChatSideBar from "./ChatSideBar";
 
 const ChatUIContainer = ({
   isLoadingMessages,
@@ -15,6 +17,7 @@ const ChatUIContainer = ({
 }) => {
   const [newMessage, setNewMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [showGroupSideBar, setShowGroupSideBar] = useState(false);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const initialLoadRef = useRef(true);
@@ -22,7 +25,13 @@ const ChatUIContainer = ({
   const { user } = useUserStore();
   const params = useParams();
   const groupId = params.id;
-  const { groups, setGroups } = useGroupStore();
+  const { groups, group, setGroups, fetchOneGroup } = useGroupStore();
+
+  useEffect(() => {
+    if (groupId) {
+      fetchOneGroup(groupId);
+    }
+  }, [groupId]);
 
   useEffect(() => {
     if (initialLoadRef.current && !isLoadingMessages && messages.length > 0) {
@@ -84,35 +93,57 @@ const ChatUIContainer = ({
     setNewMessage(e.target.value);
   };
 
+  const handleHeaderClick = () => {
+    setShowGroupSideBar(!showGroupSideBar);
+  };
+
+  const handleCloseSidebar = () => {
+    setShowGroupSideBar(false);
+  };
+
   return (
     <div className="flex flex-col h-full w-full mx-auto overflow-hidden">
-      {isLoadingMessages ? (
-        <div className="flex-1 flex items-center justify-center text-[var(--lighter-color)]">
-          Loading messages...
-        </div>
-      ) : !isThereMessages ? (
-        <div className="flex-1 flex items-center justify-center text-[var(--lighter-color)]">
-          There are no messages yet... <br /> start typing the first message!
-        </div>
-      ) : (
-        <div
-          ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto p-4 bg-[var(--secondary-color)]"
-        >
-          <MessagesList messages={messages} currentUserId={user.id} />
-          {isTyping && <TypingIndicator />}
-          <div ref={messagesEndRef} />
-        </div>
-      )}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Main Chat Area */}
+        <div className="flex-1 flex flex-col">
+          <ChatHeader onClickName={handleHeaderClick} group={group} />
 
-      <InputChat
-        handleKeyPress={handleKeyPress}
-        handleOnChange={handleOnChange}
-        value={newMessage}
-        handleSendMessage={handleSendMessage}
-        disabled={!newMessage.trim()}
-      />
+          {isLoadingMessages ? (
+            <div className="flex-1 flex items-center justify-center text-[var(--lighter-color)]">
+              Loading messages...
+            </div>
+          ) : !isThereMessages ? (
+            <div className="flex-1 flex items-center justify-center text-[var(--lighter-color)]">
+              There are no messages yet... <br /> start typing the first
+              message!
+            </div>
+          ) : (
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 overflow-y-auto p-4 bg-[var(--secondary-color)]"
+            >
+              <MessagesList messages={messages} currentUserId={user.id} />
+              {isTyping && <TypingIndicator />}
+              <div ref={messagesEndRef} />
+            </div>
+          )}
+
+          <InputChat
+            handleKeyPress={handleKeyPress}
+            handleOnChange={handleOnChange}
+            value={newMessage}
+            handleSendMessage={handleSendMessage}
+            disabled={!newMessage.trim()}
+          />
+        </div>
+
+        {/* Sidebar */}
+        {showGroupSideBar && (
+          <ChatSideBar group={group} onClose={handleCloseSidebar} />
+        )}
+      </div>
     </div>
   );
 };
+
 export default ChatUIContainer;

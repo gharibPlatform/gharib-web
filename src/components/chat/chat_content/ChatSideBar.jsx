@@ -367,8 +367,6 @@ const ChatSideBar = ({ group, onClose }) => {
             isDirty={true}
             isDisabled={false}
             label="Clear Chat History"
-            isDirty={true}
-            isDisabled={false}
             value={true}
             onClick={() => console.log("Clear chat history")}
             className="w-full justify-center"

@@ -14,7 +14,7 @@ const GroupInfoTab = ({ group, user }) => {
           <DefaultIcon
             width={28}
             height={28}
-            fontSize={28}
+            fontSize={48}
             name={group?.name || "G"}
           />
         )}

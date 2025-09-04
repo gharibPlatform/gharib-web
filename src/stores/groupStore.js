@@ -1,10 +1,11 @@
 import {
-  getGroups,
   getGroupSettings,
   patchGroupSettings,
   updateGroup,
   updateGroupSettings,
-} from "@/utils/group/apiGroup";
+} from "@/utils/group/apiGroupSettings";
+import { getGroups } from "@/utils/group/apiGroup";
+
 import { create } from "zustand";
 
 const useGroupStore = create((set, get) => ({

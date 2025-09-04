@@ -1,5 +1,6 @@
 import useNotificationsStore from "@/stores/notificationsStore";
 import { useEffect } from "react";
+import BrotherRequestCard from "./BrotherRequestCard";
 
 export default function Notifications() {
   const {
@@ -35,7 +36,13 @@ export default function Notifications() {
         ) : notifications?.length > 0 ? (
           <div>
             {notifications?.map((notification) => (
-              <div key={notification.id}></div>
+              <div key={notification.id}>
+                <BrotherRequestCard
+                  username={notification.sender.username}
+                  date={notification.created_at}
+                  icon={notification.sender.profile_pic}
+                />
+              </div>
             ))}
           </div>
         ) : (

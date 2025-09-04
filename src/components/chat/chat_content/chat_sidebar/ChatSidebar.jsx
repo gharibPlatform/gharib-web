@@ -66,26 +66,6 @@ const ChatSidebar = ({ group, onClose }) => {
           iconPreview: group.icon || "",
         });
 
-        if (groupSettings) {
-          setAdminSettings({
-            can_add_member: groupSettings.can_add_member || "all",
-            can_send_message: groupSettings.can_send_message || "all",
-            all_can_launch_khatma:
-              groupSettings.all_can_launch_khatma !== undefined
-                ? groupSettings.all_can_launch_khatma
-                : true,
-            all_can_manage_code:
-              groupSettings.all_can_manage_code !== undefined
-                ? groupSettings.all_can_manage_code
-                : true,
-            can_add_member_custom: groupSettings.can_add_member_custom || [],
-            can_send_message_custom:
-              groupSettings.can_send_message_custom || [],
-            max_khatma_participants:
-              groupSettings.max_khatma_participants || 10,
-            khatma_update_timeout: groupSettings.khatma_update_timeout || 60,
-          });
-        }
         setInitialized(true);
       } catch (err) {
         console.error("Failed to fetch group settings", err);
@@ -100,6 +80,27 @@ const ChatSidebar = ({ group, onClose }) => {
     }
   }, [group?.id, initialized]);
 
+  useEffect(() => {
+    if (groupSettings) {
+      setAdminSettings({
+        can_add_member: groupSettings.can_add_member || "all",
+        can_send_message: groupSettings.can_send_message || "all",
+        all_can_launch_khatma:
+          groupSettings.all_can_launch_khatma !== undefined
+            ? groupSettings.all_can_launch_khatma
+            : true,
+        all_can_manage_code:
+          groupSettings.all_can_manage_code !== undefined
+            ? groupSettings.all_can_manage_code
+            : true,
+        can_add_member_custom: groupSettings.can_add_member_custom || [],
+        can_send_message_custom: groupSettings.can_send_message_custom || [],
+        max_khatma_participants: groupSettings.max_khatma_participants || 10,
+        khatma_update_timeout: groupSettings.khatma_update_timeout || 60,
+      });
+    }
+  }, [groupSettings]);
+  
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => setError(""), 3000);
@@ -189,7 +190,9 @@ const ChatSidebar = ({ group, onClose }) => {
 
   if (!group) return null;
 
-  const isAdmin = true; // Replace with actual admin check
+  const isAdmin = true;
+
+  console.log("admin settings should be : ", adminSettings);
 
   return (
     <div className="fixed inset-0 z-50 lg:relative lg:inset-auto">

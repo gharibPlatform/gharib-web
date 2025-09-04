@@ -2,7 +2,13 @@ import { useState } from "react";
 import { CustomDropdown } from "../../../settings/common/CustomDropdown";
 import { ActionButton } from "../../../common/buttons/ActionButton";
 
-const AdminSettingsTab = ({ adminSettings, setAdminSettings, group }) => {
+const AdminSettingsTab = ({
+  adminSettings,
+  setAdminSettings,
+  group,
+  loading,
+  onSave,
+}) => {
   const [dropdownRotate, setDropdownRotate] = useState(90);
 
   return (
@@ -20,7 +26,7 @@ const AdminSettingsTab = ({ adminSettings, setAdminSettings, group }) => {
           }
           options={[
             { value: "all", label: "All members" },
-            { value: "admin", label: "Only admins" },
+            { value: "only_admins", label: "Only admins" },
             { value: "custom", label: "Custom members" },
           ]}
           rotate={dropdownRotate}
@@ -74,7 +80,7 @@ const AdminSettingsTab = ({ adminSettings, setAdminSettings, group }) => {
           }
           options={[
             { value: "all", label: "All members" },
-            { value: "admin", label: "Only admins" },
+            { value: "only_admins", label: "Only admins" },
             { value: "custom", label: "Custom members" },
           ]}
           rotate={dropdownRotate}
@@ -213,7 +219,7 @@ const AdminSettingsTab = ({ adminSettings, setAdminSettings, group }) => {
         <div className="space-y-3">
           <ActionButton
             isDirty={true}
-            isDisabled={false}
+            isDisabled={loading}
             label="Clear Chat History"
             value={true}
             onClick={() => console.log("Clear chat history")}
@@ -222,7 +228,7 @@ const AdminSettingsTab = ({ adminSettings, setAdminSettings, group }) => {
 
           <ActionButton
             isDirty={true}
-            isDisabled={false}
+            isDisabled={loading}
             label="Transfer Ownership"
             value={true}
             onClick={() => console.log("Transfer ownership")}
@@ -231,7 +237,7 @@ const AdminSettingsTab = ({ adminSettings, setAdminSettings, group }) => {
 
           <ActionButton
             isDirty={true}
-            isDisabled={false}
+            isDisabled={loading}
             label="Delete Group"
             value={true}
             destructive={true}

@@ -7,7 +7,7 @@ import useUserStore from "../../../stores/userStore";
 import { useParams } from "next/navigation";
 import useGroupStore from "../../../stores/groupStore";
 import ChatHeader from "./ChatHeader";
-import ChatSideBar from "./ChatSideBar";
+import ChatSideBar from "./chat_sidebar/ChatSidebar";
 
 const ChatUIContainer = ({
   isLoadingMessages,

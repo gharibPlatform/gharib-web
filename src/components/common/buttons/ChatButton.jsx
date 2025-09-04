@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import SidebarLink from "../sidebar/SidebarLink.jsx";
 
 export default function ChatButton() {

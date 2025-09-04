@@ -1,12 +1,10 @@
 "use client";
-import Header from "../../components/common/header/Header";
 import SettingsSideBar from "../../components/settings/SettingsSideBar";
 import SideBar from "../../components/common/sidebar/Sidebar.jsx";
 
 const Layout = ({ children }) => {
     return (
         <div className="w-screen h-screen flex flex-col overflow-hidden">
-            <Header />
             <div className="flex h-full">
                 <SideBar />
                 <SettingsSideBar />

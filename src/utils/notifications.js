@@ -23,7 +23,7 @@ export const denyBrotherRequest = async (brothershipReqId) => {
 export const getBrotherRequests = async () => {
   try {
     const response = await api.get('/notification/list-br-req/');
-    return response.data;
+    return response.data.results;
   } catch (error) {
     console.error('Error retrieving brother requests:', error);
     throw error;

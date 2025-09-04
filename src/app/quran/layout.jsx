@@ -1,5 +1,4 @@
 "use client";
-import Header from "../../components/common/header/Header";
 import QuranRightBar from "../../components/common/quran/quranRightbar/QuranRightBar";
 import SideBar from "../../components/common/sidebar/Sidebar";
 import { useState, useEffect } from "react";
@@ -76,7 +75,6 @@ const Layout = ({ children }) => {
         />
       )}
 
-      <Header />
       <div className="flex overflow-hidden relative">
         <SideBar />
         {showSidebar && <QuranSidebar onClose={toggleSidebar} />}

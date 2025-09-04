@@ -1,7 +1,6 @@
 "use client";
 import ChatRightBar from "../../components/chat/ChatRightBar";
 import GroupSideBar from "../../components/chat/group sidebar/GroupSidebar";
-import Header from "../../components/common/header/Header";
 import SideBar from "../../components/common/sidebar/Sidebar";
 import useGroupSidebarStore from "../../stores/groupSidebarStore";
 
@@ -10,9 +9,10 @@ const Layout = ({ children }) => {
 
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">
-      {/* <Header /> */}
       <div className="flex flex-1 overflow-hidden">
-        <SideBar />
+        <div className="relative overflow-visible">
+          <SideBar />
+        </div>
         <ChatRightBar />
 
         <div className="flex flex-col flex-1 overflow-hidden">{children}</div>

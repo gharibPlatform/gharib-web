@@ -66,6 +66,7 @@ export default function QuranSettings() {
           label="Save Changes"
           value="dirty-check"
           isDirty={isDirty}
+          isDisabled={false}
           onClick={handleSave}
         />
       </div>

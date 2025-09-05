@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
+import { getSettings, patchSettings } from "../../utils/apiSettings";
+
 
 export function useLanguageAndRegionSettings() {
     const [language, setLanguage] = useState('en');
@@ -32,29 +34,26 @@ export function useLanguageAndRegionSettings() {
 
     // Fetch current settings when component mounts
     useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const res = await axios.get("http://localhost:8000/api/settings/", {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    },
-                });
-                
-                const fetchedLanguage = res.data.language || 'en';
-                const fetchedRegion = res.data.country || '';
-                
-                setLanguage(fetchedLanguage);
-                setRegion(fetchedRegion);
-                setInitialSettings({
-                    language: fetchedLanguage,
-                    region: fetchedRegion,
-                });
-            } catch (err) {
-                console.error("Error fetching settings:", err.response ? err.response.data : err.message);
-            }
-        };
-        fetchSettings();
+      const fetch = async () => {
+        try {
+          const res = await getSettings();
+          console.log(res)
+          const fetchedLanguage = res.data.language || 'en';
+          const fetchedRegion = res.data.country || '';
+          setLanguage(fetchedLanguage);
+          setRegion(fetchedRegion);
+          setInitialSettings({
+              language: fetchedLanguage,
+              region: fetchedRegion,
+          });
+        } catch (err) {
+          console.error("Error fetching Quran settings:", err);
+        }
+      };
+      fetch();
     }, []);
+
+                
 
     useEffect(() => {
         const hasChanged =
@@ -72,32 +71,11 @@ export function useLanguageAndRegionSettings() {
     };
 
     const handleSave = async () => {
-        try {
-            const payload = { language };
-
-            if (region) {   
-                payload.country = region;
-            }
-
-            const res = await axios.patch(
-                "http://localhost:8000/api/settings/",
-                payload,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            
-            console.log("Settings updated:", res.data);
-            setInitialSettings({ language, region });
-            setIsDirty(false);
-            alert('Settings saved successfully!');
-        } catch (err) {
-            console.error("Error updating settings:", err.response ? err.response.data : err.message);
-            alert('Error saving settings.');
-        }
+      const payload = { language };
+      if (region) {   
+          payload.country = region;
+      }
+      patchSettings(payload)
     };
 
     return {

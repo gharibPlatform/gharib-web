@@ -1,6 +1,7 @@
 // hooks/settings/useQuranSettings.js
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { getSettings, patchSettings } from "../../utils/apiSettings";
 
 export function useQuranSettings() {
   const [settings, setSettings] = useState({
@@ -37,24 +38,18 @@ export function useQuranSettings() {
 
   // Fetch current settings from backend
   useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const res = await axios.get("http://localhost:8000/api/settings/", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        });
-        setSettings(res.data);        // backend should return { reciter, translation, tafsir }
-        setOriginalSettings(res.data);
-      } catch (err) {
-        console.error(
-          "Error fetching Quran settings:",
-          err.response ? err.response.data : err.message
-        );
-      }
-    };
-    fetchSettings();
-  }, []);
+  const fetch = async () => {
+    try {
+      const res = await getSettings();
+      setSettings(res.data);
+      setOriginalSettings(res.data);
+    } catch (err) {
+      console.error("Error fetching Quran settings:", err);
+    }
+  };
+  fetch();
+}, []);
+
 
   // Update settings + check if dirty
   const handleSettingChange = (key, value) => {
@@ -69,33 +64,12 @@ export function useQuranSettings() {
   };
 
   // Save settings to backend
-  const handleSave = async () => {
-    try {
-      const res = await axios.patch(
-        "http://localhost:8000/api/settings/",
-        {
+  const handleSave = () => {
+    patchSettings({
           reciter: settings.reciter,
           translation: settings.translation,
           tafsir: settings.tafsir,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("All Quran settings saved:", res.data);
-      setOriginalSettings(settings); // reset dirty check
-      setIsDirty(false);
-      alert("Quran settings saved successfully!");
-    } catch (err) {
-      console.error(
-        "Error saving Quran settings:",
-        err.response ? err.response.data : err.message
-      );
-      alert("Failed to save settings. Please try again.");
-    }
+        })
   };
 
   return {

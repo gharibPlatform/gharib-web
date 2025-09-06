@@ -1,12 +1,16 @@
 import DefaultIcon from "../icon/DefaultIcon";
 import Image from "next/image";
 import { Check, X, UserPlus } from "lucide-react";
-import { useState } from "react";
 
-export default function BrotherRequestCard({ username, date, icon }) {
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [isAccepted, setIsAccepted] = useState(false);
-  const [isDeclined, setIsDeclined] = useState(false);
+export default function BrotherRequestCard({
+  brothershipRequest,
+  isProcessing,
+  error,
+  onAccept,
+  onDecline,
+}) {
+  const { sender, created_at } = brothershipRequest;
+  const { username, profile_picture } = sender || {};
 
   function timeSince(date) {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -30,54 +34,17 @@ export default function BrotherRequestCard({ username, date, icon }) {
     return "Just now";
   }
 
-  const handleAccept = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      setIsAccepted(true);
-    }, 1000);
-  };
-
-  const handleDecline = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      setIsDeclined(true);
-    }, 1000);
-  };
-
-  if (isAccepted) {
-    return (
-      <div className="p-4 border-b border-[var(--secondary-color)] last:border-b-0 bg-[var(--darker-color)]">
-        <div className="flex items-center justify-center gap-2 text-green-400">
-          <Check className="h-5 w-5" />
-          <p className="text-sm font-medium">Request accepted</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (isDeclined) {
-    return (
-      <div className="p-4 border-b border-[var(--secondary-color)] last:border-b-0 bg-[var(--darker-color)]">
-        <div className="flex items-center justify-center gap-2 text-[var(--lighter-color)]">
-          <p className="text-sm font-medium">Request declined</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="p-4 border-b border-[var(--secondary-color)] last:border-b-0 transition-colors duration-200 group">
       <div className="flex gap-3 items-center">
         <div className="relative flex-shrink-0">
-          {icon ? (
+          {profile_picture ? (
             <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[var(--secondary-color)] group-hover:border-[var(--b-color)] transition-colors">
               <Image
-                src={icon}
+                src={profile_picture}
                 className="object-cover"
                 fill
-                alt="profile image"
+                alt={`${username}'s profile`}
               />
             </div>
           ) : (
@@ -85,7 +52,7 @@ export default function BrotherRequestCard({ username, date, icon }) {
               <DefaultIcon
                 width={12}
                 height={12}
-                fontSize={16}
+                fontSize={24}
                 name={username || "U"}
               />
             </div>
@@ -99,10 +66,16 @@ export default function BrotherRequestCard({ username, date, icon }) {
             </p>
           </div>
           <p className="text-[var(--lighter-color)] text-xs mt-1">
-            {date ? timeSince(date) : "Unknown"}
+            {created_at ? timeSince(created_at) : "Unknown"}
           </p>
         </div>
       </div>
+
+      {error && (
+        <div className="mt-2 p-2 bg-red-900/20 border border-red-700 rounded-md">
+          <p className="text-red-400 text-xs">{error}</p>
+        </div>
+      )}
 
       {isProcessing ? (
         <div className="flex justify-center mt-3">
@@ -111,18 +84,18 @@ export default function BrotherRequestCard({ username, date, icon }) {
       ) : (
         <div className="flex gap-2 mt-3">
           <button
-            onClick={handleAccept}
-            className="flex-1 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-800 transition-all flex items-center justify-center gap-1 shadow-md hover:shadow-lg"
+            onClick={onAccept}
+            className="flex-1 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-800 transition-all flex items-center justify-center gap-1 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isProcessing}
           >
             <Check className="h-4 w-4" />
             Accept
           </button>
           <button
-            onClick={handleDecline}
+            onClick={onDecline}
             className="flex-1 py-2 text-sm bg-[var(--dark-color)] text-[var(--lighter-color)] rounded-md border
               border-[var(--secondary-color)] hover:bg-[var(--darker-color)] transition-all flex items-center justify-center
-              gap-1 hover:text-white"
+              gap-1 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isProcessing}
           >
             <X className="h-4 w-4" />

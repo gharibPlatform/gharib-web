@@ -1,7 +1,11 @@
 import useNotificationsStore from "@/stores/notificationsStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import BrotherRequestCard from "./BrotherRequestCard";
 import { Bell, AlertCircle, Loader2 } from "lucide-react";
+import {
+  acceptBrotherRequest,
+  denyBrotherRequest,
+} from "@/utils/notifications";
 
 export default function Notifications() {
   const {
@@ -11,9 +15,66 @@ export default function Notifications() {
     errorNotifications,
   } = useNotificationsStore();
 
+  const [processingRequests, setProcessingRequests] = useState(new Set());
+  const [completedRequests, setCompletedRequests] = useState(new Set());
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+  const handleAccept = async (brothershipReqId) => {
+    setProcessingRequests((prev) => new Set(prev).add(brothershipReqId));
+    setErrors((prev) => ({ ...prev, [brothershipReqId]: null }));
+
+    try {
+      await acceptBrotherRequest(brothershipReqId);
+      setCompletedRequests((prev) => new Set(prev).add(brothershipReqId));
+      
+      fetchNotifications();
+    } catch (error) {
+      console.error("Failed to accept brother request:", error);
+      setErrors((prev) => ({
+        ...prev,
+        [brothershipReqId]: "Failed to accept request. Please try again.",
+      }));
+    } finally {
+      setProcessingRequests((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(brothershipReqId);
+        return newSet;
+      });
+    }
+  };
+
+  const handleDecline = async (brothershipReqId) => {
+    setProcessingRequests((prev) => new Set(prev).add(brothershipReqId));
+    setErrors((prev) => ({ ...prev, [brothershipReqId]: null }));
+
+    try {
+      await denyBrotherRequest(brothershipReqId);
+      setCompletedRequests((prev) => new Set(prev).add(brothershipReqId));
+
+      fetchNotifications();
+    } catch (error) {
+      console.error("Failed to decline brother request:", error);
+      setErrors((prev) => ({
+        ...prev,
+        [brothershipReqId]: "Failed to decline request. Please try again.",
+      }));
+    } finally {
+      setProcessingRequests((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(brothershipReqId);
+        return newSet;
+      });
+    }
+  };
+
+  // Filter out completed requests if you want them to disappear
+  const activeNotifications = notifications?.filter(
+    (notification) => !completedRequests.has(notification.id)
+  );
 
   return (
     <div className="flex flex-col w-80 h-96 bg-[var(--dark-color)] border border-[var(--secondary-color)] rounded-lg shadow-xl overflow-hidden">
@@ -24,7 +85,7 @@ export default function Notifications() {
           <h2 className="text-lg font-semibold text-white">Notifications</h2>
         </div>
         <span className="flex items-center justify-center w-6 h-6 bg-[var(--b-color)] text-white text-xs font-bold rounded-full">
-          {notifications?.length || 0}
+          {activeNotifications?.length || 0}
         </span>
       </div>
 
@@ -42,17 +103,19 @@ export default function Notifications() {
             <AlertCircle className="h-10 w-10 text-[var(--bright-r-color)] mb-3" />
             <p className="text-[var(--bright-r-color)]">{errorNotifications}</p>
           </div>
-        ) : notifications?.length > 0 ? (
+        ) : activeNotifications?.length > 0 ? (
           <div className="h-full overflow-y-auto">
-            {notifications?.map((notification) => (
+            {activeNotifications?.map((notification) => (
               <div
                 key={notification.id}
                 className="border-b border-[var(--secondary-color)] transition-colors"
               >
                 <BrotherRequestCard
-                  username={notification.sender.username}
-                  date={notification.created_at}
-                  icon={notification.sender.profile_pic}
+                  brothershipRequest={notification}
+                  isProcessing={processingRequests.has(notification.id)}
+                  error={errors[notification.id]}
+                  onAccept={() => handleAccept(notification.id)}
+                  onDecline={() => handleDecline(notification.id)}
                 />
               </div>
             ))}

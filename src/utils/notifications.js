@@ -12,7 +12,7 @@ export const acceptBrotherRequest = async (userId) => {
 
 export const denyBrotherRequest = async (brothershipReqId) => {
   try {
-    const response = await api.post(`/notification/deny-br-req/${brothershipReqId}/`);
+    const response = await api.post(`/notification/reject-br-req/${brothershipReqId}/`);
     return response.data;
   } catch (error) {
     console.error('Error denying brother request:', error);

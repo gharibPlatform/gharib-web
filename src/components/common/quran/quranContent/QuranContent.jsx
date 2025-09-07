@@ -281,7 +281,7 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
         ref={scrollRef}
         className="flex-1 overflow-y-auto no-scrollbar relative"
       >
-        {true && (
+        {currentKhatma && (
           <CurrentKhatma
             name={currentKhatma?.name}
             group={currentKhatma?.group}

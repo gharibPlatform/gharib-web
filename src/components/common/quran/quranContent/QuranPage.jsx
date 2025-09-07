@@ -25,7 +25,7 @@ export default function QuranPage({
   const { goToVerse, setQuranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
   const { quranHeaderChapter } = useQuranHeaderChapter();
-  
+
   const router = useRouter();
   useEffect(() => {
     if (goToVerse) {
@@ -42,7 +42,9 @@ export default function QuranPage({
 
       if (foundEntry)
         foundEntry[1].scrollIntoView({ behavior: "smooth", block: "center" });
-      setActiveVerse(goToVerse);
+      setActiveVerse({
+        verse_key: goToVerse,
+      });
     }
   }, [goToVerse]);
 

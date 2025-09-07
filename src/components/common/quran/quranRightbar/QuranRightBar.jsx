@@ -91,7 +91,6 @@ export default function QuranRightBar({
         </button>
       </div>
 
-      {/* Content Area */}
       <div className="flex-1 overflow-y-auto">
         {activeTab === "highlights" && (
           <QuranHighlights

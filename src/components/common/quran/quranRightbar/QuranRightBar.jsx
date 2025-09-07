@@ -20,7 +20,7 @@ export default function QuranRightBar({
 
   if (isCollapsed) {
     return (
-      <div className="w-16 h-[var(--height)] border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col items-center py-4">
+      <div className="w-16 border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col items-center py-4">
         <button
           onClick={toggleCollapse}
           className="p-2 rounded-full hover:bg-[var(--main-dark-color)] mb-6 transition-colors"
@@ -51,7 +51,7 @@ export default function QuranRightBar({
   }
 
   return (
-    <div className="overflow-y-auto w-[620px] h-[var(--height)] border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col pb-5">
+    <div className="overflow-y-auto w-[620px] border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col pb-5">
       {/* Header */}
       <div className="flex justify-between items-center p-4 border-b border-[var(--g-color)] sticky top-0 bg-[var(--main-color)] z-10">
         <div className="flex items-center gap-3">

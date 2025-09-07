@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import indexToStringSurah from "../../../../../indexToStringSurah.json";
 import { useRouter } from "next/navigation";
 import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
+import useKhatmaStore from "../../../../stores/khatmasStore";
 
 export default function KhatmaCard({ khatma }) {
   const [timeLeft, setTimeLeft] = useState("");
   const router = useRouter();
 
   const { setGoToVerse } = useQuranHeaderVerse();
+  const { setCurrentKhatma } = useKhatmaStore();
+
   const handleKhatmaCardClick = (id) => {
     router.push(`/khatmas/${id}`);
   };
@@ -16,6 +19,7 @@ export default function KhatmaCard({ khatma }) {
   const handleContinueClick = (e, khatma) => {
     e.stopPropagation();
     setGoToVerse(khatma.currentSurah + ":" + khatma.currentVerse);
+    setCurrentKhatma(khatma);
   };
 
   const formatDate = (dateString) => {

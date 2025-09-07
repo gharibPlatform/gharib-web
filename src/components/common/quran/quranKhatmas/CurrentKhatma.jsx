@@ -1,13 +1,41 @@
 import { Clock, Users, BookOpen, Edit3 } from "lucide-react";
+import indexToStringSurah from "../../../../../indexToStringSurah.json";
+
+const calculateTimeLeft = (finishDate) => {
+  if (!finishDate) return "N/A";
+
+  const now = new Date();
+  const target = new Date(finishDate);
+  const difference = target - now;
+
+  if (difference <= 0) return "Completed";
+
+  const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(
+    (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (days > 0) {
+    return `${days}d ${hours}h left`;
+  } else if (hours > 0) {
+    return `${hours}h ${minutes}m left`;
+  } else {
+    return `${minutes}m left`;
+  }
+};
 
 export default function CurrentKhatma({
   name,
   group,
-  timeLeft,
-  currentlyAt,
+  finishDate,
+  currentSurah,
+  currentVerse,
   progress,
   selfProgress,
 }) {
+  const timeLeft = calculateTimeLeft(finishDate);
+
   return (
     <div
       className="sticky top-3 mx-auto z-[9999] 
@@ -19,11 +47,11 @@ export default function CurrentKhatma({
       <div className="flex flex-col whitespace-nowrap min-w-[150px]">
         <div className="flex items-center gap-2 mb-1">
           <Clock className="h-4.5 w-4.5 text-[var(--o-color)]" />
-          <p className="font-semibold text-base">Ramadan Khatma</p>
+          <p className="font-semibold text-base">{name}</p>
         </div>
         <div className="flex items-center gap-1.5">
           <Users className="h-4 w-4 opacity-70" />
-          <p className="text-sm opacity-80">Group: Family & Friends</p>
+          <p className="text-sm opacity-80">Group: {group}</p>
         </div>
       </div>
 
@@ -42,28 +70,34 @@ export default function CurrentKhatma({
         <div className="w-full h-2.5 bg-white/20 rounded-full mt-1 relative overflow-hidden">
           <div
             className="absolute top-0 left-0 h-2.5 bg-[var(--o-color)] rounded-full transition-all duration-500"
-            style={{ width: "42%" }}
+            style={{ width: `${progress}%` }}
           />
           <div
             className="absolute top-0 left-0 h-2.5 bg-[var(--b-color)] rounded-full transition-all duration-700"
-            style={{ width: "25%" }}
+            style={{ width: `${selfProgress}%` }}
           />
         </div>
 
         <div className="flex justify-between w-full mt-1.5">
-          <p className="text-sm font-semibold text-[var(--o-color)]">42%</p>
-          <p className="text-sm font-semibold text-[var(--b-color)]">25%</p>
+          <p className="text-sm font-semibold text-[var(--o-color)]">
+            {progress}%
+          </p>
+          <p className="text-sm font-semibold text-[var(--b-color)]">
+            {selfProgress}%
+          </p>
         </div>
       </div>
 
       <div className="flex flex-col text-right whitespace-nowrap min-w-[160px]">
         <div className="flex items-center justify-end gap-2 mb-1">
           <BookOpen className="h-4.5 w-4.5" />
-          <p className="font-semibold text-base">Al-Baqarah 45</p>
+          <p className="font-semibold text-base">
+            {indexToStringSurah[currentSurah]} {currentVerse}
+          </p>
         </div>
         <div className="flex items-center justify-end gap-1.5">
           <Clock className="h-4 w-4 opacity-70" />
-          <p className="text-sm opacity-80">24m left in segment</p>
+          <p className="text-sm opacity-80">{timeLeft}</p>
         </div>
       </div>
 

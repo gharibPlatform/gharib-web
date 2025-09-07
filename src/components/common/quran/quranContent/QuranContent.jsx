@@ -283,12 +283,13 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
       >
         {currentKhatma && (
           <CurrentKhatma
-            name={currentKhatma?.name}
-            group={currentKhatma?.group}
-            timeLeft={currentKhatma?.timeLeft}
-            currentlyAt={currentKhatma?.currentlyAt}
-            progress={currentKhatma?.progress}
-            selfProgress={currentKhatma?.selfProgress}
+            name={currentKhatma?.khatma?.name}
+            group={currentKhatma?.khatma?.group_data?.name}
+            finishDate={currentKhatma?.finishDate}
+            currentSurah={currentKhatma?.currentSurah}
+            currentVerse={currentKhatma?.currentVerse}
+            progress={currentKhatma?.khatma?.progress}
+            selfProgress={currentKhatma?.progress}
           />
         )}
 

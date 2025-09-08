@@ -13,6 +13,7 @@ export default function QuranPage({
   setClickBoxBool,
   setBoxPosition,
   setVerseKey,
+  versesState,
 }) {
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
@@ -91,7 +92,6 @@ export default function QuranPage({
     setVerseKey(verse.verse_key);
   };
 
-  const currentKhatma = null;
   return (
     <div
       className="w-9/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"
@@ -108,7 +108,7 @@ export default function QuranPage({
         {/* actual verses */}
         {Array.isArray(verses) &&
           verses
-          // .filter((verse) => !(currentKhatma && versesState?.notInKhatma.has(verse.verse_key)))
+          .filter((verse) => !(versesState?.notInKhatma.has(verse.verse_key)))
           .flatMap((verse, index) => (
             <div
               key={verse.verse_key}
@@ -116,9 +116,7 @@ export default function QuranPage({
               data-verse-key={verse.verse_key}
               className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] 
                 ${activeVerse?.verse_key == verse.verse_key ? "bg-[var(--g-color)]" : ""}
-                ${currentKhatma && versesState?.alreadyRead.has(verse.verse_key) ? "text-[var(--o-color)]" : ""}
-                ${currentKhatma && versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--g-color)]" : ""}
-                ${currentKhatma && versesState?.notInKhatma.has(verse.verse_key) ? "text-[var(--w-color)]" : ""}
+                ${versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--g-color)]" : ""}
               `}
               ref={(el) => {
                 if (verseRefs.current[verse.verse_key]) {

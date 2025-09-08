@@ -78,20 +78,21 @@ export const verseByChapter = async (
   }
 };
 
-export const verseByPage = async (page, chapterId = null, lastVerse = null) => {
+export const verseByPage = async (page, chapterId = null, lastVerse = null, lastSurah = null) => {
   if (page >= 1 && page <= 604) {
     try {
       let lastPage = null;
 
-      if (lastVerse) {
-        const lastVerseKey = [chapterId, lastVerse].join(":");
-        const lastVerseData = await verseByKey(lastVerseKey);
-        lastPage = lastVerseData.page_number;
+      if (lastVerse && lastSurah) {
+        const lastSurahKey = [lastSurah, lastVerse].join(":");
+        const lastSurahData = await verseByKey(lastSurahKey);
+        lastPage = lastSurahData.page_number;
       }
+
       if (lastPage && lastPage < page) {
         return [];
       }
-      
+
       const response = await axios.get(
         `${BASE_URL}/verses/by_page/${page}?words=true`
       );
@@ -127,9 +128,10 @@ export const verseByKey = async (key) => {
 export const verseByPageAndChapter = async (
   page,
   chapterId,
-  lastVerse = null
+  lastVerse = null,
+  lastSurah = null
 ) => {
-  return await verseByPage(page, chapterId, lastVerse);
+  return await verseByPage(page, chapterId, lastVerse, lastSurah);
 };
 
 export const randomVerse = async () => {

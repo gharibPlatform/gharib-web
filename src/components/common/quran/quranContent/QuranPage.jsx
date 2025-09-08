@@ -14,6 +14,7 @@ export default function QuranPage({
   setBoxPosition,
   setVerseKey,
   versesState,
+  currentReadVerse
 }) {
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
@@ -117,6 +118,7 @@ export default function QuranPage({
               className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] 
                 ${activeVerse?.verse_key == verse.verse_key ? "bg-[var(--g-color)]" : ""}
                 ${versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--g-color)]" : ""}
+                ${currentReadVerse >= verse.verse_key.split(":")[1] ? "text-[var(--o-color)]" : ""}
               `}
               ref={(el) => {
                 if (verseRefs.current[verse.verse_key]) {

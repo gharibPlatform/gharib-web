@@ -7,6 +7,7 @@ export default function QuranSurah({
   setBoxPosition,
   setVerseKey,
   currentKhatma,
+  currentReadVerse
 }) {
   const [versesState, setVersesState] = useState({
     alreadyRead: new Set(),
@@ -62,6 +63,7 @@ export default function QuranSurah({
           setBoxPosition={setBoxPosition}
           setVerseKey={setVerseKey}
           versesState={versesState}
+          currentReadVerse={currentReadVerse}
         />
       ))}
     </div>

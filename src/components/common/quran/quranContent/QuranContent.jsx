@@ -20,12 +20,23 @@ import { audioByVerse } from "../../../../utils/quran/quranAudio";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import useKhatmaStore from "../../../../stores/khatmasStore";
 import QuranVerseModal from "./QuranVerseModal";
+import toast from "react-hot-toast";
 
 export default function QuranContent({ isLoadingUserKhatmas }) {
-  const scrollRef = useRef(null);
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
   const [lastFetchedPage, setLastFetchedPage] = useState();
+  const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
+  const [clickBoxBool, setClickBoxBool] = useState(false);
+  const [verseKey, setVerseKey] = useState();
+  const [showHighlightsConfirmation, setShowHighlightsConfirmation] =
+    useState(false);
+
+  const lastScrollTop = useRef(0);
+  const scrollRef = useRef(null);
+  const boxRef = useRef(null);
 
   const { quranHeaderPage } = useQuranHeaderPage();
   const {
@@ -37,9 +48,18 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
 
   const { quranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
-  const { shouldFetch } = useShouldFetch();
 
+  const { shouldFetch } = useShouldFetch();
   const { currentKhatma } = useKhatmaStore();
+
+  const { khatmaSelfMembership, khatmaDetails, quranChapters, userKhatmas } =
+    useKhatmaStore();
+
+  const {
+    userProgress,
+    loading: progressLoading,
+    currentChapter,
+  } = useKhatmaProgress(khatmaSelfMembership, khatmaDetails, quranChapters);
 
   const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
   const rate = 100 / totalVersesInChapter;
@@ -168,10 +188,6 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
   }, [quranHeaderVerse]);
 
   //hide header and footer when scrolling
-  const [isFooterVisible, setIsFooterVisible] = useState(true);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const lastScrollTop = useRef(0);
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = scrollRef.current.scrollTop;
@@ -197,46 +213,6 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     };
   }, []);
 
-  //list of khatmas to test
-  const khatmas = [
-    {
-      name: "Khatma 1",
-      startingVerse: "2:1",
-      endingVerse: "2:50",
-    },
-    {
-      name: "Khatma 2",
-      startingVerse: "2:51",
-      endingVerse: "2:100",
-    },
-    {
-      name: "Khatma 3",
-      startingVerse: "2:101",
-      endingVerse: "2:150",
-    },
-    {
-      name: "Khatma 4",
-      startingVerse: "2:151",
-      endingVerse: "2:200",
-    },
-    {
-      name: "Khatma 5",
-      startingVerse: "2:201",
-      endingVerse: "3:100",
-    },
-  ];
-
-  const [khatmasWithProgress, setKhatmasWithProgress] = useState(khatmas);
-  const [showKhatmas, setShowKhatmas] = useState(false);
-
-  const { khatmaSelfMembership, khatmaDetails, quranChapters, userKhatmas } =
-    useKhatmaStore();
-  const {
-    userProgress,
-    loading: progressLoading,
-    currentChapter,
-  } = useKhatmaProgress(khatmaSelfMembership, khatmaDetails, quranChapters);
-
   useEffect(() => {
     if (!userProgress) return;
 
@@ -246,17 +222,7 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
         progress: Math.min(Math.max(userProgress.percentage, 0), 100),
       };
     });
-
-    setKhatmasWithProgress(updated);
   }, [userProgress?.percentage]);
-
-  useEffect(() => {
-    console.log("here is userProgress ", userProgress);
-  }, [userProgress]);
-
-  const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
-  const [clickBoxBool, setClickBoxBool] = useState(false);
-  const boxRef = useRef(null);
 
   //closing the pop up when clikcing outside
   useEffect(() => {
@@ -292,7 +258,6 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
   }, [clickBoxBool]);
 
   //playing the verse when clickng
-  const [verseKey, setVerseKey] = useState();
   const playVerse = () => {
     setClickBoxBool(false);
     audioByVerse(1, verseKey).then((resp) => {
@@ -300,17 +265,23 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     });
   };
 
-  const [showHighlightsConfirmation, setShowHighlightsConfirmation] =
-    useState(false);
-
   const handleHighlightVerse = () => {
     setClickBoxBool(false);
     setShowHighlightsConfirmation(true);
   };
 
+  const currentReadVerse = useMemo(() => {
+    if (!currentKhatma) return;
+
+    if (quranHeaderVerse > currentKhatma.currentVerse) {
+      return quranHeaderVerse;
+    }
+
+  }, [quranHeaderVerse, currentKhatma]);
+
   useEffect(() => {
-    console.log("cache is : ", cache);
-  }, [cache]);
+    console.log("currentReadVerses", currentReadVerse);
+  }, [currentReadVerse]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -337,6 +308,7 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
           setBoxPosition={setBoxPosition}
           setVerseKey={setVerseKey}
           currentKhatma={currentKhatma}
+          currentReadVerse={currentReadVerse}
         />
 
         {clickBoxBool && (

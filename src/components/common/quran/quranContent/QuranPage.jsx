@@ -4,6 +4,7 @@ import QuranSurahSeparator from "./QuranSurahSeparator";
 import toast from "react-hot-toast";
 import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
+import useKhatmaStore from "../../../../stores/khatmasStore";
 
 import { useRouter } from "next/navigation";
 export default function QuranPage({
@@ -16,7 +17,6 @@ export default function QuranPage({
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
 
-  // Add refs for each verse
   const verseRefs = useRef({});
   const observerRef = useRef(null);
   const ref = useRef(null);
@@ -25,8 +25,53 @@ export default function QuranPage({
   const { goToVerse, setQuranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
   const { quranHeaderChapter } = useQuranHeaderChapter();
+  const { currentKhatma } = useKhatmaStore();
+
+  const [versesState, setVersesState] = useState({
+    alreadyRead: new Set(),
+    notYetRead: new Set(),
+    notInKhatma: new Set(),
+  });
+
+  useEffect(() => {
+    if (currentKhatma) {
+      const alreadyReadKeys = new Set();
+      const notYetReadKeys = new Set();
+      const notInKhatmaKeys = new Set();
+
+      verses.forEach((verse) => {
+        const [surah, ayah] = verse.verse_key.split(":").map(Number);
+
+        if (
+          surah > currentKhatma.endShareSurah ||
+          (surah === currentKhatma.endShareSurah &&
+            ayah > currentKhatma.endShareVerse) ||
+          surah < currentKhatma.startShareSurah ||
+          (surah === currentKhatma.startShareSurah &&
+            ayah < currentKhatma.startShareVerse)
+        ) {
+          notInKhatmaKeys.add(verse.verse_key);
+        } else if (
+          surah < currentKhatma.currentSurah ||
+          (surah === currentKhatma.currentSurah &&
+            ayah < currentKhatma.currentVerse)
+        ) {
+          alreadyReadKeys.add(verse.verse_key);
+        } else {
+          notYetReadKeys.add(verse.verse_key);
+        }
+      });
+
+      setVersesState({
+        notInKhatma: notInKhatmaKeys,
+        alreadyRead: alreadyReadKeys,
+        notYetRead: notYetReadKeys,
+      });
+    }
+  }, [currentKhatma, verses]);
 
   const router = useRouter();
+
   useEffect(() => {
     if (goToVerse) {
       if (quranHeaderChapter.id != goToVerse.split(":")[0]) {
@@ -47,12 +92,6 @@ export default function QuranPage({
       });
     }
   }, [goToVerse]);
-
-  useEffect(() => {
-    if (activeVerse) {
-      console.log("active verse is :", activeVerse);
-    }
-  }, [activeVerse]);
 
   //observing the verses
   useEffect(() => {
@@ -84,7 +123,6 @@ export default function QuranPage({
     };
   }, [verses]);
 
-  //pop up of verse when clicking on it
   const handleClick = (event, verse) => {
     setClickBoxBool(true);
     const rect = event.target.getBoundingClientRect();
@@ -117,7 +155,12 @@ export default function QuranPage({
               key={verse.verse_key}
               id={`verse-${verse.verse_key}`}
               data-verse-key={verse.verse_key}
-              className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] ${activeVerse?.verse_key == verse.verse_key ? "bg-[var(--g-color)]" : ""}`}
+              className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] 
+                ${activeVerse?.verse_key == verse.verse_key ? "bg-[var(--g-color)]" : ""}
+                ${currentKhatma && versesState?.alreadyRead.has(verse.verse_key) ? "text-[var(--o-color)]" : ""}
+                ${currentKhatma && versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--g-color)]" : ""}
+                ${currentKhatma && versesState?.notInKhatma.has(verse.verse_key) ? "text-[var(--w-color)]" : ""}
+              `}
               ref={(el) => {
                 if (verseRefs.current[verse.verse_key]) {
                   delete verseRefs.current[verse.verse_key];
@@ -154,7 +197,7 @@ export default function QuranPage({
                   onClick={(e) => handleClick(e, verse)}
                   className="p-1 pb-3 inline-block cursor-pointer"
                 >
-                  {word.text}{" "}
+                  {word.text}
                 </span>
               ))}
             </div>

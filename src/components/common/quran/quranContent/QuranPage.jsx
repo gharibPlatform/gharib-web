@@ -25,50 +25,6 @@ export default function QuranPage({
   const { goToVerse, setQuranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
   const { quranHeaderChapter } = useQuranHeaderChapter();
-  const { currentKhatma } = useKhatmaStore();
-
-  const [versesState, setVersesState] = useState({
-    alreadyRead: new Set(),
-    notYetRead: new Set(),
-    notInKhatma: new Set(),
-  });
-
-  useEffect(() => {
-    if (currentKhatma) {
-      const alreadyReadKeys = new Set();
-      const notYetReadKeys = new Set();
-      const notInKhatmaKeys = new Set();
-
-      verses.forEach((verse) => {
-        const [surah, ayah] = verse.verse_key.split(":").map(Number);
-
-        if (
-          surah > currentKhatma.endShareSurah ||
-          (surah === currentKhatma.endShareSurah &&
-            ayah > currentKhatma.endShareVerse) ||
-          surah < currentKhatma.startShareSurah ||
-          (surah === currentKhatma.startShareSurah &&
-            ayah < currentKhatma.startShareVerse)
-        ) {
-          notInKhatmaKeys.add(verse.verse_key);
-        } else if (
-          surah < currentKhatma.currentSurah ||
-          (surah === currentKhatma.currentSurah &&
-            ayah < currentKhatma.currentVerse)
-        ) {
-          alreadyReadKeys.add(verse.verse_key);
-        } else {
-          notYetReadKeys.add(verse.verse_key);
-        }
-      });
-
-      setVersesState({
-        notInKhatma: notInKhatmaKeys,
-        alreadyRead: alreadyReadKeys,
-        notYetRead: notYetReadKeys,
-      });
-    }
-  }, [currentKhatma, verses]);
 
   const router = useRouter();
 
@@ -135,6 +91,7 @@ export default function QuranPage({
     setVerseKey(verse.verse_key);
   };
 
+  const currentKhatma = null;
   return (
     <div
       className="w-9/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"
@@ -150,7 +107,9 @@ export default function QuranPage({
       >
         {/* actual verses */}
         {Array.isArray(verses) &&
-          verses.flatMap((verse, index) => (
+          verses
+          // .filter((verse) => !(currentKhatma && versesState?.notInKhatma.has(verse.verse_key)))
+          .flatMap((verse, index) => (
             <div
               key={verse.verse_key}
               id={`verse-${verse.verse_key}`}

@@ -75,7 +75,8 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     if (shouldFetch !== "chapter") return;
     let isMounted = true;
 
-    verseByChapter(quranHeaderChapter.id).then((updatedCache) => {
+    // if (currentKhatma ) 
+    verseByChapter(quranHeaderChapter.id, 18, 89).then((updatedCache) => {
       if (isMounted) {
         const keys = Object.keys(updatedCache);
         setLastFetchedPage(+keys[keys.length - 1]);
@@ -99,7 +100,7 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
 
     if (scrollTop + innerHeight + 3600 >= scrollHeight) {
       if (lastFetchedPage) {
-        verseByPageAndChapter(lastFetchedPage + 1, quranHeaderChapter.id).then(
+        verseByPageAndChapter(lastFetchedPage + 1, quranHeaderChapter.id, 89).then(
           (resp) => {
             setAddedPage(resp);
           }
@@ -273,6 +274,53 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     setClickBoxBool(false);
     setShowHighlightsConfirmation(true);
   };
+
+  useEffect(() => {
+    console.log("cache is : ", cache);
+  }, [cache]);
+
+    const [versesState, setVersesState] = useState({
+    alreadyRead: new Set(),
+    notYetRead: new Set(),
+    notInKhatma: new Set(),
+  });
+
+  useEffect(() => {
+    if (currentKhatma) {
+      const alreadyReadKeys = new Set();
+      const notYetReadKeys = new Set();
+      const notInKhatmaKeys = new Set();
+
+      verses.forEach((verse) => {
+        const [surah, ayah] = verse.verse_key.split(":").map(Number);
+
+        if (
+          surah > currentKhatma.endShareSurah ||
+          (surah === currentKhatma.endShareSurah &&
+            ayah > currentKhatma.endShareVerse) ||
+          surah < currentKhatma.startShareSurah ||
+          (surah === currentKhatma.startShareSurah &&
+            ayah < currentKhatma.startShareVerse)
+        ) {
+          notInKhatmaKeys.add(verse.verse_key);
+        } else if (
+          surah < currentKhatma.currentSurah ||
+          (surah === currentKhatma.currentSurah &&
+            ayah < currentKhatma.currentVerse)
+        ) {
+          alreadyReadKeys.add(verse.verse_key);
+        } else {
+          notYetReadKeys.add(verse.verse_key);
+        }
+      });
+
+      setVersesState({
+        notInKhatma: notInKhatmaKeys,
+        alreadyRead: alreadyReadKeys,
+        notYetRead: notYetReadKeys,
+      });
+    }
+  }, [currentKhatma, cache]);
 
   return (
     <div className="flex flex-col h-screen">

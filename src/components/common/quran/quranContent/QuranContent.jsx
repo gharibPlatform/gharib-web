@@ -21,6 +21,7 @@ import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import useKhatmaStore from "../../../../stores/khatmasStore";
 import QuranVerseModal from "./QuranVerseModal";
 import toast from "react-hot-toast";
+import verseIndexMap from "../../../../../verseIndexMap.json";
 
 export default function QuranContent({ isLoadingUserKhatmas }) {
   const [cache, setCache] = useState({});
@@ -51,15 +52,6 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
 
   const { shouldFetch } = useShouldFetch();
   const { currentKhatma } = useKhatmaStore();
-
-  const { khatmaSelfMembership, khatmaDetails, quranChapters, userKhatmas } =
-    useKhatmaStore();
-
-  const {
-    userProgress,
-    loading: progressLoading,
-    currentChapter,
-  } = useKhatmaProgress(khatmaSelfMembership, khatmaDetails, quranChapters);
 
   const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
   const rate = 100 / totalVersesInChapter;
@@ -182,11 +174,6 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     };
   }, [lastFetchedPage]);
 
-  //change the progress for the tracker line
-  const progress = useMemo(() => {
-    return quranHeaderVerse * rate;
-  }, [quranHeaderVerse]);
-
   //hide header and footer when scrolling
   useEffect(() => {
     const handleScroll = () => {
@@ -212,17 +199,6 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
       scrollContainer.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    if (!userProgress) return;
-
-    const updated = khatmas.map((khatma) => {
-      return {
-        ...khatma,
-        progress: Math.min(Math.max(userProgress.percentage, 0), 100),
-      };
-    });
-  }, [userProgress?.percentage]);
 
   //closing the pop up when clikcing outside
   useEffect(() => {
@@ -257,6 +233,40 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     };
   }, [clickBoxBool]);
 
+  //this for tracking currentReadVerse when on reading mode (the last read one and then in quranPage I just do a >= operation to get the ones before)
+  const currentReadVerse = useMemo(() => {
+    if (!currentKhatma) return;
+
+    if (quranHeaderVerse > currentKhatma.currentVerse) {
+      return quranHeaderVerse;
+    }
+  }, [quranHeaderVerse, currentKhatma]);
+
+  //change the progress for the tracker line
+  const progress = useMemo(() => {
+    return quranHeaderVerse * rate;
+  }, [quranHeaderVerse]);
+
+  const khatmaProgress = useMemo(() => {
+    if (!currentKhatma) return;
+
+    const total =
+      verseIndexMap[
+        `${currentKhatma.endShareSurah}:${currentKhatma.endShareVerse}`
+      ] -
+      verseIndexMap[
+        `${currentKhatma.startShareSurah}:${currentKhatma.startShareVerse}`
+      ];
+
+    const current =
+      verseIndexMap[`${quranHeaderChapter.id}:${currentReadVerse}`] -
+      verseIndexMap[
+        `${currentKhatma.startShareSurah}:${currentKhatma.startShareVerse}`
+      ];
+      
+    return (current * 100) / total;
+  }, [currentKhatma, currentReadVerse]);
+
   //playing the verse when clickng
   const playVerse = () => {
     setClickBoxBool(false);
@@ -270,18 +280,9 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     setShowHighlightsConfirmation(true);
   };
 
-  const currentReadVerse = useMemo(() => {
-    if (!currentKhatma) return;
-
-    if (quranHeaderVerse > currentKhatma.currentVerse) {
-      return quranHeaderVerse;
-    }
-
-  }, [quranHeaderVerse, currentKhatma]);
-
   useEffect(() => {
-    console.log("currentReadVerses", currentReadVerse);
-  }, [currentReadVerse]);
+    console.log("khatmaProgress", currentKhatma);
+  }, [khatmaProgress]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -298,7 +299,7 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
             currentSurah={currentKhatma?.currentSurah}
             currentVerse={currentKhatma?.currentVerse}
             progress={currentKhatma?.khatma?.progress}
-            selfProgress={currentKhatma?.progress}
+            selfProgress={khatmaProgress}
           />
         )}
 

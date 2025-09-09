@@ -14,7 +14,7 @@ export default function QuranPage({
   setBoxPosition,
   setVerseKey,
   versesState,
-  currentReadVerse
+  currentReadVerse,
 }) {
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
@@ -27,7 +27,7 @@ export default function QuranPage({
   const { goToVerse, setQuranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
   const { quranHeaderChapter } = useQuranHeaderChapter();
-
+  const { currentKhatma } = useKhatmaStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -109,58 +109,58 @@ export default function QuranPage({
         {/* actual verses */}
         {Array.isArray(verses) &&
           verses
-          .filter((verse) => !(versesState?.notInKhatma.has(verse.verse_key)))
-          .flatMap((verse, index) => (
-            <div
-              key={verse.verse_key}
-              id={`verse-${verse.verse_key}`}
-              data-verse-key={verse.verse_key}
-              className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] 
+            // .filter((verse) => !(versesState?.notInKhatma.has(verse.verse_key)))
+            .flatMap((verse, index) => (
+              <div
+                key={verse.verse_key}
+                id={`verse-${verse.verse_key}`}
+                data-verse-key={verse.verse_key}
+                className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] 
                 ${activeVerse?.verse_key == verse.verse_key ? "bg-[var(--g-color)]" : ""}
                 ${versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--g-color)]" : ""}
-                ${currentReadVerse >= verse.verse_key.split(":")[1] ? "text-[var(--o-color)]" : ""}
+                ${currentReadVerse >= verse.verse_key.split(":")[1] && versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--o-color)]" : ""}
               `}
-              ref={(el) => {
-                if (verseRefs.current[verse.verse_key]) {
-                  delete verseRefs.current[verse.verse_key];
-                }
-                if (el) verseRefs.current[verse.verse_key] = el;
-              }}
-              style={{ display: "inline" }}
-              onClick={() => setActiveVerse(verse)}
-            >
-              {/* Surah separator logic */}
-              {verse.verse_number === 1 &&
-                (index !== 0 ? (
-                  <QuranSurahSeparator
-                    chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
-                    pageNumber={pageNumber}
-                    pageNumberBool={true}
-                    basmalaPre={true}
-                  />
-                ) : Number(verse.verse_key.split(":")[0]) === 1 ||
-                  Number(verse.verse_key.split(":")[0]) === 9 ? (
-                  <QuranSurahSeparator
-                    chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
-                  />
-                ) : (
-                  <QuranSurahSeparator
-                    chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
-                    basmalaPre={true}
-                  />
-                ))}
+                ref={(el) => {
+                  if (verseRefs.current[verse.verse_key]) {
+                    delete verseRefs.current[verse.verse_key];
+                  }
+                  if (el) verseRefs.current[verse.verse_key] = el;
+                }}
+                style={{ display: "inline" }}
+                onClick={() => setActiveVerse(verse)}
+              >
+                {/* Surah separator logic */}
+                {verse.verse_number === 1 &&
+                  (index !== 0 ? (
+                    <QuranSurahSeparator
+                      chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
+                      pageNumber={pageNumber}
+                      pageNumberBool={true}
+                      basmalaPre={true}
+                    />
+                  ) : Number(verse.verse_key.split(":")[0]) === 1 ||
+                    Number(verse.verse_key.split(":")[0]) === 9 ? (
+                    <QuranSurahSeparator
+                      chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
+                    />
+                  ) : (
+                    <QuranSurahSeparator
+                      chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
+                      basmalaPre={true}
+                    />
+                  ))}
 
-              {verse.words.map((word, wordIndex) => (
-                <span
-                  key={`${index}-${wordIndex}`}
-                  onClick={(e) => handleClick(e, verse)}
-                  className="p-1 pb-3 inline-block cursor-pointer"
-                >
-                  {word.text}
-                </span>
-              ))}
-            </div>
-          ))}
+                {verse.words.map((word, wordIndex) => (
+                  <span
+                    key={`${index}-${wordIndex}`}
+                    onClick={(e) => handleClick(e, verse)}
+                    className="p-1 pb-3 inline-block cursor-pointer"
+                  >
+                    {word.text}
+                  </span>
+                ))}
+              </div>
+            ))}
       </div>
 
       {/* footer page number*/}

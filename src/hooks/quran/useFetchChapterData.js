@@ -1,7 +1,14 @@
 import { useEffect } from "react";
 import { verseByChapter } from "../../utils/quran/quran";
 
-export function useFetchChapterData(shouldFetch, quranHeaderChapter, currentKhatma, setCache, setLastFetchedPage, setPriority) {
+export function useFetchChapterData(
+  shouldFetch,
+  quranHeaderChapter,
+  currentKhatma,
+  setCache,
+  setLastFetchedPage,
+  setPriority
+) {
   useEffect(() => {
     if (shouldFetch !== "chapter") return;
     let isMounted = true;

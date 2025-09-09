@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore";
 import useShouldFetch from "../../../../stores/shouldFetchStore";

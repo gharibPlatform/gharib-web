@@ -45,7 +45,7 @@ const useKhatmaStore = create((set) => ({
 
   fetchKhatmaMembership: async (khatmaId) => {
     const data = await getKhatmaMembership(khatmaId);
-    set({ khatmaMembership: data.results });
+    set({ khatmaMembership: data.results[0] });
     return data;
   },
 

@@ -1,34 +1,36 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "../../../../stores/pageQuranHeaderStore";
 import useShouldFetch from "../../../../stores/shouldFetchStore";
+import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useKhatmaStore from "../../../../stores/khatmasStore";
 
 import QuranSurah from "./QuranSurah";
 import QuranFooter from "../QuranFooter";
 import ProgressTrackerLine from "../../progress tracker line/ProgressTrackerLine";
 import CurrentKhatma from "../quranKhatmas/CurrentKhatma";
-import { useKhatmaProgress } from "../../../../hooks/useKhatmaProgress";
-
-import {
-  getChapter,
-  verseByPageAndChapter,
-} from "../../../../utils/quran/quran";
-import { verseByPage, verseByChapter } from "../../../../utils/quran/quran";
-
-import VersePopup from "./VersePopup";
-import { audioByVerse } from "../../../../utils/quran/quranAudio";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
-import useKhatmaStore from "../../../../stores/khatmasStore";
 import QuranVerseModal from "./QuranVerseModal";
-import toast from "react-hot-toast";
+import FooterContainer from "./FooterContainer";
+import VersePopupController from "./VersePopupController";
 import verseIndexMap from "../../../../../verseIndexMap.json";
+
+import { useFetchChapterData } from "../../../../hooks/quran/useFetchChapterData";
+import { useFetchPageData } from "../../../../hooks/quran/useFetchPageData";
+import { useHeaderFooterVisibility } from "../../../../hooks/quran/useHeaderFooterVisibility";
+import { useKhatmaProgress } from "../../../../hooks/quran/useKhatmaProgress";
+import { usePlayVerse } from "../../../../hooks/quran/usePlayVerse";
+import { useProgress } from "../../../../hooks/quran/useProgress";
+import { useScrollHandling } from "../../../../hooks/quran/useScrollHandling";
+import { useCurrentReadVerse } from "../../../../hooks/quran/useCurrentReadVerse";
+import { usePopupInteractions } from "../../../../hooks/quran/usePopupInteractions";
+import { useCacheUpdates } from "../../../../hooks/quran/useCacheUpdates";
+import { useHighlightVerse } from "../../../../hooks/quran/useHighlightVerse";
 
 export default function QuranContent({ isLoadingUserKhatmas }) {
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
   const [lastFetchedPage, setLastFetchedPage] = useState();
   const [isFooterVisible, setIsFooterVisible] = useState(true);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [boxPosition, setBoxPosition] = useState({ x: 0, y: 0 });
   const [clickBoxBool, setClickBoxBool] = useState(false);
   const [verseKey, setVerseKey] = useState();
@@ -46,247 +48,61 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     setQuranHeaderChapter,
     setGoToPath,
   } = useQuranHeaderChapter();
-
   const { quranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
-
   const { shouldFetch } = useShouldFetch();
   const { currentKhatma } = useKhatmaStore();
 
-  const totalVersesInChapter = quranHeaderChapter?.verses_count || 1;
-  const rate = 100 / totalVersesInChapter;
+  useFetchPageData(
+    shouldFetch,
+    quranHeaderPage,
+    quranHeaderChapter,
+    setQuranHeaderChapter,
+    setGoToPath,
+    setCache
+  );
+  useFetchChapterData(
+    shouldFetch,
+    quranHeaderChapter,
+    currentKhatma,
+    setCache,
+    setLastFetchedPage,
+    setPriority
+  );
 
-  //fetch for one page
-  useEffect(() => {
-    if (shouldFetch !== "page") return;
-    let isMounted = true;
+  useScrollHandling(
+    scrollRef,
+    lastFetchedPage,
+    quranHeaderChapter,
+    currentKhatma,
+    setAddedPage,
+    setLastFetchedPage
+  );
 
-    verseByPage(quranHeaderPage).then((updatedCache) => {
-      if (
-        !quranHeaderChapter ||
-        quranHeaderChapter.id !== updatedCache[0].verse_key.split(":")[0]
-      ) {
-        getChapter(updatedCache[0].verse_key.split(":")[0]).then((resp) => {
-          setQuranHeaderChapter(resp);
-          setGoToPath(false);
-        });
-      }
-      if (isMounted) {
-        const tempObj = { [quranHeaderPage]: updatedCache };
-        setCache(tempObj);
-      }
-    });
+  useCacheUpdates(cache, addedPage, setCache);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [quranHeaderPage]);
+  useHeaderFooterVisibility(scrollRef, lastScrollTop, setIsFooterVisible);
+  usePopupInteractions(clickBoxBool, boxRef, scrollRef, setClickBoxBool);
 
-  //fetch for one chapter
-  useEffect(() => {
-    if (shouldFetch !== "chapter") return;
-    let isMounted = true;
+  const currentReadVerse = useCurrentReadVerse(currentKhatma, quranHeaderVerse);
+  const progress = useProgress(quranHeaderVerse, quranHeaderChapter);
+  const khatmaProgress = useKhatmaProgress(
+    currentKhatma,
+    quranHeaderChapter,
+    currentReadVerse,
+    verseIndexMap
+  );
 
-    if (currentKhatma) {
-      verseByChapter(
-        quranHeaderChapter.id,
-        currentKhatma?.startShareVerse,
-        currentKhatma?.endShareVerse
-      ).then((updatedCache) => {
-        if (isMounted) {
-          const keys = Object.keys(updatedCache);
-          setLastFetchedPage(+keys[keys.length - 1]);
-          setCache(updatedCache);
-          setPriority(true);
-        }
-      });
-      return;
-    }
-
-    verseByChapter(quranHeaderChapter.id).then((updatedCache) => {
-      if (isMounted) {
-        const keys = Object.keys(updatedCache);
-        setLastFetchedPage(+keys[keys.length - 1]);
-        setCache(updatedCache);
-        setPriority(true);
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [quranHeaderChapter]);
-
-  //scroll to apply lazy loading and fetch surah while scrolling
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-
-    const scrollHeight = scrollRef.current.scrollHeight;
-    const scrollTop = scrollRef.current.scrollTop;
-    const innerHeight = window.innerHeight;
-
-    if (scrollTop + innerHeight + 3600 >= scrollHeight) {
-      if (lastFetchedPage) {
-        if (currentKhatma) {
-          verseByPageAndChapter(
-            lastFetchedPage + 1,
-            quranHeaderChapter.id,
-            currentKhatma?.endShareVerse,
-            currentKhatma?.endShareSurah
-          ).then((resp) => {
-            setAddedPage(resp);
-          });
-
-          setLastFetchedPage(lastFetchedPage + 1);
-          return;
-        }
-
-        setLastFetchedPage(lastFetchedPage + 1);
-
-        verseByPageAndChapter(
-          lastFetchedPage + 1,
-          quranHeaderChapter.id,
-          89
-        ).then((resp) => {
-          setAddedPage(resp);
-        });
-        setLastFetchedPage(lastFetchedPage + 1);
-      }
-    }
-  };
-
-  // updating the cache
-  useEffect(() => {
-    if (addedPage && addedPage.length > 0 && addedPage[0]) {
-      setCache({ ...cache, [addedPage[0].page_number]: addedPage });
-    }
-  }, [addedPage]);
-
-  // onscroll update the cache
-  useEffect(() => {
-    const scrollableDiv = scrollRef.current;
-    if (!scrollableDiv) return;
-
-    scrollableDiv.addEventListener("scroll", handleScroll);
-
-    return () => {
-      scrollableDiv.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastFetchedPage]);
-
-  //hide header and footer when scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScroll = scrollRef.current.scrollTop;
-      const scrollDirection =
-        currentScroll > lastScrollTop.current ? "down" : "up";
-
-      if (scrollDirection === "down" && currentScroll > 50) {
-        setIsFooterVisible(false);
-        setIsHeaderVisible(false);
-      } else {
-        setIsFooterVisible(true);
-        setIsHeaderVisible(true);
-      }
-
-      lastScrollTop.current = currentScroll <= 0 ? 0 : currentScroll;
-    };
-
-    const scrollContainer = scrollRef.current;
-    scrollContainer.addEventListener("scroll", handleScroll);
-
-    return () => {
-      scrollContainer.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  //closing the pop up when clikcing outside
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (boxRef.current && !boxRef.current.contains(event.target)) {
-        setClickBoxBool(false);
-      }
-    };
-
-    if (clickBoxBool) {
-      document.addEventListener("click", handleOutsideClick);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, [clickBoxBool]);
-
-  //closing the pop up when scrolling
-  useEffect(() => {
-    if (!clickBoxBool) return;
-
-    const handleScroll = () => {
-      setClickBoxBool(false);
-    };
-
-    const scrollContainer = scrollRef.current;
-    scrollContainer?.addEventListener("scroll", handleScroll);
-
-    return () => {
-      scrollContainer?.removeEventListener("scroll", handleScroll);
-    };
-  }, [clickBoxBool]);
-
-  //this for tracking currentReadVerse when on reading mode (the last read one and then in quranPage I just do a >= operation to get the ones before)
-  const currentReadVerse = useMemo(() => {
-    if (!currentKhatma) return;
-
-    if (quranHeaderVerse > currentKhatma.currentVerse) {
-      return quranHeaderVerse;
-    }
-  }, [quranHeaderVerse, currentKhatma]);
-
-  //change the progress for the tracker line
-  const progress = useMemo(() => {
-    return quranHeaderVerse * rate;
-  }, [quranHeaderVerse]);
-
-  const khatmaProgress = useMemo(() => {
-    if (!currentKhatma) return;
-
-    const total =
-      verseIndexMap[
-        `${currentKhatma.endShareSurah}:${currentKhatma.endShareVerse}`
-      ] -
-      verseIndexMap[
-        `${currentKhatma.startShareSurah}:${currentKhatma.startShareVerse}`
-      ];
-
-    const current =
-      verseIndexMap[`${quranHeaderChapter.id}:${currentReadVerse}`] -
-      verseIndexMap[
-        `${currentKhatma.startShareSurah}:${currentKhatma.startShareVerse}`
-      ];
-      
-    return (current * 100) / total;
-  }, [currentKhatma, currentReadVerse]);
-
-  //playing the verse when clickng
-  const playVerse = () => {
-    setClickBoxBool(false);
-    audioByVerse(1, verseKey).then((resp) => {
-      console.log(resp);
-    });
-  };
-
-  const handleHighlightVerse = () => {
-    setClickBoxBool(false);
-    setShowHighlightsConfirmation(true);
-  };
-
-  useEffect(() => {
-    console.log("khatmaProgress", currentKhatma);
-  }, [khatmaProgress]);
+  const playVerse = usePlayVerse(setClickBoxBool, verseKey);
+  const handleHighlightVerse = useHighlightVerse(
+    setClickBoxBool,
+    setShowHighlightsConfirmation
+  );
 
   return (
     <div className="flex flex-col h-screen">
       {shouldFetch === "chapter" && <ProgressTrackerLine progress={progress} />}
+
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto no-scrollbar relative"
@@ -312,17 +128,15 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
           currentReadVerse={currentReadVerse}
         />
 
-        {clickBoxBool && (
-          <div ref={boxRef}>
-            <VersePopup
-              left={boxPosition.x}
-              top={boxPosition.y + (scrollRef.current?.scrollTop || 0)}
-              playVerse={playVerse}
-              setClickBoxBool={setClickBoxBool}
-              handleHighlightVerse={handleHighlightVerse}
-            />
-          </div>
-        )}
+        <VersePopupController
+          clickBoxBool={clickBoxBool}
+          boxRef={boxRef}
+          boxPosition={boxPosition}
+          scrollRef={scrollRef}
+          playVerse={playVerse}
+          setClickBoxBool={setClickBoxBool}
+          handleHighlightVerse={handleHighlightVerse}
+        />
 
         {showHighlightsConfirmation && (
           <QuranVerseModal
@@ -333,13 +147,9 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
         )}
       </div>
 
-      <div
-        className={`transition-all duration-300 ease-in-out 
-                  ${isFooterVisible ? "max-h-[500px] opacity-100 py-2" : "max-h-0 opacity-0 overflow-hidden"}
-              `}
-      >
+      <FooterContainer isVisible={isFooterVisible}>
         <QuranFooter />
-      </div>
+      </FooterContainer>
     </div>
   );
 }

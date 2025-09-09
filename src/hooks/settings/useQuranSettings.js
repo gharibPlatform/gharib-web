@@ -1,53 +1,75 @@
-import { useState } from "react";
+// hooks/settings/useQuranSettings.js
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { getSettings, patchSettings } from "../../utils/apiSettings";
 
 export function useQuranSettings() {
   const [settings, setSettings] = useState({
-    reciter: "Mishary Rashid Al Afasy",
-    translation: "english",
-    tafsir: "Ibn Kathir",
+    reciter: "",
+    translation: "",
+    tafsir: "",
   });
-
+  const [originalSettings, setOriginalSettings] = useState({});
   const [isDirty, setIsDirty] = useState(false);
 
   const options = {
     reciters: [
-      { value: "Mishary Rashid Al Afasy", label: "Mishary Rashid Al Afasy" },
-      { value: "Abu Bakr Al Shatri", label: "Abu Bakr Al Shatri" },
-      { value: "Nasser Al Qatami", label: "Nasser Al Qatami" },
-      { value: "Yasser Al Dosari", label: "Yasser Al Dosari" },
-      { value: "Hani Ar Rifai", label: "Hani Ar Rifai" },
+      { value: "reciter1", label: "Mishary Rashid Al Afasy" },
+      { value: "reciter2", label: "Abu Bakr Al Shatri" },
+      { value: "reciter3", label: "Nasser Al Qatami" },
+      { value: "reciter4", label: "Yasser Al Dosari" },
+      { value: "reciter5", label: "Hani Ar Rifai" },
     ],
     translations: [
-      { value: "english", label: "English Translation" },
-      {
-        value: "arabic1",
-        label: "Arabic Translation with Tashkeel (diacritics)",
-      },
-      {
-        value: "arabic2",
-        label: "Arabic Translation without Tashkeel (diacritics)",
-      },
-      { value: "bengali", label: "Bengali Translation" },
-      { value: "urdu", label: "Urdu Translation" },
-      { value: "turkish", label: "Turkish Translation" },
-      { value: "uzbek", label: "Uzbek Translation" },
+      { value: "translation1", label: "English Translation" },
+      { value: "translation2", label: "Arabic Translation with Tashkeel" },
+      { value: "translation3", label: "Arabic Translation without Tashkeel" },
+      { value: "translation4", label: "Bengali Translation" },
+      { value: "translation5", label: "Urdu Translation" },
+      { value: "translation6", label: "Turkish Translation" },
+      { value: "translation7", label: "Uzbek Translation" },
     ],
     tafsirs: [
-      { value: "Ibn Kathir", label: "Ibn Kathir" },
-      { value: "Maarif Ul Quran", label: "Maarif Ul Quran" },
-      { value: "Tazkirul Quran", label: "Tazkirul Quran" },
+      { value: "tafsir1", label: "Ibn Kathir" },
+      { value: "tafsir2", label: "Maarif Ul Quran" },
+      { value: "tafsir3", label: "Tazkirul Quran" },
     ],
   };
 
+  // Fetch current settings from backend
+  useEffect(() => {
+  const fetch = async () => {
+    try {
+      const res = await getSettings();
+      setSettings(res.data);
+      setOriginalSettings(res.data);
+    } catch (err) {
+      console.error("Error fetching Quran settings:", err);
+    }
+  };
+  fetch();
+}, []);
+
+
+  // Update settings + check if dirty
   const handleSettingChange = (key, value) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
-    setIsDirty(true);
+    const updated = { ...settings, [key]: value };
+    setSettings(updated);
+
+    setIsDirty(
+      updated.reciter !== originalSettings.reciter ||
+      updated.translation !== originalSettings.translation ||
+      updated.tafsir !== originalSettings.tafsir
+    );
   };
 
+  // Save settings to backend
   const handleSave = () => {
-    console.log("Saving Quran settings:", settings);
-    setIsDirty(false);
-    alert("Quran settings saved successfully!");
+    patchSettings({
+          reciter: settings.reciter,
+          translation: settings.translation,
+          tafsir: settings.tafsir,
+        })
   };
 
   return {

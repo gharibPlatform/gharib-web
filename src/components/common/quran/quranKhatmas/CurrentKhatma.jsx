@@ -33,6 +33,7 @@ export default function CurrentKhatma({
   currentVerse,
   progress,
   selfProgress,
+  isDirty,
 }) {
   const timeLeft = calculateTimeLeft(finishDate);
 
@@ -102,9 +103,11 @@ export default function CurrentKhatma({
       </div>
 
       <button
-        className="bg-[var(--o-color)] text-white px-4 py-2 rounded-md font-semibold 
+        disabled={isDirty}
+        className={`bg-[var(--o-color)] text-white px-4 py-2 rounded-md font-semibold 
                          hover:bg-[var(--o-color-hover)] transition-all duration-200 flex items-center gap-2
-                         shadow-md hover:shadow-lg whitespace-nowrap text-sm"
+                         shadow-md hover:shadow-lg whitespace-nowrap text-sm
+                         ${isDirty ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         <Edit3 className="h-4 w-4" />
         Update Progress

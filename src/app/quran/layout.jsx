@@ -11,7 +11,7 @@ import useKhatmaStore from "../../stores/khatmasStore";
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);
   const [selectedVerse, setSelectedVerse] = useState(null);
-  const [selectedHighlight, setSelectedHighlight] = useState(null); // Add this
+  const [selectedHighlight, setSelectedHighlight] = useState(null); 
   const [showSidebar, setShowSidebar] = useState(true);
 
   const toggleRightBar = () => setShowRightBar(!showRightBar);

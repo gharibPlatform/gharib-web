@@ -26,7 +26,11 @@ import { usePopupInteractions } from "../../../../hooks/quran/usePopupInteractio
 import { useCacheUpdates } from "../../../../hooks/quran/useCacheUpdates";
 import { useHighlightVerse } from "../../../../hooks/quran/useHighlightVerse";
 
-export default function QuranContent({ isLoadingUserKhatmas }) {
+export default function QuranContent({
+  isLoadingUserKhatmas,
+  isKhatmaMode,
+  isLoadingKhatmaDetails,
+}) {
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
   const [lastFetchedPage, setLastFetchedPage] = useState();
@@ -99,6 +103,8 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
     setShowHighlightsConfirmation
   );
 
+  const isDirty = khatmaProgress < currentKhatma?.progress;
+
   return (
     <div className="flex flex-col h-screen">
       {shouldFetch === "chapter" && <ProgressTrackerLine progress={progress} />}
@@ -115,7 +121,8 @@ export default function QuranContent({ isLoadingUserKhatmas }) {
             currentSurah={currentKhatma?.currentSurah}
             currentVerse={currentKhatma?.currentVerse}
             progress={currentKhatma?.khatma?.progress}
-            selfProgress={khatmaProgress}
+            selfProgress={Math.floor(khatmaProgress * 100) / 100}
+            isDirty={isDirty}
           />
         )}
 

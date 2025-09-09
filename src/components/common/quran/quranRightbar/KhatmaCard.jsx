@@ -19,6 +19,7 @@ export default function KhatmaCard({ khatma }) {
   const handleContinueClick = (e, khatma) => {
     e.stopPropagation();
     setGoToVerse(khatma.currentSurah + ":" + khatma.currentVerse);
+    router.push(`/quran/khatmas/${khatma.khatma.id}`);
     setCurrentKhatma(khatma);
   };
 

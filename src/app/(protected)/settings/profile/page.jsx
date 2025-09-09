@@ -1,5 +1,5 @@
 "use client";
-import ProfileSettings from "../../../components/settings/profile_settings/ProfileSettings";
+import ProfileSettings from "../../../../components/settings/profile_settings/ProfileSettings";
 
 export default function page() {
   return (

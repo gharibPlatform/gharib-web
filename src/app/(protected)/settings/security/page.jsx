@@ -1,5 +1,5 @@
 "use client";
-import SecuritySettings from "../../../components/settings/security_settings/SecuritySettings";
+import SecuritySettings from "../../../../components/settings/security_settings/SecuritySettings";
 
 export default function page() {
   return (

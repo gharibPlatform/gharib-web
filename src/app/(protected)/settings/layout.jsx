@@ -1,6 +1,6 @@
 "use client";
-import SettingsSideBar from "../../components/settings/SettingsSideBar";
-import SideBar from "../../components/common/sidebar/Sidebar.jsx";
+import SettingsSideBar from "../../../components/settings/SettingsSideBar";
+import SideBar from "../../../components/common/sidebar/Sidebar.jsx";
 
 const Layout = ({ children }) => {
     return (

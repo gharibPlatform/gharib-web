@@ -1,6 +1,6 @@
 "use client";
 
-import QuranSettings from "../../../components/settings/quran_settings/QuranSettings";
+import QuranSettings from "../../../../components/settings/quran_settings/QuranSettings";
 
 export default function page() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import LanguageAndRegion from "../../../components/settings/language_and_region_settings/LanguageAndRegion";
+import LanguageAndRegion from "../../../../components/settings/language_and_region_settings/LanguageAndRegion";
 
 export default function page() {
   return (

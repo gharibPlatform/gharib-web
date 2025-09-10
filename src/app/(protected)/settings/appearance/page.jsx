@@ -1,6 +1,6 @@
 "use client"
 
-import AppearanceSettings from "../../../components/settings/AppearanceSettings"
+import AppearanceSettings from "../../../../components/settings/AppearanceSettings"
 
 export default function page() {
   return(

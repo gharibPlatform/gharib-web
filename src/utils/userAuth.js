@@ -1,4 +1,6 @@
 import api from './api'; //custom api instance
+import axios from "axios";
+
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -125,15 +127,15 @@ export async function verifyEmail(data) {
 }
 
 // Refresh token
-export async function refreshToken(data) {
-  try {
-    const response = await api.post(`${API_BASE_URL}/auth/token/refresh/`, data);
-    return response.data;
-  } catch (error) {
-    console.error('Error refreshing token:', error);
-    throw error;
-  }
-}
+// export async function refreshToken(data) {
+//   try {
+//     const response = await api.post(`${API_BASE_URL}/auth/token/refresh/`, data);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error refreshing token:', error);
+//     throw error;
+//   }
+// }
 
 // Verify token
 export async function verifyToken(data) {
@@ -207,4 +209,40 @@ export function setAuthCookies(accessToken, refreshToken = null) {
 export function clearAuthCookies() {
   document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
   document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+}
+
+export function isTokenExpired(token) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    const decoded = JSON.parse(jsonPayload);
+    return decoded.exp < Math.floor(Date.now() / 1000);
+  } catch {
+    return true; // if token invalid, treat as expired
+  }
+}
+
+export async function refreshToken() {
+  try {
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (!refreshToken) return false;
+
+    const response = await axios.post("http://localhost:8000/auth/token/refresh/", {
+      refresh: refreshToken,
+    });
+
+    localStorage.setItem("access_token", response.data.access);
+    if (response.data.refresh) {
+      localStorage.setItem("refresh_token", response.data.refresh);
+    }
+    return true;
+  } catch {
+    return false;
+  }
 }

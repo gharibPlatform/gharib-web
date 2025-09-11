@@ -1,41 +1,40 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { isTokenExpired, refreshToken } from "../../utils/userAuth"
 
 export default function ProtectedLayout({ children }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const verifyToken = async () => {
       const token = localStorage.getItem("access_token");
+
       if (!token) {
         router.replace("/login");
         return;
       }
 
-      try {
-        const res = await axios.post("http://localhost:8000/auth/token/verify/", {
-          token
-        });
-
-        if (res.status === 200) {
-          setLoading(false);
-        } else {
-          localStorage.removeItem("token");
+      if (isTokenExpired(token)) {
+        const ok = await refreshToken();
+        if (!ok) {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
           router.replace("/login");
+          return;
         }
-      } catch (err) {
-        localStorage.removeItem("token");
-        router.replace("/login");
       }
+
+      setLoading(false); 
     };
 
-    checkAuth();
+    verifyToken();
   }, [router]);
 
-  if (loading) return <div>Checking authentication...</div>;
+  if (loading) {
+    return <div className="p-6 text-center">Checking authentication...</div>;
+  }
 
   return <>{children}</>;
 }

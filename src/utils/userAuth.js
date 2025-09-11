@@ -233,7 +233,7 @@ export async function refreshToken() {
     const refreshToken = localStorage.getItem("refresh_token");
     if (!refreshToken) return false;
 
-    const response = await axios.post("http://localhost:8000/auth/token/refresh/", {
+    const response = await axios.post(`${API_BASE_URL}/auth/token/refresh/`, {
       refresh: refreshToken,
     });
 

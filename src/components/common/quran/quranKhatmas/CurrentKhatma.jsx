@@ -33,6 +33,7 @@ export default function CurrentKhatma({
   currentVerse,
   progress,
   selfProgress,
+  groupProgress,
   isDirty,
 }) {
   const timeLeft = calculateTimeLeft(finishDate);
@@ -70,8 +71,8 @@ export default function CurrentKhatma({
 
         <div className="w-full h-2.5 bg-white/20 rounded-full mt-1 relative overflow-hidden">
           <div
-            className="absolute top-0 left-0 h-2.5 bg-[var(--o-color)] rounded-full transition-all duration-500"
-            style={{ width: `${progress}%` }}
+            className="absolute top-0 left-0 h-2.5 bg-[var(--o-color)] rounded-full transition-all duration-500 z-20"
+            style={{ width: `${groupProgress}%` }}
           />
           <div
             className="absolute top-0 left-0 h-2.5 bg-[var(--b-color)] rounded-full transition-all duration-700"
@@ -81,7 +82,7 @@ export default function CurrentKhatma({
 
         <div className="flex justify-between w-full mt-1.5">
           <p className="text-sm font-semibold text-[var(--o-color)]">
-            {progress}%
+            {groupProgress}%
           </p>
           <p className="text-sm font-semibold text-[var(--b-color)]">
             {selfProgress}%

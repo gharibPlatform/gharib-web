@@ -55,7 +55,7 @@ export default function QuranContent({
   const { quranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
   const { shouldFetch } = useShouldFetch();
-  const { currentKhatma } = useKhatmaStore();
+  const { currentKhatma, khatmaDetails } = useKhatmaStore();
 
   useFetchPageData(
     shouldFetch,
@@ -90,8 +90,10 @@ export default function QuranContent({
 
   const currentReadVerse = useCurrentReadVerse(currentKhatma, quranHeaderVerse);
   const progress = useProgress(quranHeaderVerse, quranHeaderChapter);
-  const khatmaProgress = useKhatmaProgress(
+
+  const [khatmaSelfProgress, khatmaGroupProgress] = useKhatmaProgress(
     currentKhatma,
+    khatmaDetails,
     quranHeaderChapter,
     currentReadVerse,
     verseIndexMap
@@ -103,7 +105,7 @@ export default function QuranContent({
     setShowHighlightsConfirmation
   );
 
-  const isDirty = khatmaProgress < currentKhatma?.progress;
+  const isDirty = khatmaSelfProgress < currentKhatma?.progress;
 
   return (
     <div className="flex flex-col h-screen">
@@ -121,7 +123,8 @@ export default function QuranContent({
             currentSurah={currentKhatma?.currentSurah}
             currentVerse={currentKhatma?.currentVerse}
             progress={currentKhatma?.khatma?.progress}
-            selfProgress={Math.floor(khatmaProgress * 100) / 100}
+            selfProgress={Math.floor(khatmaSelfProgress * 100) / 100}
+            groupProgress={Math.floor(khatmaGroupProgress * 100) / 100}
             isDirty={isDirty}
           />
         )}

@@ -9,18 +9,25 @@ import useShouldFetch from "../../../../../stores/shouldFetchStore";
 
 const Page = () => {
   const { khatmaId } = useParams();
-  const { khatmaMembership, fetchKhatmaMembership, setCurrentKhatma } =
-    useKhatmaStore();
+  const {
+    khatmaMembership,
+    khatmaDetails,
+    fetchKhatmaMembership,
+    fetchKhatmaDetails,
+    setCurrentKhatma,
+  } = useKhatmaStore();
+
   const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
   const { setShouldFetch } = useShouldFetch();
   const [isLoadingKhatmaDetails, setIsLoadingKhatmaDetails] = useState(true);
 
   useEffect(() => {
     fetchKhatmaMembership(khatmaId);
+    fetchKhatmaDetails(khatmaId);
   }, [khatmaId]);
 
   useEffect(() => {
-    if (khatmaMembership) {
+    if (khatmaMembership && khatmaDetails) {
       setIsLoadingKhatmaDetails(false);
     }
   }, [khatmaMembership]);

@@ -67,7 +67,7 @@ export const postKhatmaMembership = async (id, data) => {
 export const patchKhatmaMembership = async (id, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL}/khatma/khatma-membership/${id}/`,
+      `${API_BASE_URL}/khatma/membership/${id}/`,
       data
     );
     return response.data;

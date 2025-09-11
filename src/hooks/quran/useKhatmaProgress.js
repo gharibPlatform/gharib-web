@@ -15,7 +15,7 @@ export function useKhatmaProgress(
       !verseIndexMap ||
       currentReadVerse == null
     ) {
-      return [0, 0];
+      return [0, 0, null, null];
     }
 
     const startGroupIndex = verseIndexMap[`${khatmaDetails.startSurah}:${khatmaDetails.startVerse}`];
@@ -25,7 +25,7 @@ export function useKhatmaProgress(
     const currentIndex = verseIndexMap[`${quranHeaderChapter.id}:${currentReadVerse}`];
 
     if (![startGroupIndex, endGroupIndex, startSelfIndex, endSelfIndex, currentIndex].every(Number.isFinite)) {
-      return [0, 0];
+      return [0, 0, null, null];
     }
 
     const totalGroupCount = endGroupIndex - startGroupIndex + 1;
@@ -40,7 +40,7 @@ export function useKhatmaProgress(
     if (currentIndex <= startSelfIndex) return [0, 0];
     if (currentIndex >= endSelfIndex) return [100, (totalSelfCount * 100) / totalGroupCount];
 
-    return [khatmaSelfProgress, khatmaGroupProgress];
+    return [khatmaSelfProgress, khatmaGroupProgress, currentReadVerse, quranHeaderChapter.id];
   }, [
     currentKhatma,
     currentReadVerse,

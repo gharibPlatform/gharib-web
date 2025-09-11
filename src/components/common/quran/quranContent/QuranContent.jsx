@@ -25,6 +25,7 @@ import { useCurrentReadVerse } from "../../../../hooks/quran/useCurrentReadVerse
 import { usePopupInteractions } from "../../../../hooks/quran/usePopupInteractions";
 import { useCacheUpdates } from "../../../../hooks/quran/useCacheUpdates";
 import { useHighlightVerse } from "../../../../hooks/quran/useHighlightVerse";
+import { patchKhatmaMembership } from "@/utils/khatma/apiKhatma";
 
 export default function QuranContent({
   isLoadingUserKhatmas,
@@ -91,7 +92,12 @@ export default function QuranContent({
   const currentReadVerse = useCurrentReadVerse(currentKhatma, quranHeaderVerse);
   const progress = useProgress(quranHeaderVerse, quranHeaderChapter);
 
-  const [khatmaSelfProgress, khatmaGroupProgress] = useKhatmaProgress(
+  const [
+    khatmaSelfProgress,
+    khatmaGroupProgress,
+    currentVerseProgress,
+    currentSurahProgress,
+  ] = useKhatmaProgress(
     currentKhatma,
     khatmaDetails,
     quranHeaderChapter,
@@ -106,6 +112,19 @@ export default function QuranContent({
   );
 
   const isDirty = khatmaSelfProgress < currentKhatma?.progress;
+
+  const handleUpdateProgress = () => {
+    const data = {
+      id: currentKhatma.id,
+      currentSurah: Number(currentVerseProgress),
+      currentVerse: currentSurahProgress,
+      progress: Math.floor(khatmaSelfProgress * 100) / 100,
+    };
+    
+    patchKhatmaMembership(currentKhatma.id, {
+      data,
+    });
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -126,6 +145,7 @@ export default function QuranContent({
             selfProgress={Math.floor(khatmaSelfProgress * 100) / 100}
             groupProgress={Math.floor(khatmaGroupProgress * 100) / 100}
             isDirty={isDirty}
+            handleUpdateProgress={handleUpdateProgress}
           />
         )}
 

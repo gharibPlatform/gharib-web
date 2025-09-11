@@ -31,18 +31,17 @@ export default function CurrentKhatma({
   finishDate,
   currentSurah,
   currentVerse,
-  progress,
   selfProgress,
   groupProgress,
   isDirty,
+  handleUpdateProgress,
 }) {
   const timeLeft = calculateTimeLeft(finishDate);
 
   return (
     <div
-      className="sticky top-3 mx-auto z-[9999] 
-                    bg-gradient-to-r from-[var(--main-color)] to-[var(--main-dark-color)] 
-                    text-white px-5 py-3.5 rounded-xl shadow-lg 
+      className="sticky top-3 mx-auto z-50
+                    bg-[var(--secondary-color)] text-white px-5 py-3.5 rounded-xl shadow-lg 
                     flex items-center justify-between gap-4 w-fit max-w-3xl
                     border border-white/10"
     >
@@ -105,6 +104,7 @@ export default function CurrentKhatma({
 
       <button
         disabled={isDirty}
+        onClick={handleUpdateProgress}
         className={`bg-[var(--o-color)] text-white px-4 py-2 rounded-md font-semibold 
                          hover:bg-[var(--o-color-hover)] transition-all duration-200 flex items-center gap-2
                          shadow-md hover:shadow-lg whitespace-nowrap text-sm

@@ -1,5 +1,5 @@
 "use client";
-import SideBar from "../../components/common/sidebar/Sidebar";
+import SideBar from "../../../components/common/sidebar/Sidebar";
 
 const Layout = ({ children }) => {
   return (

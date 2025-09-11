@@ -1,10 +1,10 @@
 "use client";
-import useGroupStore from "../../../stores/groupStore";
-import KhatmasContent from "../../../components/khatmas/khatma_content/KhatmasContent";
-import useKhatmaStore from "../../../stores/khatmasStore";
+import useGroupStore from "../../../../stores/groupStore";
+import KhatmasContent from "../../../../components/khatmas/khatma_content/KhatmasContent";
+import useKhatmaStore from "../../../../stores/khatmasStore";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
 
 const Page = () => {
   const { khatmaId } = useParams();

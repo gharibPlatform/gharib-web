@@ -78,7 +78,12 @@ export const verseByChapter = async (
   }
 };
 
-export const verseByPage = async (page, chapterId = null, lastVerse = null, lastSurah = null) => {
+export const verseByPage = async (
+  page,
+  chapterId = null,
+  lastVerse = null,
+  lastSurah = null
+) => {
   if (page >= 1 && page <= 604) {
     try {
       let lastPage = null;
@@ -94,7 +99,7 @@ export const verseByPage = async (page, chapterId = null, lastVerse = null, last
       }
 
       const response = await axios.get(
-        `${BASE_URL}/verses/by_page/${page}?words=true`
+        `${BASE_URL}/verses/by_page/${page}?words=true&word_fields=verse_id,verse_key,location`
       );
 
       let verses = response.data.verses;
@@ -116,7 +121,7 @@ export const verseByPage = async (page, chapterId = null, lastVerse = null, last
 export const verseByKey = async (key) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/verses/by_key/${key}?words=true`
+      `${BASE_URL}/verses/by_key/${key}?words=true&word_fields=verse_id,verse_key,location`
     );
     return response.data.verse;
   } catch (error) {

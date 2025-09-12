@@ -95,7 +95,7 @@ export default function QuranPage({
 
   return (
     <div
-      className="w-9/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"
+      className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"
       style={{ minHeight: "100vh" }}
       data-page-number={pageNumber}
       ref={ref}
@@ -106,61 +106,55 @@ export default function QuranPage({
           direction: "rtl",
         }}
       >
-        {/* actual verses */}
-        {Array.isArray(verses) &&
-          verses
-            // .filter((verse) => !(versesState?.notInKhatma.has(verse.verse_key)))
-            .flatMap((verse, index) => (
-              <div
-                key={verse.verse_key}
-                id={`verse-${verse.verse_key}`}
-                data-verse-key={verse.verse_key}
-                className={`scroll-mt-20 hover:bg-[var(--main-color-hover)] 
-                ${activeVerse?.verse_key == verse.verse_key ? "bg-[var(--g-color)]" : ""}
-                ${versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--g-color)]" : ""}
-                ${currentReadVerse >= verse.verse_key.split(":")[1] && versesState?.notYetRead.has(verse.verse_key) ? "text-[var(--o-color)]" : ""}
-              `}
-                ref={(el) => {
-                  if (verseRefs.current[verse.verse_key]) {
-                    delete verseRefs.current[verse.verse_key];
-                  }
-                  if (el) verseRefs.current[verse.verse_key] = el;
-                }}
-                style={{ display: "inline" }}
-                onClick={() => setActiveVerse(verse)}
-              >
-                {/* Surah separator logic */}
-                {verse.verse_number === 1 &&
-                  (index !== 0 ? (
-                    <QuranSurahSeparator
-                      chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
-                      pageNumber={pageNumber}
-                      pageNumberBool={true}
-                      basmalaPre={true}
-                    />
-                  ) : Number(verse.verse_key.split(":")[0]) === 1 ||
-                    Number(verse.verse_key.split(":")[0]) === 9 ? (
-                    <QuranSurahSeparator
-                      chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
-                    />
-                  ) : (
-                    <QuranSurahSeparator
-                      chapterId={verse.verse_key.split(":")[0].padStart(3, "0")}
-                      basmalaPre={true}
-                    />
-                  ))}
+        {(() => {
+          const allWordsByLine = {};
+          let currentVerseKey = null;
+          let verseStarts = new Set(); 
 
-                {verse.words.map((word, wordIndex) => (
-                  <span
-                    key={`${index}-${wordIndex}`}
-                    onClick={(e) => handleClick(e, verse)}
-                    className="p-1 pb-3 inline-block cursor-pointer"
-                  >
-                    {word.text}
-                  </span>
-                ))}
-              </div>
-            ))}
+          verses?.forEach((verse) => {
+            verse.words.forEach((word) => {
+              if (!allWordsByLine[word.line_number]) {
+                allWordsByLine[word.line_number] = [];
+              }
+
+              if (verse.verse_key !== currentVerseKey) {
+                verseStarts.add(word.line_number);
+                currentVerseKey = verse.verse_key;
+              }
+
+              allWordsByLine[word.line_number].push({
+                ...word,
+                verse_key: verse.verse_key,
+                verse_number: verse.verse_number,
+              });
+            });
+          });
+
+          const lineNumbers = Object.keys(allWordsByLine).sort((a, b) => a - b);
+
+          return lineNumbers.map((lineNumber) => (
+            <div
+              key={`line-${lineNumber}`}
+              className={`verse-line-${lineNumber} ${verseStarts.has(Number(lineNumber)) ? "verse-start" : ""}`}
+              style={{ display: "block" }}
+            >
+              {allWordsByLine[lineNumber].map((word, wordIndex) => (
+                <span
+                  key={`line-${lineNumber}-word-${wordIndex}`}
+                  onClick={(e) => handleClick(e, { verse_key: word.verse_key })}
+                  className={`p-[1px] pb-3 inline-block cursor-pointer
+                  ${activeVerse?.verse_key == word.verse_key ? "bg-[var(--g-color)]" : ""}
+                  ${versesState?.notYetRead.has(word.verse_key) ? "text-[var(--g-color)]" : ""}
+                  ${currentReadVerse >= word.verse_key.split(":")[1] && versesState?.notYetRead.has(word.verse_key) ? "text-[var(--o-color)]" : ""}
+                `}
+                  data-verse-key={word.verse_key}
+                >
+                  {word.text}
+                </span>
+              ))}
+            </div>
+          ));
+        })()}
       </div>
 
       {/* footer page number*/}

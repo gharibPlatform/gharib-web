@@ -166,6 +166,7 @@ export default function QuranPage({
 
   useEffect(() => {
     if (goToVerse) {
+      console.log(goToVerse);
       if (quranHeaderChapter.id != goToVerse.split(":")[0]) {
         const goToChapter = goToVerse.split(":")[0];
         router.push(`/quran/chapters/${goToChapter}`);
@@ -173,12 +174,13 @@ export default function QuranPage({
       }
 
       const goToVerseNumber = goToVerse.split(":")[1];
-      const foundEntry = Object.entries(verseRefs.current).find(([key, _]) =>
-        key.endsWith(`:${goToVerseNumber}`)
+      const foundEntry = Object.values(lineRefs.current).find((el) =>
+        el?.dataset.verseKey.endsWith(`:${goToVerseNumber}`)
       );
 
       if (foundEntry)
-        foundEntry[1].scrollIntoView({ behavior: "smooth", block: "center" });
+        console.log("foundEntry", foundEntry);
+        foundEntry?.scrollIntoView({ behavior: "smooth", block: "center" });
       setActiveVerse({
         verse_key: goToVerse,
       });
@@ -192,7 +194,7 @@ export default function QuranPage({
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            console.log(entry.target.dataset.verseKey);
+            setQuranHeaderVerse(entry.target.dataset.verseKey.split(":")[1]);
           }
         });
       },

@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
@@ -52,7 +51,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
   };
 
   const handleVerseClick = (verse) => {
-    setGoToVerse(verse);
+    setGoToVerse(`${quranHeaderChapter.id}:${verse}`);
   };
 
   useEffect(() => {
@@ -91,7 +90,7 @@ const VerseTab = ({ chapters, isLoading, quranHeaderChapter }) => {
                 <div
                   onClick={() => handleVerseClick(index + 1)}
                   ref={(el) => (versesRefs.current[index + 1] = el)}
-                  className={`flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${goToVerse == index + 1 ? "bg-[var(--main-color-hover)]" : ""} `}
+                  className={`flex items-center justify-center p-2 px-4 cursor-pointer hover:bg-[var(--main-color-hover)] rounded-[8px] transition-all duration-100 ${goToVerse.split(":")[1] == index + 1 ? "bg-[var(--main-color-hover)]" : ""} `}
                 >
                   {index + 1}
                 </div>

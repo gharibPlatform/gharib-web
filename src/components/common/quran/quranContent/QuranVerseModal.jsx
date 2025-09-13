@@ -259,17 +259,17 @@ export default function QuranVerseModal({ verse, highlight, create, onClose }) {
   const pathName = usePathname();
   const segments = pathName.split("/").filter(Boolean);
   const lastSegment = segments[segments.length - 1];
-  const { setQuranHeaderVerse } = useQuranHeaderVerse();
+  const { setQuranHeaderVerse, setGoToVerse } = useQuranHeaderVerse();
 
   const goToVerse = (verse) => {
     const chapterId = verse.verse_key.split(":")[0];
     if (lastSegment === chapterId) {
-      setQuranHeaderVerse(verse.verse_number);
+      setGoToVerse(verse.verse_key);
       onClose();
       return;
     }
     router.push(`/quran/chapters/${chapterId}`);
-    setQuranHeaderVerse(verse.verse_number);
+    setGoToVerse(verse.verse_key);
     onClose();
   };
 
@@ -304,7 +304,10 @@ export default function QuranVerseModal({ verse, highlight, create, onClose }) {
                   onCancel={handleCancelClick}
                 />
               ) : (
-                <NoteViewer note={highlight.content} onEditClick={handleEditClick} />
+                <NoteViewer
+                  note={highlight.content}
+                  onEditClick={handleEditClick}
+                />
               )}
             </div>
 

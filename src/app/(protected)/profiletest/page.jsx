@@ -8,9 +8,9 @@ export default function App() {
 
   const mockUser = {
     id: 1,
-    name: "John Doe",
-    picture: "https://randomuser.me/api/portraits/men/30.jpg",
-    info: "Software Engineer · Loves hiking and coffee ☕",
+    name: "ISLAM",
+    picture: "/electron.svg",
+    info: "Software Engineer",
   };
 
   const handleClick = (user, e) => {

@@ -47,23 +47,23 @@ const Layout = ({ children }) => {
   const [isLoadingKhatmas, setIsLoadingKhatmas] = useState();
   const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
 
-  useEffect(() => {
-    if (userKhatmas) return;
-    const fetch = async () => {
-      try {
-        await fetchUserKhatmas();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetch();
-    console.log("Done");
-  }, []);
+  // useEffect(() => {
+  //   if (userKhatmas) return;
+  //   const fetch = async () => {
+  //     try {
+  //       await fetchUserKhatmas();
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetch();
+  //   console.log("Done");
+  // }, []);
 
-  useEffect(() => {
-    userKhatmas ? setIsLoadingKhatmas(false) : setIsLoadingKhatmas(true);
-    console.log("userkhatmas are : ", userKhatmas);
-  }, [userKhatmas]);
+  // useEffect(() => {
+  //   userKhatmas ? setIsLoadingKhatmas(false) : setIsLoadingKhatmas(true);
+  //   console.log("userkhatmas are : ", userKhatmas);
+  // }, [userKhatmas]);
 
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">

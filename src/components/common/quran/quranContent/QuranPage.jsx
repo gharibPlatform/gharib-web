@@ -72,7 +72,6 @@ const renderWord = (
     </span>
   );
 };
-
 const renderLine = (
   lineNumber,
   allWordsByLine,
@@ -91,6 +90,12 @@ const renderLine = (
     .filter(Boolean)
     .join(" ");
 
+  const verseKeysInThisLine = Array.from(
+    new Set(allWordsByLine[lineNumber].map((word) => word.verse_key))
+  );
+
+  const primaryVerseKey = allWordsByLine[lineNumber][0].verse_key;
+
   return (
     <div
       key={`line-${lineNumber}`}
@@ -98,7 +103,8 @@ const renderLine = (
       ref={(el) => {
         if (el) {
           lineRefs.current[lineNumber] = el;
-          el.dataset.verseKey = allWordsByLine[lineNumber][0].verse_key;
+          el.dataset.verseKey = primaryVerseKey; 
+          el.dataset.verseKeys = verseKeysInThisLine.join(",");
         }
       }}
       style={{ display: "block" }}
@@ -117,7 +123,6 @@ const renderLine = (
     </div>
   );
 };
-
 const renderAllLines = (
   verses,
   activeVerse,
@@ -163,6 +168,7 @@ export default function QuranPage({
     useQuranHeaderVerse();
   const { quranHeaderChapter } = useQuranHeaderChapter();
   const { currentKhatma } = useKhatmaStore();
+  const { readVersesKeys, setReadVersesKeys } = useKhatmaStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -213,8 +219,18 @@ export default function QuranPage({
             const lineIndex = currentVerseLines.indexOf(entry.target);
 
             if (lineIndex == currentVerseLines.length - 1) {
-              setQuranHeaderVerse(currentVerseKey.split(":")[1]);
-              console.log(currentVerseKey.split(":")[1]);
+              const verseNumber = currentVerseKey.split(":")[1];
+              setQuranHeaderVerse(verseNumber);
+
+              const allVerseKeysInLine =
+                entry.target.dataset.verseKeys.split(",");
+
+              // Add all verses to store
+              allVerseKeysInLine.forEach((verseKey) => {
+                setReadVersesKeys(verseKey.trim());
+              });
+
+              console.log("Marked as read:", allVerseKeysInLine);
             }
           }
         });
@@ -244,6 +260,10 @@ export default function QuranPage({
 
     setVerseKey(verse.verse_key);
   };
+
+  useEffect(() => {
+    if (readVersesKeys) console.log("readVersesKeys : ", readVersesKeys);
+  }, [readVersesKeys]);
 
   return (
     <div

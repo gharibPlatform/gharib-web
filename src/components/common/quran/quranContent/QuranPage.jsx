@@ -53,6 +53,7 @@ const renderWord = (
     "pb-3",
     "inline-block",
     "cursor-pointer",
+    "transition-all duration-300 ",
     isActive ? "bg-[var(--g-color)]" : "",
     isNotYetRead ? "text-[var(--g-color)]" : "",
     shouldHighlight ? "text-[var(--o-color)]" : "",
@@ -178,9 +179,8 @@ export default function QuranPage({
         el?.dataset.verseKey.endsWith(`:${goToVerseNumber}`)
       );
 
-      if (foundEntry)
-        console.log("foundEntry", foundEntry);
-        foundEntry?.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (foundEntry) console.log("foundEntry", foundEntry);
+      foundEntry?.scrollIntoView({ behavior: "smooth", block: "center" });
       setActiveVerse({
         verse_key: goToVerse,
       });
@@ -189,12 +189,33 @@ export default function QuranPage({
 
   //observing the lines
   useEffect(() => {
+    const verseKeysLines = {};
+    const allLines = Object.values(lineRefs.current);
+
+    allLines.forEach((el) => {
+      const verseKey = el.dataset.verseKey;
+      if (!verseKeysLines[verseKey]) {
+        verseKeysLines[verseKey] = [];
+      }
+      verseKeysLines[verseKey].push(el);
+    });
+
     //Creating the observer
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setQuranHeaderVerse(entry.target.dataset.verseKey.split(":")[1]);
+            const currentVerseKey = entry.target.dataset.verseKey;
+            const currentVerseLines = verseKeysLines[currentVerseKey];
+
+            if (!currentVerseLines) return;
+
+            const lineIndex = currentVerseLines.indexOf(entry.target);
+
+            if (lineIndex == currentVerseLines.length - 1) {
+              setQuranHeaderVerse(currentVerseKey.split(":")[1]);
+              console.log(currentVerseKey.split(":")[1]);
+            }
           }
         });
       },
@@ -203,10 +224,8 @@ export default function QuranPage({
       }
     );
 
-    Object.values(lineRefs.current).forEach((el) => {
-      if (el) {
-        observerRef.current.observe(el);
-      }
+    allLines.forEach((el) => {
+      observerRef.current.observe(el);
     });
 
     return () => {

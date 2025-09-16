@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, BookOpen, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
+import IndexToString from "../../../../../indexToStringSurah.json";
 
 export default function UpdateProgressModal({
   isOpen,
@@ -8,6 +9,18 @@ export default function UpdateProgressModal({
 }) {
   const [expandedKhatma, setExpandedKhatma] = useState(null);
   const [selectedParts, setSelectedParts] = useState(new Set());
+
+  const formatVerseWithSurahName = (verseNumber) => {
+    if (typeof verseNumber === "string" && verseNumber.includes(":")) {
+      const [surah, verse] = verseNumber.split(":");
+      const surahName = IndexToString[surah] || `Surah ${surah}`;
+      return `${surahName}: ${verse}`;
+    } else if (typeof verseNumber === "number") {
+      // If it's just a number without colon, it's probably a verse from first surah
+      return `${IndexToString["1"]}: ${verseNumber}`;
+    }
+    return verseNumber.toString();
+  };
 
   const groupVersesIntoParts = (verses) => {
     if (verses.length === 0) return [];
@@ -33,8 +46,8 @@ export default function UpdateProgressModal({
           id: `${startFormatted}-${endFormatted}`,
           range:
             startFormatted === endFormatted
-              ? startFormatted
-              : `${startFormatted} to ${endFormatted}`,
+              ? formatVerseWithSurahName(startFormatted)
+              : `${formatVerseWithSurahName(startFormatted)} to ${formatVerseWithSurahName(endFormatted)}`,
           start: start,
           end: end,
           verses: Array.from(
@@ -55,8 +68,8 @@ export default function UpdateProgressModal({
       id: `${startFormatted}-${endFormatted}`,
       range:
         startFormatted === endFormatted
-          ? startFormatted
-          : `${startFormatted} to ${endFormatted}`,
+          ? formatVerseWithSurahName(startFormatted)
+          : `${formatVerseWithSurahName(startFormatted)} to ${formatVerseWithSurahName(endFormatted)}`,
       start: start,
       end: end,
       verses: Array.from(

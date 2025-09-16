@@ -53,6 +53,7 @@ const renderWord = (
     "pb-3",
     "inline-block",
     "cursor-pointer",
+    "transition-all duration-300 ",
     isActive ? "bg-[var(--g-color)]" : "",
     isNotYetRead ? "text-[var(--g-color)]" : "",
     shouldHighlight ? "text-[var(--o-color)]" : "",
@@ -71,7 +72,6 @@ const renderWord = (
     </span>
   );
 };
-
 const renderLine = (
   lineNumber,
   allWordsByLine,
@@ -90,6 +90,12 @@ const renderLine = (
     .filter(Boolean)
     .join(" ");
 
+  const verseKeysInThisLine = Array.from(
+    new Set(allWordsByLine[lineNumber].map((word) => word.verse_key))
+  );
+
+  const primaryVerseKey = allWordsByLine[lineNumber][0].verse_key;
+
   return (
     <div
       key={`line-${lineNumber}`}
@@ -97,7 +103,8 @@ const renderLine = (
       ref={(el) => {
         if (el) {
           lineRefs.current[lineNumber] = el;
-          el.dataset.verseKey = allWordsByLine[lineNumber][0].verse_key;
+          el.dataset.verseKey = primaryVerseKey; 
+          el.dataset.verseKeys = verseKeysInThisLine.join(",");
         }
       }}
       style={{ display: "block" }}
@@ -116,7 +123,6 @@ const renderLine = (
     </div>
   );
 };
-
 const renderAllLines = (
   verses,
   activeVerse,
@@ -162,6 +168,7 @@ export default function QuranPage({
     useQuranHeaderVerse();
   const { quranHeaderChapter } = useQuranHeaderChapter();
   const { currentKhatma } = useKhatmaStore();
+  const { readVersesKeys, setReadVersesKeys } = useKhatmaStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -178,9 +185,8 @@ export default function QuranPage({
         el?.dataset.verseKey.endsWith(`:${goToVerseNumber}`)
       );
 
-      if (foundEntry)
-        console.log("foundEntry", foundEntry);
-        foundEntry?.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (foundEntry) console.log("foundEntry", foundEntry);
+      foundEntry?.scrollIntoView({ behavior: "smooth", block: "center" });
       setActiveVerse({
         verse_key: goToVerse,
       });
@@ -189,12 +195,43 @@ export default function QuranPage({
 
   //observing the lines
   useEffect(() => {
+    const verseKeysLines = {};
+    const allLines = Object.values(lineRefs.current);
+
+    allLines.forEach((el) => {
+      const verseKey = el.dataset.verseKey;
+      if (!verseKeysLines[verseKey]) {
+        verseKeysLines[verseKey] = [];
+      }
+      verseKeysLines[verseKey].push(el);
+    });
+
     //Creating the observer
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setQuranHeaderVerse(entry.target.dataset.verseKey.split(":")[1]);
+            const currentVerseKey = entry.target.dataset.verseKey;
+            const currentVerseLines = verseKeysLines[currentVerseKey];
+
+            if (!currentVerseLines) return;
+
+            const lineIndex = currentVerseLines.indexOf(entry.target);
+
+            if (lineIndex == currentVerseLines.length - 1) {
+              const verseNumber = currentVerseKey.split(":")[1];
+              setQuranHeaderVerse(verseNumber);
+
+              const allVerseKeysInLine =
+                entry.target.dataset.verseKeys.split(",");
+
+              // Add all verses to store
+              allVerseKeysInLine.forEach((verseKey) => {
+                setReadVersesKeys(verseKey.trim());
+              });
+
+              console.log("Marked as read:", allVerseKeysInLine);
+            }
           }
         });
       },
@@ -203,10 +240,8 @@ export default function QuranPage({
       }
     );
 
-    Object.values(lineRefs.current).forEach((el) => {
-      if (el) {
-        observerRef.current.observe(el);
-      }
+    allLines.forEach((el) => {
+      observerRef.current.observe(el);
     });
 
     return () => {
@@ -225,6 +260,10 @@ export default function QuranPage({
 
     setVerseKey(verse.verse_key);
   };
+
+  useEffect(() => {
+    if (readVersesKeys) console.log("readVersesKeys : ", readVersesKeys);
+  }, [readVersesKeys]);
 
   return (
     <div

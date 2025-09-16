@@ -13,6 +13,7 @@ import QuranVerseModal from "./QuranVerseModal";
 import FooterContainer from "./FooterContainer";
 import VersePopupController from "./VersePopupController";
 import verseIndexMap from "../../../../../verseIndexMap.json";
+import UpdateProgressModal from "./updateProgressModal";
 
 import { useFetchChapterData } from "../../../../hooks/quran/useFetchChapterData";
 import { useFetchPageData } from "../../../../hooks/quran/useFetchPageData";
@@ -31,6 +32,7 @@ export default function QuranContent({
   isLoadingUserKhatmas,
   isKhatmaMode,
   isLoadingKhatmaDetails,
+  userKhatmas,
 }) {
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
@@ -112,19 +114,38 @@ export default function QuranContent({
   );
 
   const isDirty = khatmaSelfProgress < currentKhatma?.progress;
+  const [showUpdateProgressModal, setShowUpdateProgressModal] = useState(false);
+  const { readVersesKeys } = useKhatmaStore();
 
+  const [userKhatmasProgress, setUserKhatmasProgress] = useState([]);
   const handleUpdateProgress = () => {
-    const data = {
-      id: currentKhatma.id,
-      currentSurah: Number(currentVerseProgress),
-      currentVerse: currentSurahProgress,
-      progress: Math.floor(khatmaSelfProgress * 100) / 100,
-    };
-    
-    patchKhatmaMembership(currentKhatma.id, {
-      data,
+    userKhatmas.forEach((khatma) => {
+      const versesInThisKhatma = readVersesKeys.filter((verseKey) => {
+        const [surah, ayah] = verseKey.split(":").map(Number);
+
+        if (surah < khatma.currentSurah || surah > khatma.endShareSurah)
+          return false;
+
+        if (surah === khatma.currentSurah && ayah < khatma.currentVerse)
+          return false;
+        if (surah === khatma.endShareSurah && ayah > khatma.endShareVerse)
+          return false;
+
+        return true;
+      });
+      const data = {
+        versesInThisKhatma,
+        khatma,
+      };
+      setUserKhatmasProgress((prev) => [...prev, data]);
     });
+
+    setShowUpdateProgressModal(true);
   };
+
+  useEffect(() => {
+    console.log("Updated progress:", userKhatmasProgress);
+  }, [userKhatmasProgress]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -146,6 +167,14 @@ export default function QuranContent({
             groupProgress={Math.floor(khatmaGroupProgress * 100) / 100}
             isDirty={isDirty}
             handleUpdateProgress={handleUpdateProgress}
+          />
+        )}
+
+        {showUpdateProgressModal && (
+          <UpdateProgressModal
+            isOpen={showUpdateProgressModal}
+            setIsOpen={setShowUpdateProgressModal}
+            userKhatmasProgress={userKhatmasProgress}
           />
         )}
 

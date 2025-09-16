@@ -15,7 +15,16 @@ const useKhatmaStore = create((set) => ({
   khatmaSelfMembership: null,
   groupKhatmas: null,
   currentKhatma: null,
+  readVersesKeys: [],
+  setReadVersesKeys: (verseKey) =>
+    set((state) => {
+      const filteredKeys = state.readVersesKeys.filter(
+        (key) => key !== verseKey
+      );
+      const newKeys = [...filteredKeys, verseKey];
 
+      return { readVersesKeys: newKeys };
+    }),
   setCurrentKhatma: (data) => set({ currentKhatma: data }),
   setKhatmaSelfMembership: (data) => set({ khatmaSelfMembership: data }),
   fetchKhatmaDetails: async (khatmaId) => {

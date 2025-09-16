@@ -26,7 +26,7 @@ const Page = () => {
 
   useEffect(() => {
     if (userKhatmas) {
-      console.log(userKhatmas);
+      console.log("userKhatmas : ", userKhatmas);
       setIsLoadingUserKhatmas(false);
     }
   }, [userKhatmas]);
@@ -48,7 +48,7 @@ const Page = () => {
 
   return (
     <div>
-      <QuranContent isLoadingUserKhatmas={isLoadingUserKhatmas} />
+      <QuranContent userKhatmas={userKhatmas} isLoadingUserKhatmas={isLoadingUserKhatmas} />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import useShouldFetch from "../../../../../stores/shouldFetchStore";
 import useQuranHeaderPage from "../../../../../stores/pageQuranHeaderStore";
+import useKhatmaStore from "../../../../../stores/khatmasStore";
 
 const Page = () => {
   const { page } = useParams();

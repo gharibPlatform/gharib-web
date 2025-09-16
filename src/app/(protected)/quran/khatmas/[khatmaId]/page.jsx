@@ -46,11 +46,34 @@ const Page = () => {
     }
   }, [isLoadingKhatmaDetails]);
 
+  const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
+  const [isLoadingUserKhatmas, setIsLoadingUserKhatmas] = useState(true);
+
+  useEffect(() => {
+    const fetchKhatmas = async () => {
+      try {
+        await fetchUserKhatmas();
+        setIsLoadingUserKhatmas(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchKhatmas();
+  }, []);
+
+  useEffect(() => {
+    if (userKhatmas) {
+      console.log("userKhatmas : ", userKhatmas);
+      setIsLoadingUserKhatmas(false);
+    }
+  }, [userKhatmas]);
+  
   return (
     <div>
       <QuranContent
         isKhatmaMode={true}
         isLoadingKhatmaDetails={isLoadingKhatmaDetails}
+        userKhatmas={userKhatmas}
       />
     </div>
   );

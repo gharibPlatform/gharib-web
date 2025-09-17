@@ -13,6 +13,7 @@ import {
 import useUserStore from "../../../../stores/userStore";
 import useGroupStore from "../../../../stores/groupStore";
 import DefaultIcon from "../../icon/DefaultIcon";
+import indexToString from "../../../../../indexToStringSurah.json";
 
 export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
   const [formData, setFormData] = useState({
@@ -24,15 +25,23 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
     endVerse: "",
     intentions: "",
     duaa: "",
-    groupId: "", 
+    groupId: "",
   });
 
   const [errors, setErrors] = useState({});
   const [serverTime, setServerTime] = useState(new Date());
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showGroupDropdown, setShowGroupDropdown] = useState(false);
+  const [showStartSurahDropdown, setShowStartSurahDropdown] = useState(false);
+  const [showEndSurahDropdown, setShowEndSurahDropdown] = useState(false);
   const { user } = useUserStore();
   const { groups, fetchGroups, errorGroups, loadingGroups } = useGroupStore();
+
+  const surahOptions = Object.entries(indexToString).map(([number, data]) => ({
+    number: parseInt(number),
+    name: data.name,
+    verses: data.verses,
+  }));
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -81,6 +90,29 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
     setShowGroupDropdown(false);
   };
 
+  const handleSurahSelect = (surahNumber, isStartSurah = true) => {
+    const fieldName = isStartSurah ? "startSurah" : "endSurah";
+    const verseFieldName = isStartSurah ? "startVerse" : "endVerse";
+
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: surahNumber.toString(),
+      [verseFieldName]: "",
+    }));
+
+    if (isStartSurah) {
+      setShowStartSurahDropdown(false);
+    } else {
+      setShowEndSurahDropdown(false);
+    }
+  };
+
+  const getMaxVerse = (surahNumber) => {
+    if (!surahNumber) return 1;
+    const surah = surahOptions.find((s) => s.number === parseInt(surahNumber));
+    return surah ? surah.verses : 1;
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -91,6 +123,36 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
     if (!formData.endSurah) newErrors.endSurah = "End surah is required";
     if (!formData.endVerse) newErrors.endVerse = "End verse is required";
     if (!formData.groupId) newErrors.groupId = "Group selection is required";
+
+    if (formData.startVerse) {
+      const maxStartVerse = getMaxVerse(formData.startSurah);
+      if (parseInt(formData.startVerse) > maxStartVerse) {
+        newErrors.startVerse = `Maximum verse for this surah is ${maxStartVerse}`;
+      }
+    }
+
+    if (formData.endVerse) {
+      const maxEndVerse = getMaxVerse(formData.endSurah);
+      if (parseInt(formData.endVerse) > maxEndVerse) {
+        newErrors.endVerse = `Maximum verse for this surah is ${maxEndVerse}`;
+      }
+    }
+
+    if (formData.startSurah && formData.endSurah) {
+      const startSurahNum = parseInt(formData.startSurah);
+      const endSurahNum = parseInt(formData.endSurah);
+
+      if (startSurahNum > endSurahNum) {
+        newErrors.endSurah = "End surah must come after start surah";
+      } else if (
+        startSurahNum === endSurahNum &&
+        formData.startVerse &&
+        formData.endVerse &&
+        parseInt(formData.startVerse) > parseInt(formData.endVerse)
+      ) {
+        newErrors.endVerse = "End verse must come after start verse";
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -120,7 +182,6 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
       created_at: new Date(),
     };
 
-
     onSubmit(payload);
     onClose();
   };
@@ -138,6 +199,11 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const getSurahName = (surahNumber) => {
+    const surah = surahOptions.find((s) => s.number === parseInt(surahNumber));
+    return surah ? `${surah.number}. ${surah.name}` : `Surah ${surahNumber}`;
   };
 
   return (
@@ -304,7 +370,7 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
           {/* Date and Time Information */}
           <div className="bg-[var(--dark-color)] p-3 rounded-[5px] border border-[var(--g-color)]">
             <div className="flex items-center text-[var(--w-color)] mb-2">
-              <Calendar size={14} className="mr-2" />
+              <Calendar size={14} />
               <span className="font-medium">Date:</span>
               <span className="ml-2">{formatDate(new Date())} (Today)</span>
             </div>
@@ -356,28 +422,63 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
 
             <div className="grid grid-cols-2 gap-3">
               {/* Start Surah */}
-              <div>
+              <div className="relative">
                 <label className="text-[var(--w-color)] text-sm block mb-1">
                   Start Surah *
                 </label>
-                <input
-                  type="number"
-                  name="startSurah"
-                  value={formData.startSurah}
-                  onChange={handleChange}
-                  min="1"
-                  max="114"
-                  className={`w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border py-2 px-3 ${
+                <div
+                  className={`w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border py-2 px-3 flex items-center justify-between cursor-pointer ${
                     errors.startSurah
                       ? "border-[var(--r-color)]"
                       : "border-[var(--g-color)]"
                   }`}
-                  placeholder="Surah #"
-                />
+                  onClick={() =>
+                    setShowStartSurahDropdown(!showStartSurahDropdown)
+                  }
+                >
+                  {formData.startSurah ? (
+                    <span>{getSurahName(formData.startSurah)}</span>
+                  ) : (
+                    <span className="text-[var(--w-color)] opacity-70">
+                      Select surah
+                    </span>
+                  )}
+                  <svg
+                    className={`w-4 h-4 transition-transform ${showStartSurahDropdown ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
+
                 {errors.startSurah && (
                   <p className="text-[var(--r-color)] text-xs mt-1">
                     {errors.startSurah}
                   </p>
+                )}
+
+                {/* Start Surah Dropdown */}
+                {showStartSurahDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-[var(--dark-color)] border border-[var(--g-color)] rounded-md shadow-lg max-h-60 overflow-y-auto">
+                    {surahOptions.map((surah) => (
+                      <div
+                        key={surah.number}
+                        className="p-3 hover:bg-[var(--main-color)] cursor-pointer border-b border-[var(--g-color)] last:border-b-0"
+                        onClick={() => handleSurahSelect(surah.number, true)}
+                      >
+                        <div className="text-[var(--w-color)]">
+                          {surah.number}. {surah.name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
 
@@ -392,6 +493,7 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
                   value={formData.startVerse}
                   onChange={handleChange}
                   min="1"
+                  max={getMaxVerse(formData.startSurah)}
                   className={`w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border py-2 px-3 ${
                     errors.startVerse
                       ? "border-[var(--r-color)]"
@@ -404,6 +506,11 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
                     {errors.startVerse}
                   </p>
                 )}
+                {formData.startSurah && (
+                  <p className="text-[var(--w-color)] text-xs mt-1 opacity-70">
+                    Max: {getMaxVerse(formData.startSurah)} verses
+                  </p>
+                )}
               </div>
             </div>
 
@@ -411,28 +518,61 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
 
             <div className="grid grid-cols-2 gap-3">
               {/* End Surah */}
-              <div>
+              <div className="relative">
                 <label className="text-[var(--w-color)] text-sm block mb-1">
                   End Surah *
                 </label>
-                <input
-                  type="number"
-                  name="endSurah"
-                  value={formData.endSurah}
-                  onChange={handleChange}
-                  min="1"
-                  max="114"
-                  className={`w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border py-2 px-3 ${
+                <div
+                  className={`w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border py-2 px-3 flex items-center justify-between cursor-pointer ${
                     errors.endSurah
                       ? "border-[var(--r-color)]"
                       : "border-[var(--g-color)]"
                   }`}
-                  placeholder="Surah #"
-                />
+                  onClick={() => setShowEndSurahDropdown(!showEndSurahDropdown)}
+                >
+                  {formData.endSurah ? (
+                    <span>{getSurahName(formData.endSurah)}</span>
+                  ) : (
+                    <span className="text-[var(--w-color)] opacity-70">
+                      Select surah
+                    </span>
+                  )}
+                  <svg
+                    className={`w-4 h-4 transition-transform ${showEndSurahDropdown ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
+
                 {errors.endSurah && (
                   <p className="text-[var(--r-color)] text-xs mt-1">
                     {errors.endSurah}
                   </p>
+                )}
+
+                {/* End Surah Dropdown */}
+                {showEndSurahDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-[var(--dark-color)] border border-[var(--g-color)] rounded-md shadow-lg max-h-60 overflow-y-auto">
+                    {surahOptions.map((surah) => (
+                      <div
+                        key={surah.number}
+                        className="p-3 hover:bg-[var(--main-color)] cursor-pointer border-b border-[var(--g-color)] last:border-b-0"
+                        onClick={() => handleSurahSelect(surah.number, false)}
+                      >
+                        <div className="text-[var(--w-color)]">
+                          {surah.number}. {surah.name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
 
@@ -447,6 +587,7 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
                   value={formData.endVerse}
                   onChange={handleChange}
                   min="1"
+                  max={getMaxVerse(formData.endSurah)}
                   className={`w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border py-2 px-3 ${
                     errors.endVerse
                       ? "border-[var(--r-color)]"
@@ -457,6 +598,11 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
                 {errors.endVerse && (
                   <p className="text-[var(--r-color)] text-xs mt-1">
                     {errors.endVerse}
+                  </p>
+                )}
+                {formData.endSurah && (
+                  <p className="text-[var(--w-color)] text-xs mt-1 opacity-70">
+                    Max: {getMaxVerse(formData.endSurah)} verses
                   </p>
                 )}
               </div>

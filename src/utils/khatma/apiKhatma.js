@@ -5,7 +5,7 @@ const API_BASE_URL = "http://localhost:8000";
 export const createKhatma = async (data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/khatma/create-khatma/`,
+      `${API_BASE_URL}/khatma/create/`,
       data
     );
     return response.data;
@@ -192,6 +192,20 @@ export const deleteListKhatmaMembership = async () => {
     return response.data;
   } catch (error) {
     console.error("Error deleting khatma membership list:", error);
+    throw error;
+  }
+};
+
+export const updatePartsKhatma = async (khatma_membership_id, data) => {
+  try {
+    const response = await api.patch(
+      `${API_BASE_URL}/khatma/membership/${khatma_membership_id}/part/`,
+      { parts: data }
+    );
+    console.log("the data is: ", { parts: data });
+    console.log(response);
+  } catch (error) {
+    console.error("Error updating khatma parts:", error);
     throw error;
   }
 };

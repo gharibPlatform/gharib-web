@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, BookOpen, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
 import IndexToString from "../../../../../indexToStringSurah.json";
+import { updatePartsKhatma } from "../../../../utils/khatma/apiKhatma";
 
 export default function UpdateProgressModal({
   isOpen,
@@ -25,60 +26,47 @@ export default function UpdateProgressModal({
   const groupVersesIntoParts = (verses) => {
     if (verses.length === 0) return [];
 
-    const numericVerses = verses.map((v) =>
-      typeof v === "string" && v.includes(":")
-        ? parseFloat(v.replace(":", "."))
-        : Number(v)
-    );
-    numericVerses.sort((a, b) => a - b);
+    // Keep as strings and sort properly
+    const sortedVerses = [...verses].sort((a, b) => {
+      const [surahA, verseA] = a.split(":").map(Number);
+      const [surahB, verseB] = b.split(":").map(Number);
+      if (surahA !== surahB) return surahA - surahB;
+      return verseA - verseB;
+    });
 
     const parts = [];
-    let start = numericVerses[0];
-    let end = numericVerses[0];
+    let currentPart = [sortedVerses[0]];
 
-    for (let i = 1; i < numericVerses.length; i++) {
-      if (Math.abs(numericVerses[i] - end - 0.1) < 0.2) {
-        end = numericVerses[i];
+    for (let i = 1; i < sortedVerses.length; i++) {
+      const [currentSurah, currentVerse] = currentPart[currentPart.length - 1]
+        .split(":")
+        .map(Number);
+      const [nextSurah, nextVerse] = sortedVerses[i].split(":").map(Number);
+
+      if (nextSurah === currentSurah && nextVerse === currentVerse + 1) {
+        currentPart.push(sortedVerses[i]);
       } else {
-        const startFormatted = formatVerseNumber(start);
-        const endFormatted = formatVerseNumber(end);
-        parts.push({
-          id: `${startFormatted}-${endFormatted}`,
-          range:
-            startFormatted === endFormatted
-              ? formatVerseWithSurahName(startFormatted)
-              : `${formatVerseWithSurahName(startFormatted)} to ${formatVerseWithSurahName(endFormatted)}`,
-          start: start,
-          end: end,
-          verses: Array.from(
-            { length: Math.round((end - start) / 0.1) + 1 },
-            (_, i) => formatVerseNumber(start + i * 0.1)
-          ),
-        });
-
-        start = numericVerses[i];
-        end = numericVerses[i];
+        parts.push(createPartFromVerses(currentPart));
+        currentPart = [sortedVerses[i]];
       }
     }
 
-    // Add the last part
-    const startFormatted = formatVerseNumber(start);
-    const endFormatted = formatVerseNumber(end);
-    parts.push({
-      id: `${startFormatted}-${endFormatted}`,
-      range:
-        startFormatted === endFormatted
-          ? formatVerseWithSurahName(startFormatted)
-          : `${formatVerseWithSurahName(startFormatted)} to ${formatVerseWithSurahName(endFormatted)}`,
-      start: start,
-      end: end,
-      verses: Array.from(
-        { length: Math.round((end - start) / 0.1) + 1 },
-        (_, i) => formatVerseNumber(start + i * 0.1)
-      ),
-    });
-
+    parts.push(createPartFromVerses(currentPart));
     return parts;
+  };
+
+  const createPartFromVerses = (verses) => {
+    const firstVerse = verses[0];
+    const lastVerse = verses[verses.length - 1];
+
+    return {
+      id: `${firstVerse}-${lastVerse}`,
+      range:
+        verses.length === 1
+          ? formatVerseWithSurahName(firstVerse)
+          : `${formatVerseWithSurahName(firstVerse)} to ${formatVerseWithSurahName(lastVerse)}`,
+      verses: verses,
+    };
   };
 
   const formatVerseNumber = (num) => {
@@ -117,21 +105,42 @@ export default function UpdateProgressModal({
     }
     setSelectedParts(newSelected);
   };
-
   const handleUpdateProgress = () => {
-    const allSelectedVerses = [];
+    const khatmaPlayloads = [];
 
     userKhatmasProgress.forEach((khatmaProgress, khatmaIndex) => {
       const parts = groupVersesIntoParts(khatmaProgress.versesInThisKhatma);
+      const khatmaParts = [];
+
       parts.forEach((part) => {
         if (selectedParts.has(part.id)) {
-          allSelectedVerses.push(...part.verses);
+          const startVerse = part.verses[0].split(":").map(Number);
+          const endVerse = part.verses[part.verses.length - 1]
+            .split(":")
+            .map(Number);
+
+          khatmaParts.push({
+            start: startVerse,
+            end: endVerse,
+          });
         }
       });
+
+      if (khatmaParts.length > 0) {
+        khatmaPlayloads.push({
+          khatmaId: khatmaProgress.khatma.id,
+          parts: khatmaParts,
+        });
+      }
     });
 
-    console.log("Updating progress with selected verses:", allSelectedVerses);
-    alert(`Progress updated for ${allSelectedVerses.length} verses!`);
+    console.log("Khatma playloads:", JSON.stringify(khatmaPlayloads));
+
+    khatmaPlayloads.forEach((playload) => {
+      updatePartsKhatma(playload.khatmaId, playload.parts);
+    });
+
+    alert(`Progress updated for ${khatmaPlayloads.length} khatmas!`);
     setIsOpen(false);
   };
 

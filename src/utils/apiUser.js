@@ -109,3 +109,18 @@ export const googleAuthPost = async (code) => {
     throw error;
   }
 };
+
+export const reportUser = async ({ reported_user, category, description }) => {
+  try {
+    const response = await api.post("/report/", {
+      reported_user,
+      category,
+      description,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error reporting user:", error);
+    throw error;
+  }
+};

@@ -5,10 +5,11 @@ import { Navbar } from "../components/common/landing/NavBar";
 import "./globals.css";
 export default function page() {
   return(
-  <div className="bg-[#fff] w-screen">
-    <Navbar/>
-    <Main/>
-    <Footer className='arabic'/>
+  <div className="bg-[#fff] w-full overflow-x-hidden">
+    <Navbar />
+    <Main />
+    <Footer />
   </div>
+
   )
 }

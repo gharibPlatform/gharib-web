@@ -58,7 +58,7 @@ export default function KhatmaCard({ khatma }) {
   }, [khatma.finishDate]);
 
   const getCurrentSurahVerse = () => {
-    const currentSurah = indexToStringSurah[khatma.currentSurah];
+    const currentSurah = indexToStringSurah[khatma.currentSurah].name;
     return `${currentSurah}: ${khatma.currentVerse}`;
   };
 

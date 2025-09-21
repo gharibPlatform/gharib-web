@@ -93,7 +93,7 @@ export default function CurrentKhatma({
         <div className="flex items-center justify-end gap-2 mb-1">
           <BookOpen className="h-4.5 w-4.5" />
           <p className="font-semibold text-base">
-            {indexToStringSurah[currentSurah]} {currentVerse}
+            {indexToStringSurah[currentSurah].name} {currentVerse}
           </p>
         </div>
         <div className="flex items-center justify-end gap-1.5">

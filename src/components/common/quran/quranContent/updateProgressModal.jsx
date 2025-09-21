@@ -14,12 +14,11 @@ export default function UpdateProgressModal({
   const formatVerseWithSurahName = (verseNumber) => {
     if (typeof verseNumber === "string" && verseNumber.includes(":")) {
       const [surah, verse] = verseNumber.split(":");
-      const surahName = IndexToString[surah] || `Surah ${surah}`;
+      const surahName = IndexToString[surah].name || `Surah ${surah}`;
+      console.log({surahName});
       return `${surahName}: ${verse}`;
-    } else if (typeof verseNumber === "number") {
-      // If it's just a number without colon, it's probably a verse from first surah
-      return `${IndexToString["1"]}: ${verseNumber}`;
     }
+
     return verseNumber.toString();
   };
 

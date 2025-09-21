@@ -206,9 +206,9 @@ export default function QuranContent({
         )}
       </div>
 
-      <FooterContainer isVisible={isFooterVisible}>
+{/*      <FooterContainer isVisible={isFooterVisible}>
         <QuranFooter />
-      </FooterContainer>
+      </FooterContainer>*/}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore
 import { useState, useEffect } from "react";
 import { getChapter } from "../../../../../utils/quran/quran";
 import useShouldFetch from "../../../../../stores/shouldFetchStore";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { khatmaId } = useParams();
@@ -67,7 +68,19 @@ const Page = () => {
       setIsLoadingUserKhatmas(false);
     }
   }, [userKhatmas]);
-  
+
+  const router = useRouter();
+  const isValid =
+    khatmaMembership &&
+    khatmaMembership.status == "ongoing" &&
+    khatmaMembership.progress != 100;
+
+  useEffect(() => {
+    if (!isValid && !isLoadingKhatmaDetails) {
+      router.push("/quran");
+    }
+  }, [isValid, isLoadingKhatmaDetails]);
+
   return (
     <div>
       <QuranContent

@@ -32,9 +32,9 @@ export default function KhatmasListing() {
           case "zero-progress":
             return progress === 0;
           case "currently-in":
-            return khatma.isMember; //will handle later with proper endpoint data
+            return khatma.isMember;
           case "not-joined":
-            return !khatma.isMember; 
+            return !khatma.isMember;
           default:
             return true;
         }
@@ -42,52 +42,128 @@ export default function KhatmasListing() {
     });
   }, [userKhatmas, activeFilters]);
 
+  const getEmptyStateMessage = () => {
+    if (activeFilters.length > 0) {
+      return {
+        title: "No matches found",
+        subtitle: "Try adjusting your filters to see more khatmas",
+      };
+    }
+    return {
+      title: "No khatmas yet",
+      subtitle: "Create your first khatma to get started",
+    };
+  };
+
+  const emptyState = getEmptyStateMessage();
+
   return (
-    <div className="h-full flex flex-col overflow-hidden px-12 py-6">
-      <div className="flex flex-col">
-        <h2 className="text-white text-2xl">Khatmas</h2>
-        <p className="text-[var(--lighter-color)] text-sm mb-4">
-          View and manage your khatmas
-        </p>
+    <div className="h-full flex flex-col overflow-hidden">
+      {/* Header Section */}
+      <div className="px-6 py-6 border-b border-gray-200/10">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-white text-3xl font-semibold mb-2">Khatmas</h1>
+            <p className="text-[var(--lighter-color)] text-base">
+              View and manage your khatmas
+            </p>
+          </div>
+          <ActionButton
+            label="Create Khatma"
+            onClick={() => console.log("Create")}
+            className="px-4 py-2"
+          />
+        </div>
       </div>
 
-      <div className="flex flex-1 flex-col bg-[var(--main-color)] rounded-[4px] border border-[var(--g-color)] overflow-hidden shadow-lg">
-        <div className="flex flex-row items-center justify-between p-4 border-b border-[var(--g-color)]">
-          <h3 className="text-[var(--w-color)] text-xl">All khatmas</h3>
-          <div className="flex gap-2">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col px-6 py-4 overflow-hidden">
+        <div className="bg-[var(--main-color)] rounded-lg shadow-lg flex flex-col h-full overflow-hidden">
+          {/* Controls Bar */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200/10">
+            <div className="flex items-center gap-4">
+              <h2 className="text-[var(--w-color)] text-xl font-medium">
+                All Khatmas
+              </h2>
+              {filteredKhatmas?.length > 0 && (
+                <span className="text-[var(--lighter-color)] text-sm bg-gray-700/30 px-2 py-1 rounded-full">
+                  {filteredKhatmas.length}{" "}
+                  {filteredKhatmas.length === 1 ? "khatma" : "khatmas"}
+                </span>
+              )}
+            </div>
             <KhatmaFilter onFilterChange={setActiveFilters} />
-            <ActionButton label="+" onClick={() => console.log("Create")} />
           </div>
-        </div>
 
-        <div className="grid grid-cols-5 items-center border-b border-[var(--g-color)] px-4 py-2">
-          <h2 className="text-[var(--lighter-color)]">Name</h2>
-          <h2 className="text-[var(--lighter-color)]">Group</h2>
-          <h2 className="text-[var(--lighter-color)]">Progress</h2>
-          <h2 className="text-[var(--lighter-color)]">Status</h2>
-          <h2 className="text-[var(--lighter-color)]">End Date</h2>
-        </div>
+          {/* Table Header */}
+          {filteredKhatmas?.length > 0 && (
+            <div className="grid grid-cols-5 gap-4 px-6 py-3 bg-gray-800/20 border-b border-gray-200/5">
+              <h3 className="text-[var(--lighter-color)] text-sm font-medium uppercase tracking-wide">
+                Name
+              </h3>
+              <h3 className="text-[var(--lighter-color)] text-sm font-medium uppercase tracking-wide">
+                Group
+              </h3>
+              <h3 className="text-[var(--lighter-color)] text-sm font-medium uppercase tracking-wide">
+                Progress
+              </h3>
+              <h3 className="text-[var(--lighter-color)] text-sm font-medium uppercase tracking-wide">
+                Status
+              </h3>
+              <h3 className="text-[var(--lighter-color)] text-sm font-medium uppercase tracking-wide">
+                End Date
+              </h3>
+            </div>
+          )}
 
-        <div className="flex-1 overflow-y-auto">
-          <div className="min-h-0">
+          {/* Table Content */}
+          <div className="flex-1 overflow-y-auto">
             {filteredKhatmas?.length > 0 ? (
-              filteredKhatmas.map((khatma, index) => (
-                <KhatmaRow
-                  key={index}
-                  id={khatma.khatma.id}
-                  name={khatma.khatma.name}
-                  group={khatma.khatma.group_data.name}
-                  progress={khatma.khatma.progress}
-                  status={khatma.khatma.status}
-                  endDate={khatma.finishDate}
-                  onClick={handleClick}
-                />
-              ))
+              <div className="divide-y divide-gray-200/5">
+                {filteredKhatmas.map((khatma, index) => (
+                  <KhatmaRow
+                    key={khatma.khatma.id || index}
+                    id={khatma.khatma.id}
+                    name={khatma.khatma.name}
+                    group={khatma.khatma.group_data.name}
+                    progress={khatma.khatma.progress}
+                    status={khatma.khatma.status}
+                    endDate={khatma.finishDate}
+                    onClick={handleClick}
+                  />
+                ))}
+              </div>
             ) : (
-              <div className="flex justify-center items-center py-8 text-[var(--lighter-color)]">
-                {activeFilters.length > 0
-                  ? "No khatmas match all the selected filters"
-                  : "No khatmas found"}
+              /* Empty State */
+              <div className="flex flex-col items-center justify-center py-16 px-6">
+                <div className="w-16 h-16 bg-gray-700/30 rounded-full flex items-center justify-center mb-4">
+                  <svg
+                    className="w-8 h-8 text-[var(--lighter-color)]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-[var(--w-color)] text-lg font-medium mb-2">
+                  {emptyState.title}
+                </h3>
+                <p className="text-[var(--lighter-color)] text-center max-w-md">
+                  {emptyState.subtitle}
+                </p>
+                {activeFilters.length === 0 && (
+                  <ActionButton
+                    label="Create your first khatma"
+                    onClick={() => console.log("Create")}
+                    className="mt-4"
+                  />
+                )}
               </div>
             )}
           </div>

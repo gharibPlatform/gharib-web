@@ -123,15 +123,15 @@ const VerseInfo = ({ verse }) => (
   <div className="grid grid-cols-3 gap-4 text-sm text-gray-400">
     <div>
       <span className="block font-semibold">Page</span>
-      {verse.page_number}
+      {verse?.page_number}
     </div>
     <div>
       <span className="block font-semibold">Juz</span>
-      {verse.juz_number}
+      {verse?.juz_number}
     </div>
     <div>
       <span className="block font-semibold">Hizb</span>
-      {verse.hizb_number}
+      {verse?.hizb_number}
     </div>
   </div>
 );

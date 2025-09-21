@@ -58,8 +58,8 @@ export default function ProfileForm({
         <ActionButton
           label="Save Changes"
           value="save-all"
-          error={false}
           isDirty={anyDirty}
+          isDisabled={false}
           onClick={handleSaveAll}
         />
       </div>

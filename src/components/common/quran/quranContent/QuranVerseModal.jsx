@@ -199,7 +199,7 @@ export default function QuranVerseModal({ verse, highlight, create, onClose }) {
     }
   }, [create]);
 
-  const pageNumberString = verse.page_number.toString().padStart(3, "0");
+  const pageNumberString = verse?.page_number.toString().padStart(3, "0");
 
   const handleEditClick = () => {
     setTempNote(note);

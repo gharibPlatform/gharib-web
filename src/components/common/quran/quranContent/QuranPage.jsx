@@ -64,7 +64,7 @@ const renderWord = (
   return (
     <span
       key={`line-${lineNumber}-word-${wordIndex}`}
-      onClick={(e) => handleClick(e, { verse_key: word.verse_key })}
+      onClick={(e) => handleClick(e, word.verse_key)}
       className={wordClassNames}
       data-verse-key={word.verse_key}
     >
@@ -72,6 +72,7 @@ const renderWord = (
     </span>
   );
 };
+
 const renderLine = (
   lineNumber,
   allWordsByLine,
@@ -103,7 +104,7 @@ const renderLine = (
       ref={(el) => {
         if (el) {
           lineRefs.current[lineNumber] = el;
-          el.dataset.verseKey = primaryVerseKey; 
+          el.dataset.verseKey = primaryVerseKey;
           el.dataset.verseKeys = verseKeysInThisLine.join(",");
         }
       }}
@@ -123,6 +124,7 @@ const renderLine = (
     </div>
   );
 };
+
 const renderAllLines = (
   verses,
   activeVerse,
@@ -193,6 +195,12 @@ export default function QuranPage({
     }
   }, [goToVerse]);
 
+  useEffect(() => {
+    if (activeVerse) {
+      console.log("activeVerse", activeVerse);
+    }
+  }, [activeVerse]);
+
   //observing the lines
   useEffect(() => {
     const verseKeysLines = {};
@@ -249,7 +257,7 @@ export default function QuranPage({
     };
   }, [verses]);
 
-  const handleClick = (event, verse) => {
+  const handleClick = (event, verseKey) => {
     setClickBoxBool(true);
     const rect = event.target.getBoundingClientRect();
 
@@ -258,7 +266,10 @@ export default function QuranPage({
       y: rect.top + window.scrollY - 30,
     });
 
-    setVerseKey(verse.verse_key);
+    const completeVerse = verses.find((verse) => verse.verse_key === verseKey);
+
+    setActiveVerse(completeVerse);
+    setVerseKey(verseKey);
   };
 
   useEffect(() => {

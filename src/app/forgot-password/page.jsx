@@ -1,5 +1,5 @@
 "use client"
-import ForgotPassword from "../../components/common/forgot password/ForgotPassword";
+import ForgotPassword from "../../components/common/forgot_password/ForgotPassword";
 
 const Page = () => {
 

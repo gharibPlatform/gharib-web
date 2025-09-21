@@ -1,5 +1,5 @@
 export default function QuranHighlightsVerse({ verse, onClick }) {
-  const pageNumberString = verse.page_number.toString().padStart(3, "0");
+  const pageNumberString = verse?.page_number.toString().padStart(3, "0");
 
   return (
     <div>

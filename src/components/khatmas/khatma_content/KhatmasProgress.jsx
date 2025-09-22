@@ -17,9 +17,10 @@ export default function KhatmasProgress() {
   const personalProgress = khatmaMembership?.progress;
   const blueDegree = (personalProgress * 360) / 100;
 
-  const handleClickVerse = (chapterId, verse) => {
-    router.push(`/quran/chapters/${chapterId}`);
-    setGoToVerse(verse);
+  const handleClickVerse = (surah, verse) => {
+    const verseKey = surah + ":" + verse;
+    router.push(`/quran/chapters/${surah}`);
+    setGoToVerse(verseKey);
   };
 
   const [currentAbsoluteVerse, goalAbsoluteVerse] = useAbsoluteVerseDomain(
@@ -48,7 +49,6 @@ export default function KhatmasProgress() {
                 {`${khatmaMembership?.progress}%`}
               </div>
             </div>
-            
             <div className="mb-4">
               <PersonalTrackerLine
                 progress={khatmaMembership?.progress}
@@ -63,7 +63,7 @@ export default function KhatmasProgress() {
                 <button
                   onClick={() =>
                     handleClickVerse(
-                      // currentChapter.id,
+                      khatmaMembership.currentSurah,
                       khatmaMembership.currentVerse
                     )
                   }
@@ -83,7 +83,7 @@ export default function KhatmasProgress() {
                 <button
                   onClick={() =>
                     handleClickVerse(
-                      khatmaMembership.startShareChapter,
+                      khatmaMembership.startShareSurah,
                       khatmaMembership.startShareVerse
                     )
                   }
@@ -99,7 +99,7 @@ export default function KhatmasProgress() {
                 <button
                   onClick={() =>
                     handleClickVerse(
-                      khatmaMembership.endShareChapter,
+                      khatmaMembership.endShareSurah,
                       khatmaMembership.endShareVerse
                     )
                   }
@@ -187,9 +187,9 @@ export default function KhatmasProgress() {
                 height={180}
                 orangeDegree={orangeDegree}
                 blueDegree={blueDegree}
-                fontSize={16}
-                groupProgress={`${khatmaDetails.progress}`}
-                personalProgress={`${personalProgress}%`}
+                fontSize={24}
+                groupProgress={khatmaDetails.progress}
+                personalProgress={personalProgress}
                 backgroundColor={"var(--main-color)"}
               />
 
@@ -216,7 +216,7 @@ export default function KhatmasProgress() {
                   <button
                     onClick={() =>
                       handleClickVerse(
-                        khatmaDetails.startChapter,
+                        khatmaDetails.startSurah,
                         khatmaDetails.startVerse
                       )
                     }
@@ -231,7 +231,7 @@ export default function KhatmasProgress() {
                   <button
                     onClick={() =>
                       handleClickVerse(
-                        khatmaDetails.endChapter,
+                        khatmaDetails.endSurah,
                         khatmaDetails.endVerse
                       )
                     }

@@ -65,6 +65,10 @@ const Page = () => {
     quranChapters &&
     (!khatmaDetails.group_data?.id || (khatmaDetails.group_data?.id && group));
 
+  useEffect(() => {
+    console.log("khatmaMembership is : ", khatmaMembership);
+  }, [khatmaMembership]);
+  
   return (
     <div className="flex flex-col h-full w-full">
       {!isDataReady ? (

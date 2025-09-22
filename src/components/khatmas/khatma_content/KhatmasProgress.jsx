@@ -1,46 +1,25 @@
 import Circle from "../../common/circle/Circle";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import PersonalTrackerLine from "./PersonalTrackerLine";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import { useRouter } from "next/navigation";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
-import { useKhatmaProgress } from "../../../hooks/useKhatmaProgress";
+import indexToStringSurah from "../../../../indexToStringSurah.json";
+import { useCalculateTimeLeft } from "../../../hooks/logic/calculateTimeLeft";
 
 export default function KhatmasProgress() {
-  const { khatmaDetails, khatmaMembership, khatmaSelfMembership } =
-    useKhatmaStore();
-  const { quranChapters } = useQuranHeaderChapter();
+  const { khatmaDetails, khatmaMembership } = useKhatmaStore();
   const { setGoToVerse } = useQuranHeaderVerse();
 
-  const {
-    selfStartChapter,
-    selfEndChapter,
-    groupStartChapter,
-    groupEndChapter,
-    userProgress,
-    loading,
-    currentChapter,
-  } = useKhatmaProgress(khatmaSelfMembership, khatmaDetails, quranChapters);
-
   const router = useRouter();
-  const timeLeft = 28;
-  const orangeDegree = (khatmaDetails.progress * 360) / 100;
-  const personalProgress =
-    khatmaSelfMembership.progress / khatmaMembership.length;
+  const timeLeft = useCalculateTimeLeft(khatmaDetails?.endDate);
+  const orangeDegree = (khatmaDetails?.progress * 360) / 100;
+  const personalProgress = khatmaMembership?.progress;
   const blueDegree = (personalProgress * 360) / 100;
 
   const handleClickVerse = (chapterId, verse) => {
     router.push(`/quran/chapters/${chapterId}`);
     setGoToVerse(verse);
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center w-full h-[calc(100vh-9rem)]">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--o-color)]"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col p-4 h-full w-full gap-4 overflow-hidden bg-[var(--secondary-color)]">
@@ -56,13 +35,11 @@ export default function KhatmasProgress() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Personal Progress</h2>
               <div className="bg-[var(--dark-color)] px-3 py-1 rounded-full text-xs">
-                {userProgress
-                  ? `${userProgress.percentage.toFixed(1)}%`
-                  : "Loading..."}
+                {`${khatmaMembership?.progress}%`}
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 mb-4">
+            {/* <div className="grid grid-cols-3 gap-3 mb-4">
               <div className="text-center p-3 bg-[var(--dark-color)] rounded-lg">
                 <div className="text-lg font-bold text-[var(--b-color)]">
                   {userProgress?.completed || 0}
@@ -81,13 +58,13 @@ export default function KhatmasProgress() {
                 </div>
                 <div className="text-xs text-gray-400">Goal</div>
               </div>
-            </div>
+            </div> */}
 
             <div className="mb-4">
               <PersonalTrackerLine
-                progress={khatmaSelfMembership.progress}
-                currentVerse={userProgress?.completed || 0}
-                wantedVerse={userProgress?.total || 0}
+                progress={khatmaMembership?.progress}
+                currentVerse={khatmaMembership?.completed || 0}
+                wantedVerse={khatmaMembership?.total || 0}
               />
             </div>
 
@@ -97,14 +74,16 @@ export default function KhatmasProgress() {
                 <button
                   onClick={() =>
                     handleClickVerse(
-                      currentChapter.id,
-                      khatmaSelfMembership.currentVerse
+                      // currentChapter.id,
+                      khatmaMembership.currentVerse
                     )
                   }
                   className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-4 py-2 rounded-lg transition-colors text-sm"
                 >
-                  {currentChapter.name_simple}{" "}
-                  {khatmaSelfMembership.currentVerse}
+                  {/* {currentChapter.name_simple} */}
+                  {
+                    indexToStringSurah[khatmaMembership.currentSurah].name
+                  } - {khatmaMembership.currentVerse}
                 </button>
               </div>
 
@@ -115,15 +94,15 @@ export default function KhatmasProgress() {
                 <button
                   onClick={() =>
                     handleClickVerse(
-                      selfStartChapter.id,
-                      khatmaSelfMembership.startShareVerse
+                      khatmaMembership.startShareChapter,
+                      khatmaMembership.startShareVerse
                     )
                   }
                   className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-3 py-2 rounded-lg transition-colors text-sm flex items-center gap-1"
                 >
                   <span className="text-[10px] text-gray-400">Start</span>
-                  {selfStartChapter.name_simple}{" "}
-                  {khatmaSelfMembership.startShareVerse}
+                  {indexToStringSurah[khatmaMembership.startShareSurah].name}-
+                  {khatmaMembership.startShareVerse}
                 </button>
 
                 <div className="text-gray-400 text-sm">→</div>
@@ -131,15 +110,15 @@ export default function KhatmasProgress() {
                 <button
                   onClick={() =>
                     handleClickVerse(
-                      selfEndChapter.id,
-                      khatmaSelfMembership.endShareVerse
+                      khatmaMembership.endShareChapter,
+                      khatmaMembership.endShareVerse
                     )
                   }
                   className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-3 py-2 rounded-lg transition-colors text-sm flex items-center gap-1"
                 >
                   <span className="text-[10px] text-gray-400">End</span>
-                  {selfEndChapter.name_simple}{" "}
-                  {khatmaSelfMembership.endShareVerse}
+                  {indexToStringSurah[khatmaMembership.endShareSurah].name}-
+                  {khatmaMembership.endShareVerse}
                 </button>
               </div>
             </div>
@@ -147,13 +126,11 @@ export default function KhatmasProgress() {
             <div className="mt-auto pt-3 border-t border-[var(--dark-color)]">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-400">
-                  {userProgress?.total || 0} Verses
+                  {personalProgress || 0} Verses
                 </span>
                 <span className="text-gray-400">
                   Joined:{" "}
-                  {new Date(
-                    khatmaSelfMembership.created_at
-                  ).toLocaleDateString()}
+                  {new Date(khatmaMembership.created_at).toLocaleDateString()}
                 </span>
               </div>
             </div>
@@ -174,7 +151,7 @@ export default function KhatmasProgress() {
                 Progress
               </span>
             </div>
-            <div className="overflow-y-auto flex-1 pr-1">
+            {/* <div className="overflow-y-auto flex-1 pr-1">
               {khatmaMembership
                 .sort((a, b) => b.progress - a.progress)
                 .map((user, index) => (
@@ -206,7 +183,7 @@ export default function KhatmasProgress() {
                     </span>
                   </div>
                 ))}
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -229,7 +206,7 @@ export default function KhatmasProgress() {
 
               <div className="text-center">
                 <div className="text-xs text-gray-400">Time left</div>
-                <div className="text-lg font-bold text-white">{timeLeft}h</div>
+                <div className="text-lg font-bold text-white">{timeLeft}</div>
               </div>
 
               <div className="flex gap-4">
@@ -250,13 +227,14 @@ export default function KhatmasProgress() {
                   <button
                     onClick={() =>
                       handleClickVerse(
-                        groupStartChapter.id,
+                        khatmaDetails.startChapter,
                         khatmaDetails.startVerse
                       )
                     }
                     className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-2 py-1 rounded text-xs transition-colors"
                   >
-                    {groupStartChapter.name_simple}:{khatmaDetails.startVerse}
+                    {indexToStringSurah[khatmaDetails.startSurah].name}-
+                    {khatmaDetails.startVerse}
                   </button>
                 </div>
                 <div className="flex justify-between items-center py-1">
@@ -264,13 +242,14 @@ export default function KhatmasProgress() {
                   <button
                     onClick={() =>
                       handleClickVerse(
-                        groupEndChapter.id,
+                        khatmaDetails.endChapter,
                         khatmaDetails.endVerse
                       )
                     }
                     className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-2 py-1 rounded text-xs transition-colors"
                   >
-                    {groupEndChapter.name_simple}:{khatmaDetails.endVerse}
+                    {indexToStringSurah[khatmaDetails.startSurah].name}-
+                    {khatmaDetails.endVerse}
                   </button>
                 </div>
                 <div className="flex justify-between items-center py-1">

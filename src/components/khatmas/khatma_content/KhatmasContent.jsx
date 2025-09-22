@@ -182,13 +182,13 @@ export default function KhatmasContent() {
     checkingMemberShip();
   }, [khatmaMembership]);
 
-  if (isCheckingMembership) {
-    return (
-      <div className="flex justify-center items-center h-20">
-        <p className="text-[var(--g-color)]">Checking membership...</p>
-      </div>
-    );
-  }
+//   if (isCheckingMembership) {
+//     return (
+//       <div className="flex justify-center items-center h-20">
+        {/* <p className="text-[var(--g-color)]">Checking membership...</p> */}
+      {/* </div> */}
+//     );
+  // }
 
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto no-scrollbar">

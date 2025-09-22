@@ -6,16 +6,16 @@ import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 import indexToStringSurah from "../../../../indexToStringSurah.json";
 import { useCalculateTimeLeft } from "../../../hooks/logic/calculateTimeLeft";
 import { useAbsoluteVerseDomain } from "../../../hooks/logic/useAbsoluteVerseDomain";
+import { useEffect } from "react";
 
 export default function KhatmasProgress() {
-  const { khatmaDetails, khatmaMembership } = useKhatmaStore();
+  const { khatmaDetails, khatmaMembership, membersInKhatma } = useKhatmaStore();
   const { setGoToVerse } = useQuranHeaderVerse();
 
   const router = useRouter();
   const timeLeft = useCalculateTimeLeft(khatmaDetails?.endDate);
   const orangeDegree = (khatmaDetails?.progress * 360) / 100;
-  const personalProgress = khatmaMembership?.progress;
-  const blueDegree = (personalProgress * 360) / 100;
+  const blueDegree = (khatmaMembership?.progress * 360) / 100;
 
   const handleClickVerse = (surah, verse) => {
     const verseKey = surah + ":" + verse;
@@ -52,7 +52,7 @@ export default function KhatmasProgress() {
             <div className="mb-4">
               <PersonalTrackerLine
                 progress={khatmaMembership?.progress}
-                currentVerse={currentAbsoluteVerse|| 0}
+                currentVerse={currentAbsoluteVerse || 0}
                 wantedVerse={goalAbsoluteVerse || 0}
               />
             </div>
@@ -140,8 +140,8 @@ export default function KhatmasProgress() {
                 Progress
               </span>
             </div>
-            {/* <div className="overflow-y-auto flex-1 pr-1">
-              {khatmaMembership
+            <div className="overflow-y-auto flex-1 pr-1">
+              {membersInKhatma
                 .sort((a, b) => b.progress - a.progress)
                 .map((user, index) => (
                   <div
@@ -172,7 +172,7 @@ export default function KhatmasProgress() {
                     </span>
                   </div>
                 ))}
-            </div> */}
+            </div>
           </div>
         </div>
 
@@ -188,8 +188,8 @@ export default function KhatmasProgress() {
                 orangeDegree={orangeDegree}
                 blueDegree={blueDegree}
                 fontSize={24}
-                groupProgress={khatmaDetails.progress}
-                personalProgress={personalProgress}
+                groupProgress={khatmaDetails?.progress || 0}
+                personalProgress={khatmaMembership?.progress || 0}
                 backgroundColor={"var(--main-color)"}
               />
 

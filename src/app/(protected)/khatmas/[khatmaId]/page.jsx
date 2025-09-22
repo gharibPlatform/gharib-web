@@ -11,8 +11,10 @@ const Page = () => {
   const {
     khatmaMembership,
     khatmaDetails,
+    membersInKhatma,
     fetchKhatmaDetails,
     fetchKhatmaMembership,
+    fetchMembersInKhatma,
   } = useKhatmaStore();
 
   const { quranChapters, fetchQuranChapters } = useQuranHeaderChapter();
@@ -29,6 +31,7 @@ const Page = () => {
           fetchKhatmaDetails(khatmaId),
           fetchKhatmaMembership(khatmaId),
           fetchQuranChapters(),
+          fetchMembersInKhatma(khatmaId),
         ]);
 
         if (details?.group_data?.id) {
@@ -62,13 +65,10 @@ const Page = () => {
     !isLoading &&
     khatmaDetails &&
     khatmaMembership &&
+    membersInKhatma &&
     quranChapters &&
     (!khatmaDetails.group_data?.id || (khatmaDetails.group_data?.id && group));
 
-  useEffect(() => {
-    console.log("khatmaMembership is : ", khatmaMembership);
-  }, [khatmaMembership]);
-  
   return (
     <div className="flex flex-col h-full w-full">
       {!isDataReady ? (

@@ -88,7 +88,7 @@ export default function Circle({
             }}
             className="text-[var(--b-color)]"
           >
-            {personalProgress ? `${personalProgress}` : ""}
+            {personalProgress}%
           </p>
         </div>
       </div>

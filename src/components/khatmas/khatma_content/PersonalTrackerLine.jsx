@@ -10,8 +10,10 @@ export default function PersonalTrackerLine({
           className="bg-[var(--b-color)] h-4 rounded-full"
           style={{ width: `${progress}%` }}
         ></div>
-        <div className="flex items-center justify-center pt-2 text-sm text-[var(--g-color)]">
+        <div className="flex justify-between pt-2 text-sm text-[var(--g-color)]">
+          <span>Current: {currentVerse}</span>
           <span className="text-lg text-[var(--b-color)]">{progress}%</span>
+          <span>Goal: {wantedVerse}</span>
         </div>
       </div>
     </div>

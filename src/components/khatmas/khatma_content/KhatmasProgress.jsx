@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 import indexToStringSurah from "../../../../indexToStringSurah.json";
 import { useCalculateTimeLeft } from "../../../hooks/logic/calculateTimeLeft";
+import { useAbsoluteVerseDomain } from "../../../hooks/logic/useAbsoluteVerseDomain";
 
 export default function KhatmasProgress() {
   const { khatmaDetails, khatmaMembership } = useKhatmaStore();
@@ -20,6 +21,15 @@ export default function KhatmasProgress() {
     router.push(`/quran/chapters/${chapterId}`);
     setGoToVerse(verse);
   };
+
+  const [currentAbsoluteVerse, goalAbsoluteVerse] = useAbsoluteVerseDomain(
+    khatmaMembership?.startShareSurah,
+    khatmaMembership?.startShareVerse,
+    khatmaMembership?.endShareSurah,
+    khatmaMembership?.endShareVerse,
+    khatmaMembership?.currentSurah,
+    khatmaMembership?.currentVerse
+  );
 
   return (
     <div className="flex flex-col p-4 h-full w-full gap-4 overflow-hidden bg-[var(--secondary-color)]">
@@ -38,33 +48,12 @@ export default function KhatmasProgress() {
                 {`${khatmaMembership?.progress}%`}
               </div>
             </div>
-
-            {/* <div className="grid grid-cols-3 gap-3 mb-4">
-              <div className="text-center p-3 bg-[var(--dark-color)] rounded-lg">
-                <div className="text-lg font-bold text-[var(--b-color)]">
-                  {userProgress?.completed || 0}
-                </div>
-                <div className="text-xs text-gray-400">Current</div>
-              </div>
-              <div className="text-center p-3 bg-[var(--dark-color)] rounded-lg">
-                <div className="text-lg font-bold text-[var(--o-color)]">
-                  {userProgress?.percentage.toFixed(1)}%
-                </div>
-                <div className="text-xs text-gray-400">Progress</div>
-              </div>
-              <div className="text-center p-3 bg-[var(--dark-color)] rounded-lg">
-                <div className="text-lg font-bold text-green-400">
-                  {userProgress?.total || 0}
-                </div>
-                <div className="text-xs text-gray-400">Goal</div>
-              </div>
-            </div> */}
-
+            
             <div className="mb-4">
               <PersonalTrackerLine
                 progress={khatmaMembership?.progress}
-                currentVerse={khatmaMembership?.completed || 0}
-                wantedVerse={khatmaMembership?.total || 0}
+                currentVerse={currentAbsoluteVerse|| 0}
+                wantedVerse={goalAbsoluteVerse || 0}
               />
             </div>
 
@@ -126,7 +115,7 @@ export default function KhatmasProgress() {
             <div className="mt-auto pt-3 border-t border-[var(--dark-color)]">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-400">
-                  {personalProgress || 0} Verses
+                  {goalAbsoluteVerse || 0} Verses
                 </span>
                 <span className="text-gray-400">
                   Joined:{" "}

@@ -4,16 +4,27 @@ import KhatmaFilter from "./KhatmaFilter";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
+import CreateKhatmaModal from "../../common/quran/quranRightbar/CreateKhatmaModal";
+import { createKhatma } from "../../../utils/khatma/apiKhatma";
 
 export default function KhatmasListing() {
-  const { userKhatmas } = useKhatmaStore();
-  const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);
+  const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
+
+  const router = useRouter();
+
+  const { userKhatmas } = useKhatmaStore();
 
   const handleClick = (khatmaId) => {
     router.push(`/khatmas/${khatmaId}`);
   };
 
+  const handleCreateKhatma = (khatmaData) => {
+    createKhatma(khatmaData).then((res) => {
+      console.log("res", res);
+    });
+    setShowCreateKhatmaModal(false);
+  };
   const filteredKhatmas = useMemo(() => {
     if (!userKhatmas || activeFilters.length === 0) return userKhatmas;
 
@@ -59,6 +70,12 @@ export default function KhatmasListing() {
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
+      <CreateKhatmaModal
+        isOpen={showCreateKhatmaModal}
+        onClose={() => setShowCreateKhatmaModal(false)}
+        onSubmit={handleCreateKhatma}
+      />
+
       {/* Header Section */}
       <div className="px-6 py-6 border-b border-gray-200/10">
         <div className="flex items-center justify-between">
@@ -69,9 +86,12 @@ export default function KhatmasListing() {
             </p>
           </div>
           <ActionButton
-            label="Create Khatma"
-            onClick={() => console.log("Create")}
+            label="+ Create a new Khatma"
+            onClick={() => setShowCreateKhatmaModal(true)}
             className="px-4 py-2"
+            isDisabled={false}
+            value={"create-khatma"}
+            isDirty={true}
           />
         </div>
       </div>

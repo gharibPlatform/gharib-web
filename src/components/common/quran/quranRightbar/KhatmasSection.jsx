@@ -5,19 +5,18 @@ import { useState } from "react";
 import { createKhatma } from "../../../../utils/khatma/apiKhatma";
 
 export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
-    const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
+  const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
 
-    const handleCreateKhatma = (khatmaData) => {
+  const handleCreateKhatma = (khatmaData) => {
+    createKhatma(khatmaData).then((res) => {
+      console.log("res", res);
+    });
+    setShowCreateKhatmaModal(false);
+  };
 
-        createKhatma(khatmaData).then((res) => {
-            console.log("res", res);
-        });
-        setShowCreateKhatmaModal(false);
-    };
-
-    if (isLoadingKhatmas) {
-        return (
-            <div className="p-4 text-white">
+  if (isLoadingKhatmas) {
+    return (
+      <div className="p-4 text-white">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold">Your Khatmas</h3>
           <span className="text-sm text-white/70">Loading...</span>
@@ -37,15 +36,15 @@ export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
           ))}
         </div>
       </div>
-        );
-    }
+    );
+  }
 
-    const filteredKhatmas = khatmas ? .filter((khatma) => {
-        return khatma.status == "ongoing" && khatma.progress != 100;
-    });
+  const filteredKhatmas = khatmas?.filter((khatma) => {
+    return khatma.status == "ongoing" && khatma.progress != 100;
+  });
 
-    return (
-        <div className="p-4 text-white">
+  return (
+    <div className="p-4 text-white">
       <CreateKhatmaModal
         isOpen={showCreateKhatmaModal}
         onClose={() => setShowCreateKhatmaModal(false)}
@@ -84,5 +83,5 @@ export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
         </button>
       </div>
     </div>
-    );
+  );
 }

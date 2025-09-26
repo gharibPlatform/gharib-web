@@ -7,7 +7,7 @@ export const getGroups = async (groupId) => {
   try {
     const url = groupId ? `/group/?group_id=${groupId}` : `/group/`;
     const res = await api.get(`${API_BASE_URL}${url}`);
-    return res.data;
+    return res.data.results;
   } catch (error) {
     console.error("Error creating group:", error);
   }

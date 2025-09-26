@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Calendar,
   Clock,
@@ -54,15 +54,9 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
   useEffect(() => {
     if (isOpen) {
       fetchGroups();
-      console.log("fetching groups");
     }
   }, [isOpen, fetchGroups]);
 
-  useEffect(() => {
-    if (groups?.length > 0) {
-      console.log("groups are here : ", groups);
-    }
-  }, [loadingGroups, errorGroups, groups]);
 
   if (!isOpen) return null;
 
@@ -312,6 +306,18 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
             {/* Group Dropdown */}
             {showGroupDropdown && (
               <div className="absolute z-10 w-full mt-1 bg-[var(--dark-color)] border border-[var(--g-color)] rounded-md shadow-lg max-h-60 overflow-y-auto">
+                {loadingGroups && (
+                  <div className="p-3 text-[var(--w-color)] text-center">
+                    Loading groups...
+                  </div>
+                )}
+
+                {errorGroups && (
+                  <div className="text-[var(--r-color)] text-center">
+                    An error occurred while loading groups
+                  </div>
+                )}
+
                 {groups?.map((group) => (
                   <div
                     key={group.id}

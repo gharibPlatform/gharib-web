@@ -15,7 +15,7 @@ export default function UpdateProgressModal({
     if (typeof verseNumber === "string" && verseNumber.includes(":")) {
       const [surah, verse] = verseNumber.split(":");
       const surahName = IndexToString[surah].name || `Surah ${surah}`;
-      console.log({surahName});
+      console.log({ surahName });
       return `${surahName}: ${verse}`;
     }
 
@@ -145,6 +145,13 @@ export default function UpdateProgressModal({
 
   if (!isOpen) return null;
 
+  // Filter khatmas to only show those with progress
+  const khatmasWithProgress = userKhatmasProgress.filter(
+    (khatmaProgress) =>
+      khatmaProgress.versesInThisKhatma &&
+      khatmaProgress.versesInThisKhatma.length > 0
+  );
+
   return (
     <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-[var(--main-color)] text-white rounded-lg p-6 shadow-md flex flex-col gap-4 max-w-2xl w-full max-h-[90vh] overflow-hidden">
@@ -166,8 +173,8 @@ export default function UpdateProgressModal({
         </p>
 
         <div className="flex flex-col gap-3 overflow-y-auto py-2">
-          {userKhatmasProgress.length > 0 ? (
-            userKhatmasProgress.map((khatmaProgress, index) => {
+          {khatmasWithProgress.length > 0 ? (
+            khatmasWithProgress.map((khatmaProgress, index) => {
               const parts = groupVersesIntoParts(
                 khatmaProgress.versesInThisKhatma
               );
@@ -224,7 +231,11 @@ export default function UpdateProgressModal({
               );
             })
           ) : (
-            <p className="text-center py-4 opacity-75">No khatmas found.</p>
+            <p className="text-center py-4 opacity-75">
+              {userKhatmasProgress.length > 0
+                ? "No khatmas with progress found."
+                : "No khatmas found."}
+            </p>
           )}
         </div>
 

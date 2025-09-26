@@ -2,6 +2,19 @@ import api from "../api";
 const API_BASE_URL = "http://localhost:8000";
 
 // Khatma APIs
+
+export const getUserKhatmaDetails = async (khatmaId) => {
+  try {
+    const response = await api.get(
+      `${API_BASE_URL}/khatma/${khatmaId}/membership/user/`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting user khatma membership details:", error);
+    throw error;
+  }
+};
+
 export const createKhatma = async (data) => {
   try {
     const response = await api.post(
@@ -18,7 +31,7 @@ export const createKhatma = async (data) => {
 export const getKhatmaMembership = async (khatmaId) => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/khatma/${khatmaId}/memberships/`
+      `${API_BASE_URL}/khatma/${khatmaId}/membership/`
     );
     console.log(response);
     return response.data;

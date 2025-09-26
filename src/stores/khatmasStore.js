@@ -5,6 +5,7 @@ import {
   getListKhatma,
   updateKhatma,
   getKhatmaByGroup,
+  getUserKhatmaDetails,
 } from "@/utils/khatma/apiKhatma";
 import { create } from "zustand";
 
@@ -55,8 +56,8 @@ const useKhatmaStore = create((set) => ({
   },
 
   fetchKhatmaMembership: async (khatmaId) => {
-    const data = await getKhatmaMembership(khatmaId);
-    set({ khatmaMembership: data.results[0] });
+    const data = await getUserKhatmaDetails(khatmaId);
+    set({ khatmaMembership: data });
     return data;
   },
 

@@ -69,6 +69,15 @@ const Page = () => {
     quranChapters &&
     (!khatmaDetails.group_data?.id || (khatmaDetails.group_data?.id && group));
 
+    // useEffect(() => {
+    //   console.log("isLoading is : ", isLoading);
+    //   console.log("khatmaDetails is : ", khatmaDetails);
+    //   console.log("khatmaMembership is : ", khatmaMembership);
+    //   console.log("membersInKhatma is : ", membersInKhatma);
+    //   console.log("quranChapters is : ", quranChapters);
+    //   console.log("group is : ", group);
+    // }, [khatmaMembership, isLoading, khatmaDetails, membersInKhatma, quranChapters, group]);
+
   return (
     <div className="flex flex-col h-full w-full">
       {!isDataReady ? (

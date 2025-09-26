@@ -237,7 +237,7 @@ export default function KhatmasProgress() {
                     }
                     className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-2 py-1 rounded text-xs transition-colors"
                   >
-                    {indexToStringSurah[khatmaDetails.startSurah].name}-
+                    {indexToStringSurah[khatmaDetails.endSurah].name}-
                     {khatmaDetails.endVerse}
                   </button>
                 </div>

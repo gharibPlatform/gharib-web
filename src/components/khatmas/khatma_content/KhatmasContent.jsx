@@ -9,158 +9,213 @@ import QuranHeader from "../../chat/khatmas/QuranHeaderCreateKhatma";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import useUserStore from "../../../stores/userStore";
 
-const JoinKhatmaForm = ({ onClose, khatmaId }) => {
-  const [currentSurah, setCurrentSurah] = useState("");
-  const [currentVerse, setCurrentVerse] = useState("");
-  const [finishDate, setFinishDate] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+import Circle from "../../common/circle/Circle";
+import { useRouter } from "next/navigation";
+import indexToStringSurah from "../../../../indexToStringSurah.json";
+import { useCalculateTimeLeft } from "../../../hooks/logic/calculateTimeLeft";
 
-  const {
-    fromChapter: fromChapterStart,
-    toChapter: toChapterStart,
-    fromVerse: fromVerseStart,
-    toVerse: toVerseStart,
-  } = useQuranHeaderChapter();
+function JoinKhatma({ khatmaDetails, membersInKhatma, joinKhatma }) {
+  const router = useRouter();
+  const timeLeft = useCalculateTimeLeft(khatmaDetails?.endDate);
+  const orangeDegree = (khatmaDetails?.progress * 360) / 100;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
-
+  const handleJoinKhatma = async () => {
     try {
-      const membershipData = {
-        startShareSurah: fromChapterStart.translated_name.name.toLowerCase(),
-        startShareVerse: fromVerseStart,
-        endShareSurah: fromChapterEnd.translated_name.name.toLowerCase(),
-        endShareVerse: fromVerseEnd,
-        currentSurah,
-        currentVerse,
-        progress: 0,
-        finishDate,
-        status: "ongoing",
-        groupMembership: groupId,
-        khatma: khatmaId,
-      };
-
-      await postKhatmaMembership(khatmaId, membershipData);
-      setSuccess(true);
-      setTimeout(onClose, 2000);
-    } catch (err) {
-      console.error("Failed to join khatma:", err);
-      setError(err.response?.data?.message || "Failed to join khatma");
-      if (err.response?.data?.non_field_errors) {
-        setError(err.response.data.non_field_errors[0]);
-      }
-    } finally {
-      setIsSubmitting(false);
+      await joinKhatma(khatmaDetails.id);
+    } catch (error) {
+      console.error("Error joining khatma:", error);
     }
   };
 
-  if (success) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-[var(--main-color)] p-6 rounded-lg border border-[var(--g-color)] max-w-md w-full">
-          <h2 className="text-[var(--w-color)] text-xl mb-4">Success!</h2>
-          <p className="text-[var(--w-color)]">
-            You have successfully joined the khatma.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const handleClickVerse = (surah, verse) => {
+    const verseKey = surah + ":" + verse;
+    router.push(`/quran/chapters/${surah}?verse=${verseKey}`);
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-[var(--main-color)] p-6 rounded-lg border border-[var(--g-color)]  overflow-y-auto max-h-[90vh]">
-        <h2 className="text-[var(--w-color)] text-xl mb-4">Join Khatma</h2>
+    <div className="flex flex-col p-4 h-full w-full gap-4 overflow-hidden bg-[var(--secondary-color)]">
+      <div className="bg-[var(--main-color)] rounded-lg text-white p-4">
+        <h1 className="text-2xl font-bold text-center">{khatmaDetails.name}</h1>
+        <p className="text-center text-gray-300 mt-2">
+          Join this khatma to start tracking your progress
+        </p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="text-[var(--w-color)] block mb-2">
-              Your Share (Start)
-            </label>
-            <QuranHeader selectionType="from" />
-          </div>
-
-          <div>
-            <label className="text-[var(--w-color)] block mb-2">
-              Your Share (End)
-            </label>
-            <QuranHeader selectionType="to" />
-          </div>
-
-          <div>
-            <label className="text-[var(--w-color)] block mb-2">
-              Current Progress
-            </label>
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={currentSurah}
-                onChange={(e) => setCurrentSurah(e.target.value)}
-                placeholder="Current Surah"
-                className="flex-1 bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4"
-                required
+      <div className="flex h-full w-full gap-4">
+        {/* Left Column - Group Info */}
+        <div className="flex flex-col w-2/3 gap-4">
+          {/* Group Progress Card */}
+          <div className="bg-[var(--main-color)] rounded-lg text-white p-6 flex flex-col h-full">
+            <h2 className="text-lg font-semibold mb-4">Group Progress</h2>
+            <div className="flex flex-col items-center justify-center gap-4 mb-6">
+              <Circle
+                width={180}
+                height={180}
+                orangeDegree={orangeDegree}
+                blueDegree={0}
+                fontSize={24}
+                groupProgress={khatmaDetails?.progress || 0}
+                personalProgress={0}
+                backgroundColor={"var(--main-color)"}
               />
-              <input
-                type="number"
-                value={currentVerse}
-                onChange={(e) => setCurrentVerse(e.target.value)}
-                placeholder="Current Verse"
-                className="flex-1 bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4"
-                required
-              />
+
+              <div className="text-center">
+                <div className="text-xs text-gray-400">Time left</div>
+                <div className="text-lg font-bold text-white">{timeLeft}</div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex gap-1 items-center">
+                  <div className="bg-[var(--o-color)] w-3 h-3 rounded-sm"></div>
+                  <span className="text-xs text-gray-400">Group Progress</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-auto border-t border-[var(--dark-color)] pt-4">
+              <div className="grid grid-cols-1 gap-2 text-xs">
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Start verse:</span>
+                  <button
+                    onClick={() =>
+                      handleClickVerse(
+                        khatmaDetails.startSurah,
+                        khatmaDetails.startVerse
+                      )
+                    }
+                    className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-2 py-1 rounded text-xs transition-colors"
+                  >
+                    {indexToStringSurah[khatmaDetails.startSurah].name}-
+                    {khatmaDetails.startVerse}
+                  </button>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">End verse:</span>
+                  <button
+                    onClick={() =>
+                      handleClickVerse(
+                        khatmaDetails.endSurah,
+                        khatmaDetails.endVerse
+                      )
+                    }
+                    className="bg-[var(--dark-color)] hover:bg-[var(--b-color)] px-2 py-1 rounded text-xs transition-colors"
+                  >
+                    {indexToStringSurah[khatmaDetails.endSurah].name}-
+                    {khatmaDetails.endVerse}
+                  </button>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Created at:</span>
+                  <span className="text-white">
+                    {new Date(khatmaDetails.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">End date:</span>
+                  <span className="text-white">
+                    {khatmaDetails.endDate
+                      ? new Date(khatmaDetails.endDate).toLocaleDateString()
+                      : "Not set"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Intention:</span>
+                  <span className="text-white text-right max-w-[150px] truncate">
+                    {khatmaDetails.intentions || "Not specified"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-gray-400">Launcher:</span>
+                  <span className="text-white">
+                    {khatmaDetails.launcher_data?.username || "Not specified"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col w-1/3 gap-4">
+          <div className="bg-[var(--main-color)] rounded-lg text-white p-6 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Members</h2>
+              <div className="bg-[var(--dark-color)] px-3 py-1 rounded-full text-xs">
+                {membersInKhatma.length} users
+              </div>
+            </div>
+            <div className="grid grid-cols-12 gap-3 mb-3 px-1 text-gray-400 text-xs">
+              <span className="col-span-8 font-medium">Name</span>
+              <span className="col-span-4 font-medium text-right">
+                Progress
+              </span>
+            </div>
+            <div className="overflow-y-auto flex-1 pr-1">
+              {membersInKhatma
+                .sort((a, b) => b.progress - a.progress)
+                .map((user, index) => (
+                  <div
+                    key={`${user.groupMembership.userName}-${index}`}
+                    className={`grid grid-cols-12 gap-3 py-2 px-2 hover:bg-[var(--dark-color)] rounded-lg transition-colors items-center cursor-pointer text-sm ${
+                      index === 0 ? "bg-[var(--dark-color)]" : ""
+                    }`}
+                  >
+                    <span className="col-span-8 flex items-center gap-2">
+                      <div className="w-6 h-6 bg-[var(--dark-color)] rounded-full flex items-center justify-center text-xs font-bold">
+                        #{index + 1}
+                      </div>
+                      <span
+                        className={`truncate ${index === 0 ? "text-[var(--o-color)]" : "text-white"}`}
+                      >
+                        {user.groupMembership.username}
+                      </span>
+                    </span>
+                    <span className="col-span-4 text-right">
+                      <span
+                        className={`font-bold ${index === 0 ? "text-[var(--o-color)]" : "text-[var(--b-color)]"}`}
+                      >
+                        {user.progress}%
+                      </span>
+                    </span>
+                  </div>
+                ))}
             </div>
           </div>
 
-          <div>
-            <label className="text-[var(--w-color)] block mb-2">
-              Target Finish Date
-            </label>
-            <input
-              type="datetime-local"
-              value={finishDate}
-              onChange={(e) => setFinishDate(e.target.value)}
-              className="w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-[5px] border border-[var(--g-color)] py-2 px-4"
-              required
-            />
+          <div className="bg-[var(--main-color)] rounded-lg text-white p-6">
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-2">Ready to join?</h3>
+              <p className="text-sm text-gray-300 mb-4">
+                Join this khatma and get your share of verses to complete
+              </p>
+              <button
+                onClick={handleJoinKhatma}
+                className="w-full bg-[var(--o-color)] hover:bg-[var(--o-color-hover)] text-white py-3 px-4 rounded-lg font-semibold transition-colors"
+              >
+                Join Khatma
+              </button>
+              <p className="text-xs text-gray-400 mt-2">
+                You'll be assigned a portion of verses to complete
+              </p>
+            </div>
           </div>
-
-          {error && <p className="text-[var(--r-color)]">{error}</p>}
-
-          <div className="flex justify-end space-x-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-[var(--w-color)] bg-[var(--g-color)] rounded-[4px]"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`px-4 py-2 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] hover:bg-[var(--b-color-hover)] ${
-                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            >
-              {isSubmitting ? "Joining..." : "Join Khatma"}
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default function KhatmasContent() {
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [isMember, setIsMember] = useState(false);
   const [isCheckingMembership, setIsCheckingMembership] = useState(true);
   const [membershipData, setMembershipData] = useState(null);
-  const { khatmaDetails, khatmaMembership, setKhatmaSelfMembership } =
-    useKhatmaStore();
+  const {
+    khatmaDetails,
+    khatmaMembership,
+    setKhatmaSelfMembership,
+    membersInKhatma,
+    joinKhatma,
+  } = useKhatmaStore();
   const { quranChapters } = useQuranHeaderChapter();
   const { user } = useUserStore();
 
@@ -178,83 +233,32 @@ export default function KhatmasContent() {
           }
         }
       }
+      setIsCheckingMembership(false);
     };
     checkingMemberShip();
-  }, [khatmaMembership]);
+  }, [khatmaMembership, user, setKhatmaSelfMembership]);
 
-//   if (isCheckingMembership) {
-//     return (
-//       <div className="flex justify-center items-center h-20">
-        {/* <p className="text-[var(--g-color)]">Checking membership...</p> */}
-      {/* </div> */}
-//     );
-  // }
+  if (isCheckingMembership) {
+    return (
+      <div className="flex w-full flex-1 flex-col overflow-y-auto no-scrollbar justify-center items-center">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto no-scrollbar">
       <div className="flex w-full flex-col flex-1 relative justify-center items-center">
-        <KhatmasProgress quranChapters={quranChapters} />
-
-        {/* <div className="flex flex-col items-center justify-center mt-4 mb-6 gap-2">
-          {membershipError && (
-            <p className="text-[var(--r-color)] text-sm">{membershipError}</p>
-          )}
-
-          {isMember ? (
-            <button
-              className="py-2 px-5 text-[var(--w-color)] bg-[var(--g-color)] rounded-[4px] cursor-default"
-              disabled
-            >
-              Joined
-            </button>
-          ) : (
-            <button
-              onClick={() => setShowJoinForm(true)}
-              className="hover:bg-[var(--b-color-hover)] py-2 px-5 text-[var(--w-color)] bg-[var(--b-color)] rounded-[4px] transition-colors duration-200"
-            >
-              Join
-            </button>
-          )}
-        </div> */}
+        {isMember ? (
+          <KhatmasProgress quranChapters={quranChapters} />
+        ) : (
+          <JoinKhatma
+            khatmaDetails={khatmaDetails}
+            membersInKhatma={membersInKhatma}
+            joinKhatma={joinKhatma}
+          />
+        )}
       </div>
-
-      {/* {isMember ? (
-        <>
-          <div className="flex flex-col">
-            <Personal
-              startSurah={membershipData.startShareSurah}
-              startVerse={membershipData.startShareVerse}
-              endSurah={membershipData.endShareSurah}
-              endVerse={membershipData.endShareVerse}
-              currentSurah={membershipData.currentSurah}
-              currentVerse={membershipData.currentVerse}
-              progress={membershipData.progress}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <Group groupId={groupId} khatmaId={khatmaId} />
-          </div>
-
-          <div className="flex flex-col">
-            <Members groupId={groupId} khatmaId={khatmaId} />
-          </div>
-        </>
-      ) : (
-        <div className="flex justify-center items-center p-4">
-          <p className="text-[var(--g-color)]">
-            Join the khatma to see your progress and group details
-          </p>
-        </div>
-      )}
-
-      {showJoinForm && (
-        <JoinKhatmaForm
-          onClose={() => setShowJoinForm(false)}
-          khatmaId={khatmaId}
-          groupId={groupId}
-        />
-      )} */}
     </div>
   );
 }

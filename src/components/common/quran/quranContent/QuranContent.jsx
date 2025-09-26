@@ -119,6 +119,8 @@ export default function QuranContent({
 
   const [userKhatmasProgress, setUserKhatmasProgress] = useState([]);
   const handleUpdateProgress = () => {
+    const newUserKhatmasProgress = [];
+
     userKhatmas.forEach((khatma) => {
       const versesInThisKhatma = readVersesKeys.filter((verseKey) => {
         const [surah, ayah] = verseKey.split(":").map(Number);
@@ -133,13 +135,15 @@ export default function QuranContent({
 
         return true;
       });
+
       const data = {
         versesInThisKhatma,
         khatma,
       };
-      setUserKhatmasProgress((prev) => [...prev, data]);
+      newUserKhatmasProgress.push(data);
     });
 
+    setUserKhatmasProgress(newUserKhatmasProgress);
     setShowUpdateProgressModal(true);
   };
 
@@ -206,7 +210,7 @@ export default function QuranContent({
         )}
       </div>
 
-{/*      <FooterContainer isVisible={isFooterVisible}>
+      {/*      <FooterContainer isVisible={isFooterVisible}>
         <QuranFooter />
       </FooterContainer>*/}
     </div>

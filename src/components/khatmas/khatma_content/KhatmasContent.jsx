@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import KhatmasProgress from "./KhatmasProgress";
-import {
-  postKhatmaMembership,
-  getKhatmaMembership,
-} from "../../../utils/khatma/apiKhatma";
+
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import QuranHeader from "../../chat/khatmas/QuranHeaderCreateKhatma";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import useUserStore from "../../../stores/userStore";
 
@@ -205,51 +201,14 @@ function JoinKhatma({ khatmaDetails, membersInKhatma, joinKhatma }) {
 }
 
 export default function KhatmasContent() {
-  const [showJoinForm, setShowJoinForm] = useState(false);
-  const [isMember, setIsMember] = useState(false);
-  const [isCheckingMembership, setIsCheckingMembership] = useState(true);
-  const [membershipData, setMembershipData] = useState(null);
-  const {
-    khatmaDetails,
-    khatmaMembership,
-    setKhatmaSelfMembership,
-    membersInKhatma,
-    joinKhatma,
-  } = useKhatmaStore();
+  const { khatmaDetails, khatmaMembership, membersInKhatma, joinKhatma } =
+    useKhatmaStore();
   const { quranChapters } = useQuranHeaderChapter();
-  const { user } = useUserStore();
-
-  useEffect(() => {
-    const checkingMemberShip = () => {
-      if (khatmaMembership && user) {
-        for (let index = 0; index < khatmaMembership.length; index++) {
-          const member = khatmaMembership[index];
-          console.log(member);
-          if (member.groupMembership.id === user?.id) {
-            setIsMember(true);
-            setKhatmaSelfMembership(member);
-            setIsCheckingMembership(false);
-            return;
-          }
-        }
-      }
-      setIsCheckingMembership(false);
-    };
-    checkingMemberShip();
-  }, [khatmaMembership, user, setKhatmaSelfMembership]);
-
-  if (isCheckingMembership) {
-    return (
-      <div className="flex w-full flex-1 flex-col overflow-y-auto no-scrollbar justify-center items-center">
-        Loading...
-      </div>
-    );
-  }
 
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto no-scrollbar">
       <div className="flex w-full flex-col flex-1 relative justify-center items-center">
-        {isMember ? (
+        {khatmaMembership ? (
           <KhatmasProgress quranChapters={quranChapters} />
         ) : (
           <JoinKhatma

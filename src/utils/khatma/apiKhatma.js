@@ -33,7 +33,7 @@ export const getKhatmaMembership = async (khatmaId) => {
     const response = await api.get(
       `${API_BASE_URL}/khatma/${khatmaId}/membership/`
     );
-    console.log(response);
+    console.log("response is : ", response);
     return response.data;
   } catch (error) {
     console.error("Error getting khatma membership:", error);

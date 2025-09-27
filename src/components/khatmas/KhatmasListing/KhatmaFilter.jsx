@@ -7,8 +7,6 @@ const FILTER_OPTIONS = [
   { id: "completed", label: "Completed" },
   { id: "ongoing", label: "Ongoing" },
   { id: "zero-progress", label: "0 Progress" },
-  { id: "currently-in", label: "Currently In" },
-  { id: "not-joined", label: "Not Joined Yet" },
 ];
 
 export default function KhatmaFilter({ onFilterChange }) {

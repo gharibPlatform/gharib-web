@@ -42,10 +42,6 @@ export default function KhatmasListing() {
             return status === "ongoing" || status === "active";
           case "zero-progress":
             return progress === 0;
-          case "currently-in":
-            return khatma.isMember;
-          case "not-joined":
-            return !khatma.isMember;
           default:
             return true;
         }

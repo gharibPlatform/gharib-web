@@ -4,6 +4,7 @@ import HomeButton from "../buttons/HomeButton";
 import HumburgerMenu from "../buttons/HumburgerMenu.jsx";
 import NotificationsButton from "../buttons/NotificationsButton.jsx";
 import Notifications from "../notifications/Notification.jsx";
+import GroupsButton from "../buttons/GroupsButton";
 import { useState } from "react";
 
 export default function SideBar() {
@@ -21,6 +22,7 @@ export default function SideBar() {
         <HomeButton />
         <ChatButton />
         <ExploreButton />
+        <GroupsButton />
         <div className="flex flex-col mt-auto gap-6 mb-12">
           <NotificationsButton
             onClick={onClickNotifications}
@@ -41,6 +43,7 @@ export default function SideBar() {
           <HomeButton />
           <ChatButton />
           <ExploreButton />
+          <GroupsButton />
           <NotificationsButton
             onClick={onClickNotifications}
             isActive={isNotificationsActive}

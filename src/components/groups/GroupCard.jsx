@@ -22,9 +22,8 @@ export default function GroupCard({ group, viewMode }) {
       >
         <div
           className="flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center"
-          style={{ background: "var(--b-color)" }}
         >
-          <Users className="w-6 h-6" style={{ color: "var(--w-color)" }} />
+          <DefaultIcon name={group.name} width={12} height={12} />
         </div>
 
         <div className="flex-1 min-w-0">

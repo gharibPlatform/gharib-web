@@ -121,7 +121,7 @@ export const verseByPage = async (
 export const verseByKey = async (key) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/verses/by_key/${key}?words=true&word_fields=verse_id,verse_key,location`
+      `${BASE_URL}/verses/by_key/${key}?words=true&word_fields=verse_id&translations=20,verse_key,location`
     );
     return response.data.verse;
   } catch (error) {

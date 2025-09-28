@@ -3,16 +3,12 @@ import { useRouter } from "next/navigation";
 import {
   Users,
   BookOpen,
-  Calendar,
-  Lock,
   Settings,
   ArrowLeft,
   Plus,
   Search,
-  Filter,
   MoreVertical,
   UserPlus,
-  MessageSquare,
 } from "lucide-react";
 import { ActionButton } from "../common/buttons/ActionButton";
 import GroupMemberCard from "./GroupMemberCard";

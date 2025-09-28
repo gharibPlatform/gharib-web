@@ -118,7 +118,7 @@ export default function GroupsListing() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex rounded-lg p-1" style={{ background: 'var(--input-color)' }}>
+            <div className="flex rounded-[6px] p-1" style={{ background: 'var(--input-color)' }}>
               <button
                 onClick={() => setViewMode("grid")}
                 className={`p-2 rounded ${viewMode === "grid" ? "bg-var(--main-color-hover)" : "hover:bg-var(--main-color-hover)"}`}

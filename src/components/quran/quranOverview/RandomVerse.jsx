@@ -6,7 +6,7 @@ export default function RandomVerse({ randomVerse, surahName }) {
       <div className="bg-[var(--main-color)] border border-[var(--light-color)] rounded-xl p-6 shadow-lg">
         <div
           style={{ fontFamily: `p${pageNumberString}-v1`, direction: "rtl" }}
-          className="flex flex-wrap justify-center text-2xl leading-loose text-white mb-4"
+          className="flex flex-wrap justify-center text-3xl leading-loose text-white mb-4"
         >
           {randomVerse.words.map((word, index) => (
             <span

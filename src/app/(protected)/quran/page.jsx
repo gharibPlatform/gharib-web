@@ -3,10 +3,12 @@ import { useState, useEffect, use } from "react";
 import QuranOverview from "../../../components/quran/quranOverview/QuranOverview";
 import indexToStringSurah from "../../../../indexToStringSurah.json";
 import { verseByKey } from "../../../utils/quran/quran";
+import { listChapters } from "../../../utils/quran/quran";
 
 const Page = () => {
   const [verse, setVerse] = useState(null);
   const [surahName, setSurahName] = useState(null);
+  const [chapters, setChapters] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const getRandomVerse = () => {
@@ -34,16 +36,30 @@ const Page = () => {
       console.log(error);
     }
   };
+
+  const fetchChapters = async () => {
+    try {
+      const chapters = await listChapters();
+      setChapters(chapters);
+      console.log("chapters", chapters);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchChapters();
+  }, []);
+
   useEffect(() => {
     fetchRandomVerse();
   }, []);
 
   useEffect(() => {
-    if (verse) {
+    if (verse && chapters) {
       setIsLoading(false);
-      console.log("verse", verse);
     }
-  }, [verse]);
+  }, [verse, chapters]);
 
   return (
     <div className="overflow-hidden">
@@ -52,7 +68,7 @@ const Page = () => {
           Loading Verse...
         </div>
       ) : (
-        <QuranOverview randomVerse={verse} surahName={surahName} />
+        <QuranOverview chapters={chapters} randomVerse={verse} surahName={surahName} />
       )}
     </div>
   );

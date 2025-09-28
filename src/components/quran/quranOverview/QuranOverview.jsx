@@ -45,6 +45,7 @@ export default function QuranOverview({ chapters, randomVerse, surahName }) {
                 background: "var(--secondary-color)",
                 borderColor: "var(--light-color)",
                 borderRadius: "var(--radius)",
+                fontFamily: "Cairo",
               }}
             >
               <div className="flex items-center justify-between mb-4">
@@ -78,10 +79,11 @@ export default function QuranOverview({ chapters, randomVerse, surahName }) {
 
               <div className="text-right mb-3">
                 <div
-                  className="text-xl font-arabic leading-relaxed transition-colors group-hover:text-[var(--b-color)]"
-                  style={{ color: "var(--w-color)" }}
+                  className="text-3xl font-arabic leading-relaxed transition-colors group-hover:text-[var(--b-color)]"
+                  style={{ color: "var(--w-color)", fontFamily: "surahnames"}}
                 >
-                  {surah.name_arabic}
+                  {surah.id.toString().padStart(3, "0")}
+                  surah 
                 </div>
               </div>
 

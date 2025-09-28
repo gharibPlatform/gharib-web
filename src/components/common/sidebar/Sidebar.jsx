@@ -5,6 +5,7 @@ import HumburgerMenu from "../buttons/HumburgerMenu.jsx";
 import NotificationsButton from "../buttons/NotificationsButton.jsx";
 import Notifications from "../notifications/Notification.jsx";
 import GroupsButton from "../buttons/GroupsButton";
+import QuranButton from "../buttons/QuranButton";
 import { useState } from "react";
 
 export default function SideBar() {
@@ -23,6 +24,7 @@ export default function SideBar() {
         <ChatButton />
         <ExploreButton />
         <GroupsButton />
+        <QuranButton />
         <div className="flex flex-col mt-auto gap-6 mb-12">
           <NotificationsButton
             onClick={onClickNotifications}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, BookOpen, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
-import IndexToString from "../../../../../indexToStringSurah.json";
-import { updatePartsKhatma } from "../../../../utils/khatma/apiKhatma";
+import IndexToString from "../../../../indexToStringSurah.json";
+import { updatePartsKhatma } from "../../../utils/khatma/apiKhatma";
 
 export default function UpdateProgressModal({
   isOpen,

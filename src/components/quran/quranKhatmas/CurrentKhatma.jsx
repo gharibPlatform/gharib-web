@@ -1,6 +1,6 @@
 import { Clock, Users, BookOpen, Edit3 } from "lucide-react";
-import indexToStringSurah from "../../../../../indexToStringSurah.json";
-import { useCalculateTimeLeft } from "../../../../hooks/logic/calculateTimeLeft";
+import indexToStringSurah from "../../../../indexToStringSurah.json";
+import { useCalculateTimeLeft } from "../../../hooks/logic/calculateTimeLeft";
 
 export default function CurrentKhatma({
   name,
@@ -13,7 +13,6 @@ export default function CurrentKhatma({
   isDirty,
   handleUpdateProgress,
 }) {
-  
   const timeLeft = useCalculateTimeLeft(finishDate);
 
   return (

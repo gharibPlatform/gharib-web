@@ -10,10 +10,10 @@ import {
   Users,
 } from "lucide-react";
 
-import useUserStore from "../../../../stores/userStore";
-import useGroupStore from "../../../../stores/groupStore";
-import DefaultIcon from "../../icon/DefaultIcon";
-import indexToString from "../../../../../indexToStringSurah.json";
+import useUserStore from "../../../stores/userStore";
+import useGroupStore from "../../../stores/groupStore";
+import DefaultIcon from "../../common/icon/DefaultIcon";
+import indexToString from "../../../../indexToStringSurah.json";
 
 export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
   const [formData, setFormData] = useState({
@@ -56,7 +56,6 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
       fetchGroups();
     }
   }, [isOpen, fetchGroups]);
-
 
   if (!isOpen) return null;
 

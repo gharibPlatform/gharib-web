@@ -13,7 +13,7 @@ import {
 import { ActionButton } from "../common/buttons/ActionButton";
 import GroupMemberCard from "./GroupMemberCard";
 import GroupKhatmaCard from "./GroupKhatmaCard";
-import CreateKhatmaModal from "../common/quran/quranRightbar/CreateKhatmaModal";
+import CreateKhatmaModal from "../quran/quranRightbar/CreateKhatmaModal";
 import UserSettingsTab from "../chat/chat_content/chat_sidebar/UserSettingsTab";
 import AdminSettingsTab from "../chat/chat_content/chat_sidebar/AdminSettingsTab";
 

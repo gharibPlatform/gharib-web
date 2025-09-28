@@ -1,5 +1,5 @@
 "use client";
-import QuranContent from "../../../../../components/common/quran/quranContent/QuranContent";
+import QuranContent from "../../../../../components/quran/quranContent/QuranContent";
 import { useParams } from "next/navigation";
 import useKhatmaStore from "../../../../../stores/khatmasStore";
 import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore";

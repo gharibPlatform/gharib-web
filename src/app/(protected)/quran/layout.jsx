@@ -1,9 +1,9 @@
 "use client";
-import QuranRightBar from "../../../components/common/quran/quranRightbar/QuranRightBar";
+import QuranRightBar from "../../../components/quran/quranRightbar/QuranRightBar";
 import SideBar from "../../../components/common/sidebar/Sidebar";
 import { useState, useEffect } from "react";
-import QuranVerseModal from "../../../components/common/quran/quranContent/QuranVerseModal";
-import QuranSidebar from "../../../components/common/quran/quranSidebar/QuranSidebar";
+import QuranVerseModal from "../../../components/quran/quranContent/QuranVerseModal";
+import QuranSidebar from "../../../components/quran/quranSidebar/QuranSidebar";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import useQuranHighlightStore from "../../../stores/quranHighlightStore";
 import useKhatmaStore from "../../../stores/khatmasStore";
@@ -11,7 +11,7 @@ import useKhatmaStore from "../../../stores/khatmasStore";
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);
   const [selectedVerse, setSelectedVerse] = useState(null);
-  const [selectedHighlight, setSelectedHighlight] = useState(null); 
+  const [selectedHighlight, setSelectedHighlight] = useState(null);
   const [showSidebar, setShowSidebar] = useState(true);
 
   const toggleRightBar = () => setShowRightBar(!showRightBar);
@@ -96,7 +96,7 @@ const Layout = ({ children }) => {
 
         {showRightBar && (
           <QuranRightBar
-            handleVerseClick={handleVerseClick} 
+            handleVerseClick={handleVerseClick}
             onClose={toggleRightBar}
             highlights={quranHighlights}
             userKhatmas={userKhatmas}

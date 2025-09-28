@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
 import toast from "react-hot-toast";
 import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";

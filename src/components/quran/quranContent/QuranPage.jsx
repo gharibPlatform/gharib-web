@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { audioByVerse } from "../../../../utils/quran/quranAudio";
+import { audioByVerse } from "../../../utils/quran/quranAudio";
 import QuranSurahSeparator from "./QuranSurahSeparator";
 import toast from "react-hot-toast";
-import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
-import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
-import useKhatmaStore from "../../../../stores/khatmasStore";
+import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import useKhatmaStore from "../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
 
 const processVerses = (verses) => {
@@ -165,6 +165,7 @@ export default function QuranPage({
   const observerRef = useRef(null);
   const ref = useRef(null);
 
+  console.log("pageNumberInquranPage is : ", pageNumberString);
   //headerVerse for scroll into view
   const { goToVerse, setQuranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();

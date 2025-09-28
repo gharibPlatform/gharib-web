@@ -1,5 +1,5 @@
 "use client";
-import QuranContent from "../../../../../components/common/quran/quranContent/QuranContent";
+import QuranContent from "../../../../../components/quran/quranContent/QuranContent";
 import { useParams } from "next/navigation";
 import { getChapter } from "../../../../../utils/quran/quran";
 import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore";
@@ -48,7 +48,10 @@ const Page = () => {
 
   return (
     <div>
-      <QuranContent userKhatmas={userKhatmas} isLoadingUserKhatmas={isLoadingUserKhatmas} />
+      <QuranContent
+        userKhatmas={userKhatmas}
+        isLoadingUserKhatmas={isLoadingUserKhatmas}
+      />
     </div>
   );
 };

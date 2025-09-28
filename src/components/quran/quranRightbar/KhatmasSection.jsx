@@ -2,7 +2,7 @@ import CreateKhatmaModal from "./CreateKhatmaModal";
 import KhatmaCard from "./KhatmaCard";
 import { Plus, Target } from "lucide-react";
 import { useState } from "react";
-import { createKhatma } from "../../../../utils/khatma/apiKhatma";
+import { createKhatma } from "../../../utils/khatma/apiKhatma";
 
 export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
   const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);

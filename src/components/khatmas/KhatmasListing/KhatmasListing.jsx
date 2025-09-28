@@ -4,7 +4,7 @@ import KhatmaFilter from "./KhatmaFilter";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
-import CreateKhatmaModal from "../../common/quran/quranRightbar/CreateKhatmaModal";
+import CreateKhatmaModal from "../../quran/quranRightbar/CreateKhatmaModal";
 import { createKhatma } from "../../../utils/khatma/apiKhatma";
 
 export default function KhatmasListing() {

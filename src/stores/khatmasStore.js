@@ -18,7 +18,7 @@ const useKhatmaStore = create((set) => ({
   currentKhatma: null,
   readVersesKeys: [],
   membersInKhatma: [],
-  
+
   setReadVersesKeys: (verseKey) =>
     set((state) => {
       const filteredKeys = state.readVersesKeys.filter(
@@ -63,13 +63,14 @@ const useKhatmaStore = create((set) => ({
 
   fetchGroupKhatmas: async (groupId) => {
     const data = await getKhatmaByGroup(groupId);
-    set({ groupKhatmas: data });
+    set({ groupKhatmas: data.current });
   },
 
   fetchMembersInKhatma: async (khatmaId) => {
     const data = await getKhatmaMembership(khatmaId);
     set({ membersInKhatma: data.results });
   },
+
 }));
 
 export default useKhatmaStore;

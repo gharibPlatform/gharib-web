@@ -19,87 +19,33 @@ import GroupMemberCard from "./GroupMemberCard";
 import GroupKhatmaCard from "./GroupKhatmaCard";
 import CreateKhatmaModal from "../common/quran/quranRightbar/CreateKhatmaModal";
 
-export default function OneGroup({ group }) {
+export default function OneGroup({ group, groupKhatmas }) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("members"); // 'members' or 'khatmas'
+  const [activeTab, setActiveTab] = useState("members");
   const [searchQuery, setSearchQuery] = useState("");
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
-  const [memberFilter, setMemberFilter] = useState("all"); // 'all', 'admin', 'active', 'inactive'
-
-  // Mock data - replace with actual API calls
-  const members = [
-    {
-      id: 1,
-      name: "Ahmed Mohamed",
-      role: "admin",
-      joinDate: "2024-01-15",
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Sarah Ali",
-      role: "member",
-      joinDate: "2024-01-20",
-      status: "active",
-    },
-    {
-      id: 3,
-      name: "Mohammed Hassan",
-      role: "member",
-      joinDate: "2024-02-01",
-      status: "active",
-    },
-    {
-      id: 4,
-      name: "Fatima Abdullah",
-      role: "member",
-      joinDate: "2024-02-10",
-      status: "inactive",
-    },
-  ];
-
-  const khatmas = [
-    {
-      id: 1,
-      name: "Ramadan 2024",
-      progress: 75,
-      totalPages: 604,
-      startDate: "2024-03-10",
-      endDate: "2024-04-10",
-    },
-    {
-      id: 2,
-      name: "Weekly Recitation",
-      progress: 30,
-      totalPages: 604,
-      startDate: "2024-03-01",
-      endDate: "2024-12-31",
-    },
-  ];
+  const [memberFilter, setMemberFilter] = useState("all");
 
   const filteredMembers = useMemo(() => {
-    return members.filter((member) => {
-      const matchesSearch = member.name
+    return group?.members?.filter((member) => {
+      const matchesSearch = member.username
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
-      const matchesFilter =
-        memberFilter === "all" ||
-        (memberFilter === "admin" && member.role === "admin") ||
-        (memberFilter === "active" && member.status === "active") ||
-        (memberFilter === "inactive" && member.status === "inactive");
+      const matchesFilter = memberFilter === "all";
+      // (memberFilter === "admin" && member.role === "admin") ||
 
       return matchesSearch && matchesFilter;
     });
-  }, [members, searchQuery, memberFilter]);
+  }, [group, searchQuery, memberFilter]);
 
-  const filteredKhatmas = useMemo(() => {
-    return khatmas.filter((khatma) =>
+  const filteredgroupKhatmas = useMemo(() => {
+    return groupKhatmas?.filter((khatma) =>
       khatma.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [khatmas, searchQuery]);
+  }, [groupKhatmas, searchQuery]);
 
-  const isAdmin = true; 
+  const isAdmin = true;
 
   return (
     <div
@@ -156,8 +102,8 @@ export default function OneGroup({ group }) {
                   className="text-sm"
                   style={{ color: "var(--lighter-color)" }}
                 >
-                  {group.members_count} members • {group.active_khatmas} active
-                  khatmas
+                  {group.members_count} members • {group.active_groupKhatmas}{" "}
+                  active groupKhatmas
                 </p>
               </div>
             </div>
@@ -168,6 +114,9 @@ export default function OneGroup({ group }) {
               <ActionButton
                 label="Group Settings"
                 onClick={() => console.log("Settings")}
+                isDisabled={false}
+                value={"settings"}
+                isDirty={true}
                 icon={<Settings className="w-4 h-4" />}
                 className="px-4 py-2"
               />
@@ -215,25 +164,25 @@ export default function OneGroup({ group }) {
                   : "var(--lighter-color)",
             }}
           >
-            Members ({members.length})
+            Members ({group?.members?.length})
           </button>
           <button
-            onClick={() => setActiveTab("khatmas")}
+            onClick={() => setActiveTab("groupKhatmas")}
             className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-              activeTab === "khatmas"
+              activeTab === "groupKhatmas"
                 ? "border-var(--b-color) text-var(--b-color)"
                 : "border-transparent text-var(--lighter-color) hover:text-var(--w-color)"
             }`}
             style={{
               borderColor:
-                activeTab === "khatmas" ? "var(--b-color)" : "transparent",
+                activeTab === "groupKhatmas" ? "var(--b-color)" : "transparent",
               color:
-                activeTab === "khatmas"
+                activeTab === "groupKhatmas"
                   ? "var(--b-color)"
                   : "var(--lighter-color)",
             }}
           >
-            Khatmas ({khatmas.length})
+            groupKhatmas ({groupKhatmas.length})
           </button>
         </div>
       </div>
@@ -295,10 +244,13 @@ export default function OneGroup({ group }) {
                   className="px-4 py-2"
                 />
               )}
-              {activeTab === "khatmas" && isAdmin && (
+              {activeTab === "groupKhatmas" && isAdmin && (
                 <ActionButton
                   label="Create Khatma"
                   onClick={() => setShowCreateKhatmaModal(true)}
+                  isDisabled={false}
+                  value={"create-khatma"}
+                  isDirty={true}
                   icon={<Plus className="w-4 h-4" />}
                   className="px-4 py-2"
                 />
@@ -322,7 +274,7 @@ export default function OneGroup({ group }) {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredKhatmas.map((khatma) => (
+              {filteredgroupKhatmas.map((khatma) => (
                 <GroupKhatmaCard
                   key={khatma.id}
                   khatma={khatma}
@@ -335,7 +287,7 @@ export default function OneGroup({ group }) {
           {/* Empty State */}
           {(activeTab === "members"
             ? filteredMembers.length === 0
-            : filteredKhatmas.length === 0) && (
+            : filteredgroupKhatmas.length === 0) && (
             <div className="flex flex-col items-center justify-center py-20">
               <div
                 className="w-24 h-24 rounded-full flex items-center justify-center mb-6"

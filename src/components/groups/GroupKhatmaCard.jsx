@@ -8,9 +8,7 @@ export default function GroupKhatmaCard({ khatma, groupId }) {
     router.push(`/khatmas/${khatma.id}`);
   };
 
-  const progressPercentage = Math.round(
-    (khatma.progress / khatma.totalPages) * 100
-  );
+  const progressPercentage = Math.round(khatma.progress);
 
   return (
     <div
@@ -34,9 +32,6 @@ export default function GroupKhatmaCard({ khatma, groupId }) {
             <h3 className="font-semibold" style={{ color: "var(--w-color)" }}>
               {khatma.name}
             </h3>
-            <span className="text-xs" style={{ color: "var(--lighter-color)" }}>
-              Group Khatma
-            </span>
           </div>
         </div>
         <ArrowRight
@@ -66,18 +61,6 @@ export default function GroupKhatmaCard({ khatma, groupId }) {
       </div>
 
       <div className="space-y-2 text-xs">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Users
-              className="w-3 h-3"
-              style={{ color: "var(--lighter-color)" }}
-            />
-            <span style={{ color: "var(--lighter-color)" }}>Pages:</span>
-          </div>
-          <span style={{ color: "var(--w-color)" }}>
-            {khatma.progress}/{khatma.totalPages}
-          </span>
-        </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             <Calendar

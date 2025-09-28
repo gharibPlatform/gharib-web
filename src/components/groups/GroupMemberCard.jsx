@@ -1,4 +1,5 @@
 import { Users, Crown, MessageSquare, MoreVertical } from "lucide-react";
+import DefaultIcon from "../common/icon/DefaultIcon";
 
 export default function GroupMemberCard({ member, isAdmin, groupId }) {
   const getRoleColor = (role) => {
@@ -20,11 +21,11 @@ export default function GroupMemberCard({ member, isAdmin, groupId }) {
             className="w-10 h-10 rounded-full flex items-center justify-center"
             style={{ background: "var(--b-color)" }}
           >
-            <Users className="w-5 h-5" style={{ color: "var(--w-color)" }} />
+            <DefaultIcon name={member.username} width={10} height={10} />
           </div>
           <div>
             <h3 className="font-semibold" style={{ color: "var(--w-color)" }}>
-              {member.name}
+              {member.username}
             </h3>
             <div className="flex items-center gap-1">
               {member.role === "admin" && (
@@ -48,33 +49,6 @@ export default function GroupMemberCard({ member, isAdmin, groupId }) {
             style={{ color: "var(--lighter-color)" }}
           />
         </button>
-      </div>
-
-      <div className="space-y-2 mb-4">
-        <div className="flex justify-between text-xs">
-          <span style={{ color: "var(--lighter-color)" }}>Status:</span>
-          <span
-            className="px-2 py-1 rounded-full"
-            style={{
-              color:
-                member.status === "active"
-                  ? "var(--b-color)"
-                  : "var(--lighter-color)",
-              background:
-                member.status === "active"
-                  ? "var(--b-color)20"
-                  : "var(--input-color)",
-            }}
-          >
-            {member.status}
-          </span>
-        </div>
-        <div className="flex justify-between text-xs">
-          <span style={{ color: "var(--lighter-color)" }}>Joined:</span>
-          <span style={{ color: "var(--w-color)" }}>
-            {new Date(member.joinDate).toLocaleDateString()}
-          </span>
-        </div>
       </div>
 
       <div className="flex gap-2">

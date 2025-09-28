@@ -9,6 +9,7 @@ export function ActionButton({
   destructive = false,
   onClick,
   className,
+  icon,
 }) {
   const disabled = isDisabled || !value || !!error || !isDirty;
 
@@ -25,6 +26,7 @@ export function ActionButton({
       onClick={onClick}
       disabled={disabled}
     >
+      {icon && <span className="mr-2">{icon}</span>}
       {label}
     </button>
   );

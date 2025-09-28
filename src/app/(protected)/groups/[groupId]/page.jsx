@@ -3,20 +3,21 @@ import { useEffect, useState } from "react";
 import useGroupStore from "../../../../stores/groupStore";
 import OneGroup from "@/components/groups/OneGroup";
 import { useParams } from "next/navigation";
+import useKhatmaStore from "../../../../stores/khatmasStore";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { group, fetchOneGroup } = useGroupStore();
+  const { groupKhatmas, fetchGroupKhatmas } = useKhatmaStore();
   const params = useParams();
-  const groupId = params.groupId; // check your folder name!
-
-  console.log("params: ", params); // 🔹 log this first
+  const groupId = params.groupId;
 
   useEffect(() => {
     const fetch = async () => {
       try {
         console.log("Fetching group with id:", groupId);
         await fetchOneGroup(groupId);
+        await fetchGroupKhatmas(groupId);
         console.log("Done fetching");
       } catch (error) {
         console.log("Error:", error);
@@ -26,11 +27,11 @@ const Page = () => {
   }, [groupId, fetchOneGroup]);
 
   useEffect(() => {
-    if (group) {
-      console.log("group is : ", group);
+    if (group && groupKhatmas) {
       setIsLoading(false);
+      console.log("groupKhatmas is : ", groupKhatmas);
     }
-  }, [group]);
+  }, [group, groupKhatmas]);
 
   return (
     <div className="h-full overflow-hidden ">
@@ -39,7 +40,7 @@ const Page = () => {
           Loading Group...
         </div>
       ) : (
-        <OneGroup group={group} />
+        <OneGroup group={group} groupKhatmas={groupKhatmas} />
       )}
     </div>
   );

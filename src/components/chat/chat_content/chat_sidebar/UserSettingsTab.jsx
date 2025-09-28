@@ -1,6 +1,6 @@
 const UserSettingsTab = ({ notificationSettings, setNotificationSettings }) => {
   return (
-    <div className="p-5 space-y-6">
+    <div className="p-5 space-y-6 text-white">
       <h3 className="font-semibold text-lg mb-2">Notification Settings</h3>
 
       <div className="space-y-4">

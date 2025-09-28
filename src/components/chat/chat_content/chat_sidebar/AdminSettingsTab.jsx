@@ -12,8 +12,8 @@ const AdminSettingsTab = ({
   const [dropdownRotate, setDropdownRotate] = useState(90);
 
   return (
-    <div className="p-5 space-y-6">
-      <h3 className="font-semibold text-lg mb-2">Group Management</h3>
+    <div className="p-5 space-y-6 text-white">
+      <h3 className="font-semibold text-lg mb-2 text-white">Group Management</h3>
 
       <div className="space-y-4">
         <CustomDropdown
@@ -126,7 +126,7 @@ const AdminSettingsTab = ({
 
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium">All can launch khatma</p>
+            <p className="font-medium text-white">All can launch khatma</p>
             <p className="text-sm text-[var(--b-color)]">
               Allow all members to start new khatma sessions
             </p>
@@ -149,7 +149,7 @@ const AdminSettingsTab = ({
 
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium">All can manage code</p>
+            <p className="font-medium text-white">All can manage code</p>
             <p className="text-sm text-[var(--b-color)]">
               Allow all members to manage group codes
             </p>

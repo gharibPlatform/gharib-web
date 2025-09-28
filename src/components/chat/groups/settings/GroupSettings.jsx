@@ -110,11 +110,11 @@ export default function GroupSettings({ groupId }) {
 
     if (forAction === "addMember") {
       setSelectedCustomMembers(
-        localAdvancedSettings?.can_add_member_custom || [],
+        localAdvancedSettings?.can_add_member_custom || []
       );
     } else {
       setSelectedCustomMembers(
-        localAdvancedSettings?.can_send_message_custom || [],
+        localAdvancedSettings?.can_send_message_custom || []
       );
     }
   };
@@ -202,7 +202,7 @@ export default function GroupSettings({ groupId }) {
               setError(
                 err.response?.data?.detail ||
                   err.response?.data?.message ||
-                  "Failed to update group settings",
+                  "Failed to update group settings"
               );
             } finally {
               setLoading(false);
@@ -228,7 +228,7 @@ export default function GroupSettings({ groupId }) {
                   localAdvancedSettings.can_add_member_custom.length === 0)
               ) {
                 throw new Error(
-                  "Please select at least one member who can add members",
+                  "Please select at least one member who can add members"
                 );
               }
 
@@ -238,7 +238,7 @@ export default function GroupSettings({ groupId }) {
                   localAdvancedSettings.can_send_message_custom.length === 0)
               ) {
                 throw new Error(
-                  "Please select at least one member who can send messages",
+                  "Please select at least one member who can send messages"
                 );
               }
 
@@ -291,7 +291,7 @@ export default function GroupSettings({ groupId }) {
                         ]);
                       } else {
                         setSelectedCustomMembers((prev) =>
-                          prev.filter((id) => id !== member.id),
+                          prev.filter((id) => id !== member.id)
                         );
                       }
                     }}

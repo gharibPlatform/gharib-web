@@ -6,6 +6,7 @@ import { verseByKey } from "../../../utils/quran/quran";
 
 const Page = () => {
   const [verse, setVerse] = useState(null);
+  const [surahName, setSurahName] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const getRandomVerse = () => {
@@ -13,17 +14,20 @@ const Page = () => {
     const randomSurahId = surahIds[Math.floor(Math.random() * surahIds.length)];
     const totalVerses = indexToStringSurah[randomSurahId].verses;
     const randomVerseNumber = Math.floor(Math.random() * totalVerses) + 1;
+    const surahName = indexToStringSurah[randomSurahId].name;
 
     const verseKey = `${randomSurahId}:${randomVerseNumber}`;
-    return verseKey;
+    return [verseKey, surahName];
   };
 
   const fetchRandomVerse = async () => {
     try {
-      const randomVerseKey = getRandomVerse();
-
+      const [randomVerseKey, surahName] = getRandomVerse();
+      console.log("randomVerseKey", randomVerseKey);
+      console.log("surahName", surahName);
       const randomVerseData = await verseByKey(randomVerseKey);
       setVerse(randomVerseData);
+      setSurahName(surahName);
       console.log("randomVerseKey", randomVerseKey);
       console.log("randomVerseData", randomVerseData);
     } catch (error) {
@@ -48,7 +52,7 @@ const Page = () => {
           Loading Verse...
         </div>
       ) : (
-        <QuranOverview randomVerse={verse} />
+        <QuranOverview randomVerse={verse} surahName={surahName} />
       )}
     </div>
   );

@@ -1,9 +1,10 @@
 "use client";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import QuranOverview from "../../../components/quran/quranOverview/QuranOverview";
 import indexToStringSurah from "../../../../indexToStringSurah.json";
 import { verseByKey } from "../../../utils/quran/quran";
 import { listChapters } from "../../../utils/quran/quran";
+import SideBar from "../../../components/common/sidebar/Sidebar";
 
 const Page = () => {
   const [verse, setVerse] = useState(null);
@@ -49,9 +50,6 @@ const Page = () => {
 
   useEffect(() => {
     fetchChapters();
-  }, []);
-
-  useEffect(() => {
     fetchRandomVerse();
   }, []);
 
@@ -62,14 +60,22 @@ const Page = () => {
   }, [verse, chapters]);
 
   return (
-    <div className="overflow-hidden">
-      {isLoading ? (
-        <div className="flex justify-center pt-8 text-[var(--g-color)]">
-          Loading Verse...
-        </div>
-      ) : (
-        <QuranOverview chapters={chapters} randomVerse={verse} surahName={surahName} />
-      )}
+    <div className="flex w-screen h-screen">
+      <SideBar />
+
+      <div className="flex-1 overflow-auto">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-full text-[var(--g-color)]">
+            Loading Verse...
+          </div>
+        ) : (
+          <QuranOverview
+            chapters={chapters}
+            randomVerse={verse}
+            surahName={surahName}
+          />
+        )}
+      </div>
     </div>
   );
 };

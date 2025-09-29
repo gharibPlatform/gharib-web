@@ -278,24 +278,46 @@ export default function QuranVerseModal({ verse, highlight, create, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[1000] modal-backdrop bg-black bg-opacity-70 flex items-center justify-center p-4">
-      <div className="bg-[var(--secondary-color)] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+      {/* Backdrop with transition */}
+      <div
+        className="absolute inset-0 bg-black transition-opacity duration-300 ease-in-out"
+        style={{
+          opacity: 0,
+          animation: "fadeIn 0.3s ease-in-out forwards",
+        }}
+      />
+
+      {/* Modal with scale and fade transition */}
+      <div
+        className="bg-[var(--secondary-color)] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-700 transform transition-all duration-300 ease-out"
+        style={{
+          opacity: 0,
+          transform: "scale(0.9) translateY(10px)",
+          animation: "modalEnter 0.3s ease-out forwards 0.1s",
+        }}
+      >
         <div className="p-6">
           <div className="flex justify-between items-start mb-4">
             <h2 className="text-2xl font-bold text-white">{verse.verse_key}</h2>
-            <button onClick={onClose}>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-[var(--main-color)] rounded-lg transition-colors duration-200"
+            >
               <CloseIcon />
             </button>
           </div>
 
           <div className="flex flex-col gap-6">
-            <VerseContent
-              verse={verse}
-              pageNumberString={pageNumberString}
-              onClick={() => goToVerse(verse)}
-            />
+            <div className="transition-all duration-300 ease-in-out">
+              <VerseContent
+                verse={verse}
+                pageNumberString={pageNumberString}
+                onClick={() => goToVerse(verse)}
+              />
+            </div>
 
-            <div className="text-gray-400">
+            <div className="text-gray-400 transition-all duration-300 ease-in-out">
               {isEditing ? (
                 <NoteEditor
                   tempNote={tempNote}
@@ -311,16 +333,40 @@ export default function QuranVerseModal({ verse, highlight, create, onClose }) {
               )}
             </div>
 
-            <VerseInfo verse={verse} />
+            <div className="transition-all duration-300 ease-in-out">
+              <VerseInfo verse={verse} />
+            </div>
 
             {isLoading && (
-              <div className="flex justify-center">
+              <div className="flex justify-center transition-all duration-300 ease-in-out">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--g-color)]"></div>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 0.7;
+          }
+        }
+
+        @keyframes modalEnter {
+          from {
+            opacity: 0;
+            transform: scale(0.9) translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

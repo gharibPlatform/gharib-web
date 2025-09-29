@@ -26,7 +26,8 @@ import { useCurrentReadVerse } from "../../../hooks/quran/useCurrentReadVerse";
 import { usePopupInteractions } from "../../../hooks/quran/usePopupInteractions";
 import { useCacheUpdates } from "../../../hooks/quran/useCacheUpdates";
 import { useHighlightVerse } from "../../../hooks/quran/useHighlightVerse";
-import { patchKhatmaMembership } from "@/utils/khatma/apiKhatma";
+import QuranVerseTranslateModal from "./QuranVerseTranslateModal";
+import { verseByKey } from "@/utils/quran/quran";
 
 export default function QuranContent({
   isLoadingUserKhatmas,
@@ -43,6 +44,11 @@ export default function QuranContent({
   const [verseKey, setVerseKey] = useState();
   const [showHighlightsConfirmation, setShowHighlightsConfirmation] =
     useState(false);
+
+  const [showTranslateConfirmation, setShowTranslateConfirmation] =
+    useState(false);
+
+  const [translation, setTranslation] = useState(null);
 
   const lastScrollTop = useRef(0);
   const scrollRef = useRef(null);
@@ -112,6 +118,13 @@ export default function QuranContent({
     setClickBoxBool,
     setShowHighlightsConfirmation
   );
+
+  const handleTranslateVerse = () => {
+    verseByKey(activeVerse.verse_key).then((resp) => {
+      setTranslation(resp.translations[0].text);
+    });
+    setShowTranslateConfirmation(true);
+  };
 
   const isDirty = khatmaSelfProgress < currentKhatma?.progress;
   const [showUpdateProgressModal, setShowUpdateProgressModal] = useState(false);
@@ -199,6 +212,7 @@ export default function QuranContent({
           playVerse={playVerse}
           setClickBoxBool={setClickBoxBool}
           handleHighlightVerse={handleHighlightVerse}
+          translateVerse={handleTranslateVerse}
         />
 
         {showHighlightsConfirmation && (
@@ -206,6 +220,14 @@ export default function QuranContent({
             create={true}
             verse={activeVerse}
             onClose={() => setShowHighlightsConfirmation(false)}
+          />
+        )}
+
+        {showTranslateConfirmation && (
+          <QuranVerseTranslateModal
+            translation={translation}
+            verse={activeVerse}
+            onClose={() => setShowTranslateConfirmation(false)}
           />
         )}
       </div>

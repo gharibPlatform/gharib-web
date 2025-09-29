@@ -6,6 +6,7 @@ import NotificationsButton from "../buttons/NotificationsButton.jsx";
 import Notifications from "../notifications/Notification.jsx";
 import GroupsButton from "../buttons/GroupsButton";
 import QuranButton from "../buttons/QuranButton";
+import KhatmasButton from "../buttons/KhatmasButton";
 import { useState } from "react";
 
 export default function SideBar() {
@@ -25,6 +26,7 @@ export default function SideBar() {
         <ExploreButton />
         <GroupsButton />
         <QuranButton />
+        <KhatmasButton />
         <div className="flex flex-col mt-auto gap-6 mb-12">
           <NotificationsButton
             onClick={onClickNotifications}

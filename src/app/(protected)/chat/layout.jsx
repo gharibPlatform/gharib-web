@@ -1,6 +1,6 @@
 "use client";
 import ChatRightBar from "../../../components/chat/ChatRightBar";
-import GroupSideBar from "../../../components/chat/group sidebar/GroupSidebar";
+import GroupSideBar from "../../../components/chat/group_sidebar/GroupSidebar";
 import SideBar from "../../../components/common/sidebar/Sidebar";
 import useGroupSidebarStore from "../../../stores/groupSidebarStore";
 

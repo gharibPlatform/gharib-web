@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import CreateDMListingBrothers from "../create dm/CreateDMListingBrothers";
+import CreateDMListingBrothers from "../create_dm/CreateDMListingBrothers";
 import CreateDMConfirmation from "./settings/GroupSettings";
 import Instagram from "../../common/iconButtons/Instagram";
 import Facebook from "../../common/iconButtons/Facebook";

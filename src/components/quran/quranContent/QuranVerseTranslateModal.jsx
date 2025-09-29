@@ -35,9 +35,10 @@ const VerseContent = ({ verse, pageNumberString }) => (
 const TranslationContent = ({ translation }) => (
   <div className="bg-[var(--main-color)] border border-[var(--g-color)] rounded-lg p-4">
     <div className="text-gray-400 text-sm font-medium mb-2">Translation:</div>
-    <div className="text-white text-lg leading-relaxed italic">
-      "{translation}"
-    </div>
+    <div
+      className="text-white text-lg leading-relaxed italic"
+      dangerouslySetInnerHTML={{ __html: translation }}
+    />
   </div>
 );
 

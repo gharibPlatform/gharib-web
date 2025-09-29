@@ -1,4 +1,5 @@
 import { FiCheck, FiUserX, FiSearch, FiUsers } from "react-icons/fi";
+import DefaultIcon from "../../common/icon/DefaultIcon";
 
 export default function CreateDMListingBrothers({
   selectedUsers,
@@ -29,69 +30,70 @@ export default function CreateDMListingBrothers({
   };
 
   return (
-    <div className="overflow-y-auto custom-scrollbar max-h-[500px] py-2">
-      {filteredBrothers.length > 0 ? (
-        <div className="space-y-2">
-          {filteredBrothers.map((brother) => (
-            <div
-              key={brother.id}
-              onClick={() => toggleUser(brother)}
-              className={`flex items-center justify-between cursor-pointer p-3 mx-2 rounded-lg transition-all duration-100 hover:bg-[var(--main-color-hover)]`}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[var(--circle-color)] rounded-full flex items-center justify-center text-[var(--w-color)] font-medium">
-                  {brother.name.charAt(0)}
-                </div>
-                <span className="text-[var(--w-color)] font-medium">
-                  {brother.name}
-                </span>
-              </div>
-
+    <div className="flex flex-col h-full">
+      {/* Scrollable content area */}
+      <div className="flex-grow overflow-y-auto custom-scrollbar py-2">
+        {filteredBrothers.length > 0 ? (
+          <div className="space-y-2">
+            {filteredBrothers.map((brother) => (
               <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 ${
-                  isSelected(brother)
-                    ? "bg-[var(--bright-b-color)] shadow-sm"
-                    : "border-2 border-[var(--g-color)] border-opacity-40 hover:border-[var(--bright-b-color)]"
-                }`}
+                key={brother.id}
+                onClick={() => toggleUser(brother)}
+                className={`flex items-center justify-between cursor-pointer p-3 mx-2 rounded-lg transition-all duration-100 hover:bg-[var(--main-color-hover)]`}
               >
-                {isSelected(brother) && (
-                  <FiCheck className="text-[var(--w-color)]" size={14} />
-                )}
+                <div className="flex items-center gap-3">
+                  <DefaultIcon name={brother.name} height={9} width={9} />
+                  <span className="text-[var(--w-color)] font-medium">
+                    {brother.name}
+                  </span>
+                </div>
+
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 ${
+                    isSelected(brother)
+                      ? "bg-[var(--bright-b-color)] shadow-sm"
+                      : "border-2 border-[var(--g-color)] border-opacity-40 hover:border-[var(--bright-b-color)]"
+                  }`}
+                >
+                  {isSelected(brother) && (
+                    <FiCheck className="text-[var(--w-color)]" size={14} />
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center py-12 px-4 text-[var(--g-color)]">
-          <div className="relative mb-4">
-            {searchQuery ? (
-              <div className="relative">
-                <FiSearch size={48} className="opacity-50" />
-                <div className="absolute -inset-3 bg-[var(--bright-b-color)] bg-opacity-10 rounded-full"></div>
-              </div>
-            ) : (
-              <div className="relative">
-                <FiUsers size={48} className="opacity-50" />
-                <FiUserX
-                  size={24}
-                  className="absolute -top-2 -right-2 opacity-70"
-                />
-              </div>
-            )}
+            ))}
           </div>
-          <p className="text-center text-lg font-medium text-[var(--w-color)] mb-1">
-            {searchQuery ? "No matches found" : "No brothers available"}
-          </p>
-          <p className="text-sm text-center max-w-xs mx-auto leading-relaxed">
-            {searchQuery
-              ? `No results for "${searchQuery}". Try searching with a different name.`
-              : "There are currently no brothers to display in the directory."}
-          </p>
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col items-center justify-center py-12 px-4 text-[var(--g-color)]">
+            <div className="relative mb-4">
+              {searchQuery ? (
+                <div className="relative">
+                  <FiSearch size={48} className="opacity-50" />
+                  <div className="absolute -inset-3 bg-[var(--bright-b-color)] bg-opacity-10 rounded-full"></div>
+                </div>
+              ) : (
+                <div className="relative">
+                  <FiUsers size={48} className="opacity-50" />
+                  <FiUserX
+                    size={24}
+                    className="absolute -top-2 -right-2 opacity-70"
+                  />
+                </div>
+              )}
+            </div>
+            <p className="text-center text-lg font-medium text-[var(--w-color)] mb-1">
+              {searchQuery ? "No matches found" : "No brothers available"}
+            </p>
+            <p className="text-sm text-center max-w-xs mx-auto leading-relaxed">
+              {searchQuery
+                ? `No results for "${searchQuery}". Try searching with a different name.`
+                : "There are currently no brothers to display in the directory."}
+            </p>
+          </div>
+        )}
+      </div>
 
       {selectedUsers.length > 0 && (
-        <div className="sticky bottom-0 left-0 right-0 bg-[var(--main-color-dark)] border-t border-[var(--g-color)] border-opacity-20 p-3 mt-4 backdrop-blur-sm bg-opacity-90">
+        <div className="sticky bottom-0 left-0 right-0 bg-[var(--main-color)] border-t border-[var(--g-color)] border-opacity-20 p-3 mt-auto backdrop-blur-sm bg-opacity-95 z-10">
           <div className="flex items-center justify-center text-sm text-[var(--w-color)]">
             <span className="bg-[var(--bright-b-color)] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2">
               {selectedUsers.length}

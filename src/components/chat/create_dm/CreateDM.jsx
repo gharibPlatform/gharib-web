@@ -42,8 +42,7 @@ export default function CreateDM({ close }) {
   };
 
   return (
-    <div className="relative w-[620px] h-[900px] bg-[var(--main-color)] rounded-lg overflow-hidden border border-[var(--g-color)] border-opacity-30">
-      {/* Create DM Component */}
+    <div className="relative w-[90vw] max-w-2xl h-[90vh] max-h-[900px] bg-[var(--main-color)] rounded-lg overflow-hidden border border-[var(--g-color)] border-opacity-30">
       <div
         className={`absolute inset-0 transition-all duration-300 ease-in-out overflow-y-auto no-scrollbar ${
           showConfirmation
@@ -85,7 +84,10 @@ export default function CreateDM({ close }) {
                 </span>
               ))}
               <div className="flex items-center flex-grow min-w-[120px]">
-                <FiSearch className="text-[var(--g-color)] mr-2 flex-shrink-0" size={20} />
+                <FiSearch
+                  className="text-[var(--g-color)] mr-2 flex-shrink-0"
+                  size={20}
+                />
                 <input
                   ref={inputRef}
                   value={searchQuery}
@@ -109,7 +111,7 @@ export default function CreateDM({ close }) {
               {searchQuery ? "Search Results" : "All Brothers"}
             </h3>
 
-            <div className="h-[560px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="h-[300px] overflow-y-auto pr-2 custom-scrollbar">
               <CreateDMListingBrothers
                 selectedUsers={selectedUsers}
                 toggleUser={toggleUser}
@@ -141,7 +143,6 @@ export default function CreateDM({ close }) {
           </div>
         </div>
       </div>
-
       {/* Confirmation Component */}
       <div
         className={`absolute inset-0 transition-all duration-300 ease-in-out overflow-y-auto no-scrollbar ${

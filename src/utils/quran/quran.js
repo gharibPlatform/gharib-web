@@ -130,6 +130,16 @@ export const verseByKey = async (key) => {
   }
 };
 
+export const tafsirByKey = async (key) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tafsirs/169/by_ayah/${key}`);
+    return response.data.tafsir;
+  } catch (error) {
+    console.error("Error fetching tafsirs by key:", error);
+    throw error;
+  }
+};
+
 export const verseByPageAndChapter = async (
   page,
   chapterId,

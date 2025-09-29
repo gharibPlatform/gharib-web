@@ -41,7 +41,11 @@ const TranslationContent = ({ translation }) => (
   </div>
 );
 
-export default function QuranVerseTranslateModal({ verse, translation, onClose }) {
+export default function QuranVerseTranslateModal({
+  verse,
+  translation,
+  onClose,
+}) {
   const pageNumberString = verse?.page_number.toString().padStart(3, "0");
 
   useEffect(() => {
@@ -56,7 +60,6 @@ export default function QuranVerseTranslateModal({ verse, translation, onClose }
 
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
-      {/* Backdrop with transition */}
       <div
         className="absolute inset-0 bg-black transition-opacity duration-300 ease-in-out modal-backdrop"
         style={{
@@ -65,7 +68,6 @@ export default function QuranVerseTranslateModal({ verse, translation, onClose }
         }}
       />
 
-      {/* Modal with scale and fade transition */}
       <div
         className="bg-[var(--secondary-color)] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-700 transform transition-all duration-300 ease-out"
         style={{
@@ -86,12 +88,10 @@ export default function QuranVerseTranslateModal({ verse, translation, onClose }
           </div>
 
           <div className="flex flex-col gap-6">
-            {/* Arabic Verse */}
             <div className="transition-all duration-300 ease-in-out">
               <VerseContent verse={verse} pageNumberString={pageNumberString} />
             </div>
 
-            {/* Translation */}
             <div className="transition-all duration-300 ease-in-out">
               <TranslationContent translation={translation} />
             </div>

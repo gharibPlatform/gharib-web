@@ -9,6 +9,7 @@ export default function VersePopupController({
   setClickBoxBool,
   handleHighlightVerse,
   translateVerse,
+  handleTafsirVerse,
 }) {
   if (!clickBoxBool) return null;
 
@@ -21,6 +22,7 @@ export default function VersePopupController({
         setClickBoxBool={setClickBoxBool}
         handleHighlightVerse={handleHighlightVerse}
         translateVerse={translateVerse}
+        handleTafsirVerse={handleTafsirVerse}
       />
     </div>
   );

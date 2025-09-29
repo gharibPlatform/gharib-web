@@ -1,4 +1,4 @@
-import { Highlighter } from "lucide-react";
+import { Highlighter, BookOpenText } from "lucide-react";
 export default function VersePopup({
   left,
   top,
@@ -6,6 +6,7 @@ export default function VersePopup({
   setClickBoxBool,
   handleHighlightVerse,
   translateVerse,
+  handleTafsirVerse,
 }) {
   return (
     <div>
@@ -87,6 +88,14 @@ export default function VersePopup({
           >
             <Highlighter />
             <h2 onClick={handleHighlightVerse}>Highlight</h2>
+          </div>
+
+          <div
+            onClick={() => setClickBoxBool(false)}
+            className="cursor-pointer flex flex-row  items-center rounded-sm px-4 py-2 gap-2  hover:bg-[var(--g-color-ver-02)] "
+          >
+            <BookOpenText />
+            <h2 onClick={handleTafsirVerse}>Tafsir</h2>
           </div>
         </div>
       </div>

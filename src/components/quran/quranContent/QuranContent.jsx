@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "../../../stores/pageQuranHeaderStore";
 import useShouldFetch from "../../../stores/shouldFetchStore";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 import useKhatmaStore from "../../../stores/khatmasStore";
+
+import { verseByKey } from "../../../utils/quran/quran";
+import { tafsirByKey } from "../../../utils/quran/quran";
 
 import QuranSurah from "./QuranSurah";
 import QuranFooter from "../QuranFooter";
@@ -14,6 +17,8 @@ import FooterContainer from "./FooterContainer";
 import VersePopupController from "./VersePopupController";
 import verseIndexMap from "../../../../verseIndexMap.json";
 import UpdateProgressModal from "./updateProgressModal";
+import QuranVerseTranslateModal from "./QuranVerseTranslateModal";
+import QuranVeseTafsirModal from "./QuranVerseTafsirModal";
 
 import { useFetchChapterData } from "../../../hooks/quran/useFetchChapterData";
 import { useFetchPageData } from "../../../hooks/quran/useFetchPageData";
@@ -26,8 +31,6 @@ import { useCurrentReadVerse } from "../../../hooks/quran/useCurrentReadVerse";
 import { usePopupInteractions } from "../../../hooks/quran/usePopupInteractions";
 import { useCacheUpdates } from "../../../hooks/quran/useCacheUpdates";
 import { useHighlightVerse } from "../../../hooks/quran/useHighlightVerse";
-import QuranVerseTranslateModal from "./QuranVerseTranslateModal";
-import { verseByKey } from "@/utils/quran/quran";
 
 export default function QuranContent({
   isLoadingUserKhatmas,
@@ -48,7 +51,9 @@ export default function QuranContent({
   const [showTranslateConfirmation, setShowTranslateConfirmation] =
     useState(false);
 
+  const [showTafsirConfirmation, setShowTafsirConfirmation] = useState(false);
   const [translation, setTranslation] = useState(null);
+  const [tafsir, setTafsir] = useState(null);
 
   const lastScrollTop = useRef(0);
   const scrollRef = useRef(null);
@@ -124,6 +129,14 @@ export default function QuranContent({
       setTranslation(resp.translations[0].text);
     });
     setShowTranslateConfirmation(true);
+  };
+
+  const handleTafsirVerse = () => {
+    tafsirByKey(activeVerse.verse_key).then((resp) => {
+      setTafsir(resp.text);
+      console.log("tafsir is :", resp);
+    });
+    setShowTafsirConfirmation(true);
   };
 
   const isDirty = khatmaSelfProgress < currentKhatma?.progress;
@@ -213,6 +226,7 @@ export default function QuranContent({
           setClickBoxBool={setClickBoxBool}
           handleHighlightVerse={handleHighlightVerse}
           translateVerse={handleTranslateVerse}
+          handleTafsirVerse={handleTafsirVerse}
         />
 
         {showHighlightsConfirmation && (
@@ -228,6 +242,14 @@ export default function QuranContent({
             translation={translation}
             verse={activeVerse}
             onClose={() => setShowTranslateConfirmation(false)}
+          />
+        )}
+
+        {showTafsirConfirmation && (
+          <QuranVeseTafsirModal
+            tafsir={tafsir}
+            verse={activeVerse}
+            onClose={() => setShowTafsirConfirmation(false)}
           />
         )}
       </div>

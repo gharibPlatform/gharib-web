@@ -8,7 +8,8 @@ export function useFetchChapterData(
   setCache,
   setLastFetchedPage,
   setPriority,
-  setIsLoading = () => {} 
+  setIsLoading = () => {} ,
+  setLoadedPages,
 ) {
   useEffect(() => {
     if (shouldFetch !== "chapter") return;

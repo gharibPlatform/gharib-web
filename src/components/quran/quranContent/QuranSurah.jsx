@@ -8,8 +8,7 @@ export default function QuranSurah({
   setVerseKey,
   currentKhatma,
   currentReadVerse,
-  isLoading = false, 
-  loadedPages, 
+  isLoading = false,
   totalPages,
 }) {
   const [versesState, setVersesState] = useState({
@@ -25,7 +24,7 @@ export default function QuranSurah({
       const notInKhatmaKeys = new Set();
 
       Object.values(cache)
-        .flat()
+        .flatMap((page) => page.data)
         .forEach((verse) => {
           const [surah, ayah] = verse.verse_key.split(":").map(Number);
 
@@ -59,12 +58,12 @@ export default function QuranSurah({
 
   useEffect(() => {
     console.log("cache is : ", cache);
-  })
+  }, [cache]);
 
   return (
     <div className="flex flex-col items-center justify-center pt-6">
-      {isLoading ? 
-          Array.from({ length: totalPages }).map((_, index) => (
+      {isLoading
+        ? Array.from({ length: totalPages }).map((_, index) => (
             <QuranPage
               key={`skeleton-${index}`}
               verses={[]}
@@ -74,22 +73,21 @@ export default function QuranSurah({
               setVerseKey={setVerseKey}
               versesState={versesState}
               currentReadVerse={currentReadVerse}
-              isLoading={true}
+              isLoaded={false} 
               totalPages={totalPages}
             />
           ))
-        :
-          Object.entries(cache).map(([pageNumber, verses]) => (
+        : Object.entries(cache).map(([pageNumber, { data, isLoaded }]) => (
             <QuranPage
               key={pageNumber}
-              verses={verses}
+              verses={data}
               pageNumber={pageNumber}
               setClickBoxBool={setClickBoxBool}
               setBoxPosition={setBoxPosition}
               setVerseKey={setVerseKey}
               versesState={versesState}
               currentReadVerse={currentReadVerse}
-              isLoading={false}
+              isLoaded={isLoaded} 
               totalPages={totalPages}
             />
           ))}

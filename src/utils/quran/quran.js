@@ -67,7 +67,11 @@ export const verseByChapter = async (
 
       if (response.length === 0) break;
 
-      allVerses[currentPage] = response;
+      allVerses[currentPage] = {
+        data: response,
+        isLoaded: true,
+      };
+      
       pagesFetched++;
     }
 

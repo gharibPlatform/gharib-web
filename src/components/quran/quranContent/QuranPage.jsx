@@ -192,7 +192,8 @@ export default function QuranPage({
   setVerseKey,
   versesState,
   currentReadVerse,
-  isLoading = true,
+  isLoaded = false,
+  totalPages,
 }) {
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
@@ -210,7 +211,7 @@ export default function QuranPage({
   const { readVersesKeys, setReadVersesKeys } = useKhatmaStore();
   const router = useRouter();
 
-  if (isLoading || !verses || verses.length === 0) {
+  if (!isLoaded || !verses || verses.length === 0) {
     return <QuranPageSkeleton pageNumber={pageNumber} />;
   }
 

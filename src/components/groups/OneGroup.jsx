@@ -26,7 +26,6 @@ export default function OneGroup({ group, groupKhatmas }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [memberFilter, setMemberFilter] = useState("all");
 
-  // Settings states
   const [notificationSettings, setNotificationSettings] = useState({
     enabled: true,
   });
@@ -62,13 +61,10 @@ export default function OneGroup({ group, groupKhatmas }) {
 
   const isAdmin = true;
 
-  // Handle save settings
   const handleSaveSettings = async () => {
     setLoading(true);
     try {
-      // Here you would typically make an API call to save the settings
       console.log("Saving settings:", { notificationSettings, adminSettings });
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setShowSettingsModal(false);
     } catch (error) {
@@ -78,7 +74,6 @@ export default function OneGroup({ group, groupKhatmas }) {
     }
   };
 
-  // Settings Modal Component
   const SettingsModal = () => {
     const [settingsTab, setSettingsTab] = useState("user");
 
@@ -474,20 +469,6 @@ export default function OneGroup({ group, groupKhatmas }) {
                   ? "Try adjusting your search terms"
                   : `This group has no ${activeTab} yet`}
               </p>
-              {!searchQuery && isAdmin && (
-                <ActionButton
-                  label={
-                    activeTab === "members"
-                      ? "Invite your first member"
-                      : "Create your first khatma"
-                  }
-                  onClick={
-                    activeTab === "members"
-                      ? () => setShowInviteModal(true)
-                      : () => setShowCreateKhatmaModal(true)
-                  }
-                />
-              )}
             </div>
           )}
         </div>

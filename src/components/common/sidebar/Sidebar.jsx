@@ -19,11 +19,9 @@ export default function SideBar() {
 
   return (
     <>
-      {/* Desktop Sidebar */}
       <div className="hidden md:flex relative bg-[var(--dark-color)] p-2 flex-col gap-6 items-center h-full border-r border-[var(--g-color)] overflow-hidden">
         <HomeButton />
         <ChatButton />
-        <ExploreButton />
         <GroupsButton />
         <QuranButton />
         <KhatmasButton />

@@ -228,12 +228,6 @@ export default function GroupsListing() {
             >
               {emptyState.subtitle}
             </p>
-            {!searchQuery && activeFilters.length === 0 && (
-              <ActionButton
-                label="Create your first group"
-                onClick={() => setShowCreateGroupModal(true)}
-              />
-            )}
           </div>
         )}
       </div>

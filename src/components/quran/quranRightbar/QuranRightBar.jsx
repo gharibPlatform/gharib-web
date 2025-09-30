@@ -20,7 +20,7 @@ export default function QuranRightBar({
 
   if (isCollapsed) {
     return (
-      <div className="w-16 border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col items-center py-4">
+      <div className="w-16 border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col items-center py-4 px-2 z-10">
         <button
           onClick={toggleCollapse}
           className="p-2 rounded-full hover:bg-[var(--main-dark-color)] mb-6 transition-colors"

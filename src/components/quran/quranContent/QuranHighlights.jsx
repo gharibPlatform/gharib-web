@@ -1,6 +1,7 @@
 import { verseByKey } from "../../../utils/quran/quran";
 import { useEffect, useState } from "react";
 import QuranHighlightsVerse from "./QuranHighlightsVerse";
+import { Bookmark, Loader2 } from "lucide-react";
 
 export default function QuranHighlights({
   handleVerseClick,
@@ -67,17 +68,26 @@ export default function QuranHighlights({
   };
 
   return (
-    <>
+    <div className="space-y-3">
       {isLoadingHighlights ? (
-        <div className="text-[var(--lighter-color)] text-center pt-2">
-          Loading your highlights...
+        <div className="flex items-center justify-center py-8 text-[var(--g-color)]">
+          <Loader2 className="h-5 w-5 animate-spin text-[var(--o-color)] mr-2" />
+          <p className="text-sm">Loading highlights...</p>
         </div>
       ) : !highlights || highlights.length === 0 ? (
-        <div className="text-[var(--lighter-color)] text-center pt-4">
-          No highlights yet. Click on a verse to create your first highlight!
+        <div className="text-center py-8 text-[var(--g-color)]">
+          <Bookmark className="w-8 h-8 text-[var(--o-color)] mx-auto mb-2" />
+          <p className="text-sm">No highlights yet</p>
+          <p className="text-xs mt-1">Click on a verse to highlight it</p>
         </div>
       ) : (
-        <div className="flex flex-col text-white flex-wrap px-2 gap-6 pt-2">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 mb-2 m-4">
+            <Bookmark className="w-4 h-4 text-[var(--o-color)]" />
+            <span className="text-[var(--w-color)] text-sm font-medium">
+              Your Highlights ({highlights.length})
+            </span>
+          </div>
           {sortedVerseKeys.map((verseKey) => {
             const verseData = verses[verseKey];
             const highlight = highlights.find(
@@ -96,6 +106,6 @@ export default function QuranHighlights({
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }

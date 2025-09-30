@@ -51,7 +51,7 @@ export default function QuranRightBar({
   }
 
   return (
-    <div className="overflow-y-auto w-[620px] border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col pb-5">
+    <div className="overflow-y-auto w-[620px] border-l border-[var(--g-color)] bg-[var(--main-color)] flex flex-col">
       {/* Header */}
       <div className="flex justify-between items-center p-4 border-b border-[var(--g-color)] sticky top-0 bg-[var(--main-color)] z-10">
         <div className="flex items-center gap-3">

@@ -223,7 +223,10 @@ export default function QuranContent({
           setVerseKey={setVerseKey}
           currentKhatma={currentKhatma}
           currentReadVerse={currentReadVerse}
-          isLoading={isLoading} 
+          isLoading={isLoading}
+          totalPages={
+            quranHeaderChapter?.pages[1] - quranHeaderChapter?.pages[0] + 1
+          }
         />
 
         <VersePopupController

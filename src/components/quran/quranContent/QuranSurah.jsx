@@ -9,6 +9,8 @@ export default function QuranSurah({
   currentKhatma,
   currentReadVerse,
   isLoading = false, 
+  loadedPages, 
+  totalPages,
 }) {
   const [versesState, setVersesState] = useState({
     alreadyRead: new Set(),
@@ -55,10 +57,14 @@ export default function QuranSurah({
     }
   }, [currentKhatma, cache, isLoading]);
 
+  useEffect(() => {
+    console.log("cache is : ", cache);
+  })
+
   return (
     <div className="flex flex-col items-center justify-center pt-6">
       {isLoading ? 
-          Array.from({ length: 3 }).map((_, index) => (
+          Array.from({ length: totalPages }).map((_, index) => (
             <QuranPage
               key={`skeleton-${index}`}
               verses={[]}
@@ -69,6 +75,7 @@ export default function QuranSurah({
               versesState={versesState}
               currentReadVerse={currentReadVerse}
               isLoading={true}
+              totalPages={totalPages}
             />
           ))
         :
@@ -83,6 +90,7 @@ export default function QuranSurah({
               versesState={versesState}
               currentReadVerse={currentReadVerse}
               isLoading={false}
+              totalPages={totalPages}
             />
           ))}
     </div>

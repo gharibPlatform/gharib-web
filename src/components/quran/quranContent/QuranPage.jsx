@@ -192,7 +192,7 @@ export default function QuranPage({
   setVerseKey,
   versesState,
   currentReadVerse,
-  isLoading = false,
+  isLoading = true,
 }) {
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);

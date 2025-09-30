@@ -71,13 +71,17 @@ export default function QuranContent({
   const { shouldFetch } = useShouldFetch();
   const { currentKhatma, khatmaDetails } = useKhatmaStore();
 
+  const [isLoadingQuranData, setIsLoadingQuranData] = useState(true);
+  const [isLoadingCurrentKhatma, setIsLoadingCurrentKhatma] = useState(true);
+
   useFetchPageData(
     shouldFetch,
     quranHeaderPage,
     quranHeaderChapter,
     setQuranHeaderChapter,
     setGoToPath,
-    setCache
+    setCache,
+    setIsLoadingQuranData
   );
   useFetchChapterData(
     shouldFetch,
@@ -85,7 +89,8 @@ export default function QuranContent({
     currentKhatma,
     setCache,
     setLastFetchedPage,
-    setPriority
+    setPriority,
+    setIsLoadingQuranData
   );
 
   useScrollHandling(
@@ -177,6 +182,9 @@ export default function QuranContent({
     console.log("Updated progress:", userKhatmasProgress);
   }, [userKhatmasProgress]);
 
+  const isLoading =
+    isLoadingQuranData || isLoadingUserKhatmas || isLoadingKhatmaDetails;
+
   return (
     <div className="flex flex-col h-screen">
       {shouldFetch === "chapter" && <ProgressTrackerLine progress={progress} />}
@@ -215,6 +223,7 @@ export default function QuranContent({
           setVerseKey={setVerseKey}
           currentKhatma={currentKhatma}
           currentReadVerse={currentReadVerse}
+          isLoading={isLoading} 
         />
 
         <VersePopupController

@@ -7,7 +7,8 @@ export default function QuranSurah({
   setBoxPosition,
   setVerseKey,
   currentKhatma,
-  currentReadVerse
+  currentReadVerse,
+  isLoading = false, 
 }) {
   const [versesState, setVersesState] = useState({
     alreadyRead: new Set(),
@@ -16,33 +17,35 @@ export default function QuranSurah({
   });
 
   useEffect(() => {
-    if (currentKhatma) {
+    if (currentKhatma && !isLoading) {
       const alreadyReadKeys = new Set();
       const notYetReadKeys = new Set();
       const notInKhatmaKeys = new Set();
 
-      Object.values(cache).flat().forEach((verse) => {
-        const [surah, ayah] = verse.verse_key.split(":").map(Number);
+      Object.values(cache)
+        .flat()
+        .forEach((verse) => {
+          const [surah, ayah] = verse.verse_key.split(":").map(Number);
 
-        if (
-          surah > currentKhatma.endShareSurah ||
-          (surah === currentKhatma.endShareSurah &&
-            ayah > currentKhatma.endShareVerse) ||
-          surah < currentKhatma.startShareSurah ||
-          (surah === currentKhatma.startShareSurah &&
-            ayah < currentKhatma.startShareVerse)
-        ) {
-          notInKhatmaKeys.add(verse.verse_key);
-        } else if (
-          surah < currentKhatma.currentSurah ||
-          (surah === currentKhatma.currentSurah &&
-            ayah < currentKhatma.currentVerse)
-        ) {
-          alreadyReadKeys.add(verse.verse_key);
-        } else {
-          notYetReadKeys.add(verse.verse_key);
-        }
-      });
+          if (
+            surah > currentKhatma.endShareSurah ||
+            (surah === currentKhatma.endShareSurah &&
+              ayah > currentKhatma.endShareVerse) ||
+            surah < currentKhatma.startShareSurah ||
+            (surah === currentKhatma.startShareSurah &&
+              ayah < currentKhatma.startShareVerse)
+          ) {
+            notInKhatmaKeys.add(verse.verse_key);
+          } else if (
+            surah < currentKhatma.currentSurah ||
+            (surah === currentKhatma.currentSurah &&
+              ayah < currentKhatma.currentVerse)
+          ) {
+            alreadyReadKeys.add(verse.verse_key);
+          } else {
+            notYetReadKeys.add(verse.verse_key);
+          }
+        });
 
       setVersesState({
         notInKhatma: notInKhatmaKeys,
@@ -50,22 +53,38 @@ export default function QuranSurah({
         notYetRead: notYetReadKeys,
       });
     }
-  }, [currentKhatma, cache]);
+  }, [currentKhatma, cache, isLoading]);
 
   return (
     <div className="flex flex-col items-center justify-center pt-6">
-      {Object.entries(cache).map(([pageNumber, verses]) => (
-        <QuranPage
-          key={pageNumber}
-          verses={verses}
-          pageNumber={pageNumber}
-          setClickBoxBool={setClickBoxBool}
-          setBoxPosition={setBoxPosition}
-          setVerseKey={setVerseKey}
-          versesState={versesState}
-          currentReadVerse={currentReadVerse}
-        />
-      ))}
+      {isLoading ? 
+          Array.from({ length: 3 }).map((_, index) => (
+            <QuranPage
+              key={`skeleton-${index}`}
+              verses={[]}
+              pageNumber={index + 1}
+              setClickBoxBool={setClickBoxBool}
+              setBoxPosition={setBoxPosition}
+              setVerseKey={setVerseKey}
+              versesState={versesState}
+              currentReadVerse={currentReadVerse}
+              isLoading={true}
+            />
+          ))
+        :
+          Object.entries(cache).map(([pageNumber, verses]) => (
+            <QuranPage
+              key={pageNumber}
+              verses={verses}
+              pageNumber={pageNumber}
+              setClickBoxBool={setClickBoxBool}
+              setBoxPosition={setBoxPosition}
+              setVerseKey={setVerseKey}
+              versesState={versesState}
+              currentReadVerse={currentReadVerse}
+              isLoading={false}
+            />
+          ))}
     </div>
   );
 }

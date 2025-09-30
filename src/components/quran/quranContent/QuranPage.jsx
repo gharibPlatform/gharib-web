@@ -150,6 +150,40 @@ const renderAllLines = (
   );
 };
 
+const QuranPageSkeleton = ({ pageNumber }) => {
+  return (
+    <div
+      className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"
+      style={{ minHeight: "100vh" }}
+      data-page-number={pageNumber}
+    >
+      {/* Skeleton lines as big boxes */}
+      <div
+        style={{
+          direction: "rtl",
+        }}
+        className="space-y-4"
+      >
+        {Array.from({ length: 15 }).map((_, lineIndex) => (
+          <div
+            key={`skeleton-line-${lineIndex}`}
+            className="w-full h-10 bg-[var(--light-color)] rounded-sm animate-pulse opacity-20" 
+          />
+        ))}
+      </div>
+
+      {/* Page number skeleton */}
+      <div className="pt-12 gap-6 flex items-center justify-center text-base">
+        <div className="h-[1px] w-1/2 -mx-8 bg-[var(--g-color)] opacity-30"></div>
+        <div className="px-6 text-[var(--lighter-color)] opacity-50">
+          {pageNumber}
+        </div>
+        <div className="h-[1px] w-1/2 -mx-8 bg-[var(--g-color)] opacity-30"></div>
+      </div>
+    </div>
+  );
+};
+
 export default function QuranPage({
   verses,
   pageNumber,
@@ -158,6 +192,7 @@ export default function QuranPage({
   setVerseKey,
   versesState,
   currentReadVerse,
+  isLoading = false,
 }) {
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
@@ -166,6 +201,7 @@ export default function QuranPage({
   const ref = useRef(null);
 
   console.log("pageNumberInquranPage is : ", pageNumberString);
+
   //headerVerse for scroll into view
   const { goToVerse, setQuranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
@@ -173,6 +209,10 @@ export default function QuranPage({
   const { currentKhatma } = useKhatmaStore();
   const { readVersesKeys, setReadVersesKeys } = useKhatmaStore();
   const router = useRouter();
+
+  if (isLoading || !verses || verses.length === 0) {
+    return <QuranPageSkeleton pageNumber={pageNumber} />;
+  }
 
   useEffect(() => {
     if (goToVerse) {
@@ -234,7 +274,6 @@ export default function QuranPage({
               const allVerseKeysInLine =
                 entry.target.dataset.verseKeys.split(",");
 
-              // Add all verses to store
               allVerseKeysInLine.forEach((verseKey) => {
                 setReadVersesKeys(verseKey.trim());
               });

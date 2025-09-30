@@ -7,7 +7,8 @@ export function useFetchChapterData(
   currentKhatma,
   setCache,
   setLastFetchedPage,
-  setPriority
+  setPriority,
+  setIsLoading = () => {} 
 ) {
   useEffect(() => {
     if (shouldFetch !== "chapter") return;
@@ -15,6 +16,8 @@ export function useFetchChapterData(
 
     const fetchData = async () => {
       try {
+        setIsLoading(true);
+
         const updatedCache = currentKhatma
           ? await verseByChapter(
               quranHeaderChapter.id,
@@ -28,9 +31,13 @@ export function useFetchChapterData(
           setLastFetchedPage(+keys[keys.length - 1]);
           setCache(updatedCache);
           setPriority(true);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error fetching chapter data:", error);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 

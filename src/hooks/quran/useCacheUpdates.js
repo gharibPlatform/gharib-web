@@ -2,19 +2,21 @@ import { useEffect } from "react";
 
 export function useCacheUpdates(cache, addedPage, setCache) {
   useEffect(() => {
-    if (addedPage && addedPage.length > 0 && addedPage[0]) {
+    console.log("Added page:", addedPage);
+    if (addedPage && addedPage.length > 0) {
       const page_number = addedPage[0].page_number;
-      if (cache[page_number]) {
-        return;
-      }
+      console.log("Updating cache with page:", page_number, addedPage);
 
-      setCache({
-        ...cache,
-        [page_number]: {
-          data: addedPage,
-          isLoaded: true,
-        },
+      setCache((prevCache) => {
+        console.log("Prev cache:", prevCache);
+        return {
+          ...prevCache,
+          [page_number]: {
+            data: addedPage,
+            isLoaded: true,
+          },
+        };
       });
     }
-  }, [addedPage]);
+  }, [addedPage, setCache]);
 }

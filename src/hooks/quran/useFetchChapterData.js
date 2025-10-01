@@ -8,8 +8,8 @@ export function useFetchChapterData(
   setCache,
   setLastFetchedPage,
   setPriority,
-  setIsLoading = () => {} ,
-  setLoadedPages,
+  setIsLoading = () => {},
+  setLoadedPages
 ) {
   useEffect(() => {
     if (shouldFetch !== "chapter") return;
@@ -28,7 +28,12 @@ export function useFetchChapterData(
           : await verseByChapter(quranHeaderChapter.id);
 
         if (isMounted) {
-          const keys = Object.keys(updatedCache);
+          const loadedPages = Object.values(updatedCache).filter(
+            (page) => page.isLoaded
+          );
+
+          const keys = Object.keys(loadedPages);
+          console.log("keys are : ", keys);
           setLastFetchedPage(+keys[keys.length - 1]);
           setCache(updatedCache);
           setPriority(true);

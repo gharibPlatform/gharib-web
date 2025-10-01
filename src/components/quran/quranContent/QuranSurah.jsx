@@ -62,35 +62,35 @@ export default function QuranSurah({
 
   return (
     <div className="flex flex-col items-center justify-center pt-6">
-      {isLoading
-        ? Array.from({ length: totalPages }).map((_, index) => (
-            <QuranPage
-              key={`skeleton-${index}`}
-              verses={[]}
-              pageNumber={index + 1}
-              setClickBoxBool={setClickBoxBool}
-              setBoxPosition={setBoxPosition}
-              setVerseKey={setVerseKey}
-              versesState={versesState}
-              currentReadVerse={currentReadVerse}
-              isLoaded={false} 
-              totalPages={totalPages}
-            />
-          ))
-        : Object.entries(cache).map(([pageNumber, { data, isLoaded }]) => (
-            <QuranPage
-              key={pageNumber}
-              verses={data}
-              pageNumber={pageNumber}
-              setClickBoxBool={setClickBoxBool}
-              setBoxPosition={setBoxPosition}
-              setVerseKey={setVerseKey}
-              versesState={versesState}
-              currentReadVerse={currentReadVerse}
-              isLoaded={isLoaded} 
-              totalPages={totalPages}
-            />
-          ))}
+      {Object.entries(cache).map(([pageNumber, { data, isLoaded }]) =>
+        !isLoaded ? (
+          <QuranPage
+            key={`skeleton-${pageNumber}`}
+            verses={[]}
+            pageNumber={pageNumber}
+            setClickBoxBool={setClickBoxBool}
+            setBoxPosition={setBoxPosition}
+            setVerseKey={setVerseKey}
+            versesState={versesState}
+            currentReadVerse={currentReadVerse}
+            isLoaded={false}
+            totalPages={totalPages}
+          />
+        ) : (
+          <QuranPage
+            key={pageNumber}
+            verses={data}
+            pageNumber={pageNumber}
+            setClickBoxBool={setClickBoxBool}
+            setBoxPosition={setBoxPosition}
+            setVerseKey={setVerseKey}
+            versesState={versesState}
+            currentReadVerse={currentReadVerse}
+            isLoaded={isLoaded}
+            totalPages={totalPages}
+          />
+        )
+      )}
     </div>
   );
 }

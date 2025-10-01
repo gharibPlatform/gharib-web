@@ -10,15 +10,24 @@ export function useScrollHandling(
   setLastFetchedPage
 ) {
   useEffect(() => {
-    const handleScroll = () => {
-      if (!scrollRef.current) return;
+    let isFetching = false; 
 
+    const handleScroll = () => {
+      if (!scrollRef.current || isFetching) return;
+
+      const totalPages =
+        quranHeaderChapter?.pages[1] - quranHeaderChapter?.pages[0] + 1;
       const scrollHeight = scrollRef.current.scrollHeight;
       const scrollTop = scrollRef.current.scrollTop;
       const innerHeight = window.innerHeight;
 
-      if (scrollTop + innerHeight + 3600 >= scrollHeight && lastFetchedPage) {
+      if (
+        scrollTop + innerHeight + 3600 >=
+          scrollHeight - scrollHeight * totalPages &&
+        lastFetchedPage
+      ) {
         const nextPage = lastFetchedPage + 1;
+        isFetching = true; 
 
         verseByPageAndChapter(
           nextPage,
@@ -26,10 +35,13 @@ export function useScrollHandling(
           currentKhatma?.endShareVerse,
           currentKhatma?.endShareSurah
         ).then((resp) => {
-          setAddedPage(resp);
-        });
+          isFetching = false; 
 
-        setLastFetchedPage(nextPage);
+          if (resp.length > 0 && resp[0].page_number === nextPage) {
+            setAddedPage(resp);
+            setLastFetchedPage(nextPage);
+          }
+        });
       }
     };
 
@@ -41,5 +53,12 @@ export function useScrollHandling(
     return () => {
       scrollableDiv.removeEventListener("scroll", handleScroll);
     };
-  }, [lastFetchedPage, quranHeaderChapter, currentKhatma]);
+  }, [
+    lastFetchedPage,
+    quranHeaderChapter,
+    currentKhatma,
+    setAddedPage,
+    setLastFetchedPage,
+    scrollRef,
+  ]);
 }

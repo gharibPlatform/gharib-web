@@ -60,6 +60,13 @@ export const verseByChapter = async (
     let pagesFetched = 0;
     const maxPagesPerFetch = 5;
 
+    for (let i = firstPage; i <= lastPage; i++) {
+      allVerses[i] = {
+        data: [],
+        isLoaded: false,
+      };
+    }
+
     for (let currentPage = firstPage; currentPage <= lastPage; currentPage++) {
       if (pagesFetched >= maxPagesPerFetch) break;
 
@@ -71,7 +78,7 @@ export const verseByChapter = async (
         data: response,
         isLoaded: true,
       };
-      
+
       pagesFetched++;
     }
 

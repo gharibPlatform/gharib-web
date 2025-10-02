@@ -107,7 +107,6 @@ export default function QuranSurah({
   useEffect(() => {
     if (isLoading) return;
 
-    // Disconnect previous observer
     if (observerRef.current) {
       observerRef.current.disconnect();
     }

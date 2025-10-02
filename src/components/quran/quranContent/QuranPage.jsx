@@ -82,6 +82,7 @@ export default function QuranPage({
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
   const ref = useRef(null);
+  const { activeVerse } = useQuranHeaderVerse();
 
   if (!isLoaded || !verses || verses.length === 0) {
     return <QuranPageSkeleton pageNumber={pageNumber} />;
@@ -115,6 +116,7 @@ export default function QuranPage({
       >
         {renderAllLines(
           verses,
+          activeVerse,
           versesState,
           currentReadVerse,
           handleClick,
@@ -135,6 +137,7 @@ export default function QuranPage({
 
 const renderAllLines = (
   verses,
+  activeVerse,
   versesState,
   currentReadVerse,
   handleClick,
@@ -148,6 +151,7 @@ const renderAllLines = (
       lineNumber,
       allWordsByLine,
       verseStarts,
+      activeVerse,
       versesState,
       currentReadVerse,
       handleClick,
@@ -160,6 +164,7 @@ const renderLine = (
   lineNumber,
   allWordsByLine,
   verseStarts,
+  activeVerse,
   versesState,
   currentReadVerse,
   handleClick,
@@ -197,6 +202,7 @@ const renderLine = (
           word,
           lineNumber,
           wordIndex,
+          activeVerse,
           versesState,
           currentReadVerse,
           handleClick
@@ -210,10 +216,12 @@ const renderWord = (
   word,
   lineNumber,
   wordIndex,
+  activeVerse,
   versesState,
   currentReadVerse,
   handleClick
 ) => {
+  const isActive = activeVerse?.verse_key === word.verse_key; // Check if this word is active
   const isNotYetRead = versesState?.notYetRead.has(word.verse_key);
   const verseNumber = parseInt(word.verse_key.split(":")[1], 10);
   const shouldHighlight = currentReadVerse >= verseNumber && isNotYetRead;
@@ -224,6 +232,7 @@ const renderWord = (
     "inline-block",
     "cursor-pointer",
     "transition-all duration-300 ",
+    isActive ? "bg-[var(--g-color)]" : "",
     isNotYetRead ? "text-[var(--g-color)]" : "",
     shouldHighlight ? "text-[var(--o-color)]" : "",
   ]

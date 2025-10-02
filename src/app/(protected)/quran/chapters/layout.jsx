@@ -7,6 +7,7 @@ import QuranSidebar from "../../../../components/quran/quranSidebar/QuranSidebar
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import useQuranHighlightStore from "../../../../stores/quranHighlightStore";
 import useKhatmaStore from "../../../../stores/khatmasStore";
+import useQuranHeaderVerse from "../../../../stores/verseQuranHeaderStore";
 
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);
@@ -45,25 +46,7 @@ const Layout = ({ children }) => {
   }, [quranHighlights]);
 
   const [isLoadingKhatmas, setIsLoadingKhatmas] = useState();
-  const { userKhatmas, fetchUserKhatmas } = useKhatmaStore();
-
-  // useEffect(() => {
-  //   if (userKhatmas) return;
-  //   const fetch = async () => {
-  //     try {
-  //       await fetchUserKhatmas();
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetch();
-  //   console.log("Done");
-  // }, []);
-
-  // useEffect(() => {
-  //   userKhatmas ? setIsLoadingKhatmas(false) : setIsLoadingKhatmas(true);
-  //   console.log("userkhatmas are : ", userKhatmas);
-  // }, [userKhatmas]);
+  const { userKhatmas } = useKhatmaStore();
 
   return (
     <div className="w-screen overflow-hidden h-screen flex flex-col">

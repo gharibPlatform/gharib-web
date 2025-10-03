@@ -1,11 +1,5 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { audioByVerse } from "../../../utils/quran/quranAudio";
-import QuranSurahSeparator from "./QuranSurahSeparator";
-import toast from "react-hot-toast";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import useKhatmaStore from "../../../stores/khatmasStore";
-import { useRouter } from "next/navigation";
 
 const processVerses = (verses) => {
   const allWordsByLine = {};
@@ -34,9 +28,15 @@ const processVerses = (verses) => {
   return { allWordsByLine, verseStarts };
 };
 
-const QuranPageSkeleton = ({ pageNumber }) => {
+const QuranPageSkeleton = ({ pageNumber, lineRefs }) => {
   return (
     <div
+      ref={(el) => {
+        if (el) {
+          lineRefs.current[pageNumber] = el;
+          el.dataset.pageNumber = pageNumber;
+        }
+      }}
       className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"
       style={{ minHeight: "100vh" }}
       data-page-number={pageNumber}
@@ -85,7 +85,7 @@ export default function QuranPage({
   const { activeVerse } = useQuranHeaderVerse();
 
   if (!isLoaded || !verses || verses.length === 0) {
-    return <QuranPageSkeleton pageNumber={pageNumber} />;
+    return <QuranPageSkeleton pageNumber={pageNumber} lineRefs={lineRefs} />;
   }
 
   const handleClick = (event, verseKey) => {

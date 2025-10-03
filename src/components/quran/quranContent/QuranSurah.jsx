@@ -16,7 +16,6 @@ export default function QuranSurah({
   isLoading = false,
   totalPages,
 }) {
-  const [pageNumberVerseToFetch, setPageNumberVerseToFetch] = useState(null);
   const [versesState, setVersesState] = useState({
     alreadyRead: new Set(),
     notYetRead: new Set(),
@@ -27,32 +26,18 @@ export default function QuranSurah({
   const observerRef = useRef(null);
 
   // Header verse for scroll into view
-  const { goToVerse, setQuranHeaderVerse, activeVerse, setActiveVerse } =
+  const { goToVerse, setQuranHeaderVerse, setActiveVerse } =
     useQuranHeaderVerse();
   const { quranHeaderChapter } = useQuranHeaderChapter();
   const { readVersesKeys, setReadVersesKeys } = useKhatmaStore();
   const router = useRouter();
 
-  const getLineRefs = (pageNumber, loaded = false) => {
+  const getLineRefs = (pageNumber) => {
     if (!lineRefs.current[pageNumber]) {
       lineRefs.current[pageNumber] = { current: {} };
     }
 
-    if (!loaded) {
-      return { current: {} };
-    }
-
     return lineRefs.current[pageNumber];
-  };
-
-  const checkVersePageLoaded = (pageNumber) => {
-    const pageRefs = lineRefs.current[pageNumber];
-    const hasContent = pageRefs && Object.keys(pageRefs.current).length > 0;
-    console.log(
-      hasContent ? "page is loaded with content" : "page not loaded or empty",
-      pageRefs
-    );
-    return hasContent;
   };
 
   const doesVerseExist = (verseKey) => {
@@ -62,20 +47,23 @@ export default function QuranSurah({
       for (const lineNumber in pageRefs.current) {
         const element = pageRefs.current[lineNumber];
         if (element?.dataset.verseKeys?.includes(verseKey)) {
-          return;
+          return {
+            result: true,
+            pageNumber: pageNumber,
+            lineNumber: lineNumber,
+          };
         }
       }
     }
 
-    verseByKey(verseKey).then((resp) => {
-      setPageNumberVerseToFetch(pageNumber);
-    });
+    return { result: false, pageNumber: null, lineNumber: null };
   };
 
   // Scroll to verse logic
   useEffect(() => {
     if (goToVerse) {
       console.log("Navigating to verse:", goToVerse);
+      console.log("lineRefs is : ", lineRefs);
 
       if (quranHeaderChapter.id != goToVerse.split(":")[0]) {
         const goToChapter = goToVerse.split(":")[0];
@@ -83,21 +71,37 @@ export default function QuranSurah({
         return;
       }
 
-      const goToVerseNumber = goToVerse.split(":")[1];
+      const verseCheck = doesVerseExist(goToVerse);
 
-      for (const pageNumber in lineRefs.current) {
-        const pageRefs = lineRefs.current[pageNumber];
-        const foundEntry = Object.values(pageRefs.current).find((el) =>
-          el?.dataset.verseKey.endsWith(`:${goToVerseNumber}`)
-        );
+      if (!verseCheck?.result) {
+        verseByKey(goToVerse).then((resp) => {
+          const targetPageNumber = resp.page_number;
+
+          const pageContainer = document.querySelector(
+            `[data-page-number="${targetPageNumber}"]`
+          );
+
+          if (pageContainer) {
+            pageContainer.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+            setActiveVerse({
+              verse_key: goToVerse,
+            });
+          }
+        });
+      }
+
+      if (verseCheck?.result) {
+        const pageRefs = lineRefs.current[verseCheck.pageNumber];
+        const foundEntry = pageRefs.current[verseCheck.lineNumber];
 
         if (foundEntry) {
-          doesVerseExist(goToVerse);
           foundEntry.scrollIntoView({ behavior: "smooth", block: "center" });
           setActiveVerse({
             verse_key: goToVerse,
           });
-          break;
         }
       }
     }
@@ -173,7 +177,7 @@ export default function QuranSurah({
         observerRef.current.disconnect();
       }
     };
-  }, [cache, isLoading]); 
+  }, [cache, isLoading]);
 
   useEffect(() => {
     if (currentKhatma && !isLoading) {

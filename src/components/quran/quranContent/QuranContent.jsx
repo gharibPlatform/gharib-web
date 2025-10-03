@@ -72,7 +72,6 @@ export default function QuranContent({
   const { currentKhatma, khatmaDetails } = useKhatmaStore();
 
   const [isLoadingQuranData, setIsLoadingQuranData] = useState(true);
-  const [isLoadingCurrentKhatma, setIsLoadingCurrentKhatma] = useState(true);
   const [loadedPages, setLoadedPages] = useState([]);
 
   useFetchPageData(

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,15 +16,25 @@ export const Navbar = () => {
 
       {/* Desktop menu */}
       <div className="hidden md:flex items-center gap-2">
-        <button className="rounded-l-2xl bg-[#EAEAEA] h-10 w-24 md:w-28">Home</button>
+        <button className="rounded-l-2xl bg-[#EAEAEA] h-10 w-24 md:w-28">
+          Home
+        </button>
         <button className="bg-[#EAEAEA] h-10 w-28 md:w-32">Features</button>
-        <button className="rounded-r-2xl bg-[#EAEAEA] h-10 w-24 md:w-28">About Us</button>
+        <button className="rounded-r-2xl bg-[#EAEAEA] h-10 w-24 md:w-28">
+          About Us
+        </button>
       </div>
 
       {/* Right buttons (desktop) */}
       <div className="hidden md:flex items-center gap-3">
-        <button className="border-black border rounded-[10px] h-10 w-20 md:w-24">Get apk</button>
-        <button className="border-none rounded-[10px] h-10 w-20 md:w-24 bg-[#5845EE] text-white">Log in</button>
+        <button className="border-black border rounded-[10px] h-10 w-20 md:w-24">
+          Get apk
+        </button>
+        <Link href="/login">
+          <button className="border-none rounded-[10px] h-10 w-20 md:w-24 bg-[#5845EE] text-white">
+            Log in
+          </button>
+        </Link>
       </div>
 
       {/* Hamburger (mobile) */}
@@ -37,10 +48,18 @@ export const Navbar = () => {
       {isOpen && (
         <div className="absolute top-16 left-0 w-full bg-white shadow-md flex flex-col items-center py-4 gap-4 md:hidden">
           <button className="bg-[#EAEAEA] w-40 h-10 rounded-md">Home</button>
-          <button className="bg-[#EAEAEA] w-40 h-10 rounded-md">Features</button>
-          <button className="bg-[#EAEAEA] w-40 h-10 rounded-md">About Us</button>
-          <button className="border border-black w-40 h-10 rounded-md">Get apk</button>
-          <button className="bg-[#5845EE] text-white w-40 h-10 rounded-md">Log in</button>
+          <button className="bg-[#EAEAEA] w-40 h-10 rounded-md">
+            Features
+          </button>
+          <button className="bg-[#EAEAEA] w-40 h-10 rounded-md">
+            About Us
+          </button>
+          <button className="border border-black w-40 h-10 rounded-md">
+            Get apk
+          </button>
+          <button className="bg-[#5845EE] text-white w-40 h-10 rounded-md">
+            Log in
+          </button>
         </div>
       )}
     </nav>

@@ -61,11 +61,18 @@ export default function QuranSurah({
 
   // Scroll to verse logic
   useEffect(() => {
-    if (goToVerse) {
+    if (goToVerse && quranHeaderChapter) {
       console.log("Navigating to verse:", goToVerse);
       console.log("lineRefs is : ", lineRefs);
 
-      if (quranHeaderChapter.id != goToVerse.split(":")[0]) {
+      console.log(
+        "bool is :",
+        quranHeaderChapter?.id != goToVerse.split(":")[0]
+      );
+
+      console.log("quranHeaderChapter is : ", quranHeaderChapter);
+
+      if (quranHeaderChapter?.id != goToVerse.split(":")[0]) {
         const goToChapter = goToVerse.split(":")[0];
         router.push(`/quran/chapters/${goToChapter}`);
         return;

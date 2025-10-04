@@ -82,7 +82,7 @@ export default function QuranPage({
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
   const ref = useRef(null);
-  const { activeVerse } = useQuranHeaderVerse();
+  const { activeVerse, setActiveVerse } = useQuranHeaderVerse();
 
   if (!isLoaded || !verses || verses.length === 0) {
     return <QuranPageSkeleton pageNumber={pageNumber} lineRefs={lineRefs} />;
@@ -90,6 +90,7 @@ export default function QuranPage({
 
   const handleClick = (event, verseKey) => {
     setClickBoxBool(true);
+    console.log("verseKey", verseKey);
     const rect = event.target.getBoundingClientRect();
 
     setBoxPosition({
@@ -99,6 +100,7 @@ export default function QuranPage({
 
     const completeVerse = verses.find((verse) => verse.verse_key === verseKey);
     setVerseKey(verseKey);
+    setActiveVerse(completeVerse);
   };
 
   return (
@@ -221,7 +223,7 @@ const renderWord = (
   currentReadVerse,
   handleClick
 ) => {
-  const isActive = activeVerse?.verse_key === word.verse_key; // Check if this word is active
+  const isActive = activeVerse?.verse_key === word.verse_key;
   const isNotYetRead = versesState?.notYetRead.has(word.verse_key);
   const verseNumber = parseInt(word.verse_key.split(":")[1], 10);
   const shouldHighlight = currentReadVerse >= verseNumber && isNotYetRead;

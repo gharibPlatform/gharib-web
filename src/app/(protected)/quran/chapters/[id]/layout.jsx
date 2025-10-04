@@ -32,7 +32,8 @@ const Layout = ({ children }) => {
   }, [id, setShouldFetch, setQuranHeaderChapter]);
 
   useEffect(() => {
-    if (verseId) {
+    if (verseId && id >= 1 && id <= 114) {
+      console.log("going to verse : ", verseId);
       setGoToVerse(`${id}:${verseId}`);
     }
   }, [id, verseId, setGoToVerse]);

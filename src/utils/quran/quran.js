@@ -32,6 +32,26 @@ export const getChapterInfo = async (chapterId) => {
   }
 };
 
+export async function verseByPageAndChapterRange(
+  page,
+  chapterId,
+) {
+  const pagesToFetch = [];
+
+  console.log("page is : ", page);
+  for (let i = page - 2; i <= page + 2; i++) {
+    if (i > 0) pagesToFetch.push(i);
+  }
+
+  const results = await Promise.all(
+    pagesToFetch.map((p) =>
+      verseByPageAndChapter(p, chapterId)
+    )
+  );
+
+  return results.flat();
+}
+
 export const verseByChapter = async (
   chapterId,
   firstVerse = null,
@@ -99,6 +119,7 @@ export const verseByPage = async (
     try {
       let lastPage = null;
 
+      console.log("fetching page : ", page);
       if (lastVerse && lastSurah) {
         const lastSurahKey = [lastSurah, lastVerse].join(":");
         const lastSurahData = await verseByKey(lastSurahKey);

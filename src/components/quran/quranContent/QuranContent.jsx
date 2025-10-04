@@ -72,7 +72,6 @@ export default function QuranContent({
   const { currentKhatma, khatmaDetails } = useKhatmaStore();
 
   const [isLoadingQuranData, setIsLoadingQuranData] = useState(true);
-  const [loadedPages, setLoadedPages] = useState([]);
 
   useFetchPageData(
     shouldFetch,
@@ -91,7 +90,6 @@ export default function QuranContent({
     setLastFetchedPage,
     setPriority,
     setIsLoadingQuranData,
-    setLoadedPages
   );
 
   useScrollHandling(
@@ -178,10 +176,6 @@ export default function QuranContent({
     setUserKhatmasProgress(newUserKhatmasProgress);
     setShowUpdateProgressModal(true);
   };
-
-  useEffect(() => {
-    console.log("loaded pages are : ", loadedPages);
-  }, [loadedPages]);
 
   const isLoading =
     isLoadingQuranData || isLoadingUserKhatmas || isLoadingKhatmaDetails;

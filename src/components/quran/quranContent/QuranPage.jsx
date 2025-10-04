@@ -82,7 +82,7 @@ export default function QuranPage({
   const pageNumberString = pageNumber.toString().padStart(3, "0");
   const pageNumberRef = useRef(null);
   const ref = useRef(null);
-  const { activeVerse, setActiveVerse } = useQuranHeaderVerse();
+  const { activeVerse, setActiveVerse, goToVerse } = useQuranHeaderVerse();
 
   if (!isLoaded || !verses || verses.length === 0) {
     return <QuranPageSkeleton pageNumber={pageNumber} lineRefs={lineRefs} />;
@@ -102,6 +102,11 @@ export default function QuranPage({
     setVerseKey(verseKey);
     setActiveVerse(completeVerse);
   };
+
+  useEffect(() => {
+    console.log("goToVerse is : ", goToVerse);
+    console.log("activeVerse is : ", activeVerse);
+  }, [goToVerse, activeVerse]);
 
   return (
     <div

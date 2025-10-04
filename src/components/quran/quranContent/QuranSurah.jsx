@@ -81,26 +81,30 @@ export default function QuranSurah({
       const verseCheck = doesVerseExist(goToVerse);
 
       if (!verseCheck?.result) {
-        verseByKey(goToVerse).then((resp) => {
-          const targetPageNumber = resp.page_number;
+        router.push(`/quran/chapters/${quranHeaderChapter.id}/${goToVerse.split(":")[1]}`);
+        return;
 
-          const pageContainer = document.querySelector(
-            `[data-page-number="${targetPageNumber}"]`
-          );
+        // verseByKey(goToVerse).then((resp) => {
+        //   const targetPageNumber = resp.page_number;
 
-          if (pageContainer) {
-            pageContainer.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-            setActiveVerse({
-              verse_key: goToVerse,
-            });
-          }
-        });
+        //   const pageContainer = document.querySelector(
+        //     `[data-page-number="${targetPageNumber}"]`
+        //   );
+
+        //   if (pageContainer) {
+        //     pageContainer.scrollIntoView({
+        //       behavior: "smooth",
+        //       block: "center",
+        //     });
+        //     setActiveVerse({
+        //       verse_key: goToVerse,
+        //     });
+        //   }
+        // });
       }
 
       if (verseCheck?.result) {
+
         const pageRefs = lineRefs.current[verseCheck.pageNumber];
         const foundEntry = pageRefs.current[verseCheck.lineNumber];
 

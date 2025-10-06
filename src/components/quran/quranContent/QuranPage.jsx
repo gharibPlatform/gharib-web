@@ -103,11 +103,6 @@ export default function QuranPage({
     setActiveVerse(completeVerse);
   };
 
-  useEffect(() => {
-    console.log("goToVerse is : ", goToVerse);
-    console.log("activeVerse is : ", activeVerse);
-  }, [goToVerse, activeVerse]);
-
   return (
     <div
       className="w-10/12 rounded-sm text-[var(--w-color)] text-center text-4xl pl-16 pt-16 relative"

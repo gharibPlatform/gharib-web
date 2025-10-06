@@ -101,13 +101,20 @@ export default function QuranSurah({
     }
   }, [goToVerse]);
 
-  useEffect(() => {
-    if (!pageToFetch ) return;
-    const el = document.querySelector(`[data-page-number="${pageToFetch}"]`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }, [cache[pageToFetch]], pageToFetch);
+  useEffect(
+    () => {
+      if (!pageToFetch) return;
+      const el = document.querySelector(`[data-page-number="${pageToFetch}"]`);
+      if (el) {
+        setActiveVerse({
+          verse_key: goToVerse,
+        });
+        el.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    },
+    [cache[pageToFetch]],
+    pageToFetch
+  );
 
   // Observing logic for intersection observer
   useEffect(() => {

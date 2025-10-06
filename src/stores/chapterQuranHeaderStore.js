@@ -8,6 +8,7 @@ const useQuranHeaderChapter = create((set) => ({
     fromChapter: null,
     toChapter: null,
     quranChapters: null,
+    pageToFetch : null,
   fetchQuranChapters: async () => {
     const data = await listChapters();
     set({ quranChapters: data });
@@ -17,6 +18,7 @@ const useQuranHeaderChapter = create((set) => ({
   setQuranHeaderChapter: (chapter) => set({ quranHeaderChapter: chapter }),
   setPriority: (priority) => set({ priority }),
   setGoToPath: (goToPath) => set({ goToPath }),
+  setPageToFetch: (pageToFetch) => set({ pageToFetch }),
 }));
 
 export default useQuranHeaderChapter;

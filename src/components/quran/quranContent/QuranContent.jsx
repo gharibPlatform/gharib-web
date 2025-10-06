@@ -34,7 +34,6 @@ import { useHighlightVerse } from "../../../hooks/quran/useHighlightVerse";
 
 export default function QuranContent({
   isLoadingUserKhatmas,
-  isKhatmaMode,
   isLoadingKhatmaDetails,
   userKhatmas,
 }) {
@@ -65,6 +64,7 @@ export default function QuranContent({
     setPriority,
     setQuranHeaderChapter,
     setGoToPath,
+    pageToFetch,
   } = useQuranHeaderChapter();
   const { quranHeaderVerse, activeVerse, setActiveVerse } =
     useQuranHeaderVerse();
@@ -89,7 +89,8 @@ export default function QuranContent({
     setCache,
     setLastFetchedPage,
     setPriority,
-    setIsLoadingQuranData,
+    setIsLoadingQuranData
+    // pageToFetch,
   );
 
   useScrollHandling(

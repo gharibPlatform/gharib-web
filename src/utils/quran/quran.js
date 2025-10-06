@@ -32,10 +32,7 @@ export const getChapterInfo = async (chapterId) => {
   }
 };
 
-export async function verseByPageAndChapterRange(
-  page,
-  chapterId,
-) {
+export async function verseByPageAndChapterRange(page, chapterId) {
   const pagesToFetch = [];
 
   console.log("page is : ", page);
@@ -44,67 +41,72 @@ export async function verseByPageAndChapterRange(
   }
 
   const results = await Promise.all(
-    pagesToFetch.map((p) =>
-      verseByPageAndChapter(p, chapterId)
-    )
+    pagesToFetch.map((p) => verseByPageAndChapter(p, chapterId))
   );
 
   return results.flat();
 }
 
-export const verseByChapter = async (
+export const verseByChapterRange = async (
   chapterId,
+  pageToFetch,
   firstVerse = null,
   lastVerse = null
 ) => {
   try {
     let allVerses = {};
     let chapterInfo = await getChapter(chapterId);
-    console.log(chapterInfo);
 
     let firstPage = chapterInfo.pages[0];
     let lastPage = chapterInfo.pages[1];
 
+    let page = pageToFetch || firstPage;
+
     if (firstVerse) {
-      const firstVerseKey = [chapterId, firstVerse].join(":");
+      const firstVerseKey = `${chapterId}:${firstVerse}`;
       const firstVerseData = await verseByKey(firstVerseKey);
       firstPage = firstVerseData.page_number;
     }
 
     if (lastVerse) {
-      const lastVerseKey = [chapterId, lastVerse].join(":");
+      const lastVerseKey = `${chapterId}:${lastVerse}`;
       const lastVerseData = await verseByKey(lastVerseKey);
       lastPage = lastVerseData.page_number;
     }
 
-    let pagesFetched = 0;
-    const maxPagesPerFetch = 5;
+    const pagesToFetch = [];
+    for (let i = page - 2; i <= page + 2; i++) {
+      if (i >= firstPage && i <= lastPage) {
+        pagesToFetch.push(i);
+      }
+    }
 
-    for (let i = firstPage; i <= lastPage; i++) {
-      allVerses[i] = {
+    for (let loadingData = firstPage; loadingData <= lastPage; loadingData++) {
+      allVerses[loadingData] = {
         data: [],
         isLoaded: false,
       };
     }
 
-    for (let currentPage = firstPage; currentPage <= lastPage; currentPage++) {
-      if (pagesFetched >= maxPagesPerFetch) break;
+    console.log("pagesToFetch is : ", pagesToFetch);
 
-      const response = await verseByPageAndChapter(currentPage, chapterId);
-
-      if (response.length === 0) break;
-
-      allVerses[currentPage] = {
-        data: response,
-        isLoaded: true,
-      };
-
-      pagesFetched++;
+    for (let p of pagesToFetch) {
+      console.log("p is : ", p);
+      const response = await verseByPageAndChapter(p, chapterId);
+      if (response && response.length > 0) {
+        console.log("response is : ", response);
+        allVerses[p] = {
+          data: response,
+          isLoaded: true,
+        };
+      }
     }
+
+    console.log("allVerses is : ", allVerses);
 
     return allVerses;
   } catch (error) {
-    console.error("Error fetching verses:", error);
+    console.error("Error fetching verses in range:", error);
     throw error;
   }
 };

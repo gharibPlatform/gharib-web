@@ -142,7 +142,6 @@ export default function QuranSidebar({ onClose }) {
   const [activeTab, setActiveTab] = useState("chapter");
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(quranHeaderChapter);
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);

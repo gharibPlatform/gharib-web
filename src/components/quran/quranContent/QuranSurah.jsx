@@ -28,7 +28,7 @@ export default function QuranSurah({
   // Header verse for scroll into view
   const { goToVerse, setQuranHeaderVerse, setActiveVerse } =
     useQuranHeaderVerse();
-  const { quranHeaderChapter } = useQuranHeaderChapter();
+  const { quranHeaderChapter, pageToFetch } = useQuranHeaderChapter();
   const { readVersesKeys, setReadVersesKeys } = useKhatmaStore();
   const router = useRouter();
 
@@ -81,30 +81,13 @@ export default function QuranSurah({
       const verseCheck = doesVerseExist(goToVerse);
 
       if (!verseCheck?.result) {
-        router.push(`/quran/chapters/${quranHeaderChapter.id}/${goToVerse.split(":")[1]}`);
+        router.push(
+          `/quran/chapters/${quranHeaderChapter.id}/${goToVerse.split(":")[1]}`
+        );
         return;
-
-        // verseByKey(goToVerse).then((resp) => {
-        //   const targetPageNumber = resp.page_number;
-
-        //   const pageContainer = document.querySelector(
-        //     `[data-page-number="${targetPageNumber}"]`
-        //   );
-
-        //   if (pageContainer) {
-        //     pageContainer.scrollIntoView({
-        //       behavior: "smooth",
-        //       block: "center",
-        //     });
-        //     setActiveVerse({
-        //       verse_key: goToVerse,
-        //     });
-        //   }
-        // });
       }
 
       if (verseCheck?.result) {
-
         const pageRefs = lineRefs.current[verseCheck.pageNumber];
         const foundEntry = pageRefs.current[verseCheck.lineNumber];
 
@@ -117,6 +100,14 @@ export default function QuranSurah({
       }
     }
   }, [goToVerse]);
+
+  useEffect(() => {
+    if (!pageToFetch ) return;
+    const el = document.querySelector(`[data-page-number="${pageToFetch}"]`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [cache[pageToFetch]], pageToFetch);
 
   // Observing logic for intersection observer
   useEffect(() => {

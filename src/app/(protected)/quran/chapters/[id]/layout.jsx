@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
-import { getChapter } from "../../../../../utils/quran/quran";
+import { getChapter, verseByKey } from "../../../../../utils/quran/quran";
 
 import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderVerse from "../../../../../stores/verseQuranHeaderStore";
@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
   const setQuranHeaderChapter = useQuranHeaderChapter(
     (state) => state.setQuranHeaderChapter
   );
+  const { pageToFetch, setPageToFetch } = useQuranHeaderChapter();
   const { setGoToVerse } = useQuranHeaderVerse();
   const setShouldFetch = useShouldFetch((state) => state.setShouldFetch);
   const { fetchUserKhatmas } = useKhatmaStore();
@@ -35,6 +36,19 @@ const Layout = ({ children }) => {
     if (verseId && id >= 1 && id <= 114) {
       console.log("going to verse : ", verseId);
       setGoToVerse(`${id}:${verseId}`);
+    }
+  }, [id, verseId, setGoToVerse]);
+
+  useEffect(() => {
+    if (verseId > 1 && id >= 1 && id <= 114) {
+      const fetchVerseData = async () => {
+        const verse = await verseByKey(`${id}:${verseId}`);
+        setPageToFetch(verse.page_number);
+        setGoToVerse(`${id}:${verseId}`);
+      };
+
+      console.log("verseId is : ", verseId);
+      fetchVerseData();
     }
   }, [id, verseId, setGoToVerse]);
 

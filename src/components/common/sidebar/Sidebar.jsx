@@ -14,7 +14,6 @@ export default function SideBar() {
   
   const onClickNotifications = () => {
     setIsNotificationsActive((prev) => !prev);
-    console.log("clicked");
   };
 
   return (

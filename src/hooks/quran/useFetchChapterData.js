@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { verseByChapter } from "../../utils/quran/quran";
+import { verseByChapterRange } from "../../utils/quran/quran";
+import useQuranHeaderChapter from "../../stores/chapterQuranHeaderStore";
 
 export function useFetchChapterData(
   shouldFetch,
@@ -8,24 +9,29 @@ export function useFetchChapterData(
   setCache,
   setLastFetchedPage,
   setPriority,
-  setIsLoading = () => {},
-  setLoadedPages
+  setIsLoading = () => {}
 ) {
+  const { pageToFetch } = useQuranHeaderChapter();
+
   useEffect(() => {
-    if (shouldFetch !== "chapter") return;
+    if (shouldFetch !== "chapter" || !quranHeaderChapter) return;
     let isMounted = true;
 
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        if (pageToFetch) {
+          console.log("pageToFetch is : ", pageToFetch);
+        }
 
         const updatedCache = currentKhatma
-          ? await verseByChapter(
+          ? await verseByChapterRange(
               quranHeaderChapter.id,
+              pageToFetch,
               currentKhatma?.startShareVerse,
               currentKhatma?.endShareVerse
             )
-          : await verseByChapter(quranHeaderChapter.id);
+          : await verseByChapterRange(quranHeaderChapter.id, pageToFetch);
 
         if (isMounted) {
           const loadedPages = Object.values(updatedCache).filter(
@@ -52,5 +58,5 @@ export function useFetchChapterData(
     return () => {
       isMounted = false;
     };
-  }, [quranHeaderChapter, shouldFetch, currentKhatma]);
+  }, [quranHeaderChapter, shouldFetch, currentKhatma, pageToFetch]);
 }

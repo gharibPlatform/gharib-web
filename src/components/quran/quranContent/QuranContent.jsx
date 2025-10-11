@@ -33,6 +33,7 @@ import { useCacheUpdates } from "../../../hooks/quran/useCacheUpdates";
 import { useHighlightVerse } from "../../../hooks/quran/useHighlightVerse";
 
 export default function QuranContent({
+  isKhatmaMode,
   isLoadingUserKhatmas,
   isLoadingKhatmaDetails,
   userKhatmas,
@@ -220,9 +221,7 @@ export default function QuranContent({
           currentKhatma={currentKhatma}
           currentReadVerse={currentReadVerse}
           isLoading={isLoading}
-          totalPages={
-            quranHeaderChapter?.pages[1] - quranHeaderChapter?.pages[0] + 1
-          }
+          isKhatmaMode={isKhatmaMode}
         />
 
         <VersePopupController

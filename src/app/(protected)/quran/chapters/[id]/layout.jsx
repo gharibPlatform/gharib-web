@@ -50,7 +50,7 @@ const Layout = ({ children }) => {
       console.log("verseId is : ", verseId);
       fetchVerseData();
     }
-  }, [id, verseId, setGoToVerse]);
+  }, [verseId, setGoToVerse]);
 
   return <>{children}</>;
 };

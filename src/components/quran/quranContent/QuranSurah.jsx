@@ -14,7 +14,7 @@ export default function QuranSurah({
   currentKhatma,
   currentReadVerse,
   isLoading = false,
-  totalPages,
+  isKhatmaMode,
 }) {
   const [versesState, setVersesState] = useState({
     alreadyRead: new Set(),
@@ -41,27 +41,32 @@ export default function QuranSurah({
   };
 
   const doesVerseExist = (verseKey) => {
-    for (const pageNumber in lineRefs.current) {
-      const pageRefs = lineRefs.current[pageNumber];
+    for (const [pageNumber, pageRefs] of Object.entries(lineRefs.current)) {
+      if (!pageRefs?.current) continue;
 
-      for (const lineNumber in pageRefs.current) {
-        const element = pageRefs.current[lineNumber];
-        if (element?.dataset.verseKeys?.includes(verseKey)) {
-          return {
-            result: true,
-            pageNumber: pageNumber,
-            lineNumber: lineNumber,
-          };
+      for (const [lineNumber, element] of Object.entries(pageRefs.current)) {
+        if (!element?.dataset?.verseKeys) continue;
+        if (element.dataset.verseKeys.split(",").includes(verseKey)) {
+          return { result: true, pageNumber, lineNumber };
         }
       }
     }
-
     return { result: false, pageNumber: null, lineNumber: null };
   };
 
+  useEffect(() => {
+    const cachePageNumbers = new Set(Object.keys(cache));
+
+    for (const pageNumber in lineRefs.current) {
+      if (!cachePageNumbers.has(pageNumber)) {
+        delete lineRefs.current[pageNumber];
+      }
+    }
+  }, [cache]);
+
   // Scroll to verse logic
   useEffect(() => {
-    if (goToVerse && quranHeaderChapter) {
+    if (goToVerse && quranHeaderChapter && !isKhatmaMode) {
       console.log("Navigating to verse:", goToVerse);
       console.log("lineRefs is : ", lineRefs);
 
@@ -80,6 +85,7 @@ export default function QuranSurah({
 
       const verseCheck = doesVerseExist(goToVerse);
 
+      console.log("verseCheck is : ", verseCheck);
       if (!verseCheck?.result) {
         router.push(
           `/quran/chapters/${quranHeaderChapter.id}/${goToVerse.split(":")[1]}`
@@ -91,6 +97,7 @@ export default function QuranSurah({
         const pageRefs = lineRefs.current[verseCheck.pageNumber];
         const foundEntry = pageRefs.current[verseCheck.lineNumber];
 
+        console.log("foundEntry is : ", foundEntry);
         if (foundEntry) {
           foundEntry.scrollIntoView({ behavior: "smooth", block: "center" });
           setActiveVerse({
@@ -122,6 +129,7 @@ export default function QuranSurah({
 
     if (observerRef.current) {
       observerRef.current.disconnect();
+      observerRef.current = null;
     }
 
     const verseKeysLines = {};

@@ -54,6 +54,8 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
+    console.log("chapters is : ", chapters);
+    console.log("verse is : ", verse);
     if (verse && chapters) {
       setIsLoading(false);
     }

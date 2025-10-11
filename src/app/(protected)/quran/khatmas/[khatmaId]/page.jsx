@@ -76,6 +76,9 @@ const Page = () => {
     khatmaMembership.progress != 100;
 
   useEffect(() => {
+    console.log("isValid is : ", isValid);
+    console.log("isLoadingKhatmaDetails is : ", isLoadingKhatmaDetails);
+    
     if (!isValid && !isLoadingKhatmaDetails) {
       router.push("/quran");
     }
@@ -85,6 +88,7 @@ const Page = () => {
     <div>
       <QuranContent
         isKhatmaMode={true}
+        isLoadingUserKhatmas={isLoadingUserKhatmas}
         isLoadingKhatmaDetails={isLoadingKhatmaDetails}
         userKhatmas={userKhatmas}
       />

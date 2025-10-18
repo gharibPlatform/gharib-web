@@ -1,5 +1,5 @@
 "use client";
-import QuranContent from "../../../../../components/quran/quranContent/QuranContent";
+import QuranContent from "../../../../../components/common/quran/quranContent/QuranContent";
 import { useParams } from "next/navigation";
 import useKhatmaStore from "../../../../../stores/khatmasStore";
 import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore";
@@ -69,26 +69,21 @@ const Page = () => {
     }
   }, [userKhatmas]);
 
-  const router = useRouter();
   const isValid =
     khatmaMembership &&
     khatmaMembership.status == "ongoing" &&
     khatmaMembership.progress != 100;
 
   useEffect(() => {
-    console.log("isValid is : ", isValid);
-    console.log("isLoadingKhatmaDetails is : ", isLoadingKhatmaDetails);
-    
-    if (!isValid && !isLoadingKhatmaDetails) {
+    if (!isValid && !isLoadingKhatmaDetails && khatmaMembership) {
       router.push("/quran");
     }
-  }, [isValid, isLoadingKhatmaDetails]);
+  }, [isValid, isLoadingKhatmaDetails, khatmaMembership]);
 
   return (
     <div>
       <QuranContent
         isKhatmaMode={true}
-        isLoadingUserKhatmas={isLoadingUserKhatmas}
         isLoadingKhatmaDetails={isLoadingKhatmaDetails}
         userKhatmas={userKhatmas}
       />

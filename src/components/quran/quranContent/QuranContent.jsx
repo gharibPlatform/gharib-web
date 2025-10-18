@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "../../../stores/pageQuranHeaderStore";
 import useShouldFetch from "../../../stores/shouldFetchStore";
@@ -12,11 +12,9 @@ import {
 import { tafsirByKey } from "../../../utils/quran/quran";
 
 import QuranSurah from "./QuranSurah";
-import QuranFooter from "../QuranFooter";
 import ProgressTrackerLine from "../../common/progress tracker line/ProgressTrackerLine";
 import CurrentKhatma from "../quranKhatmas/CurrentKhatma";
 import QuranVerseModal from "./QuranVerseModal";
-import FooterContainer from "./FooterContainer";
 import VersePopupController from "./VersePopupController";
 import verseIndexMap from "../../../../verseIndexMap.json";
 import UpdateProgressModal from "./updateProgressModal";
@@ -29,10 +27,8 @@ import { useHeaderFooterVisibility } from "../../../hooks/quran/useHeaderFooterV
 import { useKhatmaProgress } from "../../../hooks/quran/useKhatmaProgress";
 import { usePlayVerse } from "../../../hooks/quran/usePlayVerse";
 import { useProgress } from "../../../hooks/quran/useProgress";
-import { useScrollHandling } from "../../../hooks/quran/useScrollHandling";
 import { useCurrentReadVerse } from "../../../hooks/quran/useCurrentReadVerse";
 import { usePopupInteractions } from "../../../hooks/quran/usePopupInteractions";
-import { useCacheUpdates } from "../../../hooks/quran/useCacheUpdates";
 import { useHighlightVerse } from "../../../hooks/quran/useHighlightVerse";
 
 export default function QuranContent({
@@ -96,17 +92,6 @@ export default function QuranContent({
     setIsLoadingQuranData
     // pageToFetch,
   );
-
-  useScrollHandling(
-    scrollRef,
-    lastFetchedPage,
-    quranHeaderChapter,
-    currentKhatma,
-    setAddedPage,
-    setLastFetchedPage
-  );
-
-  useCacheUpdates(cache, addedPage, setCache);
 
   useHeaderFooterVisibility(scrollRef, lastScrollTop, setIsFooterVisible);
   usePopupInteractions(clickBoxBool, boxRef, scrollRef, setClickBoxBool);

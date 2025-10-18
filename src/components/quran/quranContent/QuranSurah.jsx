@@ -15,6 +15,7 @@ export default function QuranSurah({
   currentReadVerse,
   isLoading = false,
   isKhatmaMode,
+  scrollFetchPage,
 }) {
   const [versesState, setVersesState] = useState({
     alreadyRead: new Set(),
@@ -242,8 +243,14 @@ export default function QuranSurah({
   return (
     <div className="flex flex-col items-center justify-center pt-6">
       <Virtuoso
-        style={{ height: "100vh", width: "100%" }}
+        style={{ height: "400vh", width: "100%" }}
         totalCount={Object.keys(cache).length}
+        rangeChanged={({ startIndex }) => {
+          const [pageNumber] = Object.entries(cache)[startIndex] || [];
+          if (pageNumber) {
+            scrollFetchPage(parseInt(pageNumber) + 1);
+          }
+        }}
         itemContent={(index) => {
           const [pageNumber, { data, isLoaded }] = Object.entries(cache)[index];
           return (

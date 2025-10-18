@@ -26,12 +26,12 @@ export function useFetchChapterData(
 
         const updatedCache = currentKhatma
           ? await verseByChapterRange(
-              quranHeaderChapter.id,
+              quranHeaderChapter,
               pageToFetch,
               currentKhatma?.startShareVerse,
               currentKhatma?.endShareVerse
             )
-          : await verseByChapterRange(quranHeaderChapter.id, pageToFetch);
+          : await verseByChapterRange(quranHeaderChapter, pageToFetch);
 
         if (isMounted) {
           const loadedPages = Object.values(updatedCache).filter(

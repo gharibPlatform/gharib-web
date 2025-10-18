@@ -48,14 +48,14 @@ export async function verseByPageAndChapterRange(page, chapterId) {
 }
 
 export const verseByChapterRange = async (
-  chapterId,
+  chapter,
   pageToFetch,
   firstVerse = null,
   lastVerse = null
 ) => {
   try {
     let allVerses = {};
-    let chapterInfo = await getChapter(chapterId);
+    let chapterInfo = chapter;
 
     let firstPage = chapterInfo.pages[0];
     let lastPage = chapterInfo.pages[1];
@@ -63,13 +63,13 @@ export const verseByChapterRange = async (
     let page = pageToFetch || firstPage;
 
     if (firstVerse) {
-      const firstVerseKey = `${chapterId}:${firstVerse}`;
+      const firstVerseKey = `${chapter.id}:${firstVerse}`;
       const firstVerseData = await verseByKey(firstVerseKey);
       firstPage = firstVerseData.page_number;
     }
 
     if (lastVerse) {
-      const lastVerseKey = `${chapterId}:${lastVerse}`;
+      const lastVerseKey = `${chapter.id}:${lastVerse}`;
       const lastVerseData = await verseByKey(lastVerseKey);
       lastPage = lastVerseData.page_number;
     }
@@ -88,13 +88,9 @@ export const verseByChapterRange = async (
       };
     }
 
-    console.log("pagesToFetch is : ", pagesToFetch);
-
     for (let p of pagesToFetch) {
-      console.log("p is : ", p);
-      const response = await verseByPageAndChapter(p, chapterId);
+      const response = await verseByPageAndChapter(p, chapter.id);
       if (response && response.length > 0) {
-        console.log("response is : ", response);
         allVerses[p] = {
           data: response,
           isLoaded: true,
@@ -103,6 +99,30 @@ export const verseByChapterRange = async (
     }
 
     console.log("allVerses is : ", allVerses);
+
+    return allVerses;
+  } catch (error) {
+    console.error("Error fetching verses in range:", error);
+    throw error;
+  }
+};
+
+export const verseByChapterRangeScroll = async (chapter, pagesToFetch) => {
+  try {
+    const allVerses = {};
+    
+    console.log("pagesToFetch is : ", pagesToFetch);
+
+    for (let p of pagesToFetch) {
+      console.log("p is : ", p);
+      const response = await verseByPageAndChapter(p, chapter.id);
+      if (response && response.length > 0) {
+        allVerses[p] = {
+          data: response,
+          isLoaded: true,
+        };
+      }
+    }
 
     return allVerses;
   } catch (error) {

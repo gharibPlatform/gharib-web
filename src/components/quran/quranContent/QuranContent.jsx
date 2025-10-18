@@ -5,7 +5,10 @@ import useShouldFetch from "../../../stores/shouldFetchStore";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 import useKhatmaStore from "../../../stores/khatmasStore";
 
-import { verseByKey } from "../../../utils/quran/quran";
+import {
+  verseByChapterRangeScroll,
+  verseByKey,
+} from "../../../utils/quran/quran";
 import { tafsirByKey } from "../../../utils/quran/quran";
 
 import QuranSurah from "./QuranSurah";
@@ -124,6 +127,36 @@ export default function QuranContent({
     verseIndexMap
   );
 
+  const scrollFetchPage = async (index) => {
+    if (cache[index + 1].isLoaded === true) {
+      return;
+    }
+
+    let pagesToFetch = [];
+
+    for (let i = index - 2; i <= index + 2; i++) {
+      if (cache[i].isLoaded === false) {
+        pagesToFetch.push(i);
+      }
+    }
+
+    try {
+      const updatedCache = await verseByChapterRangeScroll(
+        quranHeaderChapter,
+        pagesToFetch
+      );
+
+      console.log("updatedCache is : ", updatedCache);
+      const fetchedPages = Object.values(updatedCache).filter(
+        (page) => page.isLoaded
+      );
+
+      setCache((prev) => ({ ...prev, ...updatedCache }));
+    } catch (error) {
+      console.error("Error fetching verses:", error);
+    }
+  };
+
   const playVerse = usePlayVerse(setClickBoxBool, verseKey);
   const handleHighlightVerse = useHighlightVerse(
     setClickBoxBool,
@@ -222,6 +255,7 @@ export default function QuranContent({
           currentReadVerse={currentReadVerse}
           isLoading={isLoading}
           isKhatmaMode={isKhatmaMode}
+          scrollFetchPage={scrollFetchPage}
         />
 
         <VersePopupController

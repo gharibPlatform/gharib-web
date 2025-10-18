@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import QuranPage from "./QuranPage";
-import { verseByKey } from "../../../utils/quran/quran";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
+import { Virtuoso } from "react-virtuoso";
 
 export default function QuranSurah({
   cache,
@@ -241,35 +241,27 @@ export default function QuranSurah({
 
   return (
     <div className="flex flex-col items-center justify-center pt-6">
-      {Object.entries(cache).map(([pageNumber, { data, isLoaded }]) =>
-        !isLoaded ? (
-          <QuranPage
-            key={`skeleton-${pageNumber}`}
-            verses={[]}
-            pageNumber={pageNumber}
-            setClickBoxBool={setClickBoxBool}
-            setBoxPosition={setBoxPosition}
-            setVerseKey={setVerseKey}
-            versesState={versesState}
-            currentReadVerse={currentReadVerse}
-            isLoaded={false}
-            lineRefs={getLineRefs(pageNumber)}
-          />
-        ) : (
-          <QuranPage
-            key={pageNumber}
-            verses={data}
-            pageNumber={pageNumber}
-            setClickBoxBool={setClickBoxBool}
-            setBoxPosition={setBoxPosition}
-            setVerseKey={setVerseKey}
-            versesState={versesState}
-            currentReadVerse={currentReadVerse}
-            isLoaded={isLoaded}
-            lineRefs={getLineRefs(pageNumber, true)}
-          />
-        )
-      )}
+      <Virtuoso
+        style={{ height: "100vh", width: "100%" }}
+        totalCount={Object.keys(cache).length}
+        itemContent={(index) => {
+          const [pageNumber, { data, isLoaded }] = Object.entries(cache)[index];
+          return (
+            <QuranPage
+              key={pageNumber}
+              verses={isLoaded ? data : []}
+              pageNumber={pageNumber}
+              setClickBoxBool={setClickBoxBool}
+              setBoxPosition={setBoxPosition}
+              setVerseKey={setVerseKey}
+              versesState={versesState}
+              currentReadVerse={currentReadVerse}
+              isLoaded={isLoaded}
+              lineRefs={getLineRefs(pageNumber)}
+            />
+          );
+        }}
+      />
     </div>
   );
 }

@@ -23,6 +23,7 @@ export default function QuranSurah({
     notInKhatma: new Set(),
   });
 
+  const virtuosoRef = useRef(null);
   const lineRefs = useRef({});
   const observerRef = useRef(null);
 
@@ -95,12 +96,16 @@ export default function QuranSurah({
       }
 
       if (verseCheck?.result) {
-        const pageRefs = lineRefs.current[verseCheck.pageNumber];
-        const foundEntry = pageRefs.current[verseCheck.lineNumber];
+        const pageIndex = Object.keys(cache).indexOf(verseCheck.pageNumber);
 
-        console.log("foundEntry is : ", foundEntry);
-        if (foundEntry) {
-          foundEntry.scrollIntoView({ behavior: "smooth", block: "center" });
+        console.log("pageIndex is : ", pageIndex);
+
+        if (pageIndex !== -1 && virtuosoRef.current) {
+          virtuosoRef.current.scrollToIndex({
+            index: pageIndex,
+            align: "center",
+            behavior: "smooth",
+          });
           setActiveVerse({
             verse_key: goToVerse,
           });
@@ -240,11 +245,22 @@ export default function QuranSurah({
     console.log("cache is : ", cache);
   }, [cache]);
 
+  useEffect(() => {
+    setActiveVerse({
+      verse_key: goToVerse,
+    });
+  }, [pageToFetch]);
+
   return (
-    <div className="flex flex-col items-center justify-center pt-6">
+    <div className="flex flex-col items-center justify-center pt-6 pb-8">
       <Virtuoso
-        style={{ height: "400vh", width: "100%" }}
+        key={pageToFetch || "default"}
+        style={{ height: "100vh", width: "100%" }}
         totalCount={Object.keys(cache).length}
+        increaseViewportBy={1200}
+        initialTopMostItemIndex={
+          pageToFetch ? Object.keys(cache).map(Number).indexOf(pageToFetch) : 0
+        }
         rangeChanged={({ startIndex }) => {
           const [pageNumber] = Object.entries(cache)[startIndex] || [];
           if (pageNumber) {

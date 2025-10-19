@@ -36,6 +36,7 @@ export default function QuranContent({
   isLoadingUserKhatmas,
   isLoadingKhatmaDetails,
   userKhatmas,
+  targetPageIndex,
 }) {
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
@@ -119,7 +120,7 @@ export default function QuranContent({
 
     let pagesToFetch = [];
 
-    for (let i = index - 2; i <= index + 2; i++) {
+    for (let i = index - 1; i <= index + 1; i++) {
       if (cache[i].isLoaded === false) {
         pagesToFetch.push(i);
       }
@@ -241,6 +242,7 @@ export default function QuranContent({
           isLoading={isLoading}
           isKhatmaMode={isKhatmaMode}
           scrollFetchPage={scrollFetchPage}
+          targetPageIndex={targetPageIndex}
         />
 
         <VersePopupController

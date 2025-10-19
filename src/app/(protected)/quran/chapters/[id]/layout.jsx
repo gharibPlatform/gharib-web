@@ -47,7 +47,6 @@ const Layout = ({ children }) => {
         setGoToVerse(`${id}:${verseId}`);
       };
 
-      console.log("verseId is : ", verseId);
       fetchVerseData();
     }
   }, [verseId, setGoToVerse]);

@@ -97,9 +97,6 @@ export default function QuranSurah({
 
       if (verseCheck?.result) {
         const pageIndex = Object.keys(cache).indexOf(verseCheck.pageNumber);
-
-        console.log("pageIndex is : ", pageIndex);
-
         if (pageIndex !== -1 && virtuosoRef.current) {
           virtuosoRef.current.scrollToIndex({
             index: pageIndex,
@@ -113,21 +110,6 @@ export default function QuranSurah({
       }
     }
   }, [goToVerse]);
-
-  useEffect(
-    () => {
-      if (!pageToFetch) return;
-      const el = document.querySelector(`[data-page-number="${pageToFetch}"]`);
-      if (el) {
-        setActiveVerse({
-          verse_key: goToVerse,
-        });
-        el.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
-    },
-    [cache[pageToFetch]],
-    pageToFetch
-  );
 
   // Observing logic for intersection observer
   useEffect(() => {
@@ -255,6 +237,7 @@ export default function QuranSurah({
     <div className="flex flex-col items-center justify-center pt-6 pb-8">
       <Virtuoso
         key={pageToFetch || "default"}
+        ref={virtuosoRef}
         style={{ height: "100vh", width: "100%" }}
         totalCount={Object.keys(cache).length}
         increaseViewportBy={1200}

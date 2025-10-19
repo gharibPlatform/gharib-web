@@ -114,8 +114,8 @@ export default function QuranContent({
   );
 
   const scrollFetchPage = async (index) => {
-    if (cache[index + 1].isLoaded === true) {
-      return;
+    if (cache[index + 1].isLoaded === true && cache[index - 1] === false) {
+      return; 
     }
 
     let pagesToFetch = [];

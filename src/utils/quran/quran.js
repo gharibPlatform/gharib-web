@@ -50,8 +50,8 @@ export async function verseByPageAndChapterRange(page, chapterId) {
 export const verseByChapterRange = async (
   chapter,
   pageToFetch,
-  firstVerse = null,
-  lastVerse = null
+  firstVerseKey = null,
+  lastVerseKey = null
 ) => {
   try {
     let allVerses = {};
@@ -59,17 +59,14 @@ export const verseByChapterRange = async (
 
     let firstPage = chapterInfo.pages[0];
     let lastPage = chapterInfo.pages[1];
-
     let page = pageToFetch || firstPage;
 
-    if (firstVerse) {
-      const firstVerseKey = `${chapter.id}:${firstVerse}`;
+    if (firstVerseKey) {
       const firstVerseData = await verseByKey(firstVerseKey);
       firstPage = firstVerseData.page_number;
     }
 
-    if (lastVerse) {
-      const lastVerseKey = `${chapter.id}:${lastVerse}`;
+    if (lastVerseKey) {
       const lastVerseData = await verseByKey(lastVerseKey);
       lastPage = lastVerseData.page_number;
     }
@@ -81,7 +78,13 @@ export const verseByChapterRange = async (
       }
     }
 
-    for (let loadingData = firstPage; loadingData <= lastPage; loadingData++) {
+    const LAST_PAGE = lastPage
+      ? lastPage <= chapter.pages[1]
+        ? lastPage
+        : chapter.pages[1]
+      : chapter.pages[1];
+
+    for (let loadingData = firstPage; loadingData <= LAST_PAGE; loadingData++) {
       allVerses[loadingData] = {
         data: [],
         isLoaded: false,
@@ -117,7 +120,7 @@ export const verseByChapterRangeScroll = async (chapter, pagesToFetch) => {
 
     for (let p of pagesToFetch) {
       if (!(p >= firstPage && p <= lastPage)) continue;
-      
+
       const response = await verseByPageAndChapter(p, chapter.id);
       if (response && response.length > 0) {
         allVerses[p] = {

@@ -29,8 +29,12 @@ export function useFetchChapterData(
           ? await verseByChapterRange(
               quranHeaderChapter,
               pageToFetch,
-              currentKhatma?.startShareVerse,
-              currentKhatma?.endShareVerse
+              currentKhatma
+                ? `${currentKhatma.startShareSurah}:${currentKhatma.startShareVerse}`
+                : null,
+              currentKhatma
+                ? `${currentKhatma.endShareSurah}:${currentKhatma.endShareVerse}`
+                : null
             )
           : await verseByChapterRange(quranHeaderChapter, pageToFetch);
 

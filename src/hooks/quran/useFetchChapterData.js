@@ -17,6 +17,7 @@ export function useFetchChapterData(
     if (shouldFetch !== "chapter" || !quranHeaderChapter) return;
     let isMounted = true;
 
+    console.log("currentKhatma is : ", currentKhatma);
     const fetchData = async () => {
       try {
         setIsLoading(true);

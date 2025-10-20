@@ -37,6 +37,7 @@ export default function QuranContent({
   isLoadingKhatmaDetails,
   userKhatmas,
   targetPageIndex,
+  
 }) {
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
@@ -115,7 +116,7 @@ export default function QuranContent({
 
   const scrollFetchPage = async (index) => {
     if (cache[index + 1].isLoaded === true && cache[index - 1] === false) {
-      return; 
+      return;
     }
 
     let pagesToFetch = [];

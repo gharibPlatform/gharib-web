@@ -110,11 +110,14 @@ export const verseByChapterRange = async (
 export const verseByChapterRangeScroll = async (chapter, pagesToFetch) => {
   try {
     const allVerses = {};
-    
+    const firstPage = chapter.pages[0];
+    const lastPage = chapter.pages[1];
+
     console.log("pagesToFetch is : ", pagesToFetch);
 
     for (let p of pagesToFetch) {
-      console.log("p is : ", p);
+      if (!(p >= firstPage && p <= lastPage)) continue;
+      
       const response = await verseByPageAndChapter(p, chapter.id);
       if (response && response.length > 0) {
         allVerses[p] = {

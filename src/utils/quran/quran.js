@@ -88,6 +88,7 @@ export const verseByChapterRange = async (
       allVerses[loadingData] = {
         data: [],
         isLoaded: false,
+        lastPage: loadingData === LAST_PAGE,
       };
     }
 

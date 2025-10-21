@@ -20,6 +20,7 @@ import verseIndexMap from "../../../../verseIndexMap.json";
 import UpdateProgressModal from "./updateProgressModal";
 import QuranVerseTranslateModal from "./QuranVerseTranslateModal";
 import QuranVeseTafsirModal from "./QuranVerseTafsirModal";
+import QuranFooter from "../QuranFooter";
 
 import { useFetchChapterData } from "../../../hooks/quran/useFetchChapterData";
 import { useFetchPageData } from "../../../hooks/quran/useFetchPageData";
@@ -37,7 +38,6 @@ export default function QuranContent({
   isLoadingKhatmaDetails,
   userKhatmas,
   targetPageIndex,
-  
 }) {
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
@@ -283,9 +283,9 @@ export default function QuranContent({
         )}
       </div>
 
-      {/*      <FooterContainer isVisible={isFooterVisible}>
-        <QuranFooter />
-      </FooterContainer>*/}
+      {/* <div className=""> */}
+        {/* <QuranFooter /> */}
+      {/* </div> */}
     </div>
   );
 }

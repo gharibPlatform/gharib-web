@@ -5,6 +5,7 @@ import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import useKhatmaStore from "../../../stores/khatmasStore";
 import { useRouter } from "next/navigation";
 import { Virtuoso } from "react-virtuoso";
+import QuranFooter from "../QuranFooter";
 
 export default function QuranSurah({
   cache,
@@ -251,8 +252,13 @@ export default function QuranSurah({
           }
         }}
         itemContent={(index) => {
-          const [pageNumber, { data, isLoaded }] = Object.entries(cache)[index];
-          return (
+          const [pageNumber, { data, isLoaded, lastPage }] =
+            Object.entries(cache)[index];
+          return lastPage ? (
+            <div className="flex flex-col items-center justify-center pt-6 pb-8">
+              <QuranFooter />
+            </div>
+          ) : (
             <QuranPage
               key={pageNumber}
               verses={isLoaded ? data : []}

@@ -1,12 +1,11 @@
 import { useRef } from "react";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import { createServerSearchParamsForServerPage } from "next/dist/server/request/search-params";
 import Image from "next/image";
 
-const isBasmalaPre = (chapterNumber, pageNumber, chapterFirstPageNumber) => {
+const isBasmalaPre = (chapterId, pageNumber, chapterFirstPageNumber) => {
   const isFirstPage = pageNumber === chapterFirstPageNumber;
-  const isNoBasmala = chapterNumber === 9 || chapterNumber === 1;
+  const isNoBasmala = chapterId === 9 || chapterId === 1;
   if (!isFirstPage || isNoBasmala) {
     return null;
   }
@@ -18,10 +17,22 @@ const isBasmalaPre = (chapterNumber, pageNumber, chapterFirstPageNumber) => {
   );
 };
 
-const isSurahPre = (verseNumber) => {
-  if (verseNumber === 1) {
-    return true;
+const isSurahPre = (pageNumber, chapterFirstPageNumber, chapterId) => {
+  const isFirstPage = pageNumber === chapterFirstPageNumber;
+  if (isFirstPage) {
+    return (
+      <div>
+        <div
+          className="text-5xl font-arabic leading-relaxed transition-colors group-hover:text-[var(--b-color)]"
+          style={{ color: "var(--w-color)", fontFamily: "surahnames" }}
+        >
+          {chapterId.toString().padStart(3, "0")}
+          surah
+        </div>
+      </div>
+    );
   }
+  return false;
 };
 
 const processVerses = (verses) => {
@@ -140,6 +151,11 @@ export default function QuranPage({
           direction: "rtl",
         }}
       >
+        {isSurahPre(
+          parseInt(pageNumber),
+          quranHeaderChapter.pages[0],
+          quranHeaderChapter.id
+        )}
         {isBasmalaPre(
           quranHeaderChapter.id,
           parseInt(pageNumber),

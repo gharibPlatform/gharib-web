@@ -1,5 +1,28 @@
-import { useState, useEffect, useRef, useLayoutEffect } from "react";
+import { useRef } from "react";
 import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import { createServerSearchParamsForServerPage } from "next/dist/server/request/search-params";
+import Image from "next/image";
+
+const isBasmalaPre = (chapterNumber, pageNumber, chapterFirstPageNumber) => {
+  const isFirstPage = pageNumber === chapterFirstPageNumber;
+  const isNoBasmala = chapterNumber === 9 || chapterNumber === 1;
+  if (!isFirstPage || isNoBasmala) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center justify-center pb-12">
+      <Image src="/Basmala.svg" width={200} height={200} />
+    </div>
+  );
+};
+
+const isSurahPre = (verseNumber) => {
+  if (verseNumber === 1) {
+    return true;
+  }
+};
 
 const processVerses = (verses) => {
   const allWordsByLine = {};
@@ -83,6 +106,7 @@ export default function QuranPage({
   const pageNumberRef = useRef(null);
   const ref = useRef(null);
   const { activeVerse, setActiveVerse, goToVerse } = useQuranHeaderVerse();
+  const { quranHeaderChapter } = useQuranHeaderChapter();
 
   if (!isLoaded || !verses || verses.length === 0) {
     return <QuranPageSkeleton pageNumber={pageNumber} lineRefs={lineRefs} />;
@@ -116,6 +140,11 @@ export default function QuranPage({
           direction: "rtl",
         }}
       >
+        {isBasmalaPre(
+          quranHeaderChapter.id,
+          parseInt(pageNumber),
+          quranHeaderChapter.pages[0]
+        )}
         {renderAllLines(
           verses,
           activeVerse,

@@ -121,8 +121,8 @@ export default function QuranContent({
 
     let pagesToFetch = [];
 
-    for (let i = index - 1; i <= index + 1; i++) {
-      if (cache[i].isLoaded === false) {
+    for (let i = index - 1; i <= index + 2; i++) {
+      if (cache[i].isLoaded === false && cache[i]) {
         pagesToFetch.push(i);
       }
     }

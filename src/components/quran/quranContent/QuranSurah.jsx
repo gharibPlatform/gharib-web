@@ -167,7 +167,7 @@ export default function QuranSurah({
         });
       },
       {
-        threshold: 1,
+        threshold: 0.5,
       }
     );
 
@@ -254,11 +254,7 @@ export default function QuranSurah({
         itemContent={(index) => {
           const [pageNumber, { data, isLoaded, lastPage }] =
             Object.entries(cache)[index];
-          return lastPage ? (
-            <div className="flex flex-col items-center justify-center pt-6 pb-8">
-              <QuranFooter />
-            </div>
-          ) : (
+          return (
             <QuranPage
               key={pageNumber}
               verses={isLoaded ? data : []}
@@ -272,6 +268,13 @@ export default function QuranSurah({
               lineRefs={getLineRefs(pageNumber)}
             />
           );
+        }}
+        components={{
+          Footer: () => (
+            <div className="w-full flex justify-center pt-12 pb-24">
+              <QuranFooter />
+            </div>
+          ),
         }}
       />
     </div>

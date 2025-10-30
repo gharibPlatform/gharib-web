@@ -6,6 +6,8 @@ import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore
 import { useState, useEffect } from "react";
 import { getChapter } from "../../../../../utils/quran/quran";
 import useShouldFetch from "../../../../../stores/shouldFetchStore";
+import useQuranHeaderVerse from "../../../../../stores/verseQuranHeaderStore";
+import { verseByKey } from "../../../../../utils/quran/quran";
 
 const Page = () => {
   const { khatmaId } = useParams();
@@ -17,7 +19,8 @@ const Page = () => {
     setCurrentKhatma,
   } = useKhatmaStore();
 
-  const { quranHeaderChapter, setQuranHeaderChapter } = useQuranHeaderChapter();
+  const { setQuranHeaderChapter, setPageToFetch } = useQuranHeaderChapter();
+  const { setGoToVerse } = useQuranHeaderVerse();
   const { setShouldFetch } = useShouldFetch();
   const [isLoadingKhatmaDetails, setIsLoadingKhatmaDetails] = useState(true);
 
@@ -29,6 +32,18 @@ const Page = () => {
   useEffect(() => {
     if (khatmaMembership && khatmaDetails) {
       setIsLoadingKhatmaDetails(false);
+
+      const fetchVerseData = async () => {
+        const verse = await verseByKey(
+          `${khatmaMembership.currentSurah}:${khatmaMembership.currentVerse}`
+        );
+        setPageToFetch(verse.page_number);
+        setGoToVerse(
+          `${khatmaMembership.currentSurah}:${khatmaMembership.currentVerse}`
+        );
+      };
+
+      fetchVerseData();
     }
   }, [khatmaMembership]);
 

@@ -12,7 +12,7 @@ const isBasmalaPre = (chapterId, pageNumber, chapterFirstPageNumber) => {
 
   return (
     <div className="flex items-center justify-center pb-12">
-      <Image src="/Basmala.svg" width={200} height={200} />
+      <Image alt="basmala" src="/Basmala.svg" width={200} height={200} />
     </div>
   );
 };

@@ -138,45 +138,41 @@ export default function QuranSurah({
       });
     });
 
+    console.log("creating the observer...", observerRef.current);
     // Create the observer
-    observerRef.current = new IntersectionObserver(
+    ((observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          console.log("entry is : ", entry);
           if (entry.isIntersecting) {
-            const currentVerseKey = entry.target.dataset.verseKey;
-            const currentVerseLines = verseKeysLines[currentVerseKey];
+            const currentVerseKeys = entry.target.dataset.verseKeys.split(",");
 
-            if (!currentVerseLines) return;
+            const verseNumber =
+              currentVerseKeys[currentVerseKeys.length - 1].split(":")[1];
+            setQuranHeaderVerse(verseNumber);
 
-            const lineIndex = currentVerseLines.indexOf(entry.target);
+            const allVerseKeysInLine =
+              entry.target.dataset.verseKeys.split(",");
 
-            if (lineIndex === currentVerseLines.length - 1) {
-              const verseNumber = currentVerseKey.split(":")[1];
-              setQuranHeaderVerse(verseNumber);
+            allVerseKeysInLine.forEach((verseKey) => {
+              setReadVersesKeys(verseKey.trim());
+            });
 
-              const allVerseKeysInLine =
-                entry.target.dataset.verseKeys.split(",");
-
-              allVerseKeysInLine.forEach((verseKey) => {
-                setReadVersesKeys(verseKey.trim());
-              });
-
-              console.log("Marked as read:", allVerseKeysInLine);
-            }
+            console.log("Marked as read:", allVerseKeysInLine);
           }
         });
       },
+
       {
         threshold: 0.5,
       }
-    );
-
-    // Observe all lines
-    allLines.forEach((el) => {
-      if (el) {
-        observerRef.current.observe(el);
-      }
-    });
+    )),
+      // Observe all lines
+      allLines.forEach((el) => {
+        if (el) {
+          observerRef.current.observe(el);
+        }
+      }));
 
     return () => {
       if (observerRef.current) {

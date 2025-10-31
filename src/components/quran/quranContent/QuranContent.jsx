@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 import useQuranHeaderPage from "../../../stores/pageQuranHeaderStore";
 import useShouldFetch from "../../../stores/shouldFetchStore";
@@ -101,11 +101,12 @@ export default function QuranContent({
   const currentReadVerse = useCurrentReadVerse(currentKhatma, quranHeaderVerse);
   const progress = useProgress(quranHeaderVerse, quranHeaderChapter);
 
+  // this is for the progress bar of the current khatma
   const [
     khatmaSelfProgress,
     khatmaGroupProgress,
-    currentVerseProgress,
-    currentSurahProgress,
+    //     currentVerseProgress,
+    // currentSurahProgress,
   ] = useKhatmaProgress(
     currentKhatma,
     khatmaDetails,
@@ -114,15 +115,19 @@ export default function QuranContent({
     verseIndexMap
   );
 
+  useEffect(() => {
+    console.log("quranHeaderVerse is : ", quranHeaderVerse);
+  }, [quranHeaderVerse]);
+  
   const scrollFetchPage = async (index) => {
-    if (cache[index + 1].isLoaded === true && cache[index - 1] === false) {
+    if (cache[index + 1]?.isLoaded === true && cache[index - 1]?.isLoaded === false) {
       return;
     }
 
     let pagesToFetch = [];
 
     for (let i = index - 1; i <= index + 2; i++) {
-      if (cache[i].isLoaded === false && cache[i]) {
+      if (cache[i]?.isLoaded === false && cache[i]) {
         pagesToFetch.push(i);
       }
     }
@@ -170,6 +175,7 @@ export default function QuranContent({
   const { readVersesKeys } = useKhatmaStore();
 
   const [userKhatmasProgress, setUserKhatmasProgress] = useState([]);
+  //and this is for the update for all read verses for all user khatmas
   const handleUpdateProgress = () => {
     const newUserKhatmasProgress = [];
 
@@ -284,7 +290,7 @@ export default function QuranContent({
       </div>
 
       {/* <div className=""> */}
-        {/* <QuranFooter /> */}
+      {/* <QuranFooter /> */}
       {/* </div> */}
     </div>
   );

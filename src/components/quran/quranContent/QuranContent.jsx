@@ -84,6 +84,7 @@ export default function QuranContent({
     setCache,
     setIsLoadingQuranData
   );
+  //this is for the intial fetch of the chapter data (both read mode and khatma mode)
   useFetchChapterData(
     shouldFetch,
     quranHeaderChapter,
@@ -105,7 +106,7 @@ export default function QuranContent({
   const [
     khatmaSelfProgress,
     khatmaGroupProgress,
-    //     currentVerseProgress,
+    // currentVerseProgress,
     // currentSurahProgress,
   ] = useKhatmaProgress(
     currentKhatma,
@@ -174,10 +175,11 @@ export default function QuranContent({
   };
 
   const isDirty = khatmaSelfProgress < currentKhatma?.progress;
+
   const [showUpdateProgressModal, setShowUpdateProgressModal] = useState(false);
   const { readVersesKeys } = useKhatmaStore();
-
   const [userKhatmasProgress, setUserKhatmasProgress] = useState([]);
+
   //and this is for the update for all read verses for all user khatmas
   const handleUpdateProgress = () => {
     const newUserKhatmasProgress = [];

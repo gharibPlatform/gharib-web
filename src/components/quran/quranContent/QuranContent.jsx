@@ -118,9 +118,12 @@ export default function QuranContent({
   useEffect(() => {
     console.log("quranHeaderVerse is : ", quranHeaderVerse);
   }, [quranHeaderVerse]);
-  
+
   const scrollFetchPage = async (index) => {
-    if (cache[index + 1]?.isLoaded === true && cache[index - 1]?.isLoaded === false) {
+    if (
+      cache[index + 1]?.isLoaded === true &&
+      cache[index - 1]?.isLoaded === false
+    ) {
       return;
     }
 
@@ -179,13 +182,12 @@ export default function QuranContent({
   const handleUpdateProgress = () => {
     const newUserKhatmasProgress = [];
 
-    userKhatmas.forEach((khatma) => {
+    userKhatmas?.forEach((khatma) => {
       const versesInThisKhatma = readVersesKeys.filter((verseKey) => {
         const [surah, ayah] = verseKey.split(":").map(Number);
 
         if (surah < khatma.currentSurah || surah > khatma.endShareSurah)
           return false;
-
         if (surah === khatma.currentSurah && ayah < khatma.currentVerse)
           return false;
         if (surah === khatma.endShareSurah && ayah > khatma.endShareVerse)
@@ -194,10 +196,31 @@ export default function QuranContent({
         return true;
       });
 
+      const filledVerses = [];
+
+      const groupedBySurah = versesInThisKhatma.reduce((acc, verseKey) => {
+        const [surah, ayah] = verseKey.split(":").map(Number);
+        if (!acc[surah]) acc[surah] = [];
+        acc[surah].push(ayah);
+        return acc;
+      }, {});
+
+      Object.entries(groupedBySurah).forEach(([surah, ayahs]) => {
+        ayahs.sort((a, b) => a - b);
+
+        const start = ayahs[0];
+        const end = ayahs[ayahs.length - 1];
+
+        for (let i = start; i <= end; i++) {
+          filledVerses.push(`${surah}:${i}`);
+        }
+      });
+
       const data = {
-        versesInThisKhatma,
+        versesInThisKhatma: filledVerses,
         khatma,
       };
+
       newUserKhatmasProgress.push(data);
     });
 

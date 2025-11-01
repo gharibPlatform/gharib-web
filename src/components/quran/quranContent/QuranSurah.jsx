@@ -32,7 +32,7 @@ export default function QuranSurah({
   const { goToVerse, setQuranHeaderVerse, setActiveVerse } =
     useQuranHeaderVerse();
   const { quranHeaderChapter, pageToFetch } = useQuranHeaderChapter();
-  const { readVersesKeys, setReadVersesKeys } = useKhatmaStore();
+  const { setReadVersesKeys } = useKhatmaStore();
   const router = useRouter();
 
   const getLineRefs = (pageNumber) => {
@@ -154,6 +154,8 @@ export default function QuranSurah({
             const allVerseKeysInLine =
               entry.target.dataset.verseKeys.split(",");
 
+            console.log("Marked as read 2 : ", entry.target.dataset.verseKeys);
+            
             allVerseKeysInLine.forEach((verseKey) => {
               setReadVersesKeys(verseKey.trim());
             });
@@ -248,7 +250,7 @@ export default function QuranSurah({
           }
         }}
         itemContent={(index) => {
-          const [pageNumber, { data, isLoaded, lastPage }] =
+          const [pageNumber, { data, isLoaded }] =
             Object.entries(cache)[index];
           return (
             <QuranPage

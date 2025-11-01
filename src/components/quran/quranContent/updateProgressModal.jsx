@@ -78,7 +78,8 @@ export default function UpdateProgressModal({
   useEffect(() => {
     if (isOpen) {
       const allParts = new Set();
-      userKhatmasProgress.forEach((khatmaProgress) => {
+
+      userKhatmasProgress?.forEach((khatmaProgress) => {
         const parts = groupVersesIntoParts(khatmaProgress.versesInThisKhatma);
         parts.forEach((part) => allParts.add(part.id));
       });

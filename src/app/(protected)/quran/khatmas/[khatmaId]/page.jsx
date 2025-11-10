@@ -100,6 +100,7 @@ const Page = () => {
         isKhatmaMode={true}
         isLoadingKhatmaDetails={isLoadingKhatmaDetails}
         userKhatmas={userKhatmas}
+        currentKhatmaBool={true}
       />
     </div>
   );

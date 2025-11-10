@@ -17,6 +17,7 @@ export default function QuranSurah({
   isLoading = false,
   isKhatmaMode,
   scrollFetchPage,
+  currentKhatmaBool,
 }) {
   const [versesState, setVersesState] = useState({
     alreadyRead: new Set(),
@@ -155,7 +156,7 @@ export default function QuranSurah({
               entry.target.dataset.verseKeys.split(",");
 
             console.log("Marked as read 2 : ", entry.target.dataset.verseKeys);
-            
+
             allVerseKeysInLine.forEach((verseKey) => {
               setReadVersesKeys(verseKey.trim());
             });
@@ -184,7 +185,7 @@ export default function QuranSurah({
   }, [cache, isLoading]);
 
   useEffect(() => {
-    if (currentKhatma && !isLoading) {
+    if (currentKhatma && currentKhatmaBool && !isLoading) {
       const alreadyReadKeys = new Set();
       const notYetReadKeys = new Set();
       const notInKhatmaKeys = new Set();
@@ -250,8 +251,7 @@ export default function QuranSurah({
           }
         }}
         itemContent={(index) => {
-          const [pageNumber, { data, isLoaded }] =
-            Object.entries(cache)[index];
+          const [pageNumber, { data, isLoaded }] = Object.entries(cache)[index];
           return (
             <QuranPage
               key={pageNumber}

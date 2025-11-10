@@ -38,6 +38,7 @@ export default function QuranContent({
   isLoadingKhatmaDetails,
   userKhatmas,
   targetPageIndex,
+  currentKhatmaBool = false,
 }) {
   const [cache, setCache] = useState({});
   const [addedPage, setAddedPage] = useState([]);
@@ -241,7 +242,7 @@ export default function QuranContent({
         ref={scrollRef}
         className="flex-1 overflow-y-auto no-scrollbar relative"
       >
-        {currentKhatma && (
+        {currentKhatmaBool && (
           <CurrentKhatma
             name={currentKhatma?.khatma?.name}
             group={currentKhatma?.khatma?.group_data?.name}
@@ -275,6 +276,7 @@ export default function QuranContent({
           isKhatmaMode={isKhatmaMode}
           scrollFetchPage={scrollFetchPage}
           targetPageIndex={targetPageIndex}
+          currentKhatmaBool={currentKhatmaBool}
         />
 
         <VersePopupController

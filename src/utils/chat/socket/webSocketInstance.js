@@ -24,7 +24,7 @@ class WebSocketService {
         throw new Error("No access token available");
       }
 
-      const endpoint = "ws://localhost:8000/"
+      const endpoint = "ws://localhost/"
       
       this.socket = new WebSocket(
         `${endpoint}?token=${encodeURIComponent(token)}`

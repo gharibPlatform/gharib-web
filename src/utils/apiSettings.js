@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = "http://localhost:8000/api/settings/";
+const API_BASE_URL = "http://localhost/api/settings/";
 
 // Helper function to get authorization headers
 const getAuthHeaders = () => ({

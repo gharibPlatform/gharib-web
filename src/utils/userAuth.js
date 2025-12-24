@@ -2,7 +2,7 @@ import api from './api'; //custom api instance
 import axios from "axios";
 
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost';
 
 // Google authentication
 export async function googleAuth(data) {

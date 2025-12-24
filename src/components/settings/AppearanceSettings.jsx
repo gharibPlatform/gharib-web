@@ -9,7 +9,7 @@ export default function AppearanceSettings() {
 
   try {
     const res = await axios.patch(
-      "http://localhost:8000/api/settings/",
+      "http://localhost/api/settings/",
       { theme: theme },
       {
         headers: {

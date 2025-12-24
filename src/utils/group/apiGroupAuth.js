@@ -1,6 +1,6 @@
 import api from "../api";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "http://localhost";
 
 export const getGroupAuth = async () => {
   try {

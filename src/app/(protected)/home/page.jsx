@@ -2,7 +2,7 @@
 
 import useKhatmaStore from "../../../stores/khatmasStore";
 import { useEffect, useState } from "react";
-import KhatmaListingHome from "../../../components/home/KhatmasListingHome";
+import Home from "../../../components/home/Home";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState();
@@ -32,7 +32,7 @@ const Page = () => {
           Loading kahtmas...
         </div>
       ) : (
-        <KhatmaListingHome khatmas={userKhatmas} />
+        <Home khatmas={userKhatmas} />
       )}
     </div>
   );

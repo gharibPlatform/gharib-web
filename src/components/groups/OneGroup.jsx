@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { UserPlus } from "lucide-react";
 import CreateKhatmaModal from "../quran/quranRightbar/CreateKhatmaModal";
 import { SettingsModal } from "./OneGroupSettingsModal";
 import { GroupHeader } from "./OneGroupHeader";
@@ -6,9 +7,16 @@ import { GroupTabs } from "./OneGroupTabs";
 import { GroupToolbar } from "./OneGroupToolbar";
 import { GroupContent } from "./OneGroupContent";
 import useUserStore from "../../stores/userStore";
+import InviteMembersModal from "./InviteMembersModal";
 
 export default function OneGroup({ group, groupKhatmas }) {
   const { user } = useUserStore();
+
+  const [showInviteModal, setShowInviteModal] = useState(false);
+
+  const handleInviteMembers = async (usernames) => {
+    console.log("Inviting members:", usernames);
+  };
 
   const [activeTab, setActiveTab] = useState("members");
   const [searchQuery, setSearchQuery] = useState("");
@@ -117,7 +125,7 @@ export default function OneGroup({ group, groupKhatmas }) {
           memberFilter={memberFilter}
           onMemberFilterChange={setMemberFilter}
           isAdmin={isAdmin}
-          onInviteMembers={() => {}}
+          onInviteMembers={() => setShowInviteModal(true)}
           onCreateKhatma={() => setShowCreateKhatmaModal(true)}
         />
 
@@ -132,6 +140,22 @@ export default function OneGroup({ group, groupKhatmas }) {
             searchQuery={searchQuery}
           />
         </div>
+
+        <button
+          onClick={() => setShowInviteModal(true)}
+          className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-[var(--bright-b-color)] to-[var(--b-color)] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+        >
+          <UserPlus size={24} />
+        </button>
+
+        {showInviteModal && (
+          <InviteMembersModal
+            onClose={() => setShowInviteModal(false)}
+            onInviteMembers={handleInviteMembers}
+            groupName={group.name}
+            groupId={group.id}
+          />
+        )}
       </div>
     </div>
   );

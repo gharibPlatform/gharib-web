@@ -29,8 +29,8 @@ export default function Home({ khatmas }) {
       console.error("Error sending brother request:", error);
 
       let errorMsg = "Failed to send friend request";
-      if (error.response?.data?.message) {
-        errorMsg = error.response.data.message;
+      if (error.response?.data?.detail) {
+        errorMsg = error.response.data.detail;
       } else if (error.message) {
         errorMsg = error.message;
       }

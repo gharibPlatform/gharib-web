@@ -27,11 +27,11 @@ const Page = () => {
   }, [groupId, fetchOneGroup]);
 
   useEffect(() => {
-    if (group && groupKhatmas) {
+    if (group) {
       setIsLoading(false);
-      console.log("groupKhatmas is : ", groupKhatmas);
+      console.log("Group loaded:", group);
     }
-  }, [group, groupKhatmas]);
+  }, [group]);
 
   return (
     <div className="h-full overflow-hidden ">

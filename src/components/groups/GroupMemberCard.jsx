@@ -1,7 +1,7 @@
 import { Users, Crown, MessageSquare, MoreVertical } from "lucide-react";
 import DefaultIcon from "../common/icon/DefaultIcon";
 
-export default function GroupMemberCard({ member, isAdmin, groupId }) {
+export default function GroupMemberCard({ member, isAdmin, role }) {
   const getRoleColor = (role) => {
     return role === "admin" ? "var(--o-color)" : "var(--lighter-color)";
   };
@@ -25,20 +25,20 @@ export default function GroupMemberCard({ member, isAdmin, groupId }) {
           </div>
           <div>
             <h3 className="font-semibold" style={{ color: "var(--w-color)" }}>
-              {member.username}
+              {member?.username}
             </h3>
             <div className="flex items-center gap-1">
-              {member.role === "admin" && (
+              {role === "admin" && (
                 <Crown
                   className="w-3 h-3"
-                  style={{ color: getRoleColor(member.role) }}
+                  style={{ color: getRoleColor(role) }}
                 />
               )}
               <span
                 className="text-xs"
-                style={{ color: getRoleColor(member.role) }}
+                style={{ color: getRoleColor(role) }}
               >
-                {member.role}
+                {role}
               </span>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function GroupMemberCard({ member, isAdmin, groupId }) {
           <MessageSquare className="w-4 h-4" />
           Message
         </button>
-        {isAdmin && member.role !== "admin" && (
+        {isAdmin && role !== "admin" && (
           <button
             className="flex-1 flex items-center justify-center gap-2 py-2 rounded text-sm hover:bg-var(--main-color-hover)"
             style={{ color: "var(--o-color)" }}

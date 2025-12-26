@@ -5,8 +5,11 @@ import { GroupHeader } from "./OneGroupHeader";
 import { GroupTabs } from "./OneGroupTabs";
 import { GroupToolbar } from "./OneGroupToolbar";
 import { GroupContent } from "./OneGroupContent";
+import useUserStore from "../../stores/userStore";
 
 export default function OneGroup({ group, groupKhatmas }) {
+  const { user } = useUserStore();
+
   const [activeTab, setActiveTab] = useState("members");
   const [searchQuery, setSearchQuery] = useState("");
   const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
@@ -29,7 +32,6 @@ export default function OneGroup({ group, groupKhatmas }) {
   });
 
   const [loading, setLoading] = useState(false);
-  const isAdmin = true;
 
   const filteredMembers = useMemo(() => {
     return group?.memberships?.filter((member) => {
@@ -59,6 +61,11 @@ export default function OneGroup({ group, groupKhatmas }) {
       setLoading(false);
     }
   };
+
+  const isAdmin = group.memberships?.some(
+    (membership) =>
+      membership.user.id === user?.id && membership.role === "admin"
+  );
 
   return (
     <div

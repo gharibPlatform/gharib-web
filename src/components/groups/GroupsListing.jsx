@@ -2,26 +2,37 @@ import { ActionButton } from "../common/buttons/ActionButton";
 import GroupCard from "./GroupCard";
 import GroupFilter from "./GroupFilter";
 import useGroupStore from "../../stores/groupStore";
-import { useState, useMemo } from "react";
-import { createGroup } from "../../utils/group/apiGroup";
-import { Users, Search, Grid, List } from "lucide-react";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { Users, Search, Grid, List, Key } from "lucide-react";
 import CreateDM from "../chat/create_dm/CreateDM";
+import { joinGroupByCode } from "../../utils/group/apiGroupShare";
+import JoinGroupModal from "./JoinGroupModal";
 
 export default function GroupsListing() {
   const [activeFilters, setActiveFilters] = useState([]);
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState("grid");
 
-  const { groups } = useGroupStore();
+  const { groups, refreshGroups } = useGroupStore();
 
-  const handleCreateGroup = (groupData) => {
-    createGroup(groupData).then((res) => {
-      console.log("res", res);
-    });
-    setShowCreateGroupModal(false);
+  const handleJoinGroup = async (code) => {
+    try {
+      const data = await joinGroupByCode({ code });
+      console.log("Joined group response:", data);
+
+      setTimeout(() => {
+        refreshGroups();
+      }, 1000);
+
+      setShowJoinGroupModal(false);
+      return data;
+    } catch (error) {
+      console.error("Error joining group:", error);
+      throw error;
+    }
   };
-
   const filteredGroups = useMemo(() => {
     if (!groups) return [];
 
@@ -65,7 +76,7 @@ export default function GroupsListing() {
     }
     return {
       title: "No groups yet",
-      subtitle: "Create your first group to get started",
+      subtitle: "Create or join a group to get started",
       icon: Users,
     };
   };
@@ -78,12 +89,20 @@ export default function GroupsListing() {
       className="h-full flex flex-col overflow-hidden"
       style={{ background: "var(--main-color)" }}
     >
+      {/* Modals */}
       {showCreateGroupModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 backdrop-blur-sm transition-opacity">
           <div className="animate-scaleIn">
             <CreateDM close={() => setShowCreateGroupModal(false)} />
           </div>
         </div>
+      )}
+
+      {showJoinGroupModal && (
+        <JoinGroupModal
+          onClose={() => setShowJoinGroupModal(false)}
+          onSubmit={handleJoinGroup}
+        />
       )}
 
       {/* Header Section */}
@@ -103,14 +122,26 @@ export default function GroupsListing() {
               Collaborate with others on Quran study
             </p>
           </div>
-          <ActionButton
-            label="+ Create Group"
-            onClick={() => setShowCreateGroupModal(true)}
-            className="px-4 py-2"
-            isDisabled={false}
-            value={"create-group"}
-            isDirty={true}
-          />
+          <div className="flex gap-3">
+            <ActionButton
+              label="Join Group"
+              onClick={() => setShowJoinGroupModal(true)}
+              className="px-4 py-2"
+              isDisabled={false}
+              value={"join-group"}
+              isDirty={true}
+              icon={<Key className="w-4 h-4" />}
+            />
+            <ActionButton
+              label="Create Group"
+              onClick={() => setShowCreateGroupModal(true)}
+              className="px-4 py-2"
+              isDisabled={false}
+              value={"create-group"}
+              isDirty={true}
+              icon={<Users className="w-4 h-4" />}
+            />
+          </div>
         </div>
 
         <div className="flex items-center justify-between">
@@ -228,6 +259,26 @@ export default function GroupsListing() {
             >
               {emptyState.subtitle}
             </p>
+            <div className="flex gap-3">
+              <ActionButton
+                label="Join Group by Code"
+                onClick={() => setShowJoinGroupModal(true)}
+                className="px-4 py-2"
+                isDisabled={false}
+                value={"join-group"}
+                isDirty={true}
+                icon={<Key className="w-4 h-4" />}
+              />
+              <ActionButton
+                label="Create Group"
+                onClick={() => setShowCreateGroupModal(true)}
+                className="px-4 py-2"
+                isDisabled={false}
+                value={"create-group"}
+                isDirty={true}
+                icon={<Users className="w-4 h-4" />}
+              />
+            </div>
           </div>
         )}
       </div>

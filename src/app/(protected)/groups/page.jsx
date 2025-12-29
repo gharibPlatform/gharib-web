@@ -1,7 +1,7 @@
 "use client";
 import GroupsListing from "../../../components/groups/GroupsListing";
 import { useEffect, useState } from "react";
-import useGroupStore from "../../../stores/groupStore";
+import useGroupStore from "../../../stores/group/groupStore";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState();
@@ -22,7 +22,7 @@ const Page = () => {
   useEffect(() => {
     groups ? setIsLoading(false) : setIsLoading(true);
   }, [groups]);
-  
+
   return (
     <div className="h-full overflow-hidden ">
       {isLoading ? (

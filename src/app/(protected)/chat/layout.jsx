@@ -2,7 +2,7 @@
 import ChatRightBar from "../../../components/chat/ChatRightBar";
 import GroupSideBar from "../../../components/chat/group_sidebar/GroupSidebar";
 import SideBar from "../../../components/common/sidebar/Sidebar";
-import useGroupSidebarStore from "../../../stores/groupSidebarStore";
+import useGroupSidebarStore from "../../../stores/group/groupSidebarStore";
 
 const Layout = ({ children }) => {
   const { isGroupSidebarOpen } = useGroupSidebarStore();

@@ -1,8 +1,8 @@
 import Circle from "../../common/circle/Circle";
-import useKhatmaStore from "../../../stores/khatmasStore";
+import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
 import PersonalTrackerLine from "./PersonalTrackerLine";
 import { useRouter } from "next/navigation";
-import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
+import useQuranHeaderVerse from "../../../stores/quran/verseQuranHeaderStore";
 import indexToStringSurah from "../../../../indexToStringSurah.json";
 import { useCalculateTimeLeft } from "../../../hooks/logic/calculateTimeLeft";
 import { useAbsoluteVerseDomain } from "../../../hooks/logic/useAbsoluteVerseDomain";

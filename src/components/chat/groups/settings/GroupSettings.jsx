@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useGroupStore from "../../../../stores/groupStore";
+import useGroupStore from "../../../../stores/group/groupStore";
 import NormalSettings from "./NormalSettings";
 import AdvancedSettings from "./AdvancedSettings";
 

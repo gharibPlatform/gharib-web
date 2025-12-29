@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import useQuranHeaderPage from "../../../stores/pageQuranHeaderStore";
-import useShouldFetch from "../../../stores/shouldFetchStore";
-import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
-import useKhatmaStore from "../../../stores/khatmasStore";
+import useQuranHeaderChapter from "../../../stores/quran/chapterQuranHeaderStore";
+import useQuranHeaderPage from "../../../stores/quran/pageQuranHeaderStore";
+import useShouldFetch from "../../../stores/quran/shouldFetchStore";
+import useQuranHeaderVerse from "../../../stores/quran/verseQuranHeaderStore";
+import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
 
 import {
   verseByChapterRangeScroll,

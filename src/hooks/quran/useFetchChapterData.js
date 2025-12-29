@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { verseByChapterRange } from "../../utils/quran/quran";
-import useQuranHeaderChapter from "../../stores/chapterQuranHeaderStore";
+import useQuranHeaderChapter from "../../stores/quran/chapterQuranHeaderStore";
 
 export function useFetchChapterData(
   shouldFetch,

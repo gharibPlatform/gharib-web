@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import useQuranHeaderVerse from "../../stores/verseQuranHeaderStore";
-import useKhatmaStore from "../../stores/khatmasStore";
+import useQuranHeaderVerse from "../../stores/quran/verseQuranHeaderStore";
+import useKhatmaStore from "../../stores/khatamat/khatmasStore";
 import indexToStringSurah from "../../../indexToStringSurah.json";
 import CreateKhatmaModal from "../quran/quranRightbar/CreateKhatmaModal";
 

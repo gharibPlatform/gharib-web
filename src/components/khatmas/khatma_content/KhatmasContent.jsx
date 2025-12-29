@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import KhatmasProgress from "./KhatmasProgress";
 
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import useKhatmaStore from "../../../stores/khatmasStore";
-import useUserStore from "../../../stores/userStore";
+import useQuranHeaderChapter from "../../../stores/quran/chapterQuranHeaderStore";
+import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
+import useUserStore from "../../../stores/user/userStore";
 
 import Circle from "../../common/circle/Circle";
 import { useRouter } from "next/navigation";

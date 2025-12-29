@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getChapter, verseByKey } from "../../../../../utils/quran/quran";
 
-import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore";
-import useQuranHeaderVerse from "../../../../../stores/verseQuranHeaderStore";
-import useShouldFetch from "../../../../../stores/shouldFetchStore";
-import useKhatmaStore from "../../../../../stores/khatmasStore";
+import useQuranHeaderChapter from "../../../../../stores/quran/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "../../../../../stores/quran/verseQuranHeaderStore";
+import useShouldFetch from "../../../../../stores/quran/shouldFetchStore";
+import useKhatmaStore from "../../../../../stores/khatamat/khatmasStore";
 
 const Layout = ({ children }) => {
   const { id, verseId } = useParams();

@@ -1,8 +1,8 @@
-import useQuranHeaderChapter from "../../stores/chapterQuranHeaderStore";
+import useQuranHeaderChapter from "../../stores/quran/chapterQuranHeaderStore";
 import { getChapter } from "../../utils/quran/quran";
 import { useRouter } from "next/navigation";
-import useBeginningOfTheSurah from "../../stores/begginingOfTheSurah";
-import useQuranHeaderPage from "../../stores/pageQuranHeaderStore";
+import useBeginningOfTheSurah from "../../stores/quran/begginingOfTheSurah";
+import useQuranHeaderPage from "../../stores/quran/pageQuranHeaderStore";
 
 export default function QuranFooter() {
   const { quranHeaderChapter, priority, setQuranHeaderChapter, setGoToPath } =

@@ -1,7 +1,7 @@
 import ChatKhatmaCard from "./ChatKhatmaCard";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import useKhatmaStore from "../../../stores/khatmasStore";
+import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
 
 export default function ChatKhatmasSection() {
   const BACKGROUND_COLOR = "#212121";

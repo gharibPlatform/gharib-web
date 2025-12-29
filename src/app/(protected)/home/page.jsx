@@ -1,6 +1,6 @@
 "use client";
 
-import useKhatmaStore from "../../../stores/khatmasStore";
+import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
 import { useEffect, useState } from "react";
 import Home from "../../../components/home/Home";
 

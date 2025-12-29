@@ -1,11 +1,11 @@
 "use client";
-import useGroupStore from "../../../../stores/groupStore";
+import useGroupStore from "../../../../stores/group/groupStore";
 import KhatmasContent from "../../../../components/khatmas/khatma_content/KhatmasContent";
-import useKhatmaStore from "../../../../stores/khatmasStore";
+import useKhatmaStore from "../../../../stores/khatamat/khatmasStore";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import useQuranHeaderChapter from "../../../../stores/chapterQuranHeaderStore";
-import useUserStore from "../../../../stores/userStore";
+import useQuranHeaderChapter from "../../../../stores/quran/chapterQuranHeaderStore";
+import useUserStore from "../../../../stores/user/userStore";
 import { useCalculateTimeLeft } from "../../../../hooks/logic/calculateTimeLeft";
 import Circle from "../../../../components/common/circle/Circle";
 import indexToStringSurah from "../../../../../indexToStringSurah.json";

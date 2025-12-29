@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import QuranPage from "./QuranPage";
-import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import useKhatmaStore from "../../../stores/khatmasStore";
+import useQuranHeaderVerse from "../../../stores/quran/verseQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/quran/chapterQuranHeaderStore";
+import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
 import { useRouter } from "next/navigation";
 import { Virtuoso } from "react-virtuoso";
 import QuranFooter from "../QuranFooter";

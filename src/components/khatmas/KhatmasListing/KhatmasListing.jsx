@@ -1,7 +1,7 @@
 import { ActionButton } from "../../common/buttons/ActionButton";
 import KhatmaRow from "../khatma_content/KhatmaRow";
 import KhatmaFilter from "./KhatmaFilter";
-import useKhatmaStore from "../../../stores/khatmasStore";
+import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import CreateKhatmaModal from "../../quran/quranRightbar/CreateKhatmaModal";

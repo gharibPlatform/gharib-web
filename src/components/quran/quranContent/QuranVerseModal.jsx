@@ -1,9 +1,9 @@
 "use client";
-import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
+import useQuranHeaderVerse from "../../../stores/quran/verseQuranHeaderStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import { createHighlights, getHighlights } from "@/utils/khatma/apiHighlight";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/quran/chapterQuranHeaderStore";
 
 const Textarea = ({
   value,

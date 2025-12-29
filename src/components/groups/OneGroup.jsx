@@ -6,7 +6,7 @@ import { GroupHeader } from "./OneGroupHeader";
 import { GroupTabs } from "./OneGroupTabs";
 import { GroupToolbar } from "./OneGroupToolbar";
 import { GroupContent } from "./OneGroupContent";
-import useUserStore from "../../stores/userStore";
+import useUserStore from "../../stores/user/userStore";
 import InviteMembersModal from "./InviteMembersModal";
 
 export default function OneGroup({ group, groupKhatmas }) {

@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { FiSearch, FiX, FiPlus, FiAlertCircle } from "react-icons/fi";
 import CreateDM from "./create_dm/CreateDM";
 import DirectMessagesSection from "./direct_messages/DirectMessagesSection";
-import useGroupStore from "../../stores/groupStore";
+import useGroupStore from "../../stores/group/groupStore";
 
 export default function ChatRightBar() {
   const [showCreateDM, setShowCreateDM] = useState(false);

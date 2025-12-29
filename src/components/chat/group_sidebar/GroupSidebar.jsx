@@ -5,7 +5,7 @@ import Tooltip from "../../common/tooltip/Tooltip";
 import GroupSettings from "../groups/settings/GroupSettings";
 import AddBrother from "../groups/AddBrother";
 import ShareGroup from "../groups/ShareGroup";
-import useGroupStore from "../../../stores/groupStore";
+import useGroupStore from "../../../stores/group/groupStore";
 
 export default function GroupSideBar() {
   const { group } = useGroupStore();

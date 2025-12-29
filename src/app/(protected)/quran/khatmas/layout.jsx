@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import QuranVerseModal from "../../../../components/quran/quranContent/QuranVerseModal";
 import QuranSidebar from "../../../../components/quran/quranSidebar/QuranSidebar";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import useQuranHighlightStore from "../../../../stores/quranHighlightStore";
-import useKhatmaStore from "../../../../stores/khatmasStore";
+import useQuranHighlightStore from "../../../../stores/quran/quranHighlightStore";
+import useKhatmaStore from "../../../../stores/khatamat/khatmasStore";
 
 const Layout = ({ children }) => {
   const [showRightBar, setShowRightBar] = useState(true);

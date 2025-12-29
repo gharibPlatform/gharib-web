@@ -3,9 +3,9 @@ import React, { useEffect, useState, useRef } from "react";
 import MessagesList from "./MessagesList";
 import TypingIndicator from "./TypingIndicator";
 import InputChat from "./InputChat";
-import useUserStore from "../../../stores/userStore";
+import useUserStore from "../../../stores/user/userStore";
 import { useParams } from "next/navigation";
-import useGroupStore from "../../../stores/groupStore";
+import useGroupStore from "../../../stores/group/groupStore";
 import ChatHeader from "./ChatHeader";
 import ChatSideBar from "./chat_sidebar/ChatSidebar";
 

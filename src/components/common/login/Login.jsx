@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { login } from "../../../utils/userAuth";
 import { useRouter } from "next/navigation";
-import useUserStore from "@/stores/userStore";
+import useUserStore from "@/stores/user/userStore";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -47,7 +47,9 @@ const Login = () => {
 
   return (
     <div className="flex flex-col items-center bg-[var(--dark-color)] w-full max-w-md mx-auto justify-center py-6 px-4 sm:px-8 rounded-md">
-      <h2 className="text-[var(--w-color)] text-2xl sm:text-3xl pb-6 sm:pb-8 pt-4">Login</h2>
+      <h2 className="text-[var(--w-color)] text-2xl sm:text-3xl pb-6 sm:pb-8 pt-4">
+        Login
+      </h2>
 
       <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
         <input
@@ -78,9 +80,7 @@ const Login = () => {
           Forgot Password?
         </a>
 
-        <button
-          className="w-full px-4 py-2 bg-[var(--o-color)] text-lg sm:text-xl text-[var(--w-color)] placeholder-[var(--g-color)] mb-2 rounded-md"
-        >
+        <button className="w-full px-4 py-2 bg-[var(--o-color)] text-lg sm:text-xl text-[var(--w-color)] placeholder-[var(--g-color)] mb-2 rounded-md">
           Login
         </button>
       </form>

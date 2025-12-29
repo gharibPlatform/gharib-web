@@ -1,12 +1,12 @@
 "use client";
 import QuranContent from "../../../../../components/quran/quranContent/QuranContent";
 import { useParams } from "next/navigation";
-import useKhatmaStore from "../../../../../stores/khatmasStore";
-import useQuranHeaderChapter from "../../../../../stores/chapterQuranHeaderStore";
+import useKhatmaStore from "../../../../../stores/khatamat/khatmasStore";
+import useQuranHeaderChapter from "../../../../../stores/quran/chapterQuranHeaderStore";
 import { useState, useEffect } from "react";
 import { getChapter } from "../../../../../utils/quran/quran";
-import useShouldFetch from "../../../../../stores/shouldFetchStore";
-import useQuranHeaderVerse from "../../../../../stores/verseQuranHeaderStore";
+import useShouldFetch from "../../../../../stores/quran/shouldFetchStore";
+import useQuranHeaderVerse from "../../../../../stores/quran/verseQuranHeaderStore";
 import { verseByKey } from "../../../../../utils/quran/quran";
 
 const Page = () => {

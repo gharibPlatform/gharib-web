@@ -1,5 +1,5 @@
 "use client";
-import useKhatmaStore from "@/stores/khatmasStore";
+import useKhatmaStore from "@/stores/khatamat/khatmasStore";
 import GroupKhatmas from "../../../components/khatmas/KhatmasListing/KhatmasListing";
 import { useEffect, useState } from "react";
 

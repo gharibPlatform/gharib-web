@@ -3,7 +3,7 @@ import { useParams, useRouter } from "next/navigation";
 import ChatContent from "../../../../../components/chat/chat_content/ChatContent";
 import useNameHeaderStore from "../../../../../stores/nameHeaderStore";
 import { useEffect, useState } from "react";
-import useGroupStore from "../../../../../stores/groupStore";
+import useGroupStore from "../../../../../stores/group/groupStore";
 import useChatStore from "../../../../../stores/useChatStore";
 import useChatWebSocket from "../../../../../hooks/socket/useChatWebSocket.js";
 import authMiddleware from "../../../../../utils/authMiddleware";

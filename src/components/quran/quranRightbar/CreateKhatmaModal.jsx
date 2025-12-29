@@ -10,8 +10,8 @@ import {
   Users,
 } from "lucide-react";
 
-import useUserStore from "../../../stores/userStore";
-import useGroupStore from "../../../stores/groupStore";
+import useUserStore from "../../../stores/user/userStore";
+import useGroupStore from "../../../stores/group/groupStore";
 import DefaultIcon from "../../common/icon/DefaultIcon";
 import indexToString from "../../../../indexToStringSurah.json";
 

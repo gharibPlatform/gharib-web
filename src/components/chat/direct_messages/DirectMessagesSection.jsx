@@ -1,6 +1,6 @@
 import DirectMessagesCard from "./DirectMessagesCard";
-import useGroupStore from "../../../stores/groupStore";
-import useUserStore from "../../../stores/userStore";
+import useGroupStore from "../../../stores/group/groupStore";
+import useUserStore from "../../../stores/user/userStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
@@ -101,7 +101,7 @@ export default function DirectMessagesSection({ searchQuery }) {
                   group.last_message ? group.last_message.created_at : null
                 }
                 unreadCount={group.unreadCount || group.unread_count || 0}
-                searchQuery={effectiveSearch} 
+                searchQuery={effectiveSearch}
                 groupId={group.id}
               />
             </div>

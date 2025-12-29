@@ -1,7 +1,7 @@
 import { ActionButton } from "../common/buttons/ActionButton";
 import GroupCard from "./GroupCard";
 import GroupFilter from "./GroupFilter";
-import useGroupStore from "../../stores/groupStore";
+import useGroupStore from "../../stores/group/groupStore";
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Users, Search, Grid, List, Key } from "lucide-react";
 import CreateDM from "../chat/create_dm/CreateDM";

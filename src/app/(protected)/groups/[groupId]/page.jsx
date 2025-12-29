@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import useGroupStore from "../../../../stores/groupStore";
+import useGroupStore from "../../../../stores/group/groupStore";
 import OneGroup from "@/components/groups/OneGroup";
 import { useParams } from "next/navigation";
-import useKhatmaStore from "../../../../stores/khatmasStore";
+import useKhatmaStore from "../../../../stores/khatamat/khatmasStore";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(true);

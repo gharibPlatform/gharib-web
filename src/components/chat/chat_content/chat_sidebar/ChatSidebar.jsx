@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import useUserStore from "../../../../stores/userStore";
-import useGroupStore from "../../../../stores/groupStore";
+import useUserStore from "../../../../stores/user/userStore";
+import useGroupStore from "../../../../stores/group/groupStore";
 import { ActionButton } from "../../../common/buttons/ActionButton";
 import GroupInfoTab from "./GroupInfoTab";
 import UserSettingsTab from "./UserSettingsTab";
@@ -100,7 +100,7 @@ const ChatSidebar = ({ group, onClose }) => {
       });
     }
   }, [groupSettings]);
-  
+
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => setError(""), 3000);

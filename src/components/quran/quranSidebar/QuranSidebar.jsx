@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
-import useQuranHeaderVerse from "@/stores/verseQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/quran/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "@/stores/quran/verseQuranHeaderStore";
 import toast from "react-hot-toast";
-import useQuranHeaderPage from "@/stores/pageQuranHeaderStore";
+import useQuranHeaderPage from "@/stores/quran/pageQuranHeaderStore";
 import { X } from "lucide-react";
 
 const ChapterTab = ({ chapters, isLoading, quranHeaderChapter }) => {

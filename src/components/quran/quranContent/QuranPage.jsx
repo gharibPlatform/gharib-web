@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import useQuranHeaderVerse from "../../../stores/verseQuranHeaderStore";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderVerse from "../../../stores/quran/verseQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/quran/chapterQuranHeaderStore";
 import Image from "next/image";
 
 const isBasmalaPre = (chapterId, pageNumber, chapterFirstPageNumber) => {

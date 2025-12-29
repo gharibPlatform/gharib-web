@@ -4,7 +4,7 @@ import QuranOverview from "../../../components/quran/quranOverview/QuranOverview
 import indexToStringSurah from "../../../../indexToStringSurah.json";
 import { verseByKey } from "../../../utils/quran/quran";
 import SideBar from "../../../components/common/sidebar/Sidebar";
-import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
+import useQuranHeaderChapter from "../../../stores/quran/chapterQuranHeaderStore";
 
 const Page = () => {
   const [verse, setVerse] = useState(null);

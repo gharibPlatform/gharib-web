@@ -21,6 +21,7 @@ import {
 } from "../../utils/group/apiGroupShare";
 import { getBrothers } from "../../utils/apiUser";
 import DefaultIcon from "../common/icon/DefaultIcon";
+import useBrothersStore from "../../stores/user/useBrothersStore";
 
 export const InviteSuccessModal = ({ count, onClose }) => {
   return (
@@ -94,7 +95,6 @@ export const InviteErrorModal = ({ error, onClose, onRetry }) => {
 
 export default function InviteMembersModal({ onClose, groupName, groupId }) {
   const [selectedFriends, setSelectedFriends] = useState([]);
-  const [friends, setFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loadingFriends, setLoadingFriends] = useState(false);
   const [error, setError] = useState("");
@@ -109,9 +109,11 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
   const [loadingCode, setLoadingCode] = useState(true);
   const [codeError, setCodeError] = useState("");
 
+  const { brothers, isLoadingBrothers, fetchBrothers } = useBrothersStore();
+
   useEffect(() => {
     fetchGroupCode();
-    fetchFriends();
+    fetchBrothers();
 
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -121,21 +123,7 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose, groupId]);
-
-  const fetchFriends = async () => {
-    setLoadingFriends(true);
-    try {
-      const data = await getBrothers();
-      console.log("data is : ", data);
-      setFriends(data.brothers || []);
-    } catch (err) {
-      console.error("Error fetching friends:", err);
-      setFriends([]);
-    } finally {
-      setLoadingFriends(false);
-    }
-  };
+  }, [onClose, groupId, fetchBrothers]);
 
   const fetchGroupCode = async () => {
     setLoadingCode(true);
@@ -189,12 +177,12 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
     setError("");
 
     if (activeTab === "friends") {
-      if (selectedFriends?.length === 0) {
+      if (selectedFriends.length === 0) {
         setError("Please select at least one friend");
         return;
       }
 
-      const usernameList = selectedFriends?.map((friend) => friend.username);
+      const usernameList = selectedFriends.map((friend) => friend.username);
 
       setIsLoading(true);
 
@@ -256,9 +244,10 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
     return `${diffHours}h left`;
   };
 
-  const filteredFriends = friends.filter((friend) =>
-    friend.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredFriends =
+    brothers?.filter((friend) =>
+      friend?.username?.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -400,7 +389,7 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
 
                 {/* Friends List */}
                 <div className="bg-[var(--dark-color)] rounded-xl border border-[var(--g-color)] border-opacity-30 max-h-60 overflow-y-auto">
-                  {loadingFriends ? (
+                  {isLoadingBrothers ? (
                     <div className="flex justify-center py-8">
                       <div className="animate-spin rounded-full h-8 w-8 border-2 border-[var(--bright-b-color)] border-t-transparent"></div>
                     </div>
@@ -480,13 +469,13 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
                 <button
                   type="submit"
                   onClick={handleSubmit}
-                  disabled={selectedFriends?.length === 0 || isLoading}
+                  disabled={selectedFriends.length === 0 || isLoading}
                   className={`px-8 py-3 text-white text-lg rounded-xl font-medium flex items-center gap-3 ${
                     isLoading
                       ? "bg-[var(--b-color)]"
                       : "bg-gradient-to-r from-[var(--bright-b-color)] to-[var(--b-color)] hover:from-[var(--b-color-hover)] hover:to-[var(--bright-b-color)]"
                   } ${
-                    selectedFriends?.length === 0
+                    selectedFriends.length === 0
                       ? "opacity-50 cursor-not-allowed"
                       : ""
                   }`}
@@ -499,8 +488,8 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
                   ) : (
                     <>
                       <Mail size={20} />
-                      Invite {selectedFriends?.length}{" "}
-                      {selectedFriends?.length === 1 ? "Friend" : "Friends"}
+                      Invite {selectedFriends.length}{" "}
+                      {selectedFriends.length === 1 ? "Friend" : "Friends"}{" "}
                     </>
                   )}
                 </button>

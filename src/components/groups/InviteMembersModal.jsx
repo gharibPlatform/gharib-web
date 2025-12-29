@@ -11,13 +11,16 @@ import {
   Clock,
   Copy,
   Key,
+  Search,
+  Check,
 } from "lucide-react";
 
 import {
   getGroupCodeInfo,
   generateGroupCode,
-  addMemberToGroup,
 } from "../../utils/group/apiGroupShare";
+import { getBrothers } from "../../utils/apiUser";
+import DefaultIcon from "../common/icon/DefaultIcon";
 
 export const InviteSuccessModal = ({ count, onClose }) => {
   return (
@@ -90,10 +93,13 @@ export const InviteErrorModal = ({ error, onClose, onRetry }) => {
 };
 
 export default function InviteMembersModal({ onClose, groupName, groupId }) {
-  const [usernames, setUsernames] = useState("");
+  const [selectedFriends, setSelectedFriends] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loadingFriends, setLoadingFriends] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("usernames");
+  const [activeTab, setActiveTab] = useState("friends");
   const [copied, setCopied] = useState(false);
   const [generating, setGenerating] = useState(false);
   const modalRef = useRef(null);
@@ -105,6 +111,7 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
 
   useEffect(() => {
     fetchGroupCode();
+    fetchFriends();
 
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -116,11 +123,19 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose, groupId]);
 
-  useEffect(() => {
-    if (groupCode) {
-      console.log(groupCode);
+  const fetchFriends = async () => {
+    setLoadingFriends(true);
+    try {
+      const data = await getBrothers();
+      console.log("data is : ", data);
+      setFriends(data.brothers || []);
+    } catch (err) {
+      console.error("Error fetching friends:", err);
+      setFriends([]);
+    } finally {
+      setLoadingFriends(false);
     }
-  }, [groupCode]);
+  };
 
   const fetchGroupCode = async () => {
     setLoadingCode(true);
@@ -158,25 +173,28 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
     }
   };
 
+  const toggleFriendSelection = (friend) => {
+    setSelectedFriends((prev) => {
+      const isSelected = prev.some((f) => f.id === friend.id);
+      if (isSelected) {
+        return prev.filter((f) => f.id !== friend.id);
+      } else {
+        return [...prev, friend];
+      }
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (activeTab === "usernames") {
-      const usernameList = usernames
-        .split(",")
-        .map((u) => u.trim())
-        .filter((u) => u.length > 0);
-
-      if (usernameList.length === 0) {
-        setError("Please enter at least one username");
+    if (activeTab === "friends") {
+      if (selectedFriends?.length === 0) {
+        setError("Please select at least one friend");
         return;
       }
 
-      if (usernameList.some((username) => username.length < 3)) {
-        setError("All usernames must be at least 3 characters");
-        return;
-      }
+      const usernameList = selectedFriends?.map((friend) => friend.username);
 
       setIsLoading(true);
 
@@ -238,11 +256,15 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
     return `${diffHours}h left`;
   };
 
+  const filteredFriends = friends.filter((friend) =>
+    friend.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div
         ref={modalRef}
-        className="bg-gradient-to-br from-[var(--main-color)] to-[var(--dark-color)] rounded-2xl border border-[var(--g-color)] border-opacity-30 shadow-2xl max-w-2xl w-full"
+        className="bg-gradient-to-br from-[var(--main-color)] to-[var(--dark-color)] rounded-2xl border border-[var(--g-color)] border-opacity-30 shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col"
       >
         {/* Header */}
         <div className="p-8 pb-6 border-b border-[var(--g-color)] border-opacity-20">
@@ -274,16 +296,16 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
         <div className="px-8 pt-6 border-b border-[var(--g-color)] border-opacity-20">
           <div className="flex gap-6">
             <button
-              onClick={() => setActiveTab("usernames")}
+              onClick={() => setActiveTab("friends")}
               className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === "usernames"
+                activeTab === "friends"
                   ? "border-[var(--bright-b-color)] text-[var(--bright-b-color)]"
                   : "border-transparent text-[var(--g-color)] hover:text-[var(--w-color)]"
               }`}
             >
               <div className="flex items-center gap-2">
                 <User size={16} />
-                By Username
+                Invite Friends
               </div>
             </button>
             <button
@@ -303,38 +325,140 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
         </div>
 
         {/* Form Content */}
-        <div className="p-8">
-          {activeTab === "usernames" ? (
+        <div className="flex-1 overflow-auto p-8">
+          {activeTab === "friends" ? (
             <form onSubmit={handleSubmit}>
               <div className="mb-8">
                 <label className="text-[var(--w-color)] text-lg font-medium flex items-center mb-4">
                   <div className="w-8 h-8 bg-[var(--bright-b-color)] bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
                     <User size={18} className="text-[var(--w-color)]" />
                   </div>
-                  Usernames
+                  Select Friends
                 </label>
-                <div className="relative">
-                  <textarea
-                    value={usernames}
-                    onChange={(e) => {
-                      setUsernames(e.target.value);
-                      setError("");
-                    }}
+
+                {/* Search Bar */}
+                <div className="relative mb-6">
+                  <Search
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--g-color)]"
+                    size={20}
+                  />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    className={`w-full bg-[var(--dark-color)] text-[var(--w-color)] text-lg rounded-xl border-2 py-4 px-4 transition-all min-h-[120px] resize-none ${
-                      error
-                        ? "border-[var(--r-color)]"
-                        : "border-[var(--g-color)] border-opacity-30"
-                    }`}
-                    placeholder="Enter usernames separated by commas (e.g., user1, user2, user3)..."
+                    className="w-full bg-[var(--dark-color)] text-[var(--w-color)] rounded-xl border-2 border-[var(--g-color)] border-opacity-30 py-3 px-4 pl-12 transition-all"
+                    placeholder="Search friends?..."
                     disabled={isLoading}
                     autoFocus
                   />
                 </div>
 
-                <p className="text-[var(--g-color)] text-sm mt-3">
-                  Enter multiple usernames separated by commas
-                </p>
+                {/* Selected Friends Preview */}
+                {selectedFriends?.length > 0 && (
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[var(--w-color)] font-medium">
+                        Selected ({selectedFriends?.length})
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedFriends([])}
+                        className="text-sm text-[var(--g-color)] hover:text-[var(--w-color)]"
+                      >
+                        Clear all
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedFriends?.map((friend) => (
+                        <div
+                          key={friend.id}
+                          className="flex items-center gap-2 bg-gradient-to-r from-[var(--bright-b-color)]/20 to-[var(--b-color)]/20 px-3 py-2 rounded-lg border border-[var(--bright-b-color)]/30"
+                        >
+                          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[var(--bright-b-color)] to-[var(--b-color)] flex items-center justify-center">
+                            <DefaultIcon
+                              name={friend.username}
+                              size={12}
+                              className="text-white"
+                            />
+                          </div>
+                          <span className="text-[var(--w-color)] text-sm font-medium">
+                            @{friend.username}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => toggleFriendSelection(friend)}
+                            className="text-[var(--g-color)] hover:text-[var(--w-color)]"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Friends List */}
+                <div className="bg-[var(--dark-color)] rounded-xl border border-[var(--g-color)] border-opacity-30 max-h-60 overflow-y-auto">
+                  {loadingFriends ? (
+                    <div className="flex justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-[var(--bright-b-color)] border-t-transparent"></div>
+                    </div>
+                  ) : filteredFriends?.length > 0 ? (
+                    filteredFriends?.map((friend) => {
+                      const isSelected = selectedFriends?.some(
+                        (f) => f.id === friend.id
+                      );
+                      return (
+                        <div
+                          key={friend.id}
+                          className={`flex items-center gap-4 p-4 cursor-pointer transition-colors border-b border-[var(--g-color)] border-opacity-10 last:border-b-0 ${
+                            isSelected
+                              ? "bg-gradient-to-r from-[var(--bright-b-color)]/10 to-[var(--b-color)]/10"
+                              : "hover:bg-[var(--main-color)]"
+                          }`}
+                          onClick={() => toggleFriendSelection(friend)}
+                        >
+                          <div className="relative">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--bright-b-color)] to-[var(--b-color)] flex items-center justify-center">
+                              <DefaultIcon
+                                name={friend.username}
+                                size={20}
+                                className="text-white"
+                              />
+                            </div>
+                            {isSelected && (
+                              <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border-2 border-[var(--dark-color)]">
+                                <Check size={10} className="text-white" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-[var(--w-color)] font-medium">
+                              @{friend.username}
+                            </h4>
+                            {friend.full_name && (
+                              <p className="text-[var(--g-color)] text-sm">
+                                {friend.full_name}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-8">
+                      <div className="w-12 h-12 mx-auto mb-4 bg-[var(--dark-color)] rounded-full flex items-center justify-center">
+                        <User size={20} className="text-[var(--g-color)]" />
+                      </div>
+                      <p className="text-[var(--g-color)]">
+                        {searchQuery
+                          ? "No friends found"
+                          : "No friends available"}
+                      </p>
+                    </div>
+                  )}
+                </div>
 
                 {error && (
                   <div className="mt-4 p-4 bg-[var(--r-color)]/10 border border-[var(--r-color)]/20 rounded-xl">
@@ -356,12 +480,16 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
                 <button
                   type="submit"
                   onClick={handleSubmit}
-                  disabled={!usernames.trim() || isLoading}
+                  disabled={selectedFriends?.length === 0 || isLoading}
                   className={`px-8 py-3 text-white text-lg rounded-xl font-medium flex items-center gap-3 ${
                     isLoading
                       ? "bg-[var(--b-color)]"
                       : "bg-gradient-to-r from-[var(--bright-b-color)] to-[var(--b-color)] hover:from-[var(--b-color-hover)] hover:to-[var(--bright-b-color)]"
-                  } ${!usernames.trim() ? "opacity-50 cursor-not-allowed" : ""}`}
+                  } ${
+                    selectedFriends?.length === 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                 >
                   {isLoading ? (
                     <>
@@ -371,7 +499,8 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
                   ) : (
                     <>
                       <Mail size={20} />
-                      Send Invitations
+                      Invite {selectedFriends?.length}{" "}
+                      {selectedFriends?.length === 1 ? "Friend" : "Friends"}
                     </>
                   )}
                 </button>
@@ -379,6 +508,7 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
             </form>
           ) : (
             <div className="space-y-6">
+              {/* ... (keep the existing code tab content exactly as it was) ... */}
               <div className="mb-8">
                 <label className="text-[var(--w-color)] text-lg font-medium flex items-center mb-4">
                   <div className="w-8 h-8 bg-[var(--bright-b-color)] bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
@@ -564,11 +694,11 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
 
                 <div className="flex gap-3">
                   <button
-                    onClick={() => setActiveTab("usernames")}
+                    onClick={() => setActiveTab("friends")}
                     className="px-6 py-3 text-white rounded-xl font-medium flex items-center gap-2 bg-gradient-to-r from-[var(--bright-b-color)] to-[var(--b-color)] hover:from-[var(--b-color-hover)] hover:to-[var(--bright-b-color)] transition-all"
                   >
                     <User size={18} />
-                    Username Invite
+                    Invite Friends
                   </button>
 
                   <button

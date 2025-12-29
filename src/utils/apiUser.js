@@ -1,11 +1,11 @@
-import api from './api';
+import api from "./api";
 
 export const blockUser = async (userId) => {
   try {
     const response = await api.post(`/api/block-user/${userId}/`);
     return response.data;
   } catch (error) {
-    console.error('Error blocking user:', error);
+    console.error("Error blocking user:", error);
     throw error;
   }
 };
@@ -15,7 +15,7 @@ export const deleteBrother = async (userId) => {
     const response = await api.delete(`/api/delete-brother/${userId}/`);
     return response.data;
   } catch (error) {
-    console.error('Error deleting brother:', error);
+    console.error("Error deleting brother:", error);
     throw error;
   }
 };
@@ -25,37 +25,37 @@ export const deleteUser = async (userId) => {
     const response = await api.post(`/api/delete/${userId}/`);
     return response.data;
   } catch (error) {
-    console.error('Error deleting user account:', error);
+    console.error("Error deleting user account:", error);
     throw error;
   }
 };
 
 export const getFcmDevice = async () => {
   try {
-    const response = await api.get('/api/fcm-device/');
+    const response = await api.get("/api/fcm-device/");
     return response.data;
   } catch (error) {
-    console.error('Error retrieving FCM device info:', error);
+    console.error("Error retrieving FCM device info:", error);
     throw error;
   }
 };
 
 export const getBlockedUsers = async () => {
   try {
-    const response = await api.get('/api/list-blocked/');
+    const response = await api.get("/api/list-blocked/");
     return response.data;
   } catch (error) {
-    console.error('Error retrieving blocked users:', error);
+    console.error("Error retrieving blocked users:", error);
     throw error;
   }
 };
 
-export const getFriends = async () => {
+export const getBrothers = async () => {
   try {
-    const response = await api.get('/api/list-friends/');
+    const response = await api.get("/api/list-brothers/");
     return response.data;
   } catch (error) {
-    console.error('Error retrieving friends list:', error);
+    console.error("Error retrieving brothers list:", error);
     throw error;
   }
 };
@@ -65,7 +65,7 @@ export const getMutualBrothers = async (userId) => {
     const response = await api.get(`/api/mutual-brother/${userId}/`);
     return response.data;
   } catch (error) {
-    console.error('Error retrieving mutual brothers:', error);
+    console.error("Error retrieving mutual brothers:", error);
     throw error;
   }
 };
@@ -75,7 +75,7 @@ export const getUserSettings = async (userId) => {
     const response = await api.get(`/api/usersettings/${userId}/`);
     return response.data;
   } catch (error) {
-    console.error('Error retrieving user settings:', error);
+    console.error("Error retrieving user settings:", error);
     throw error;
   }
 };
@@ -85,7 +85,7 @@ export const updateUserSettingsPut = async (userId, settings) => {
     const response = await api.put(`/api/usersettings/${userId}/`, settings);
     return response.data;
   } catch (error) {
-    console.error('Error updating user settings with PUT:', error);
+    console.error("Error updating user settings with PUT:", error);
     throw error;
   }
 };
@@ -95,17 +95,17 @@ export const updateUserSettingsPatch = async (userId, settings) => {
     const response = await api.patch(`/api/usersettings/${userId}/`, settings);
     return response.data;
   } catch (error) {
-    console.error('Error updating user settings with PATCH:', error);
+    console.error("Error updating user settings with PATCH:", error);
     throw error;
   }
 };
 
 export const googleAuthPost = async (code) => {
   try {
-    const response = await api.post('/auth/google/', code);
+    const response = await api.post("/auth/google/", code);
     return response.data;
   } catch (error) {
-    console.error('Error exchanging Google code:', error);
+    console.error("Error exchanging Google code:", error);
     throw error;
   }
 };

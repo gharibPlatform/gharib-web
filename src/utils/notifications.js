@@ -1,8 +1,8 @@
 import api from './api';
 
-export const acceptBrotherRequest = async (userId) => {
+export const acceptBrotherRequest = async (br_req_id) => {
   try {
-    const response = await api.post(`/notification/accept-br-req/${userId}/`);
+    const response = await api.post(`/notification/accept-br-req/${br_req_id}/`);
     return response.data;
   } catch (error) {
     console.error('Error accepting brother request:', error);

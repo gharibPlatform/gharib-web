@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { getFriends, blockUser, deleteBrother } from "../utils/apiUser";
+import { getBrothers, blockUser, deleteBrother } from "../utils/apiUser";
 import { useState, useEffect } from "react";
 
 const ChatActionsContext = createContext();
@@ -11,7 +11,7 @@ export function ChatActionsProvider({ children }) {
     useEffect(() => {
         async function fetchFriends() {
           try {
-            const data = await getFriends();
+            const data = await getBrothers();
             setFriends(data);
           } catch (error) {
             console.error("Failed to fetch friends:", error);

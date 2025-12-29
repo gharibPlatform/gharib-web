@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import QuranOverview from "../../../components/quran/quranOverview/QuranOverview";
 import indexToStringSurah from "../../../../indexToStringSurah.json";
 import { verseByKey } from "../../../utils/quran/quran";
-import { listChapters } from "../../../utils/quran/quran";
 import SideBar from "../../../components/common/sidebar/Sidebar";
+import useQuranHeaderChapter from "../../../stores/chapterQuranHeaderStore";
 
 const Page = () => {
   const [verse, setVerse] = useState(null);
   const [surahName, setSurahName] = useState(null);
-  const [chapters, setChapters] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { quranChapters, fetchQuranChapters } = useQuranHeaderChapter();
 
   const getRandomVerse = () => {
     const surahIds = Object.keys(indexToStringSurah);
@@ -39,12 +39,13 @@ const Page = () => {
   };
 
   const fetchChapters = async () => {
-    try {
-      const chapters = await listChapters();
-      setChapters(chapters);
-      console.log("chapters", chapters);
-    } catch (error) {
-      console.log(error);
+    if (!quranChapters) {
+      try {
+        console.log("fetching quranChapters");
+        fetchQuranChapters();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -54,12 +55,10 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    console.log("chapters is : ", chapters);
-    console.log("verse is : ", verse);
-    if (verse && chapters) {
+    if (verse && quranChapters) {
       setIsLoading(false);
     }
-  }, [verse, chapters]);
+  }, [verse, quranChapters]);
 
   return (
     <div className="flex w-screen h-screen">
@@ -72,7 +71,7 @@ const Page = () => {
           </div>
         ) : (
           <QuranOverview
-            chapters={chapters}
+            chapters={quranChapters}
             randomVerse={verse}
             surahName={surahName}
           />

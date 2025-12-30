@@ -19,7 +19,6 @@ import {
   getGroupCodeInfo,
   generateGroupCode,
 } from "../../utils/group/apiGroupShare";
-import { getBrothers } from "../../utils/apiUser";
 import DefaultIcon from "../common/icon/DefaultIcon";
 import useBrothersStore from "../../stores/user/useBrothersStore";
 
@@ -93,10 +92,14 @@ export const InviteErrorModal = ({ error, onClose, onRetry }) => {
   );
 };
 
-export default function InviteMembersModal({ onClose, groupName, groupId }) {
+export default function InviteMembersModal({
+  onClose,
+  groupName,
+  groupId,
+  onInviteMembers,
+}) {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [loadingFriends, setLoadingFriends] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("friends");
@@ -124,6 +127,12 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose, groupId, fetchBrothers]);
+
+  useEffect(() => {
+    if (brothers) {
+      console.log("brothers is : ", brothers);
+    }
+  }, [brothers]);
 
   const fetchGroupCode = async () => {
     setLoadingCode(true);
@@ -182,7 +191,9 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
         return;
       }
 
-      const usernameList = selectedFriends.map((friend) => friend.username);
+      const usernameList = selectedFriends.map(
+        (friend) => friend.brother.username
+      );
 
       setIsLoading(true);
 
@@ -246,7 +257,9 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
 
   const filteredFriends =
     brothers?.filter((friend) =>
-      friend?.username?.toLowerCase().includes(searchQuery.toLowerCase())
+      friend?.brother?.username
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase())
     ) || [];
 
   return (
@@ -362,17 +375,19 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
                       {selectedFriends?.map((friend) => (
                         <div
                           key={friend.id}
-                          className="flex items-center gap-2 bg-gradient-to-r from-[var(--bright-b-color)]/20 to-[var(--b-color)]/20 px-3 py-2 rounded-lg border border-[var(--bright-b-color)]/30"
+                          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--bright-b-color)]"
                         >
-                          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[var(--bright-b-color)] to-[var(--b-color)] flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center">
                             <DefaultIcon
-                              name={friend.username}
-                              size={12}
+                              name={friend.brother.username}
+                              fontSize={18}
+                              height={8}
+                              width={8}
                               className="text-white"
                             />
                           </div>
                           <span className="text-[var(--w-color)] text-sm font-medium">
-                            @{friend.username}
+                            {friend.brother.username}
                           </span>
                           <button
                             type="button"
@@ -409,10 +424,12 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
                           onClick={() => toggleFriendSelection(friend)}
                         >
                           <div className="relative">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--bright-b-color)] to-[var(--b-color)] flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center">
                               <DefaultIcon
-                                name={friend.username}
-                                size={20}
+                                name={friend.brother.username}
+                                fontSize={24}
+                                height={12}
+                                width={12}
                                 className="text-white"
                               />
                             </div>
@@ -424,11 +441,11 @@ export default function InviteMembersModal({ onClose, groupName, groupId }) {
                           </div>
                           <div className="flex-1">
                             <h4 className="text-[var(--w-color)] font-medium">
-                              @{friend.username}
+                              {friend.brother.username}
                             </h4>
-                            {friend.full_name && (
+                            {friend.brother_since && (
                               <p className="text-[var(--g-color)] text-sm">
-                                {friend.full_name}
+                                {friend.brother_since}
                               </p>
                             )}
                           </div>

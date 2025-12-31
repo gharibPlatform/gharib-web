@@ -30,7 +30,7 @@ export default function QuranSurah({
   const observerRef = useRef(null);
 
   // Header verse for scroll into view
-  const { goToVerse, setQuranHeaderVerse, setActiveVerse } =
+  const { goToVerse, setActiveVerse, setQuranHeaderVerse, setGoToVerse } =
     useQuranHeaderVerse();
   const { quranHeaderChapter, pageToFetch } = useQuranHeaderChapter();
   const { setReadVersesKeys } = useKhatmaStore();
@@ -70,6 +70,8 @@ export default function QuranSurah({
 
   // Scroll to verse logic
   useEffect(() => {
+    console.log("goToVerse is : ", goToVerse);
+
     if (goToVerse && quranHeaderChapter && !isKhatmaMode) {
       console.log("Navigating to verse:", goToVerse);
       console.log("lineRefs is : ", lineRefs);
@@ -233,6 +235,14 @@ export default function QuranSurah({
     });
   }, [pageToFetch]);
 
+  const handleBeginningOfTheSurah = () => {
+    setQuranHeaderVerse(1);
+    setGoToVerse(null);
+    setTimeout(() => {
+      setGoToVerse(`${quranHeaderChapter.id}:${1}`);
+    }, 0);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center pt-6 pb-8">
       <Virtuoso
@@ -270,7 +280,9 @@ export default function QuranSurah({
         components={{
           Footer: () => (
             <div className="w-full flex justify-center pt-12 pb-24">
-              <QuranFooter />
+              <QuranFooter
+                handleBeginningOfTheSurah={handleBeginningOfTheSurah}
+              />
             </div>
           ),
         }}

@@ -315,10 +315,6 @@ export default function QuranContent({
           />
         )}
       </div>
-
-      {/* <div className=""> */}
-      {/* <QuranFooter /> */}
-      {/* </div> */}
     </div>
   );
 }

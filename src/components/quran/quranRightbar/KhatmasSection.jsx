@@ -1,17 +1,37 @@
-import CreateKhatmaModal from "../createKhatmaModal/CreateKhatmaModal";
+import CreateKhatmaModal from "../../khatmas/create_khatma/CreateKhatmaModal";
+import JoinKhatmaModal from "../../khatmas/create_khatma/JoinKhatmaModal";
 import KhatmaCard from "./KhatmaCard";
 import { Plus, Target } from "lucide-react";
 import { useState } from "react";
 import { createKhatma } from "../../../utils/khatma/apiKhatma";
+import { joinKhatma } from "../../../utils/khatma/apiKhatma";
 
 export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
   const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
+  const [showJoinKhatmaModal, setShowJoinKhatmaModal] = useState(false);
+  const [lastCreatedKhatma, setLastCreatedKhatma] = useState(null);
 
   const handleCreateKhatma = (khatmaData) => {
     createKhatma(khatmaData).then((res) => {
-      console.log("res", res);
+      setLastCreatedKhatma(res);
+      setShowCreateKhatmaModal(false);
+      setShowJoinKhatmaModal(true);
     });
-    setShowCreateKhatmaModal(false);
+  };
+
+  const handleJoinKhatma = async (khatma) => {
+    try {
+      await joinKhatma(khatma.id);
+
+      // Optionally: Show success message or update UI
+      console.log("Successfully joined khatma:", khatma.name);
+
+      // You might want to refresh the khatmas list here
+      // or update the lastCreatedKhatma status
+    } catch (error) {
+      console.error("Error joining khatma:", error);
+      throw error; // Re-throw to handle in modal
+    }
   };
 
   if (isLoadingKhatmas) {
@@ -45,10 +65,22 @@ export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
 
   return (
     <div className="p-4 text-white">
+      {/* Create Khatma Modal */}
       <CreateKhatmaModal
         isOpen={showCreateKhatmaModal}
         onClose={() => setShowCreateKhatmaModal(false)}
         onSubmit={handleCreateKhatma}
+      />
+
+      {/* Join Khatma Modal */}
+      <JoinKhatmaModal
+        isOpen={showJoinKhatmaModal}
+        onClose={() => {
+          setShowJoinKhatmaModal(false);
+          setLastCreatedKhatma(null);
+        }}
+        onJoin={handleJoinKhatma}
+        khatma={lastCreatedKhatma}
       />
 
       <div className="flex justify-between items-center mb-6">

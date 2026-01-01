@@ -237,6 +237,10 @@ export default function QuranSurah({
 
   const handleBeginningOfTheSurah = () => {
     setQuranHeaderVerse(1);
+    //two different state updates to insure that the goToVerse is acutally changing means the useEffect that depends on it for the scrollIntoView is firing well... means two renders
+    //could consider another way to do this by using a unique id for each goToVerse like so  :
+    //setGoToVerse(`${quranHeaderChapter.id}:${1}:${Date.now()}`); and then later I would still get the same goToVerse but the useEffect
+    // would Fire because the state actually changed but I dont know whether this will cause errors later so I would just be good with the two renders...
     setGoToVerse(null);
     setTimeout(() => {
       setGoToVerse(`${quranHeaderChapter.id}:${1}`);

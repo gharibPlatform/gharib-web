@@ -1,4 +1,4 @@
-import CreateKhatmaModal from "./CreateKhatmaModal";
+import CreateKhatmaModal from "../createKhatmaModal/CreateKhatmaModal";
 import KhatmaCard from "./KhatmaCard";
 import { Plus, Target } from "lucide-react";
 import { useState } from "react";

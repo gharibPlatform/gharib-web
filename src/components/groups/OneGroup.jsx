@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { UserPlus } from "lucide-react";
-import CreateKhatmaModal from "../quran/quranRightbar/CreateKhatmaModal";
+import CreateKhatmaModal from "../quran/createKhatmaModal/CreateKhatmaModal";
 import { SettingsModal } from "./OneGroupSettingsModal";
 import { GroupHeader } from "./OneGroupHeader";
 import { GroupTabs } from "./OneGroupTabs";

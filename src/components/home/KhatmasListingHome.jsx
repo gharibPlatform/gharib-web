@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import useQuranHeaderVerse from "../../stores/quran/verseQuranHeaderStore";
 import useKhatmaStore from "../../stores/khatamat/khatmasStore";
 import indexToStringSurah from "../../../indexToStringSurah.json";
-import CreateKhatmaModal from "../quran/quranRightbar/CreateKhatmaModal";
+import CreateKhatmaModal from "../quran/createKhatmaModal/CreateKhatmaModal";
 
 const KhatmaCard = ({ khatma, onContinue, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);

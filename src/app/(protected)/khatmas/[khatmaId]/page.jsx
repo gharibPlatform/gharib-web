@@ -9,18 +9,26 @@ import useUserStore from "../../../../stores/user/userStore";
 import { useCalculateTimeLeft } from "../../../../hooks/logic/calculateTimeLeft";
 import Circle from "../../../../components/common/circle/Circle";
 import indexToStringSurah from "../../../../utils/consts/indexToStringSurah.json";
+import JoinKhatmaModal from "../../../../components/khatmas/create_khatma/JoinKhatmaModal";
+import { postKhatmaMembership } from "../../../../utils/khatma/apiKhatma";
 
 const JoinKhatma = ({ khatmaDetails, membersInKhatma }) => {
   const timeLeft = useCalculateTimeLeft(khatmaDetails?.endDate);
   const orangeDegree = (khatmaDetails?.progress * 360) / 100;
+  const [showJoinKhatmaModal, setShowJoinKhatmaModal] = useState(false);
 
-  // const handleJoinKhatma = async () => {
-  //   try {
-  //     await joinKhatma(khatmaDetails.id);
-  //   } catch (error) {
-  //     console.error("Error joining khatma:", error);
-  //   }
-  // };
+  const handleButtonClick = () => {
+    setShowJoinKhatmaModal(true);
+  };
+
+  const handleJoinKhatma = async (khatma, userSettings) => {
+    try {
+      await postKhatmaMembership(khatma.id, userSettings);
+      console.log("Successfully joined khatma:", khatma.name);
+    } catch (error) {
+      console.error("Error joining khatma:", error);
+    }
+  };
 
   const handleClickVerse = (surah, verse) => {
     const verseKey = surah + ":" + verse;
@@ -29,6 +37,16 @@ const JoinKhatma = ({ khatmaDetails, membersInKhatma }) => {
 
   return (
     <div className="flex flex-col p-4 h-full w-full gap-4 overflow-hidden bg-[var(--secondary-color)]">
+      <JoinKhatmaModal
+        isOpen={showJoinKhatmaModal}
+        onClose={() => {
+          setShowJoinKhatmaModal(false);
+          setLastCreatedKhatma(null);
+        }}
+        onJoin={handleJoinKhatma}
+        khatma={khatmaDetails}
+      />
+
       <div className="bg-[var(--main-color)] rounded-lg text-white p-4">
         <h1 className="text-2xl font-bold text-center">{khatmaDetails.name}</h1>
         <p className="text-center text-gray-300 mt-2">
@@ -183,7 +201,7 @@ const JoinKhatma = ({ khatmaDetails, membersInKhatma }) => {
                 Join this khatma and get your share of verses to complete
               </p>
               <button
-                // onClick={handleJoinKhatma}
+                onClick={handleButtonClick}
                 className="w-full bg-[var(--o-color)] hover:bg-[var(--o-color-hover)] text-white py-3 px-4 rounded-lg font-semibold transition-colors"
               >
                 Join Khatma

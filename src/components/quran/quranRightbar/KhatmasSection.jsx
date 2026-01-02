@@ -4,7 +4,7 @@ import KhatmaCard from "./KhatmaCard";
 import { Plus, Target } from "lucide-react";
 import { useState } from "react";
 import { createKhatma } from "../../../utils/khatma/apiKhatma";
-import { joinKhatma } from "../../../utils/khatma/apiKhatma";
+import { postKhatmaMembership } from "../../../utils/khatma/apiKhatma";
 
 export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
   const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
@@ -19,18 +19,14 @@ export default function KhatmasSection({ khatmas, isLoadingKhatmas }) {
     });
   };
 
-  const handleJoinKhatma = async (khatma) => {
+  const handleJoinKhatma = async (khatma, userSettings) => {
     try {
-      await joinKhatma(khatma.id);
+      await postKhatmaMembership(khatma.id, userSettings);
 
-      // Optionally: Show success message or update UI
       console.log("Successfully joined khatma:", khatma.name);
-
-      // You might want to refresh the khatmas list here
-      // or update the lastCreatedKhatma status
     } catch (error) {
       console.error("Error joining khatma:", error);
-      throw error; // Re-throw to handle in modal
+      throw error;
     }
   };
 

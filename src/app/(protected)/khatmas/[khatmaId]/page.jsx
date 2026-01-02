@@ -8,7 +8,7 @@ import useQuranHeaderChapter from "../../../../stores/quran/chapterQuranHeaderSt
 import useUserStore from "../../../../stores/user/userStore";
 import { useCalculateTimeLeft } from "../../../../hooks/logic/calculateTimeLeft";
 import Circle from "../../../../components/common/circle/Circle";
-import indexToStringSurah from "../../../../../indexToStringSurah.json";
+import indexToStringSurah from "../../../../utils/consts/indexToStringSurah.json";
 
 const JoinKhatma = ({ khatmaDetails, membersInKhatma }) => {
   const timeLeft = useCalculateTimeLeft(khatmaDetails?.endDate);

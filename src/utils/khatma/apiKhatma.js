@@ -6,7 +6,7 @@ const API_BASE_URL = "http://localhost";
 export const getUserKhatmaDetails = async (khatmaId) => {
   try {
     const response = await api.get(
-      `${API_BASE_URL}/khatma/${khatmaId}/membership/user/`,
+      `${API_BASE_URL}/khatma/${khatmaId}/membership/user/`
     );
     return response.data;
   } catch (error) {
@@ -17,10 +17,7 @@ export const getUserKhatmaDetails = async (khatmaId) => {
 
 export const createKhatma = async (data) => {
   try {
-    const response = await api.post(
-      `${API_BASE_URL}/khatma/create/`,
-      data
-    );
+    const response = await api.post(`${API_BASE_URL}/khatma/create/`, data);
     return response.data;
   } catch (error) {
     console.error("Error creating khatma:", error);
@@ -64,10 +61,10 @@ export const updateKhatmaMembership = async (id, data) => {
   }
 };
 
-export const postKhatmaMembership = async (id, data) => {
+export const postKhatmaMembership = async (khatmaId, data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/khatma/khatma-membership/${id}/`,
+      `${API_BASE_URL}/khatma/${khatmaId}/membership/create/`,
       data
     );
     return response.data;

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import verseIndexMap from "../../../verseIndexMap.json";
+import verseIndexMap from "../../utils/consts/verseIndexMap.json";
 
 export const useAbsoluteVerseDomain = (
   startSurah,

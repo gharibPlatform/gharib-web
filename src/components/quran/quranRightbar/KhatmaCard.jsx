@@ -1,6 +1,6 @@
 import { Clock, Calendar, BookOpen, Router } from "lucide-react";
 import { useState, useEffect } from "react";
-import indexToStringSurah from "../../../../indexToStringSurah.json";
+import indexToStringSurah from "../../../utils/consts/indexToStringSurah.json";
 import { useRouter } from "next/navigation";
 import useQuranHeaderVerse from "../../../stores/quran/verseQuranHeaderStore";
 import useKhatmaStore from "../../../stores/khatamat/khatmasStore";

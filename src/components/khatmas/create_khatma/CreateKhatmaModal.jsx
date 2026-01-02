@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { User, Calendar, FileText } from "lucide-react";
 import useUserStore from "../../../stores/user/userStore";
 import useGroupStore from "../../../stores/group/groupStore";
-import indexToString from "../../../../indexToStringSurah.json";
+import { surahOptions } from "../../../utils/consts/quranSelector";
 
 import ModalWrapper from "./ModalWrapper";
 import ModalHeader from "./ModalHeader";
@@ -30,12 +30,6 @@ export default function CreateKhatmaModal({ isOpen, onClose, onSubmit }) {
 
   const { user } = useUserStore();
   const { groups, fetchGroups, loadingGroups } = useGroupStore();
-
-  const surahOptions = Object.entries(indexToString).map(([number, data]) => ({
-    number: parseInt(number),
-    name: data.name,
-    verses: data.verses,
-  }));
 
   useEffect(() => {
     if (isOpen) {

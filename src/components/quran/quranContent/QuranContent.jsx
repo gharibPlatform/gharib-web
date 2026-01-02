@@ -16,7 +16,7 @@ import ProgressTrackerLine from "../../common/progress tracker line/ProgressTrac
 import CurrentKhatma from "../quranKhatmas/CurrentKhatma";
 import QuranVerseModal from "./QuranVerseModal";
 import VersePopupController from "./VersePopupController";
-import verseIndexMap from "../../../../verseIndexMap.json";
+import verseIndexMap from "../../../utils/consts/verseIndexMap.json";
 import UpdateProgressModal from "./updateProgressModal";
 import QuranVerseTranslateModal from "./QuranVerseTranslateModal";
 import QuranVeseTafsirModal from "./QuranVerseTafsirModal";

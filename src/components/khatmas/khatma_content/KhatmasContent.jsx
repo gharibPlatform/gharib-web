@@ -7,7 +7,7 @@ import useUserStore from "../../../stores/user/userStore";
 
 import Circle from "../../common/circle/Circle";
 import { useRouter } from "next/navigation";
-import indexToStringSurah from "../../../../indexToStringSurah.json";
+import indexToStringSurah from "../../../utils/consts/indexToStringSurah.json";
 import { useCalculateTimeLeft } from "../../../hooks/logic/calculateTimeLeft";
 
 function JoinKhatma({ khatmaDetails, membersInKhatma, joinKhatma }) {

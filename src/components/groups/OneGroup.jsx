@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { UserPlus } from "lucide-react";
 import CreateKhatmaModal from "../khatmas/create_khatma/CreateKhatmaModal";
+import JoinKhatmaModal from "../khatmas/create_khatma/JoinKhatmaModal";
 import { SettingsModal } from "./OneGroupSettingsModal";
 import { GroupHeader } from "./OneGroupHeader";
 import { GroupTabs } from "./OneGroupTabs";
@@ -8,20 +9,21 @@ import { GroupToolbar } from "./OneGroupToolbar";
 import { GroupContent } from "./OneGroupContent";
 import useUserStore from "../../stores/user/userStore";
 import InviteMembersModal from "./InviteMembersModal";
+import { createKhatma } from "../../utils/khatma/apiKhatma";
+import { postKhatmaMembership } from "../../utils/khatma/apiKhatma";
 
 export default function OneGroup({ group, groupKhatmas }) {
   const { user } = useUserStore();
 
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
+  const [showJoinKhatmaModal, setShowJoinKhatmaModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
-  const handleInviteMembers = async (usernames) => {
-    console.log("Inviting members:", usernames);
-  };
+  const [lastCreatedKhatma, setLastCreatedKhatma] = useState(null);
 
   const [activeTab, setActiveTab] = useState("members");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [memberFilter, setMemberFilter] = useState("all");
 
   const [notificationSettings, setNotificationSettings] = useState({
@@ -40,6 +42,28 @@ export default function OneGroup({ group, groupKhatmas }) {
   });
 
   const [loading, setLoading] = useState(false);
+
+  const handleInviteMembers = async (usernames) => {
+    console.log("Inviting members:", usernames);
+  };
+
+  const handleCreateKhatma = (khatmaData) => {
+    createKhatma(khatmaData).then((res) => {
+      setLastCreatedKhatma(res);
+      setShowCreateKhatmaModal(false);
+      setShowJoinKhatmaModal(true);
+    });
+  };
+
+  const handleJoinKhatma = async (khatma, userSettings) => {
+    try {
+      await postKhatmaMembership(khatma.id, userSettings);
+      console.log("Successfully joined khatma:", khatma.name);
+    } catch (error) {
+      console.error("Error joining khatma:", error);
+      throw error;
+    }
+  };
 
   const filteredMembers = useMemo(() => {
     return group?.memberships?.filter((member) => {
@@ -84,7 +108,18 @@ export default function OneGroup({ group, groupKhatmas }) {
       <CreateKhatmaModal
         isOpen={showCreateKhatmaModal}
         onClose={() => setShowCreateKhatmaModal(false)}
+        onSubmit={handleCreateKhatma}
         groupId={group.id}
+      />
+
+      <JoinKhatmaModal
+        isOpen={showJoinKhatmaModal}
+        onClose={() => {
+          setShowJoinKhatmaModal(false);
+          setLastCreatedKhatma(null);
+        }}
+        onJoin={handleJoinKhatma}
+        khatma={lastCreatedKhatma}
       />
 
       <SettingsModal

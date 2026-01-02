@@ -5,11 +5,15 @@ import useKhatmaStore from "../../../stores/khatamat/khatmasStore";
 import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import CreateKhatmaModal from "../create_khatma/CreateKhatmaModal";
+import JoinKhatmaModal from "../create_khatma/JoinKhatmaModal";
 import { createKhatma } from "../../../utils/khatma/apiKhatma";
+import { postKhatmaMembership } from "../../../utils/khatma/apiKhatma";
 
 export default function KhatmasListing() {
   const [activeFilters, setActiveFilters] = useState([]);
   const [showCreateKhatmaModal, setShowCreateKhatmaModal] = useState(false);
+  const [showJoinKhatmaModal, setShowJoinKhatmaModal] = useState(false);
+  const [lastCreatedKhatma, setLastCreatedKhatma] = useState(null);
 
   const router = useRouter();
 
@@ -21,10 +25,23 @@ export default function KhatmasListing() {
 
   const handleCreateKhatma = (khatmaData) => {
     createKhatma(khatmaData).then((res) => {
-      console.log("res", res);
+      console.log("Created khatma response:", res);
+      setLastCreatedKhatma(res);
+      setShowCreateKhatmaModal(false);
+      setShowJoinKhatmaModal(true);
     });
-    setShowCreateKhatmaModal(false);
   };
+
+  const handleJoinKhatma = async (khatma, userSettings) => {
+    try {
+      await postKhatmaMembership(khatma.id, userSettings);
+      console.log("Successfully joined khatma:", khatma.name);
+    } catch (error) {
+      console.error("Error joining khatma:", error);
+      throw error;
+    }
+  };
+
   const filteredKhatmas = useMemo(() => {
     if (!userKhatmas || activeFilters.length === 0) return userKhatmas;
 
@@ -66,10 +83,22 @@ export default function KhatmasListing() {
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
+      {/* Create Khatma Modal */}
       <CreateKhatmaModal
         isOpen={showCreateKhatmaModal}
         onClose={() => setShowCreateKhatmaModal(false)}
         onSubmit={handleCreateKhatma}
+      />
+
+      {/* Join Khatma Modal */}
+      <JoinKhatmaModal
+        isOpen={showJoinKhatmaModal}
+        onClose={() => {
+          setShowJoinKhatmaModal(false);
+          setLastCreatedKhatma(null);
+        }}
+        onJoin={handleJoinKhatma}
+        khatma={lastCreatedKhatma}
       />
 
       {/* Header Section */}
@@ -174,11 +203,12 @@ export default function KhatmasListing() {
                   {emptyState.subtitle}
                 </p>
                 {activeFilters.length === 0 && (
-                  <ActionButton
-                    label="Create your first khatma"
-                    onClick={() => console.log("Create")}
-                    className="mt-4"
-                  />
+                  <button
+                    onClick={() => setShowCreateKhatmaModal(true)}
+                    className="mt-4 px-6 py-3 bg-[var(--bright-b-color)] text-white rounded-lg hover:bg-[var(--b-color)] transition-colors"
+                  >
+                    Create your first khatma
+                  </button>
                 )}
               </div>
             )}

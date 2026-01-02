@@ -16,6 +16,9 @@ import useQuranHeaderVerse from "../../stores/quran/verseQuranHeaderStore";
 import useKhatmaStore from "../../stores/khatamat/khatmasStore";
 import indexToStringSurah from "../../utils/consts/indexToStringSurah.json";
 import CreateKhatmaModal from "../khatmas/create_khatma/CreateKhatmaModal";
+import JoinKhatmaModal from "../khatmas/create_khatma/JoinKhatmaModal";
+import { createKhatma } from "../../utils/khatma/apiKhatma";
+import { postKhatmaMembership } from "../../utils/khatma/apiKhatma";
 
 const KhatmaCard = ({ khatma, onContinue, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -83,7 +86,7 @@ const KhatmaCard = ({ khatma, onContinue, onClick }) => {
             <div className="flex items-center gap-3 text-sm text-white/70">
               <div className="flex items-center gap-1">
                 <Users size={14} />
-                <span>{khatma.khatma?.group_date?.name || "Personal"}</span>
+                <span>{khatma.khatma?.group_data?.name || "Personal"}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Calendar size={14} />
@@ -186,17 +189,33 @@ const KhatmaCard = ({ khatma, onContinue, onClick }) => {
   );
 };
 
-export default function KhatmasListingHome({
-  khatmas,
-  isLoadingKhatmas,
-  onCreateKhatma,
-}) {
+export default function KhatmasListingHome({ khatmas, isLoadingKhatmas }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [lastCreatedKhatma, setLastCreatedKhatma] = useState(null);
 
   const router = useRouter();
 
   const { setGoToVerse } = useQuranHeaderVerse();
   const { setCurrentKhatma } = useKhatmaStore();
+
+  const handleCreateKhatma = (khatmaData) => {
+    createKhatma(khatmaData).then((res) => {
+      setLastCreatedKhatma(res);
+      setShowCreateModal(false);
+      setShowJoinModal(true);
+    });
+  };
+
+  const handleJoinKhatma = async (khatma, userSettings) => {
+    try {
+      await postKhatmaMembership(khatma.id, userSettings);
+      console.log("Successfully joined khatma:", khatma.name);
+    } catch (error) {
+      console.error("Error joining khatma:", error);
+      throw error;
+    }
+  };
 
   const handleContinue = (khatma) => {
     setGoToVerse(khatma.currentSurah + ":" + khatma.currentVerse);
@@ -241,6 +260,23 @@ export default function KhatmasListingHome({
 
   return (
     <div className="p-6">
+      {/* Modals */}
+      <CreateKhatmaModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateKhatma}
+      />
+
+      <JoinKhatmaModal
+        isOpen={showJoinModal}
+        onClose={() => {
+          setShowJoinModal(false);
+          setLastCreatedKhatma(null);
+        }}
+        onJoin={handleJoinKhatma}
+        khatma={lastCreatedKhatma}
+      />
+
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-3xl font-bold text-white mb-2">Your Khatmas</h2>
@@ -298,6 +334,12 @@ export default function KhatmasListingHome({
             Start your first Khatma to begin tracking your Quran reading
             progress with friends or individually.
           </p>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="px-6 py-3 bg-[var(--bright-b-color)] text-white rounded-lg hover:bg-[var(--b-color)] transition-colors"
+          >
+            Create Your First Khatma
+          </button>
         </div>
       )}
 
@@ -320,12 +362,6 @@ export default function KhatmasListingHome({
           Create Khatma
         </button>
       </div>
-
-      <CreateKhatmaModal
-        isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        onSubmit={onCreateKhatma}
-      />
     </div>
   );
 }

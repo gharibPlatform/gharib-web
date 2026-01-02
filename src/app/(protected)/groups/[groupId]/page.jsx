@@ -30,8 +30,9 @@ const Page = () => {
     if (group) {
       setIsLoading(false);
       console.log("Group loaded:", group);
+      console.log("Group khatmas loaded:", groupKhatmas);
     }
-  }, [group]);
+  }, [group, groupKhatmas]);
 
   return (
     <div className="h-full overflow-hidden ">

@@ -202,6 +202,7 @@ const JoinKhatma = ({ khatmaDetails, membersInKhatma }) => {
 const Page = () => {
   const { khatmaId } = useParams();
   const {
+    userKhatmas,
     khatmaMembership,
     khatmaDetails,
     membersInKhatma,
@@ -229,12 +230,10 @@ const Page = () => {
         ]);
 
         const members = useKhatmaStore.getState().membersInKhatma;
-        console.log("members is : ", members);
-        console.log("user.username is : ", user.username);
+        const khatmaDetails = useKhatmaStore.getState().khatmaDetails;
 
-        let isMember = members?.find(
-          (member) => member.groupMembership.username === user.username
-        );
+        let isMember = khatmaDetails?.user_joined;
+
         if (isMember) {
           await fetchKhatmaMembership(khatmaId);
           setIsMember(true);

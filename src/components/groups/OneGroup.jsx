@@ -30,6 +30,8 @@ export default function OneGroup({ group, groupKhatmas }) {
     enabled: true,
   });
 
+  console.log("groupKhatmas are : ", groupKhatmas);
+  
   const [adminSettings, setAdminSettings] = useState({
     can_add_member: "all",
     can_add_member_custom: [],

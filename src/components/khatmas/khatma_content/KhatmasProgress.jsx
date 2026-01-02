@@ -130,7 +130,7 @@ export default function KhatmasProgress() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Members</h2>
               <div className="bg-[var(--dark-color)] px-3 py-1 rounded-full text-xs">
-                {khatmaMembership.length} users
+                {membersInKhatma?.length} users
               </div>
             </div>
             <div className="grid grid-cols-12 gap-3 mb-3 px-1 text-gray-400 text-xs">
@@ -145,7 +145,7 @@ export default function KhatmasProgress() {
                 .sort((a, b) => b.progress - a.progress)
                 .map((user, index) => (
                   <div
-                    key={`${user.groupMembership.userName}-${index}`}
+                    key={`${user.user.userName}-${index}`}
                     className={`grid grid-cols-12 gap-3 py-2 px-2 hover:bg-[var(--dark-color)] rounded-lg transition-colors items-center cursor-pointer text-sm ${
                       index === 0 ? "bg-[var(--dark-color)]" : ""
                     }`}
@@ -157,7 +157,7 @@ export default function KhatmasProgress() {
                       <span
                         className={`truncate ${index === 0 ? "text-[var(--o-color)]" : "text-white"}`}
                       >
-                        {user.groupMembership.username}
+                        {user.user.username}
                       </span>
                     </span>
                     <span className="col-span-3 text-xs text-gray-400">

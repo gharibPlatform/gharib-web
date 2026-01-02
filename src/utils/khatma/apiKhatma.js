@@ -40,7 +40,9 @@ export const getKhatmaMembership = async (khatmaId) => {
 
 export const getKhatmaByGroup = async (groupId) => {
   try {
+
     const response = await api.get(`${API_BASE_URL}/khatma/group/${groupId}/`);
+    console.log("response is : ", response);
     return response.data;
   } catch (error) {
     console.error("Error getting khatma from the group:", error);

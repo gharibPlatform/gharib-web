@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import SafeHtmlContent from "../../../utils/consts/safeHtmlContent";
 
 const CloseIcon = () => (
   <svg
@@ -57,9 +58,9 @@ const TafsirContent = ({ tafsir }) => (
         Tafsir
       </div>
     </div>
-    <div
+    <SafeHtmlContent
+      html={tafsir}
       className="text-white text-base leading-relaxed space-y-4 tafsir-content"
-      dangerouslySetInnerHTML={{ __html: tafsir }}
     />
   </div>
 );

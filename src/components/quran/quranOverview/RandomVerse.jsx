@@ -1,3 +1,5 @@
+import SafeHtmlContent from "../../../utils/consts/safeHtmlContent";
+
 export default function RandomVerse({ randomVerse, surahName }) {
   const pageNumberString = randomVerse?.page_number.toString().padStart(3, "0");
   const translation = randomVerse?.translations?.[0]?.text;
@@ -24,9 +26,10 @@ export default function RandomVerse({ randomVerse, surahName }) {
             <div className="text-sm text-[var(--lighter-color)] mb-2 font-medium">
               Translation:
             </div>
-            <div className="text-[var(--w-color)] text-sm leading-relaxed italic">
-              "{translation}"
-            </div>
+            <SafeHtmlContent
+              html={`"${translation}"`}
+              className="text-[var(--w-color)] text-sm leading-relaxed italic"
+            />
           </div>
         )}
 

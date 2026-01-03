@@ -12,17 +12,16 @@ export default function ProfileForm({
 }) {
   return (
     <div className="flex flex-col gap-8">
-      {/* Display Name */}
       <div className="pt-4">
-        <SectionHeader title="Change your display name" />
+        <SectionHeader title="Change your full name" />
         <FormInput
-          id="displayName"
-          label="Display Name"
-          value={profile.displayName}
-          error={errors.displayName}
-          isDirty={isDirty.displayName}
-          onChange={(e) => handleChange(e, "displayName")}
-          placeholder="Enter your display name"
+          id="fullname"
+          label="Full Name"
+          value={profile.fullname}
+          error={errors.fullname}
+          isDirty={isDirty.fullname}
+          onChange={(e) => handleChange(e, "fullname")}
+          placeholder="Enter your full name"
         />
       </div>
 
@@ -37,20 +36,6 @@ export default function ProfileForm({
           isDirty={isDirty.bio}
           onChange={(e) => handleChange(e, "bio")}
           placeholder="Tell us about yourself"
-        />
-      </div>
-
-      {/* Location */}
-      <div>
-        <SectionHeader title="Change your location" />
-        <FormInput
-          id="location"
-          label="Location"
-          value={profile.location}
-          error={errors.location}
-          isDirty={isDirty.location}
-          onChange={(e) => handleChange(e, "location")}
-          placeholder="Where are you based?"
         />
       </div>
 

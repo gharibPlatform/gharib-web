@@ -4,14 +4,14 @@ export function ActionButton({
   label,
   value,
   error,
-  isDisabled = true,
+  isDisabled = false,
   isDirty,
   destructive = false,
   onClick,
   className,
   icon,
 }) {
-  const disabled = isDisabled || !value || !!error || !isDirty;
+  const disabled = isDisabled || !!error || (!isDirty && !!value);
 
   return (
     <button

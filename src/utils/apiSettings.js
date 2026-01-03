@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API_BASE_URL = "http://localhost/api/settings/";
 
@@ -29,10 +29,10 @@ export const patchSettings = async (data) => {
     const res = await axios.patch(API_BASE_URL, data, {
       headers: {
         ...getAuthHeaders(),
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
-    alert("settings changed successfully")
+    alert("settings changed successfully");
     return res;
   } catch (err) {
     console.error(

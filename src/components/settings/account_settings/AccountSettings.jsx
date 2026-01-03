@@ -16,14 +16,24 @@ export default function AccountSettings() {
     errors,
     setPopupOpen,
     handleChange,
-    handleButtonClick,
+    handleUsernameChange,
+    handleEmailChange,
+    handleDeleteAccount,
   } = useAccountSettings();
+
+  const handlePopupConfirm = () => {
+    if (popupContent.onConfirm) {
+      popupContent.onConfirm();
+    }
+    setPopupOpen(false);
+  };
 
   return (
     <div className="px-8 pt-4 flex flex-col">
       <ConfirmationPopup
         isOpen={popupOpen}
         onClose={() => setPopupOpen(false)}
+        onConfirm={handlePopupConfirm}
         title={popupContent.title}
         description={popupContent.description}
         actionType={popupContent.actionType}
@@ -34,7 +44,7 @@ export default function AccountSettings() {
         error={errors.username}
         isDirty={isDirty.username}
         onUsernameChange={(e) => handleChange(e, "username")}
-        onButtonClick={handleButtonClick}
+        onButtonClick={handleUsernameChange}
       />
 
       <ChangeEmailSection
@@ -42,10 +52,10 @@ export default function AccountSettings() {
         error={errors.email}
         isDirty={isDirty.email}
         onEmailChange={(e) => handleChange(e, "email")}
-        onButtonClick={handleButtonClick}
+        onButtonClick={handleEmailChange}
       />
 
-      <DeleteAccountSection onButtonClick={handleButtonClick} />
+      <DeleteAccountSection onButtonClick={handleDeleteAccount} />
     </div>
   );
 }

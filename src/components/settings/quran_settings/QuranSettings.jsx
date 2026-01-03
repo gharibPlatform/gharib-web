@@ -1,12 +1,23 @@
+// components/settings/QuranSettings.jsx
 import { useState } from "react";
 import { SectionHeader } from "../common/SectionHeader";
 import { CustomDropdown } from "../common/CustomDropdown";
+import { ConfirmationPopup } from "../common/ConfirmationPopup";
 import { useQuranSettings } from "../../../hooks/settings/useQuranSettings";
 import { ActionButton } from "../../common/buttons/ActionButton";
 
 export default function QuranSettings() {
-  const { settings, isDirty, options, handleSettingChange, handleSave } =
-    useQuranSettings();
+  const {
+    settings,
+    isDirty,
+    isLoading,
+    options,
+    popupOpen,
+    popupContent,
+    setPopupOpen,
+    handleSettingChange,
+    handleSave,
+  } = useQuranSettings();
 
   const [rotate, setRotate] = useState({
     reciter: 90,
@@ -14,8 +25,25 @@ export default function QuranSettings() {
     tafsir: 90,
   });
 
+  const handlePopupConfirm = () => {
+    if (popupContent.onConfirm) {
+      popupContent.onConfirm();
+    }
+  };
+
   return (
     <div className="px-8 pt-4 flex flex-col">
+      {/* Confirmation Popup */}
+      <ConfirmationPopup
+        isOpen={popupOpen}
+        onClose={() => setPopupOpen(false)}
+        onConfirm={handlePopupConfirm}
+        title={popupContent.title}
+        description={popupContent.description}
+        actionType={popupContent.actionType}
+        isLoading={isLoading}
+      />
+
       {/* Reciter Section */}
       <div className="flex flex-col pt-4">
         <SectionHeader title="Reciter" />
@@ -27,6 +55,7 @@ export default function QuranSettings() {
           setRotate={(val) => setRotate((prev) => ({ ...prev, reciter: val }))}
           label="Select your preferred reciter"
           description="Choose from the list of available reciters"
+          disabled={isLoading}
         />
       </div>
 
@@ -43,6 +72,7 @@ export default function QuranSettings() {
           }
           label="Select your preferred translation"
           description="Choose from the list of available translations"
+          disabled={isLoading}
         />
       </div>
 
@@ -57,17 +87,19 @@ export default function QuranSettings() {
           setRotate={(val) => setRotate((prev) => ({ ...prev, tafsir: val }))}
           label="Select your preferred tafsir"
           description="Choose from the list of available tafsirs"
+          disabled={isLoading}
         />
       </div>
 
       {/* Save Button */}
-      <div className="flex pb-8">
+      <div className="flex pb-8 mt-8">
         <ActionButton
-          label="Save Changes"
+          label={isLoading ? "Saving..." : "Save Changes"}
           value="dirty-check"
           isDirty={isDirty}
-          isDisabled={false}
+          isDisabled={!isDirty || isLoading}
           onClick={handleSave}
+          className="min-w-[120px]"
         />
       </div>
     </div>

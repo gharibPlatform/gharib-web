@@ -20,8 +20,9 @@ export default function AppearanceSettings() {
     try {
       setIsLoading(true);
       const settings = await getSettings();
-      if (settings?.mode) {
-        setSelectedMode(settings.mode);
+      console.log("settings", settings);
+      if (settings?.data?.mode) {
+        setSelectedMode(settings?.data?.mode);
       }
     } catch (error) {
       console.error("Failed to load mode:", error);
@@ -67,6 +68,8 @@ export default function AppearanceSettings() {
     }
     setPopupOpen(false);
   };
+
+  console.log("selectedMode", selectedMode);
 
   return (
     <div className="px-8 pt-4 flex flex-col overflow-hidden">

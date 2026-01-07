@@ -1,20 +1,50 @@
-# Use the Node.js 18-alpine image
-FROM node:18-alpine
+FROM node:20-alpine AS base
 
-# Set the working directory
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy package files
+COPY package.json package-lock.json* ./
+RUN npm ci --legacy-peer-deps
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Expose the application port
+RUN npm install sharp
+
+RUN npm run build
+
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
+
+RUN if [ -d "/app/.next/standalone" ]; then \
+    echo "Found standalone output, copying..."; \
+    cp -r /app/.next/standalone/* ./; \
+    else \
+    echo "No standalone output, using regular .next"; \
+    mkdir -p .next && cp -r /app/.next/* ./.next/; \
+    fi && \
+    chown -R nextjs:nodejs ./
+
+USER nextjs
+
 EXPOSE 3000
 
-# Command to run the application
-CMD ["npm", "run", "dev"]
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD if [ -f "server.js" ]; then node server.js; else npm start;

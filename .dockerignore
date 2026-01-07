@@ -1,0 +1,21 @@
+# .dockerignore
+.git
+.gitignore
+.DS_Store
+*.log
+.env*.local
+node_modules
+.next
+dist
+build
+coverage
+.dockerignore
+Dockerfile
+docker-compose.yml
+README.md
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.vscode
+.idea

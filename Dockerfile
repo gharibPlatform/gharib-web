@@ -15,36 +15,38 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Install sharp and build
 RUN npm install sharp
-
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
+# Production image
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
+# Copy necessary files
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/package.json ./package.json
 
-RUN if [ -d "/app/.next/standalone" ]; then \
-    echo "Found standalone output, copying..."; \
-    cp -r /app/.next/standalone/* ./; \
-    else \
-    echo "No standalone output, using regular .next"; \
-    mkdir -p .next && cp -r /app/.next/* ./.next/; \
-    fi && \
-    chown -R nextjs:nodejs ./
+# Handle standalone output correctly
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+# Fix permissions
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
 EXPOSE 3000
-
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
 
-CMD if [ -f "server.js" ]; then node server.js; else npm start;
+# Start the server
+CMD ["node", "server.js"]

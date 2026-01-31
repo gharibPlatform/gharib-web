@@ -1,12 +1,10 @@
 import api from "../api";
 
-const API_BASE_URL = "http://localhost";
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export const getGroupSettings = async (groupId) => {
   try {
-    const response = await api.get(
-      `${API_BASE_URL}/group/settings/${groupId}/`
-    );
+    const response = await api.get(`${API_URL}/group/settings/${groupId}/`);
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -18,8 +16,8 @@ export const getGroupSettings = async (groupId) => {
 export const updateGroupSettings = async (groupId, data) => {
   try {
     const response = await api.put(
-      `${API_BASE_URL}/group/settings/${groupId}/`,
-      data
+      `${API_URL}/group/settings/${groupId}/`,
+      data,
     );
     return response.data;
   } catch (error) {
@@ -31,8 +29,8 @@ export const updateGroupSettings = async (groupId, data) => {
 export const patchGroupSettings = async (groupId, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL}/group/settings/${groupId}/`,
-      data
+      `${API_URL}/group/settings/${groupId}/`,
+      data,
     );
     return response.data;
   } catch (error) {

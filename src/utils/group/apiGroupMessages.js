@@ -1,16 +1,16 @@
 import api from "../api";
 
-const API_BASE_URL = "http://localhost";
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 // Group Media
 export const uploadGroupMedia = async (groupId, formData) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL} / group / media / ${groupId} / `,
+      `${API_URL}/group/media/${groupId}/`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -22,9 +22,7 @@ export const uploadGroupMedia = async (groupId, formData) => {
 // Group Messages
 export const getGroupMessages = async (groupId) => {
   try {
-    const response = await api.get(
-      `${API_BASE_URL}/group/messages/${groupId}/`
-    );
+    const response = await api.get(`${API_URL}/group/messages/${groupId}/`);
     return response.data;
   } catch (error) {
     console.error("Error getting group messages:", error);

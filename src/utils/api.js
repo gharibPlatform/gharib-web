@@ -2,24 +2,25 @@
 import axios from "axios";
 import { refreshToken } from "./userAuth";
 
-const API_BASE_URL = "http://localhost";
-
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_URL,
 });
 
 api.interceptors.request.use(
   (config) => {
     const skipAuthPaths = [
-      '/auth/login/',
-      '/auth/registration/',
-      '/auth/token/refresh/',
-      '/auth/password/reset/',
-      '/auth/password/reset/confirm/'
+      "/auth/login/",
+      "/auth/registration/",
+      "/auth/token/refresh/",
+      "/auth/password/reset/",
+      "/auth/password/reset/confirm/",
     ];
 
     // Only attach token if route is NOT in skip list
-    const shouldAttachToken = !skipAuthPaths.some(path => config.url?.includes(path));
+    const shouldAttachToken = !skipAuthPaths.some((path) =>
+      config.url?.includes(path),
+    );
 
     if (shouldAttachToken) {
       const token = localStorage.getItem("access_token");
@@ -43,7 +44,7 @@ api.interceptors.request.use(
     config.withCredentials = true;
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Handle token refresh when 401 occurs
@@ -54,11 +55,13 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       const skipRefreshPaths = [
-        '/auth/login/',
-        '/auth/registration/',
-        '/auth/token/refresh/'
+        "/auth/login/",
+        "/auth/registration/",
+        "/auth/token/refresh/",
       ];
-      if (skipRefreshPaths.some(path => originalRequest.url?.includes(path))) {
+      if (
+        skipRefreshPaths.some((path) => originalRequest.url?.includes(path))
+      ) {
         return Promise.reject(error);
       }
 
@@ -79,16 +82,18 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
+        console.error("Token refresh failed:", refreshError);
 
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
 
-        document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-        document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        document.cookie =
+          "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie =
+          "refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
         }
 
         return Promise.reject(refreshError);
@@ -96,7 +101,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

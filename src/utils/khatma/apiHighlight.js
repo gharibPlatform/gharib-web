@@ -1,13 +1,11 @@
 import api from "../api";
-const API_BASE_URL = "http://localhost";
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 //Highlights
 
 export const getHighlights = async () => {
   try {
-    const response = await api.get(
-      `${API_BASE_URL}/highlight/`
-    );
+    const response = await api.get(`${API_URL}/highlight/`);
     return response.data.results;
   } catch (error) {
     console.error("Error getting highlights:", error);
@@ -17,9 +15,7 @@ export const getHighlights = async () => {
 
 export const getHighlightById = async (id) => {
   try {
-    const response = await api.get(
-      `${API_BASE_URL}/highlight/${id}/`
-    );
+    const response = await api.get(`${API_URL}/highlight/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Error getting highlights:", error);
@@ -29,10 +25,7 @@ export const getHighlightById = async (id) => {
 
 export const createHighlights = async (data) => {
   try {
-    const response = await api.post(
-      `${API_BASE_URL}/highlight/`,
-      data
-    );
+    const response = await api.post(`${API_URL}/highlight/`, data);
     return response.data;
   } catch (error) {
     console.error("Error creating highlights:", error);
@@ -42,10 +35,7 @@ export const createHighlights = async (data) => {
 
 export const updateHighlights = async (id, data) => {
   try {
-    const response = await api.put(
-      `${API_BASE_URL}/highlight/${id}/`,
-      data
-    );
+    const response = await api.put(`${API_URL}/highlight/${id}/`, data);
     return response.data;
   } catch (error) {
     console.error("Error updating highlights:", error);
@@ -55,10 +45,7 @@ export const updateHighlights = async (id, data) => {
 
 export const patchHighlights = async (id, data) => {
   try {
-    const response = await api.patch(
-      `${API_BASE_URL}/highlight/${id}/`,
-      data
-    );
+    const response = await api.patch(`${API_URL}/highlight/${id}/`, data);
     return response.data;
   } catch (error) {
     console.error("Error patching highlights:", error);
@@ -68,9 +55,7 @@ export const patchHighlights = async (id, data) => {
 
 export const deleteHighlights = async (id) => {
   try {
-    const response = await api.delete(
-      `${API_BASE_URL}/highlight/${id}/`
-    );
+    const response = await api.delete(`${API_URL}/highlight/${id}/`);
     return response.data;
   } catch (error) {
     console.error("Error deleting highlights:", error);

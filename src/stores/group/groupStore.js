@@ -1,10 +1,9 @@
 import {
   getGroupSettings,
   patchGroupSettings,
-  updateGroup,
   updateGroupSettings,
 } from "@/utils/group/apiGroupSettings";
-import { getGroups } from "@/utils/group/apiGroup";
+import { getGroups, updateGroup } from "@/utils/group/apiGroup";
 
 import { create } from "zustand";
 

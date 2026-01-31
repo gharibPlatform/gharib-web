@@ -1,12 +1,12 @@
 import api from "../api";
 
-const API_BASE_URL = "http://localhost";
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export const addMemberToGroup = async (groupId, data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/add-member-group/${groupId}/`,
-      data
+      `${API_URL}/group/add-member-group/${groupId}/`,
+      data,
     );
     return response.data;
   } catch (error) {
@@ -18,7 +18,7 @@ export const addMemberToGroup = async (groupId, data) => {
 export const removeMemberFromGroup = async (groupId, userId) => {
   try {
     const response = await api.delete(
-      `${API_BASE_URL}/group/remove-member-group/${groupId}/${userId}/`
+      `${API_URL}/group/remove-member-group/${groupId}/${userId}/`,
     );
     return response.data;
   } catch (error) {
@@ -30,8 +30,8 @@ export const removeMemberFromGroup = async (groupId, userId) => {
 export const changeMemberRole = async (groupId, userId, data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/change-member-role/${groupId}/${userId}/`,
-      data
+      `${API_URL}/group/change-member-role/${groupId}/${userId}/`,
+      data,
     );
     return response.data;
   } catch (error) {
@@ -42,7 +42,7 @@ export const changeMemberRole = async (groupId, userId, data) => {
 
 export const getGroupCodeInfo = async (groupId) => {
   try {
-    const response = await api.get(`${API_BASE_URL}/group/code/${groupId}/`);
+    const response = await api.get(`${API_URL}/group/code/${groupId}/`);
     return response.data;
   } catch (error) {
     console.error("Error getting group code info:", error);
@@ -53,8 +53,8 @@ export const getGroupCodeInfo = async (groupId) => {
 export const updateGroupCodeInfo = async (groupId, data) => {
   try {
     const response = await api.put(
-      `${API_BASE_URL}/group/code-info/${groupId}/`,
-      data
+      `${API_URL}/group/code-info/${groupId}/`,
+      data,
     );
     return response.data;
   } catch (error) {
@@ -66,8 +66,8 @@ export const updateGroupCodeInfo = async (groupId, data) => {
 export const patchGroupCodeInfo = async (groupId, data) => {
   try {
     const response = await api.patch(
-      `${API_BASE_URL}/group/code-info/${groupId}/`,
-      data
+      `${API_URL}/group/code-info/${groupId}/`,
+      data,
     );
     return response.data;
   } catch (error) {
@@ -78,9 +78,7 @@ export const patchGroupCodeInfo = async (groupId, data) => {
 
 export const deleteGroupCodeInfo = async (groupId) => {
   try {
-    const response = await api.delete(
-      `${API_BASE_URL}/group/code-info/${groupId}/`
-    );
+    const response = await api.delete(`${API_URL}/group/code-info/${groupId}/`);
     return response.data;
   } catch (error) {
     console.error("Error deleting group code info:", error);
@@ -90,9 +88,7 @@ export const deleteGroupCodeInfo = async (groupId) => {
 
 export const deactivateGroupCode = async () => {
   try {
-    const response = await api.post(
-      `${API_BASE_URL}/group/deactivate-group-code/`
-    );
+    const response = await api.post(`${API_URL}/group/deactivate-group-code/`);
     return response.data;
   } catch (error) {
     console.error("Error deactivating group code:", error);
@@ -103,8 +99,8 @@ export const deactivateGroupCode = async () => {
 export const generateGroupCode = async (data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/generate-group-code/`,
-      data
+      `${API_URL}/group/generate-group-code/`,
+      data,
     );
     return response.data;
   } catch (error) {
@@ -116,8 +112,8 @@ export const generateGroupCode = async (data) => {
 export const joinGroupByCode = async (data) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/join-group-by-code/`,
-      data
+      `${API_URL}/group/join-group-by-code/`,
+      data,
     );
     return response.data;
   } catch (error) {
@@ -129,8 +125,8 @@ export const joinGroupByCode = async (data) => {
 export const addMemberToGroupByUsername = async (groupId, username) => {
   try {
     const response = await api.post(
-      `${API_BASE_URL}/group/add-member-by-username/${groupId}/`,
-      { username }
+      `${API_URL}/group/add-member-by-username/${groupId}/`,
+      { username },
     );
     return response.data;
   } catch (error) {

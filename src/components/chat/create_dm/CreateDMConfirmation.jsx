@@ -2,20 +2,9 @@ import { useState, useEffect } from "react";
 import { createGroup } from "../../../utils/group/apiGroup";
 import { ActionButton } from "../../common/buttons/ActionButton";
 import { FormInput } from "../../common/input/FormInput";
-import {
-  FiX,
-  FiUpload,
-  FiImage,
-  FiUsers,
-  FiUser,
-  FiCheck,
-} from "react-icons/fi";
+import { FiX, FiUpload, FiImage, FiCheck } from "react-icons/fi";
 
-export default function CreateDMConfirmation({
-  selectedUsers,
-  onSuccess,
-  onCancel,
-}) {
+export default function CreateDMConfirmation({ onSuccess }) {
   const [groupName, setGroupName] = useState("");
   const [groupIcon, setGroupIcon] = useState(null);
   const [error, setError] = useState("");
@@ -70,9 +59,9 @@ export default function CreateDMConfirmation({
         formData.append("icon", groupIcon);
       }
 
-      selectedUsers.forEach((user) => {
-        formData.append("users", user.id);
-      });
+      // For direct message, you might want to handle this differently
+      // Maybe the current user is automatically added?
+      // Or you might need to pass the current user's ID
 
       await createGroup(formData);
       onSuccess();
@@ -85,34 +74,11 @@ export default function CreateDMConfirmation({
   };
 
   return (
-    <div className="bg-[var(--main-color)] w-full h-full flex flex-col rounded-lg overflow-hidden shadow-xl">
-      <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+    <div className="bg-[var(--main-color)] w-full h-full flex flex-col rounded-lg overflow-hidden p-6">
+      <div className="flex-1 overflow-y-auto custom-scrollbar">
+        {/* Group Name */}
         <div className="mb-6">
-          <h3 className="text-[var(--g-color)] text-sm font-medium mb-3 flex items-center gap-2 uppercase tracking-wide">
-            <FiUser size={14} />
-            Group Members • {selectedUsers.length}
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-40 overflow-y-auto p-1 custom-scrollbar">
-            {selectedUsers.map((user) => (
-              <div
-                key={user.id}
-                className="bg-[var(--main-color-hover)] p-3 rounded-lg flex items-center gap-3 border border-[var(--g-color)] border-opacity-20 transition-colors hover:border-opacity-40"
-              >
-                <div className="w-8 h-8 rounded-full bg-[var(--circle-color)] flex items-center justify-center text-xs font-medium text-[var(--w-color)] flex-shrink-0">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <span className="text-[var(--w-color)] text-sm truncate">
-                  {user.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="h-px bg-[var(--g-color)] bg-opacity-20 my-6"></div>
-
-        <div className="mb-6">
-          <label className=" text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
+          <label className="text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[var(--bright-b-color)]"></span>
             Group Name
           </label>
@@ -142,7 +108,7 @@ export default function CreateDMConfirmation({
 
         {/* Group Icon */}
         <div className="mb-6">
-          <label className=" text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
+          <label className="text-[var(--w-color)] text-sm font-medium mb-3 flex items-center gap-2">
             <FiImage size={16} className="text-[var(--bright-b-color)]" />
             Group Icon
             <span className="text-xs font-normal text-[var(--g-color)]">
@@ -207,28 +173,15 @@ export default function CreateDMConfirmation({
         )}
       </div>
 
-      <div className="p-6 border-t border-[var(--g-color)] border-opacity-20 bg-[var(--main-color-dark)]">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <ActionButton
-            label="Cancel"
-            value="1"
-            isDirty={true}
-            isDisabled={false}
-            onClick={onCancel}
-            className="bg-transparent hover:bg-[var(--main-color-hover)] text-[var(--w-color)] border border-[var(--g-color)] border-opacity-40"
-          />
-
-          <ActionButton
-            label={loading ? "Creating Group..." : "Create Group"}
-            value="2"
-            isDirty={true}
-            isDisabled={
-              selectedUsers.length === 0 || loading || groupName.length < 2
-            }
-            onClick={handleCreateGroup}
-            className="bg-[var(--bright-b-color)] hover:bg-[var(--b-color-hover)] text-white disabled:bg-[var(--main-color-hover)] disabled:text-[var(--g-color)] transition-colors shadow-md"
-          />
-        </div>
+      <div className="pt-6 border-t border-[var(--g-color)] border-opacity-20 mt-auto">
+        <ActionButton
+          label={loading ? "Creating DM..." : "Create DM"}
+          value="create"
+          isDirty={true}
+          isDisabled={loading || groupName.length < 2}
+          onClick={handleCreateGroup}
+          className="w-full bg-[var(--bright-b-color)] hover:bg-[var(--b-color-hover)] text-white disabled:bg-[var(--main-color-hover)] disabled:text-[var(--g-color)] transition-colors shadow-md py-3"
+        />
       </div>
     </div>
   );

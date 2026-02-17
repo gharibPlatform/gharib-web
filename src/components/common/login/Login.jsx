@@ -17,9 +17,9 @@ const Login = () => {
 
     login(loginData)
       .then((response) => {
-        router.push("/chat");
         console.log("user : ", response.user);
         setUser(response.user);
+        router.push("/home");
       })
       .catch((error) => {
         console.error("Login failed:", error);

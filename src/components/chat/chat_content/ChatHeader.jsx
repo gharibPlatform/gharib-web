@@ -12,6 +12,13 @@ export default function ChatHeader({ group, onClickName }) {
               onClick={onClickName}
               className="w-10 h-10 rounded-full object-cover cursor-pointer"
             />
+          ) : group?.icon ? (
+            <img
+              src={group.icon}
+              alt={group.name}
+              onClick={onClickName}
+              className="w-10 h-10 rounded-full object-cover cursor-pointer"
+            />
           ) : (
             <div onClick={onClickName} className="cursor-pointer">
               <DefaultIcon name={group?.name} width={14} height={14} />

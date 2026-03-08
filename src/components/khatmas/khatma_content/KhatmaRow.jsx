@@ -35,11 +35,11 @@ const GroupUI = ({ group }) => {
   return (
     <div className="flex items-center gap-3 w-full">
       <div className="relative">
-        {group.icon ? (
+        {group?.icon ? (
           <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-600/50">
             <img
               src={group.icon}
-              alt={`${group} icon`}
+              alt={`${group.name} icon`}
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.target.style.display = "none";
@@ -50,17 +50,17 @@ const GroupUI = ({ group }) => {
               className="w-8 h-8 rounded-full bg-gray-700/50 flex items-center justify-center"
               style={{ display: "none" }}
             >
-              <DefaultIcon name={group} height={8} width={8} />
+              <DefaultIcon name={group.name} height={8} width={8} />
             </div>
           </div>
         ) : (
           <div className="w-8 h-8 rounded-full bg-gray-700/50 flex items-center justify-center border border-gray-600/50">
-            <DefaultIcon name={group} height={8} width={8} />
+            <DefaultIcon name={group.name} height={8} width={8} />
           </div>
         )}
       </div>
       <span className="text-sm font-medium text-[var(--w-color)] truncate">
-        {group}
+        {group.name}
       </span>
     </div>
   );

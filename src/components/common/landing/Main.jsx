@@ -1,13 +1,12 @@
-"use client"
-import React from 'react'
-import Image from 'next/image'
-import RandomVerse from "../../../components/quran/quranOverview/RandomVerseLanding";
+"use client";
+import React from "react";
+import Link from "next/link";
+import RandomVerse from "../../../components/quran/quranOverview/RandomVerse";
 import indexToStringSurah from "../../../utils/consts/indexToStringSurah.json";
 import { verseByKey } from "../../../utils/quran/quran";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+
 export const Main = () => {
-  const img = ["/yakra.svg"]
-  
   const [verse, setVerse] = useState(null);
   const [surahName, setSurahName] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,14 +24,10 @@ export const Main = () => {
   const fetchRandomVerse = async () => {
     try {
       const [randomVerseKey, surahName] = getRandomVerse();
-      console.log("randomVerseKey", randomVerseKey);
-      console.log("surahName", surahName);
       const randomVerseData = await verseByKey(randomVerseKey);
       setVerse(randomVerseData);
       setSurahName(surahName);
       setIsLoading(false);
-      console.log("randomVerseKey", randomVerseKey);
-      console.log("randomVerseData", randomVerseData);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
@@ -42,172 +37,743 @@ export const Main = () => {
   useEffect(() => {
     fetchRandomVerse();
   }, []);
-  
+
   return (
-    <main className='poppins overflow-hidden'>
-      <div className="relative min-h-screen bg-gradient-to-b from-slate-50 to-white text-gray-900">
-        {/* Subtle decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50/30 rounded-full blur-3xl -z-10"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-50/30 rounded-full blur-3xl -z-10"></div>
-        
-        {/* Simple accent shapes */}
-        <div className="absolute top-20 right-8 w-24 h-24">
-          <div className="absolute rotate-12 right-0 top-12 h-2 w-28 bg-emerald-500/40 rounded-sm"></div>
-          <div className="absolute rotate-12 right-4 top-14 h-2 w-20 bg-emerald-500/30 rounded-sm"></div>
+    <main
+      className="overflow-hidden"
+      style={{
+        fontFamily: "var(--font-cairo)",
+        backgroundColor: "var(--secondary-color)",
+        color: "var(--w-color)",
+      }}
+    >
+      <div className="relative min-h-screen">
+        {/* Background noise texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "repeat",
+            backgroundSize: "128px",
+          }}
+        />
+
+        {/* Ambient glows */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[120px] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse, rgba(220,153,8,0.07) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute top-40 right-0 w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse, rgba(65,115,250,0.05) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-[500px] h-[300px] rounded-full blur-[100px] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse, rgba(220,153,8,0.04) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Geometric accent lines */}
+        <div className="absolute top-32 right-10 opacity-20 hidden lg:block">
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+            <rect
+              x="1"
+              y="1"
+              width="60"
+              height="60"
+              stroke="#dc9908"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+            />
+            <rect
+              x="20"
+              y="20"
+              width="60"
+              height="60"
+              stroke="#dc9908"
+              strokeWidth="0.5"
+              strokeDasharray="4 4"
+            />
+          </svg>
         </div>
-        <div className="absolute bottom-24 left-8 w-24 h-24">
-          <div className="absolute -rotate-12 left-0 bottom-12 h-2 w-28 bg-amber-500/40 rounded-sm"></div>
-          <div className="absolute -rotate-12 left-4 bottom-14 h-2 w-20 bg-amber-500/30 rounded-sm"></div>
+        <div className="absolute bottom-40 left-10 opacity-15 hidden lg:block">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <circle
+              cx="40"
+              cy="40"
+              r="39"
+              stroke="#4173fa"
+              strokeWidth="0.5"
+              strokeDasharray="3 5"
+            />
+            <circle
+              cx="40"
+              cy="40"
+              r="25"
+              stroke="#4173fa"
+              strokeWidth="0.5"
+              strokeDasharray="3 5"
+            />
+          </svg>
         </div>
-        
+
         {/* Main content */}
-        <div className="container mx-auto px-4 py-12 sm:py-16 max-w-7xl relative z-10">
+        <div className="container mx-auto px-4 py-16 sm:py-24 max-w-7xl relative z-10">
           {/* Hero section */}
-          <div className="text-center mb-16 sm:mb-20 relative">
-            <div className="space-y-3 mb-8">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight text-gray-900">
+          <div className="text-center mb-24 sm:mb-32 relative">
+            <div
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 border"
+              style={{
+                borderColor: "rgba(220,153,8,0.25)",
+                backgroundColor: "rgba(220,153,8,0.07)",
+              }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full animate-pulse"
+                style={{ backgroundColor: "var(--o-color)" }}
+              />
+              <span
+                className="text-xs font-medium tracking-widest uppercase"
+                style={{ color: "var(--o-color)" }}
+              >
+                Quran · Community · Growth
+              </span>
+            </div>
+
+            <div className="space-y-2 mb-8">
+              <h1
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight"
+                style={{ color: "var(--w-color)" }}
+              >
                 Ghareb among people,
               </h1>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight text-indigo-700">
+              <h2
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #dc9908 0%, #f5c842 50%, #dc9908 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
                 remembered in the heavens.
               </h2>
             </div>
-            
-            <div className="max-w-4xl mx-auto space-y-4 mb-8">
-              <p className="text-lg sm:text-xl md:text-2xl font-medium text-gray-700 px-4">
-                Unite individuals and groups in a shared journey to complete the Quran.
-              </p>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 px-4 leading-relaxed max-w-3xl mx-auto">
-                Ghareb empowers spiritual growth with features like group recitations, personal tracking tools, 
-                focused Ayah sharing, and daily Islamic reminders.
+
+            <div className="max-w-2xl mx-auto mb-10">
+              <p
+                className="text-base sm:text-lg md:text-xl px-4 leading-relaxed"
+                style={{ color: "var(--g-color)" }}
+              >
+                Unite individuals and groups in a shared journey to complete the
+                Quran. Spiritual growth, group recitations, personal tracking,
+                and daily reminders — all in one place.
               </p>
             </div>
-            
-            <div className="flex flex-col sm:flex-row justify-center gap-4 px-4">
-              <button className="px-8 py-3 bg-amber-50 border border-amber-300 rounded-lg font-semibold text-base hover:bg-amber-100 hover:shadow-md transition-all duration-200">
-                Read Quran
-              </button>
-              <button className="px-8 py-3 bg-indigo-600 text-white rounded-lg font-semibold text-base hover:bg-indigo-700 hover:shadow-md transition-all duration-200">
-                Join Ghareb
-              </button>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-3 px-4">
+              <Link href="/quran">
+                <button
+                  className="px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 w-full sm:w-auto"
+                  style={{
+                    backgroundColor: "var(--main-color)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    color: "var(--lighter-color)",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor =
+                      "var(--main-color-hover)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor =
+                      "var(--main-color)")
+                  }
+                >
+                  Read Quran
+                </button>
+              </Link>
+              <Link href="/signup">
+                <button
+                  className="px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 w-full sm:w-auto"
+                  style={{
+                    backgroundColor: "var(--o-color)",
+                    color: "#0a0a0a",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor =
+                      "var(--o-color-hover)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = "var(--o-color)")
+                  }
+                >
+                  Join Ghareb
+                </button>
+              </Link>
             </div>
-          </div>
-          <div
-            className="pt-20 pb-28 mb-20"
-          >
-            <div className="max-w-4xl mx-auto px-6">
-              {isLoading ? (
-                <div className="flex justify-center items-center text-[var(--g-color)]">
-                  Loading Verse...
+
+            {/* Stats row */}
+            <div className="flex flex-wrap justify-center gap-8 mt-16 opacity-60">
+              {[
+                ["114", "Surahs"],
+                ["6236", "Ayahs"],
+                ["∞", "Rewards"],
+              ].map(([val, label]) => (
+                <div key={label} className="text-center">
+                  <p
+                    className="text-2xl font-bold"
+                    style={{ color: "var(--o-color)" }}
+                  >
+                    {val}
+                  </p>
+                  <p
+                    className="text-xs uppercase tracking-widest mt-1"
+                    style={{ color: "var(--g-color)" }}
+                  >
+                    {label}
+                  </p>
                 </div>
-              ) : (
-                <RandomVerse className='bg-red-500' randomVerse={verse} surahName={surahName} />
-              )}
+              ))}
             </div>
           </div>
-          
+
+          {/* Random Verse */}
+          <div className="mb-24 sm:mb-32">
+            <div className="max-w-3xl mx-auto">
+              <div className="flex items-center gap-3 mb-6">
+                <div
+                  className="h-px flex-1 max-w-[40px]"
+                  style={{ backgroundColor: "rgba(220,153,8,0.3)" }}
+                />
+                <p
+                  className="text-xs uppercase tracking-widest"
+                  style={{ color: "var(--g-color)" }}
+                >
+                  Verse of the moment
+                </p>
+              </div>
+
+              <div
+                className="rounded-2xl p-[1px]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(220,153,8,0.15), rgba(255,255,255,0.03), rgba(65,115,250,0.08))",
+                }}
+              >
+                <div
+                  className="rounded-2xl px-8 py-10 relative overflow-hidden"
+                  style={{ backgroundColor: "var(--main-color)" }}
+                >
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at 50% -20%, rgba(220,153,8,0.05) 0%, transparent 60%)",
+                    }}
+                  />
+                  {isLoading ? (
+                    <div
+                      className="flex items-center justify-center gap-2 py-8"
+                      style={{ color: "var(--g-color)" }}
+                    >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full animate-pulse"
+                        style={{ backgroundColor: "var(--o-color)" }}
+                      />
+                      <span className="text-sm">Loading verse...</span>
+                    </div>
+                  ) : (
+                    <RandomVerse randomVerse={verse} surahName={surahName} />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* What is Ghareb section */}
-          <div className="mb-16 sm:mb-20">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 px-2">
-              What is <span className="bg-indigo-600 text-white px-3 py-1 rounded-lg">Ghareb?</span>
-            </h2>
-            
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 sm:gap-8 min-h-[400px] md:h-[420px] mt-8 border border-gray-200">
-              <div className="md:w-1/2 text-center md:text-left">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-medium leading-relaxed text-gray-800 mb-6">
-                  <span className="text-indigo-600 font-semibold">Ghareb</span> turns your screen time into 
-                  meaningful moments by guiding you to 
-                  recite and complete the Quran. It nurtures 
-                  your soul while empowering the next 
-                  generation with Quranic values, fostering a 
-                  stronger, more connected society.
-                </h3>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <button className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold text-base hover:bg-indigo-700 transition-colors duration-200">
-                    Join Ghareb
-                  </button>
-                  <button className="px-6 py-3 bg-white border border-gray-300 rounded-lg font-semibold text-base hover:border-indigo-600 hover:text-indigo-600 transition-colors duration-200">
-                    Log in
-                  </button>
+          <div className="mb-20 sm:mb-28">
+            <div className="flex items-center gap-3 mb-10 px-2">
+              <div
+                className="h-px flex-1 max-w-[40px]"
+                style={{ backgroundColor: "rgba(220,153,8,0.4)" }}
+              />
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                What is{" "}
+                <span
+                  className="px-3 py-1 rounded-lg"
+                  style={{
+                    backgroundColor: "rgba(220,153,8,0.12)",
+                    color: "var(--o-color)",
+                    border: "1px solid rgba(220,153,8,0.2)",
+                  }}
+                >
+                  Ghareb?
+                </span>
+              </h2>
+            </div>
+
+            <div
+              className="rounded-2xl p-[1px]"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(220,153,8,0.2), rgba(65,115,250,0.1), rgba(220,153,8,0.05))",
+              }}
+            >
+              <div
+                className="rounded-2xl p-6 sm:p-10 flex flex-col md:flex-row items-center gap-8 min-h-[320px]"
+                style={{ backgroundColor: "var(--main-color)" }}
+              >
+                <div className="md:w-1/2 text-center md:text-left">
+                  <h3
+                    className="text-lg sm:text-xl md:text-2xl font-medium leading-relaxed mb-8"
+                    style={{ color: "var(--lighter-color)" }}
+                  >
+                    <span
+                      className="font-bold"
+                      style={{ color: "var(--o-color)" }}
+                    >
+                      Ghareb
+                    </span>{" "}
+                    turns your screen time into meaningful moments by guiding
+                    you to recite and complete the Quran. It nurtures your soul
+                    while empowering the next generation with Quranic values,
+                    fostering a stronger, more connected community.
+                  </h3>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link href="/signup">
+                      <button
+                        className="px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 w-full sm:w-auto"
+                        style={{
+                          backgroundColor: "var(--o-color)",
+                          color: "#0a0a0a",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.backgroundColor =
+                            "var(--o-color-hover)")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.backgroundColor =
+                            "var(--o-color)")
+                        }
+                      >
+                        Join Ghareb
+                      </button>
+                    </Link>
+                    <Link href="/login">
+                      <button
+                        className="px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 w-full sm:w-auto"
+                        style={{
+                          backgroundColor: "var(--secondary-color)",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          color: "var(--lighter-color)",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.borderColor =
+                            "rgba(220,153,8,0.4)")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.borderColor =
+                            "rgba(255,255,255,0.08)")
+                        }
+                      >
+                        Log in
+                      </button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-              <div className="md:w-1/2 flex justify-center items-center">
-                <div className="w-56 h-56 sm:w-64 sm:h-64 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl flex items-center justify-center shadow-md">
-                  <span className="text-6xl">📖</span>
+
+                {/* Static Arabic accent — no spinning circle */}
+                <div className="md:w-1/2 flex justify-center items-center">
+                  <div
+                    className="rounded-2xl flex flex-col items-center justify-center gap-4 px-12 py-10"
+                    style={{
+                      backgroundColor: "var(--secondary-color)",
+                      border: "1px solid rgba(220,153,8,0.1)",
+                    }}
+                  >
+                    <div
+                      className="arab text-8xl font-light"
+                      style={{ color: "var(--o-color)", lineHeight: 1 }}
+                    >
+                      غ
+                    </div>
+                    <div
+                      className="h-px w-12"
+                      style={{ backgroundColor: "rgba(220,153,8,0.3)" }}
+                    />
+                    <p
+                      className="text-xs uppercase tracking-[0.25em]"
+                      style={{ color: "var(--g-color)" }}
+                    >
+                      Ghareb
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          
+
           {/* Why choose Ghareb section */}
-          <div className="mb-16 sm:mb-20">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 px-2">
-              Why choose <span className="bg-amber-400 text-gray-900 px-3 py-1 rounded-lg">Ghareb?</span>
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-8">
+          <div className="mb-20 sm:mb-28">
+            <div className="flex items-center gap-3 mb-10 px-2">
+              <div
+                className="h-px flex-1 max-w-[40px]"
+                style={{ backgroundColor: "rgba(65,115,250,0.4)" }}
+              />
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                Why choose{" "}
+                <span
+                  className="px-3 py-1 rounded-lg"
+                  style={{
+                    backgroundColor: "rgba(65,115,250,0.1)",
+                    color: "var(--bright-b-color)",
+                    border: "1px solid rgba(65,115,250,0.2)",
+                  }}
+                >
+                  Ghareb?
+                </span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
               {/* Card 1 */}
-              <div className="bg-white rounded-xl shadow-md p-6 h-auto sm:h-[340px] md:h-[360px] flex flex-col border border-gray-200 hover:shadow-lg transition-shadow duration-200">
-                <div className="flex justify-between items-start mb-5 pb-4 border-b border-gray-200">
-                  <h3 className="font-bold text-xl sm:text-2xl text-gray-800">Group Khatma</h3>
-                  <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-xl">
-                    👥
-                  </div>
+              <div
+                className="rounded-xl p-6 flex flex-col transition-all duration-300 cursor-default"
+                style={{
+                  backgroundColor: "var(--main-color)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.borderColor = "rgba(220,153,8,0.25)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)")
+                }
+              >
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-5"
+                  style={{
+                    backgroundColor: "rgba(220,153,8,0.1)",
+                    border: "1px solid rgba(220,153,8,0.15)",
+                  }}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#dc9908"
+                    strokeWidth="1.5"
+                  >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
                 </div>
-                <div className='flex flex-col justify-center flex-1 text-gray-700 space-y-2'>
-                  <p className="text-base leading-relaxed">Collaborate with others to complete the Quran together.</p>
-                  <p className="text-base leading-relaxed">Divide portions, set a timeframe, and invite as a community, concluding with a heartfelt Dua.</p>
+                <h3
+                  className="font-bold text-lg mb-3"
+                  style={{ color: "var(--w-color)" }}
+                >
+                  Group Khatma
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--g-color)" }}
+                >
+                  Collaborate with others to complete the Quran together. Divide
+                  portions, set a timeframe, and invite your community —
+                  concluding with a heartfelt Dua.
+                </p>
+                <div
+                  className="mt-auto pt-6 flex items-center gap-1.5 text-xs font-medium"
+                  style={{ color: "var(--o-color)" }}
+                >
+                  <span>Learn more</span>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
-              
+
               {/* Card 2 */}
-              <div className="bg-white rounded-xl shadow-md p-6 h-auto sm:h-[340px] md:h-[360px] flex flex-col border border-gray-200 hover:shadow-lg transition-shadow duration-200">
-                <div className="flex justify-between items-start mb-5 pb-4 border-b border-gray-200">
-                  <h3 className="font-bold text-xl sm:text-2xl text-gray-800">Personal Tracking</h3>
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-xl">
-                    📈
-                  </div>
+              <div
+                className="rounded-xl p-6 flex flex-col transition-all duration-300 cursor-default"
+                style={{
+                  backgroundColor: "var(--main-color)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.borderColor = "rgba(65,115,250,0.25)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)")
+                }
+              >
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-5"
+                  style={{
+                    backgroundColor: "rgba(65,115,250,0.1)",
+                    border: "1px solid rgba(65,115,250,0.15)",
+                  }}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#4173fa"
+                    strokeWidth="1.5"
+                  >
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg>
                 </div>
-                <div className='flex flex-col justify-center flex-1 text-gray-700 space-y-2'>
-                  <p className="text-base leading-relaxed">Monitor your Quranic progress, highlight your favorite Ayah, and dive into reflections with Tafsir tools to enhance your understanding.</p>
+                <h3
+                  className="font-bold text-lg mb-3"
+                  style={{ color: "var(--w-color)" }}
+                >
+                  Personal Tracking
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--g-color)" }}
+                >
+                  Monitor your Quranic progress, highlight your favorite Ayah,
+                  and dive into reflections with Tafsir tools to enhance your
+                  understanding.
+                </p>
+                <div
+                  className="mt-auto pt-6 flex items-center gap-1.5 text-xs font-medium"
+                  style={{ color: "var(--bright-b-color)" }}
+                >
+                  <span>Learn more</span>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
-              
+
               {/* Card 3 */}
-              <div className="bg-white rounded-xl shadow-md p-6 h-auto sm:h-[340px] md:h-[360px] flex flex-col border border-gray-200 hover:shadow-lg transition-shadow duration-200">
-                <div className="flex justify-between items-start mb-5 pb-4 border-b border-gray-200">
-                  <h3 className="font-bold text-xl sm:text-2xl text-gray-800">Daily Reminders</h3>
-                  <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center text-xl">
-                    🔔
-                  </div>
+              <div
+                className="rounded-xl p-6 flex flex-col transition-all duration-300 cursor-default"
+                style={{
+                  backgroundColor: "var(--main-color)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.borderColor = "rgba(255,76,76,0.25)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)")
+                }
+              >
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-5"
+                  style={{
+                    backgroundColor: "rgba(255,76,76,0.08)",
+                    border: "1px solid rgba(255,76,76,0.15)",
+                  }}
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ff4c4c"
+                    strokeWidth="1.5"
+                  >
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                  </svg>
                 </div>
-                <div className='flex flex-col justify-center flex-1 text-gray-700 space-y-2'>
-                  <p className="text-base leading-relaxed">Stay connected with daily Islamic reminders, Hadith, and inspirational quotes to keep your faith strong and your heart at peace.</p>
+                <h3
+                  className="font-bold text-lg mb-3"
+                  style={{ color: "var(--w-color)" }}
+                >
+                  Daily Reminders
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--g-color)" }}
+                >
+                  Stay connected with daily Islamic reminders, Hadith, and
+                  inspirational quotes to keep your faith strong and your heart
+                  at peace.
+                </p>
+                <div
+                  className="mt-auto pt-6 flex items-center gap-1.5 text-xs font-medium"
+                  style={{ color: "var(--bright-r-color)" }}
+                >
+                  <span>Learn more</span>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
             </div>
           </div>
-          
+
           {/* Quran quote section */}
-          <div className="mb-12 sm:mb-16 px-2">
-            <p className="text-xl sm:text-2xl md:text-3xl font-light mb-6 text-center text-gray-700">Allah, Exalted is He, said:</p>
-            <div className="bg-amber-100 p-6 sm:p-8 rounded-lg max-w-full sm:max-w-[85%] md:max-w-[70%] mx-auto text-center shadow-md border border-amber-200">
-              <p className="font-semibold mb-2 text-base sm:text-lg md:text-xl text-gray-800 leading-relaxed">"And cooperate in righteousness and piety, but do not cooperate in sin and aggression.</p>
-              <p className="font-semibold text-base sm:text-lg md:text-xl text-gray-800 leading-relaxed">And fear Allah; indeed, Allah is severe in punishment"</p>
+          <div className="mb-20 sm:mb-28 px-2">
+            <div className="relative max-w-3xl mx-auto">
+              <div
+                className="absolute -top-8 -left-4 text-8xl font-serif opacity-10 select-none"
+                style={{ color: "var(--o-color)", lineHeight: 1 }}
+              >
+                "
+              </div>
+              <div
+                className="rounded-2xl p-[1px]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(220,153,8,0.2), rgba(220,153,8,0.05))",
+                }}
+              >
+                <div
+                  className="rounded-2xl p-8 sm:p-12 text-center relative overflow-hidden"
+                  style={{ backgroundColor: "var(--darker-color)" }}
+                >
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at 50% 0%, rgba(220,153,8,0.06) 0%, transparent 60%)",
+                    }}
+                  />
+                  <p
+                    className="text-xs uppercase tracking-widest mb-6"
+                    style={{ color: "var(--o-color)", opacity: 0.7 }}
+                  >
+                    Allah, Exalted is He, said
+                  </p>
+                  <p
+                    className="font-medium text-base sm:text-lg md:text-xl leading-relaxed mb-2"
+                    style={{ color: "var(--lighter-color)" }}
+                  >
+                    "And cooperate in righteousness and piety, but do not
+                    cooperate in sin and aggression.
+                  </p>
+                  <p
+                    className="font-medium text-base sm:text-lg md:text-xl leading-relaxed"
+                    style={{ color: "var(--lighter-color)" }}
+                  >
+                    And fear Allah; indeed, Allah is severe in punishment."
+                  </p>
+                  <div
+                    className="mt-6 pt-6 border-t"
+                    style={{ borderColor: "rgba(255,255,255,0.06)" }}
+                  >
+                    <p className="text-sm" style={{ color: "var(--g-color)" }}>
+                      Al-Ma'idah, verse 2
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <p className="text-right text-sm sm:text-base mt-3 px-4 text-gray-600">— Al-Ma'idah, verse 2</p>
           </div>
-        </div>
-        
-        {/* Simple dots decoration */}
-        <div className="absolute right-8 bottom-24 opacity-40">
-          <div className="grid grid-cols-3 gap-2">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="w-2 h-2 rounded-full bg-rose-400"></div>
-            ))}
+
+          {/* CTA section */}
+          <div className="mb-8 text-center">
+            <div
+              className="rounded-2xl p-[1px]"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(220,153,8,0.15), rgba(65,115,250,0.1))",
+              }}
+            >
+              <div
+                className="rounded-2xl py-16 px-8"
+                style={{ backgroundColor: "var(--main-color)" }}
+              >
+                <h2
+                  className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4"
+                  style={{ color: "var(--w-color)" }}
+                >
+                  Begin your journey today
+                </h2>
+                <p
+                  className="text-sm sm:text-base mb-8 max-w-md mx-auto"
+                  style={{ color: "var(--g-color)" }}
+                >
+                  Join thousands connecting with the Quran every day. It's free,
+                  it's meaningful.
+                </p>
+                <div className="flex flex-col sm:flex-row justify-center gap-3">
+                  <Link href="/signup">
+                    <button
+                      className="px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 w-full sm:w-auto"
+                      style={{
+                        backgroundColor: "var(--o-color)",
+                        color: "#0a0a0a",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.backgroundColor =
+                          "var(--o-color-hover)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.backgroundColor =
+                          "var(--o-color)")
+                      }
+                    >
+                      Join Ghareb — it's free
+                    </button>
+                  </Link>
+                  <Link href="/quran">
+                    <button
+                      className="px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 w-full sm:w-auto"
+                      style={{
+                        backgroundColor: "var(--secondary-color)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        color: "var(--lighter-color)",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.borderColor =
+                          "rgba(255,255,255,0.15)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.borderColor =
+                          "rgba(255,255,255,0.08)")
+                      }
+                    >
+                      Read Quran
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </main>
-  )
-}
+  );
+};

@@ -23,7 +23,7 @@ export const Navbar = () => {
           className="text-lg font-semibold"
           style={{ color: "var(--w-color)", fontFamily: "var(--font-cairo)" }}
         >
-          Ghareb
+          Gharib
         </span>
       </div>
 

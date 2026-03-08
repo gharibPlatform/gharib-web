@@ -29,7 +29,7 @@ const Footer = () => {
                     fontFamily: "var(--font-cairo)",
                   }}
                 >
-                  Ghareb
+                  Gharib
                 </h3>
                 <p
                   className="text-xs mt-0.5"
@@ -153,7 +153,7 @@ const Footer = () => {
                 className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs"
                 style={{ color: "var(--g-color)" }}
               >
-                <p>© 2024 Ghareb Inc.</p>
+                <p>© 2024 Gharib Inc.</p>
                 <div className="flex gap-6">
                   {["Privacy", "Terms"].map((link) => (
                     <a
@@ -199,7 +199,7 @@ const Footer = () => {
                       fontFamily: "var(--font-cairo)",
                     }}
                   >
-                    Ghareb
+                    Gharib
                   </h3>
                   <p
                     className="text-xs mt-1"
@@ -330,7 +330,7 @@ const Footer = () => {
               className="flex justify-between items-center text-xs"
               style={{ color: "var(--g-color)" }}
             >
-              <p>© 2024 Ghareb Inc. All rights reserved.</p>
+              <p>© 2024 Gharib Inc. All rights reserved.</p>
               <div className="flex gap-8">
                 {["Privacy Policy", "Terms of Service"].map((link) => (
                   <a
